@@ -1,1 +1,12 @@
-<p>admin-view works!</p>
+<div *ngIf="accounts.length > 0">
+  <h1>Danh sách tài khoản</h1>
+  <ul>
+    <li *ngFor="let account of accounts">
+      <span>{{ account.tenDangNhap }}</span>
+      <!-- Hiển thị thông tin tài khoản khác tùy ý -->
+    </li>
+  </ul>
+</div>
+<div *ngIf="accounts.length === 0">
+  <p>Không có tài khoản nào được tìm thấy.</p>
+</div>
