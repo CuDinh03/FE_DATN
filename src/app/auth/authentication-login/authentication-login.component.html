@@ -1,40 +1,39 @@
-<!--<section class="login_box_area section-margin">-->
-<!--  <div class="container">-->
-<!--    <div class="row">-->
-<!--      <div class="col-lg-6">-->
-<!--        <div class="login_box_img">-->
-<!--          <div class="hover">-->
-<!--            <h4>New to our website?</h4>-->
-<!--            <p>There are advances being made in science and technology everyday, and a good example of this is the</p>-->
-<!--            <a class="button button-account" href="register.html">Tạo tài khoản</a>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="col-lg-6">-->
-<!--        <div class="login_form_inner">-->
-<!--          <h3>Đăng nhập </h3>-->
-<!--&lt;!&ndash;          <form class="row login_form" (ngSubmit)="onSubmit(username, password)" id="contactForm" >&ndash;&gt;-->
-<!--&lt;!&ndash;            <div class="col-md-12 form-group">&ndash;&gt;-->
-<!--&lt;!&ndash;              <input type="text" class="form-control" id="username" #username name="name" placeholder="Tên đăng nhập" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Tên đăng nhập'">&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            <div class="col-md-12 form-group">&ndash;&gt;-->
-<!--&lt;!&ndash;              <input type="text" class="form-control" id="password" #password name="password" placeholder="Mật khẩu" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Mật khẩu'">&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            <div class="col-md-12 form-group">&ndash;&gt;-->
-<!--&lt;!&ndash;              <div class="creat_account">&ndash;&gt;-->
-<!--&lt;!&ndash;                <input type="checkbox" id="f-option2" name="selector">&ndash;&gt;-->
-<!--&lt;!&ndash;                <label for="f-option2">Duy trì đăng nhập</label>&ndash;&gt;-->
-<!--&lt;!&ndash;              </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            <div class="col-md-12 form-group">&ndash;&gt;-->
-<!--&lt;!&ndash;              <button type="submit" value="submit" class="button button-login w-100">Đăng nhập</button>&ndash;&gt;-->
-<!--&lt;!&ndash;              <a href="#">Quên mật khẩu?</a>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;          </form>&ndash;&gt;-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</section>-->
+<section class="login_box_area section-margin">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="login_box_img">
+          <div class="hover">
+            <h4>New to our website?</h4>
+            <p>There are advances being made in science and technology everyday, and a good example of this is the</p>
+            <a class="button button-account" href="register.html">Tạo tài khoản</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="login_form_inner">
+          <h3>Đăng nhập </h3>
+          <form class="row login_form" (ngSubmit)="onSubmit()" id="contactForm">
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" [(ngModel)]="tenDangNhap" name="username" placeholder="Tên đăng nhập">
+            </div>
+            <div class="col-md-12 form-group">
+              <input type="password" class="form-control" [(ngModel)]="matKhau" name="password" placeholder="Mật khẩu">
+            </div>
+            <div class="col-md-12 form-group">
+              <div class="creat_account">
+                <input type="checkbox" id="f-option2" name="selector">
+                <label for="f-option2">Duy trì đăng nhập</label>
+              </div>
+            </div>
+            <div class="col-md-12 form-group">
+              <button type="button" class="button button-login w-100" (click)="onSubmit()">Đăng nhập</button>
+              <a href="#">Quên mật khẩu?</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<p>login</p>

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {AuthenticationService} from "../../service/AuthenticationService";
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-authentication-login',
@@ -7,18 +9,31 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./authentication-login.component.css']
 })
 export class AuthenticationLoginComponent {
-  username: string | undefined;
-  password: string | undefined;
-  constructor(private http: HttpClient) {}
+  tenDangNhap: string = '';
+  matKhau: string = '';
 
-  onSubmit(username: HTMLInputElement, password: HTMLInputElement) {
-    const formData = { tenDangNhap: username, matKhau: password };
-    this.http.post<any>('http://localhost:9091/api/auth/log-in', formData)
-      .subscribe(response => {
-        console.log(response);
-        localStorage.setItem('token', response.result.token);
-      }, error => {
-        console.error(error);
-      });
+  constructor(private authService: AuthenticationService,private router: Router) { }
+
+  onSubmit() {
+    this.authService.login(this.tenDangNhap, this.matKhau)
+      .subscribe(
+        response => {
+          // Lưu token vào localStorage
+          localStorage.setItem('token', response.result.token);
+          // Redirect sau khi đăng nhập thành công
+          this.router.navigate(['/admin']).then(() => {
+            console.log('Redirected to /admin');
+          }).catch(err => {
+            console.error('Error navigating to /admin:', err);
+          });
+
+        },
+        error => {
+          // Xử lý lỗi đăng nhập (hiển thị thông báo lỗi, v.v.)
+          console.error('Đăng nhập thất bại:', error);
+        }
+      );
   }
+
+
 }
