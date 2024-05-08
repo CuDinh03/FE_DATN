@@ -18,6 +18,8 @@ import { AuthenticationLoginComponent } from './auth/authentication-login/authen
 import {FormsModule} from "@angular/forms";
 import {TaiKhoanService} from "./service/TaiKhoanService";
 import {HttpClientModule} from "@angular/common/http";
+import { ShoppingCartComponent } from './page/shopping-cart/shopping-cart.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -35,8 +37,10 @@ import {HttpClientModule} from "@angular/common/http";
     OfferSectionComponent,
     ShopCategoryComponent,
     AdminViewComponent,
-    AuthenticationLoginComponent
-  ],
+    AuthenticationLoginComponent,
+    ShoppingCartComponent,
+    RegisterComponent
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
