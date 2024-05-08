@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {AuthenticationService} from "../service/AuthenticationService";
 
 @Injectable({
@@ -8,9 +8,14 @@ import {AuthenticationService} from "../service/AuthenticationService";
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthenticationService, private router: Router) {
   }
-  canActivate(): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.authService.isLoggedIn()) {
-      return true; // Người dùng đã đăng nhập, cho phép truy cập
+      if (this.authService.getRole() == 'ADMIN'){
+        return true
+      }else {
+        this.router.navigate(['trang-chu']);
+        return false;
+      }
     } else {
       this.router.navigate(['/log-in']);
       return false;

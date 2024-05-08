@@ -20,12 +20,21 @@ export class AuthenticationLoginComponent {
         response => {
           // Lưu token vào localStorage
           localStorage.setItem('token', response.result.token);
-          // Redirect sau khi đăng nhập thành công
-          this.router.navigate(['/admin']).then(() => {
-            console.log('Redirected to /admin');
-          }).catch(err => {
-            console.error('Error navigating to /admin:', err);
-          });
+          if (this.authService.getRole()=='ADMIN'){
+            // Redirect sau khi đăng nhập thành công
+            this.router.navigate(['/admin']).then(() => {
+              console.log('Redirected to /admin');
+            }).catch(err => {
+              console.error('Error navigating to /admin:', err);
+            });
+          }else {
+            this.router.navigate(['trang-chu']).then(():void =>{
+              console.log('Redirected to /trang-chu');
+            }).catch(err =>{
+              console.error('Error navigating to /trang-chu:', err);
+            })
+          }
+
 
         },
         error => {
