@@ -20,6 +20,7 @@ import {TaiKhoanService} from "./service/TaiKhoanService";
 import {HttpClientModule} from "@angular/common/http";
 import { ShoppingCartComponent } from './page/shopping-cart/shopping-cart.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { SidebarComponent } from './admin/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { RegisterComponent } from './auth/register/register.component';
     AdminViewComponent,
     AuthenticationLoginComponent,
     ShoppingCartComponent,
-    RegisterComponent
+    RegisterComponent,
+    SidebarComponent
     ],
   imports: [
     BrowserModule,

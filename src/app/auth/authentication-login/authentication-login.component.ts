@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-authentication-login',
   templateUrl: './authentication-login.component.html',
   styleUrls: ['./authentication-login.component.css']
+
 })
 export class AuthenticationLoginComponent {
   tenDangNhap: string = '';

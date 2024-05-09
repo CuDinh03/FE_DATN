@@ -1,3 +1,4 @@
+<app-header></app-header>
 <section class="blog-banner-area" id="blog">
   <div class="container h-100">
     <div class="blog-banner">
@@ -33,9 +34,9 @@
           </div> -->
         </div>
       </div>
-      <div class="col-lg-5 offset-lg-1">
+      <div class="col-lg-5 offset-lg-1" *ngIf="account">
         <div class="s_product_text">
-          <h3>Faded SkyBlu Denim Jeans</h3>
+          <h3>{{account.tenDangNhap}}</h3>
           <h2>$149.99</h2>
           <ul class="list">
             <li><a class="active" href="#"><span>Category</span> : Household</a></li>
@@ -45,7 +46,7 @@
             something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
             during the winter.</p>
           <div class="product_count">
-            <label for="qty">Quantity:</label>
+<!--            <label for="qty">Quantity:</label>-->
             <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
                     class="increase items-count" type="button"><i class="ti-angle-left"></i></button>
             <input type="text" name="qty" id="sst" size="2" maxlength="12" value="1" title="Quantity:" class="input-text qty">
@@ -379,3 +380,4 @@
     </div>
   </div>
 </section>
+<app-footer></app-footer>

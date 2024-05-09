@@ -1,28 +1,33 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {error} from "@angular/compiler-cli/src/transformers/util";
+import {ApiResponse} from "../model/ApiResponse";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaiKhoanService {
 
-  accounts: any[] = []; // Định nghĩa mảng chứa danh sách tài khoản
+  apiUrl = 'http://localhost:9091/api/users';
 
-  constructor(private http: HttpClient) { }
 
-  ngOnInit(): void {
-    this.getAccounts(); // Gọi phương thức để lấy danh sách tài khoản khi component được khởi tạo
-  }
+  constructor(private http: HttpClient) {}
 
-  getAccounts() {
-    this.http.get<any>('http://localhost:9091/api/users/all').subscribe(
-      response => {
-        this.accounts = response.result; // Gán danh sách tài khoản từ response vào biến accounts
-      },
-      error => {
-        console.error('Error getting accounts:', error);
-      }
-    );
-  }
+    getAccounts(page: number, size: number): Observable<ApiResponse<any>> {
+        const token = localStorage.getItem('token');
+
+        // Thêm token vào header của yêu cầu
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+
+        let params = new HttpParams();
+        params = params.append('page', page.toString());
+        params = params.append('size', size.toString());
+
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
+    }
+
+
 }

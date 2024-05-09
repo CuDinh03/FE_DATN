@@ -6,7 +6,8 @@ import {AuthenticationLoginComponent} from "./auth/authentication-login/authenti
 import {ShopCategoryComponent} from "./page/shop-category/shop-category.component";
 import {ProductDetailComponent} from "./page/product-detail/product-detail.component";
 import {RegisterComponent} from "./auth/register/register.component";
-import {AuthGuard} from "./auth/auth.guard"; 
+import {AuthGuard} from "./auth/auth.guard";
+import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
 
 const routes: Routes = [
   {
@@ -19,10 +20,12 @@ const routes: Routes = [
   },
   // Các route khác của ứng dụng
   {path:'trang-chu',component:MainViewComponent},
+  {path:'',component:MainViewComponent},
   {path:'log-in',component:AuthenticationLoginComponent},
   {path:'list-p',component:ShopCategoryComponent},
-  {path:'single-p',component:ProductDetailComponent},
-  {path:'register',component:RegisterComponent}
+  {path:'detail/:id',component:ProductDetailComponent},
+  {path:'register',component:RegisterComponent},
+  {path:'shopping-cart',component:ShoppingCartComponent}
 ];
 
 
