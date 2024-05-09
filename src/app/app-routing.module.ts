@@ -1,17 +1,37 @@
-// import {RouterModule,Routes} from "@angular/router";
-// import {NgModule} from "@angular/core";
-// import {MainViewComponent} from "./page/main-view/main-view.component";
-// import {AdminViewComponent} from "./admin/admin-view/admin-view.component";
-// import {AuthenticationLoginComponent} from "./auth/authentication-login/authentication-login.component";
+import {RouterModule,Routes} from "@angular/router";
+import {NgModule} from "@angular/core";
+import {MainViewComponent} from "./page/main-view/main-view.component";
+import {AdminViewComponent} from "./admin/admin-view/admin-view.component";
+import {AuthenticationLoginComponent} from "./auth/authentication-login/authentication-login.component";
+import {ShopCategoryComponent} from "./page/shop-category/shop-category.component";
+import {ProductDetailComponent} from "./page/product-detail/product-detail.component";
+import {RegisterComponent} from "./auth/register/register.component";
+import {AuthGuard} from "./auth/auth.guard";
+import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
 
-// const routes: Routes = [
-//   {path:'trang-chu',component:MainViewComponent},
-//   {path:'admin',component:AdminViewComponent},
-//   {path:'log-in',component:AuthenticationLoginComponent}
-// ];
+const routes: Routes = [
+  {
+    path: 'admin',
+    canActivate: [AuthGuard], // Sử dụng canActivate với AuthGuard
+    children: [
+      { path: '', component: AdminViewComponent },
+      // Các route con khác của trang admin
+    ]
+  },
+  // Các route khác của ứng dụng
+  {path:'trang-chu',component:MainViewComponent},
+  {path:'',component:MainViewComponent},
+  {path:'log-in',component:AuthenticationLoginComponent},
+  {path:'list-p',component:ShopCategoryComponent},
+  {path:'detail/:id',component:ProductDetailComponent},
+  {path:'register',component:RegisterComponent},
+  {path:'shopping-cart',component:ShoppingCartComponent}
+];
 
-// @NgModule({
-//   imports: [RouterModule.forRoot(routes)],
-//   exports: [RouterModule]
-// })
-// export class AppRoutingModule{}
+
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule{}
