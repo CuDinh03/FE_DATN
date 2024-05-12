@@ -1,19 +1,12 @@
-
-import { HttpErrorResponse } from '@angular/common/http';
-import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
-import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component } from '@angular/core';
 import { DanhMucService } from 'src/app/service/DanhMucService';
-
-
 
 @Component({
   selector: 'app-product-view',
   templateUrl: './product-view.component.html',
   styleUrls: ['./product-view.component.css']
 })
-export class ProductViewComponent implements OnInit{
-
+export class ProductViewComponent {
   danhMuc: any[] = [];
   totalElements = 0;
   totalPages = 0;

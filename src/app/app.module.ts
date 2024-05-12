@@ -21,6 +21,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { ShoppingCartComponent } from './page/shopping-cart/shopping-cart.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { SidebarComponent } from './admin/sidebar/sidebar.component';
+import { ProductViewComponent } from './admin/product-view/product-view.component';
 
 @NgModule({
   declarations: [
@@ -40,8 +41,10 @@ import { SidebarComponent } from './admin/sidebar/sidebar.component';
     AdminViewComponent,
     AuthenticationLoginComponent,
     ShoppingCartComponent,
+    SidebarComponent,
     RegisterComponent,
-    SidebarComponent
+    ProductViewComponent
+    
     ],
   imports: [
     BrowserModule,

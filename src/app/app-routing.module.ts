@@ -8,7 +8,7 @@ import {ProductDetailComponent} from "./page/product-detail/product-detail.compo
 import {RegisterComponent} from "./auth/register/register.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
-import { ProductViewComponent } from './admin/product-view/product-view.component';
+import { ProductViewComponent } from "./admin/product-view/product-view.component";
 
 const routes: Routes = [
   {
