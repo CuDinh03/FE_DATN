@@ -25,10 +25,16 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "src/assets/shopping/css/style.css",
+              "src/assets/admin/assets/css/styles.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/shopping/js/main.js",
+              "src/assets/admin/assets/js/app.min.js",
+              "src/assets/admin/assets/js/dashboard.js",
+              "src/assets/admin/assets/js/sidebarmenu.js"
+            ]
+
           },
           "configurations": {
             "production": {
@@ -88,9 +94,15 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/assets/shopping/css/style.css",
+              "src/assets/admin/assets/css/styles.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/shopping/js/main.js",
+              "src/assets/admin/assets/js/app.min.js",
+              "src/assets/admin/assets/js/dashboard.js",
+              "src/assets/admin/assets/js/sidebarmenu.js"
+            ]
           }
         }
       }

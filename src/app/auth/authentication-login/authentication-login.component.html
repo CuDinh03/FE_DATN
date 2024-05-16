@@ -1,39 +1,60 @@
-<section class="login_box_area section-margin">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="login_box_img">
-          <div class="hover">
-            <h4>New to our website?</h4>
-            <p>There are advances being made in science and technology everyday, and a good example of this is the</p>
-            <a class="button button-account" href="register.html">Tạo tài khoản</a>
+<!--<!doctype html>-->
+<!--<html lang="en">-->
+
+<!--<head>-->
+<!--  <meta charset="utf-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--  <title>Login</title>-->
+
+<!--</head>-->
+
+<body>
+<!--  Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+  <div
+    class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="d-flex align-items-center justify-content-center w-100">
+      <div class="row justify-content-center w-100">
+        <div class="col-md-8 col-lg-6 col-xxl-3">
+          <div class="card mb-0">
+            <div class="card-body">
+              <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                <img src="assets/admin/assets/images/logos/dark-logo.svg" width="180" alt="">
+              </a>
+              <p class="text-center">Your Social Campaigns</p>
+              <form (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Tên đăng nhập</label>
+                  <input type="text" [(ngModel)]="tenDangNhap" name="username"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-4">
+                  <label for="exampleInputPassword1" class="form-label">Mật khẩu</label>
+                  <input type="password" [(ngModel)]="matKhau" name="password" class="form-control" id="exampleInputPassword1">
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                  <div class="form-check">
+                    <input class="form-check-input primary" type="checkbox" value="" id="flexCheckChecked" checked>
+                    <label class="form-check-label text-dark" for="flexCheckChecked">
+                      Ghi nho
+                    </label>
+                  </div>
+                  <a class="text-primary fw-bold" href="./index.html">Forgot Password ?</a>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" (click)="onSubmit()">Đăng nhập</button>
+                <div class="d-flex align-items-center justify-content-center">
+                  <p class="fs-4 mb-0 fw-bold">New to ?</p>
+                  <a class="text-primary fw-bold ms-2" href="./authentication-register.html">Create an account</a>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="login_form_inner">
-          <h3>Đăng nhập </h3>
-          <form class="row login_form" (ngSubmit)="onSubmit()" id="contactForm">
-            <div class="col-md-12 form-group">
-              <input type="text" class="form-control" [(ngModel)]="tenDangNhap" name="username" placeholder="Tên đăng nhập">
-            </div>
-            <div class="col-md-12 form-group">
-              <input type="password" class="form-control" [(ngModel)]="matKhau" name="password" placeholder="Mật khẩu">
-            </div>
-            <div class="col-md-12 form-group">
-              <div class="creat_account">
-                <input type="checkbox" id="f-option2" name="selector">
-                <label for="f-option2">Duy trì đăng nhập</label>
-              </div>
-            </div>
-            <div class="col-md-12 form-group">
-              <button type="button" class="button button-login w-100" (click)="onSubmit()">Đăng nhập</button>
-              <a href="#">Quên mật khẩu?</a>
-            </div>
-          </form>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
+
+
+<!--</html>-->
 

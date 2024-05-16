@@ -11,13 +11,13 @@
         </button>
         <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
           <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-            <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/trang-chu">Home</a></li>
             <li class="nav-item submenu dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                  aria-expanded="false">Shop</a>
               <ul class="dropdown-menu">
-                <li class="nav-item"><a class="nav-link" href="category.html">Shop Category</a></li>
-                <li class="nav-item"><a class="nav-link" href="single-product.html">Product Details</a></li>
+                <li class="nav-item"><a class="nav-link" href="/list-p">Shop Category</a></li>
+                <!--                <li class="nav-item"><a class="nav-link" href="single-product.html">Product Details</a></li>-->
                 <li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
                 <li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
                 <li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
@@ -35,18 +35,37 @@
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                  aria-expanded="false">Pages</a>
               <ul class="dropdown-menu">
-                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/log-in">Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
                 <li class="nav-item"><a class="nav-link" href="tracking-order.html">Tracking</a></li>
               </ul>
             </li>
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            <li *ngIf="isLoggedIn()" class="nav-item submenu dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">Tuỳ chọn</a>
+              <ul class="dropdown-menu">
+                <li class="nav-item"><a class="nav-link" href="/my-info">Thông tin cá nhân</a></li>
+                <li *ngIf="getAccount()" class="nav-item"><a class="nav-link" href="/admin">Quản lý tài khoản</a></li>
+                <!--                <li class="nav-item"><a class="nav-link" href="tracking-order.html"></a></li>-->
+              </ul>
+            </li>
           </ul>
 
           <ul class="nav-shop">
-            <li class="nav-item"><button><i class="ti-search"></i></button></li>
-            <li class="nav-item"><button><i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span></button> </li>
-            <li class="nav-item"><a class="button button-header" href="#">Buy Now</a></li>
+            <li class="nav-item"><input type="text" class="form-control" placeholder="Tìm kiếm"></li>
+            <li class="nav-item">
+              <button><i class="ti-search"></i></button>
+            </li>
+            <li class="nav-item"><a type="button" href="/shopping-cart" style="text-decoration: none"
+                                    class="nav-link"><i class="ti-shopping-cart"></i></a></li>
+            <!--            <li class="nav-item"><a class="button button-header" href="#">Buy Now</a></li>-->
+          </ul>
+
+          <ul class="nav-shop">
+            <li class="nav-item" *ngIf="isLoggedIn()">
+              <a class="button button-header" (click)="logout()">Đăng Xuất</a>
+            </li>
           </ul>
         </div>
       </div>
