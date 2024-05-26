@@ -30,7 +30,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
           return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
       }
 
-      addDanhMuc(danhMuc: DanhMucDto): Observable<ApiResponse<any>> {
+      createDanhMuc(danhMuc: DanhMucDto): Observable<ApiResponse<DanhMucDto>> {
         const token = localStorage.getItem('token');
     
         // Thêm token vào header của yêu cầu
@@ -38,7 +38,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
           'Authorization': `Bearer ${token}`
         });
     
-        return this.http.post<ApiResponse<any>>(`${this.apiUrl}`, danhMuc, { headers });
+        return this.http.post<ApiResponse<DanhMucDto>>(`${this.apiUrl}/create`, danhMuc, { headers });
       }
 
       

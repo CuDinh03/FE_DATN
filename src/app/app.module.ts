@@ -15,7 +15,7 @@ import { ShopCategoryComponent } from './page/shop-category/shop-category.compon
 import {AppRoutingModule} from "./app-routing.module";
 import { AdminViewComponent } from './admin/admin-view/admin-view.component';
 import { AuthenticationLoginComponent } from './auth/authentication-login/authentication-login.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaiKhoanService} from "./service/TaiKhoanService";
 import {HttpClientModule} from "@angular/common/http";
 import { ShoppingCartComponent } from './page/shopping-cart/shopping-cart.component';
@@ -50,6 +50,7 @@ import { ProductViewComponent } from './admin/product-view/product-view.componen
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule
   ],
   providers: [TaiKhoanService],

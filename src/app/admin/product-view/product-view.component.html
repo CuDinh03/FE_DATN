@@ -89,7 +89,19 @@
                                         <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
                                         <td>{{danhMuc.ma }}</td>
                                         <td>{{danhMuc.ten}}</td>
-                                        <td>{{danhMuc.trangThai}}</td>
+                                        <td>
+                                            <div *ngIf="danhMuc.trangThai === true">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                    
+                                                  </div>
+                                            </div>
+                                            <div *ngIf="danhMuc.trangThai === false">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                                  </div>
+                                            </div>
+                                        </td>
                                         <td>
                                             <a [routerLink]="'/detail/' + danhMuc.id" type="button"
                                                class="btn btn-info me-2">Chi tiết</a>
@@ -127,7 +139,7 @@
                   <h5 class="modal-title" id="exampleModalLabel">Thêm danh mục</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form #addForm="ngForm">
+                <form [formGroup]="danhMucForm" (ngSubmit)="createDanhMuc()">
                 <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Mã</label>
@@ -144,9 +156,8 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                  <button [disabled]="addForm.invalid" type="button" class="btn btn-primary">Thêm</button>
+                  <button type="submit" class="btn btn-primary">Thêm</button>
                 </div>
-
             </form>
               </div>
             </div>
