@@ -1,6 +1,6 @@
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
      data-sidebar-position="fixed" data-header-position="fixed">
-    <app-sidebar></app-sidebar>
+     <app-sidebar></app-sidebar>
     <!--  Main wrapper -->
     <div class="body-wrapper">
         <!--  Header Start -->
@@ -56,8 +56,8 @@
         <div class="container-fluid">
             <!--  Row 1 -->
             <div class="row">
-                <div class="col-lg-12 d-flex align-items-strech">
-                    <div class="card" style="width: 100%;">
+                <div class="col-12 d-flex align-items-strech">
+                    <div class="card" style="width: 1116px;">
                         <div class="card-body">
                             <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                                 <div class="mb-3 mb-sm-0"> 
@@ -74,7 +74,7 @@
                                 </div>
                             </div>
                             <div *ngIf="danhMuc.length > 0">
-                                <table class="table text-nowrap mb-0 align-middle">
+                                <table class="table text-nowrap mb-0 align-middle col-6 mb-3">
                                     <thead class="text-dark fs-4">
                                     <tr>
                                         <th class="border-bottom-0" scope="col"> <h6 class="fw-semibold mb-0">#</h6></th>
@@ -85,7 +85,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr *ngFor="let danhMuc of danhMuc; let i = index">
+                                    <tr *ngFor="let danhMuc of danhMuc; let i = index" style="height: 30px;">
                                         <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
                                         <td>{{danhMuc.ma }}</td>
                                         <td>{{danhMuc.ten}}</td>
@@ -103,11 +103,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <a [routerLink]="'/detail/' + danhMuc.id" type="button"
-                                               class="btn btn-info me-2">Chi tiết</a>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                Thêm
-                                              </button>
+                                            
                                         </td>
                                     </tr>
                                     </tbody>
@@ -121,7 +117,6 @@
                                             [disabled]="currentPage === totalPages - 1">>
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                         <div *ngIf="danhMuc.length === 0">
@@ -131,36 +126,5 @@
                 </div>
             </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content" style="width: auto;">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Thêm danh mục</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form [formGroup]="danhMucForm" (ngSubmit)="createDanhMuc()">
-                <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Mã</label>
-                            <input type="text" class="form-control" id="ma"name="ma">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tên</label>
-                            <input type="text" class="form-control" name="ten">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Trạng thái</label>
-                            <input type="text" class="form-control" name="trangThai">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                  <button type="submit" class="btn btn-primary">Thêm</button>
-                </div>
-            </form>
-              </div>
-            </div>
-          </div>
     </div>
 </div>

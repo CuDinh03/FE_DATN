@@ -12,7 +12,7 @@ import { TaiKhoanService } from 'src/app/service/TaiKhoanService';
   styleUrls: ['./product-view.component.css']
 })
 export class ProductViewComponent {
-  
+
   danhMuc: any[] = [];
   totalElements = 0;
   totalPages = 0;
@@ -21,11 +21,11 @@ export class ProductViewComponent {
   startFrom = 1;
   submitted = false;
   danhMucForm: FormGroup = new FormGroup({});
-  
+
 
   constructor(private apiService: DanhMucService, private formBuilder: FormBuilder,
-    
-    private router: Router) {}
+
+    private router: Router) { }
 
   ngOnInit(): void {
     this.loadDanhMuc();
@@ -37,18 +37,21 @@ export class ProductViewComponent {
         this.danhMuc = response.result.content;
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
+        console.log("view danh muc");
+        
       });
   }
 
   onPageChange(page: number): void {
-    this.currentPage = page; 
+    this.currentPage = page;
     this.loadDanhMuc();
   }
   createDanhMuc(): void {
+    this.submitted = true;
     const danhMucData: DanhMucDto = this.danhMucForm.value;
     this.apiService.createDanhMuc(danhMucData).subscribe(data => {
       console.log(data);
-      this.router.navigate(['/all']);
+      this.router.navigate(['/admin/san-pham']);
     }, err => console.log(err));
   }
 }
