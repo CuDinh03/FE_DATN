@@ -28,15 +28,15 @@ export class HeaderComponent {
     // Gọi phương thức logout từ AuthenticationService
     this.auth.logout();
     // Redirect đến trang đăng nhập sau khi đăng xuất
-    this.router.navigate(['/log-in']).then(() => {
-      console.log('Redirected to /login');
-      this.router.navigate(['/log-in']).then(() => {
-        console.log('Redirected to /log-in');
+    this.router.navigate(['/trang-chu']).then(() => {
+      console.log('Redirected to /trang-chu');
+      this.router.navigate(['/trang-chu']).then(() => {
+        console.log('Redirected to /trang-chu');
       }).catch(err => {
-        console.error('Error navigating to /log-in:', err);
+        console.error('Error navigating to /trang-chu:', err);
       });
     }).catch(err => {
-      console.error('Error navigating to /login:', err);
+      console.error('Error navigating to /trang-chu:', err);
     });
   }
 

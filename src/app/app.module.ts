@@ -21,7 +21,8 @@ import {HttpClientModule} from "@angular/common/http";
 import { ShoppingCartComponent } from './page/shopping-cart/shopping-cart.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { SidebarComponent } from './admin/sidebar/sidebar.component';
-import { ProductViewComponent } from './admin/product-view/product-view.component';
+import { ProfileComponent } from './page/profile/profile.component';
+
 
 @NgModule({
   declarations: [
@@ -43,16 +44,16 @@ import { ProductViewComponent } from './admin/product-view/product-view.componen
     ShoppingCartComponent,
     SidebarComponent,
     RegisterComponent,
-    ProductViewComponent
-    
+    SidebarComponent,
+    ProfileComponent
     ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+    ],
   providers: [TaiKhoanService],
   bootstrap: [HomeComponent]
 })
