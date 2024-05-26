@@ -8,6 +8,7 @@ import {ProductDetailComponent} from "./page/product-detail/product-detail.compo
 import {RegisterComponent} from "./auth/register/register.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
+import {ProfileComponent} from "./page/profile/profile.component";
 
 const routes: Routes = [
   {
@@ -15,6 +16,7 @@ const routes: Routes = [
     canActivate: [AuthGuard], // Sử dụng canActivate với AuthGuard
     children: [
       { path: '', component: AdminViewComponent },
+      // {path:':id', component:AdminViewComponent}
       // Các route con khác của trang admin
     ]
   },
@@ -25,7 +27,9 @@ const routes: Routes = [
   {path:'list-p',component:ShopCategoryComponent},
   {path:'detail/:id',component:ProductDetailComponent},
   {path:'register',component:RegisterComponent},
-  {path:'shopping-cart',component:ShoppingCartComponent}
+  {path:'shopping-cart',component:ShoppingCartComponent},
+  {path:'sign-up',component:RegisterComponent},
+  {path:'profile',component:ProfileComponent}
 ];
 
 
