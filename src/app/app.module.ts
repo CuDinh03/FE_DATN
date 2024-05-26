@@ -24,6 +24,7 @@ import { SidebarComponent } from './admin/sidebar/sidebar.component';
 import { ProfileComponent } from './page/profile/profile.component';
 import { ProductViewComponent } from './admin/product-view/product-view.component';
 import { AccountViewComponent } from './admin/account-view/account-view.component';
+import { CategoryViewComponent } from './admin/category-view/category-view.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { AccountViewComponent } from './admin/account-view/account-view.componen
     SidebarComponent,
     ProfileComponent,
     ProductViewComponent,
-    AccountViewComponent
+    AccountViewComponent,
+    CategoryViewComponent
     
     ],
   imports: [

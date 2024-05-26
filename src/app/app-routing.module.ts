@@ -1,3 +1,4 @@
+import { CategoryViewComponent } from './admin/category-view/category-view.component';
 import { AccountViewComponent } from './admin/account-view/account-view.component';
 import {RouterModule,Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
@@ -19,7 +20,8 @@ const routes: Routes = [
     children: [
       { path: '', component: AdminViewComponent },
       { path: 'tai-khoan', component: AccountViewComponent },
-      {path:'san-pham',component:ProductViewComponent}
+      {path:'san-pham',component:ProductViewComponent},
+      {path:'danh-muc',component:CategoryViewComponent},
       // {path:':id', component:AdminViewComponent}
       // Các route con khác của trang admin
     ]

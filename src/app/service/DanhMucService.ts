@@ -38,7 +38,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
           'Authorization': `Bearer ${token}`
         });
     
-        return this.http.post<ApiResponse<DanhMucDto>>(`${this.apiUrl}/create`, danhMuc, { headers });
+        return this.http.post<ApiResponse<DanhMucDto>>(`${this.apiUrl}` +'/create', danhMuc, { headers });
       }
 
       
