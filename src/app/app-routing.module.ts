@@ -9,13 +9,17 @@ import {RegisterComponent} from "./auth/register/register.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
 import {ProfileComponent} from "./page/profile/profile.component";
+import {AdminSanphamComponent} from "./admin/admin-sanpham/admin-sanpham.component";
 
 const routes: Routes = [
   {
     path: 'admin',
-    canActivate: [AuthGuard], // Sử dụng canActivate với AuthGuard
+    // canActivate: [AuthGuard], // Sử dụng canActivate với AuthGuard
     children: [
       { path: '', component: AdminViewComponent },
+      { path:'san-pham', component: AdminSanphamComponent},
+      { path:'hoa-don', component: AdminSanphamComponent},
+
       // {path:':id', component:AdminViewComponent}
       // Các route con khác của trang admin
     ]
@@ -29,7 +33,9 @@ const routes: Routes = [
   {path:'register',component:RegisterComponent},
   {path:'shopping-cart',component:ShoppingCartComponent},
   {path:'sign-up',component:RegisterComponent},
-  {path:'profile',component:ProfileComponent}
+  {path:'profile',component:ProfileComponent},
+  // { path: '**', redirectTo: '/trang-chu' } // Đường dẫn cho các trang không tồn tại
+
 ];
 
 

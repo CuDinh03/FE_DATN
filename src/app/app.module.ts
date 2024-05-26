@@ -22,6 +22,8 @@ import { ShoppingCartComponent } from './page/shopping-cart/shopping-cart.compon
 import { RegisterComponent } from './auth/register/register.component';
 import { SidebarComponent } from './admin/sidebar/sidebar.component';
 import { ProfileComponent } from './page/profile/profile.component';
+import { AdminSanphamComponent } from './admin/admin-sanpham/admin-sanpham.component';
+import { AdminHoadonComponent } from './admin/admin-hoadon/admin-hoadon.component';
 
 
 @NgModule({
@@ -44,7 +46,9 @@ import { ProfileComponent } from './page/profile/profile.component';
     ShoppingCartComponent,
     RegisterComponent,
     SidebarComponent,
-    ProfileComponent
+    ProfileComponent,
+    AdminSanphamComponent,
+    AdminHoadonComponent
     ],
     imports: [
         BrowserModule,
