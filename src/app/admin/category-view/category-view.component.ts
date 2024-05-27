@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
+import {ApiResponse} from "../../model/ApiResponse";
 
 @Component({
   selector: 'app-category-view',
@@ -29,11 +30,17 @@ export class CategoryViewComponent {
       // Khởi tạo danhMucForm ở đây
       this.danhMucForm = this.formBuilder.group({
         // Khai báo các trường trong form tại đây
+        ten:[''],
+        ma:[''],
+        trangThai:['']
       });
   }
 
   ngOnInit(): void {
     this.loadDanhMuc();
+  }
+  get f() {
+    return this.danhMucForm.controls;
   }
 
   loadDanhMuc(): void {
@@ -52,13 +59,19 @@ export class CategoryViewComponent {
   }
 
   createDanhMuc(): void {
-       
+
     this.submitted = true;
+    if (this.danhMucForm.invalid){
+      return;
+    }
     const danhMucData: DanhMucDto = this.danhMucForm.value;
-    this.apiService.createDanhMuc(danhMucData).subscribe(data => {
+    this.apiService.createDanhMuc(danhMucData)
+      .subscribe(
+        (data : ApiResponse<DanhMucDto> )  => {
       console.log(data);
-      this.router.navigate(['/admin/san-pham']);
-    }, err => console.log(err));
+      this.router.navigate(['/admin/danh-muc']);
+    },
+          err => console.log(err));
   }
 
   logout() {
