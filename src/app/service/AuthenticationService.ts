@@ -27,6 +27,8 @@ export class AuthenticationService {
 
   getRole(): string | null {
     const token = localStorage.getItem('token');
+
+    console.log(token)
     if (!token) {
       return null;
     }

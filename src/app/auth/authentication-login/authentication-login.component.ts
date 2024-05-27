@@ -36,7 +36,6 @@ export class AuthenticationLoginComponent {
             })
           }
 
-
         },
         error => {
           // Xử lý lỗi đăng nhập (hiển thị thông báo lỗi, v.v.)

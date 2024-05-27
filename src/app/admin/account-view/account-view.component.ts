@@ -1,3 +1,4 @@
+
 import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {TaiKhoanService} from "../../service/TaiKhoanService";
 import {HttpClient} from "@angular/common/http";
@@ -6,12 +7,13 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {ApiResponse} from "../../model/ApiResponse";
 
+
 @Component({
-  selector: 'app-admin-view',
-  templateUrl: './admin-view.component.html',
-  styleUrls: ['./admin-view.component.css']
+  selector: 'app-account-view',
+  templateUrl: './account-view.component.html',
+  styleUrls: ['./account-view.component.css']
 })
-export class AdminViewComponent implements OnInit {
+export class AccountViewComponent {
   @ViewChild('accountModal') accountModal!: ElementRef;
 
   accounts: any[] = [];

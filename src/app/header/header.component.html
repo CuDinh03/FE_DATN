@@ -41,15 +41,6 @@
               </ul>
             </li>
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-            <li *ngIf="isLoggedIn()" class="nav-item submenu dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                 aria-expanded="false">Tuỳ chọn</a>
-              <ul class="dropdown-menu">
-                <li class="nav-item"><a class="nav-link" href="/my-info">Thông tin cá nhân</a></li>
-                <li *ngIf="getAccount()" class="nav-item"><a class="nav-link" href="/admin">Quản lý tài khoản</a></li>
-                <!--                <li class="nav-item"><a class="nav-link" href="tracking-order.html"></a></li>-->
-              </ul>
-            </li>
           </ul>
 
           <ul class="nav-shop">
@@ -63,9 +54,41 @@
           </ul>
 
           <ul class="nav-shop">
-            <li class="nav-item" *ngIf="isLoggedIn()">
-              <a class="button button-header" (click)="logout()">Đăng Xuất</a>
-            </li>
+<!--            <li class="nav-item" >-->
+<!--              <a class="button button-header" (click)="logout()">Đăng Xuất</a>-->
+<!--            </li>-->
+            <div class="navbar-collapse justify-content-end px-0" id="navbarNav" >
+              <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+                <li class="nav-item dropdown"*ngIf="isLoggedIn()">
+                  <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
+                     data-bs-toggle="dropdown"
+                     aria-expanded="false">
+                    <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35"
+                         class="rounded-circle">
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
+                       aria-labelledby="drop2">
+                    <div class="message-body">
+                      <a href="/profile" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-user fs-6"></i>
+                        <p class="mb-0 fs-3">My Profile</p>
+                      </a>
+                      <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-mail fs-6"></i>
+                        <p class="mb-0 fs-3">My Account</p>
+                      </a>
+                      <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-list-check fs-6"></i>
+                        <p class="mb-0 fs-3">My Task</p>
+                      </a>
+                      <a (click)="logout()"
+                         class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
           </ul>
         </div>
       </div>

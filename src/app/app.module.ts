@@ -15,12 +15,16 @@ import { ShopCategoryComponent } from './page/shop-category/shop-category.compon
 import {AppRoutingModule} from "./app-routing.module";
 import { AdminViewComponent } from './admin/admin-view/admin-view.component';
 import { AuthenticationLoginComponent } from './auth/authentication-login/authentication-login.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaiKhoanService} from "./service/TaiKhoanService";
 import {HttpClientModule} from "@angular/common/http";
 import { ShoppingCartComponent } from './page/shopping-cart/shopping-cart.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { SidebarComponent } from './admin/sidebar/sidebar.component';
+import { ProfileComponent } from './page/profile/profile.component';
+import { ProductViewComponent } from './admin/product-view/product-view.component';
+import { AccountViewComponent } from './admin/account-view/account-view.component';
+import { CategoryViewComponent } from './admin/category-view/category-view.component';
 
 @NgModule({
   declarations: [
@@ -41,13 +45,19 @@ import { SidebarComponent } from './admin/sidebar/sidebar.component';
     AuthenticationLoginComponent,
     ShoppingCartComponent,
     RegisterComponent,
-    SidebarComponent
+    SidebarComponent,
+    ProfileComponent,
+    ProductViewComponent,
+    AccountViewComponent,
+    CategoryViewComponent
+    
     ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
   ],
   providers: [TaiKhoanService],
   bootstrap: [HomeComponent]
