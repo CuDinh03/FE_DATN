@@ -14,7 +14,7 @@ import {AdminSanphamComponent} from "./admin/admin-sanpham/admin-sanpham.compone
 const routes: Routes = [
   {
     path: 'admin',
-    // canActivate: [AuthGuard], // Sử dụng canActivate với AuthGuard
+    canActivate: [AuthGuard], // Sử dụng canActivate với AuthGuard
     children: [
       { path: '', component: AdminViewComponent },
       { path:'san-pham', component: AdminSanphamComponent},
