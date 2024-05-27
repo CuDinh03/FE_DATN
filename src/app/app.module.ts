@@ -25,6 +25,7 @@ import { ProfileComponent } from './page/profile/profile.component';
 import { ProductViewComponent } from './admin/product-view/product-view.component';
 import { AccountViewComponent } from './admin/account-view/account-view.component';
 import { CategoryViewComponent } from './admin/category-view/category-view.component';
+import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { CategoryViewComponent } from './admin/category-view/category-view.compo
     ProfileComponent,
     ProductViewComponent,
     AccountViewComponent,
-    CategoryViewComponent
+    CategoryViewComponent,
+    ShoppingViewComponent
     
     ],
   imports: [
