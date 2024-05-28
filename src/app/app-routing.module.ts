@@ -13,7 +13,6 @@ import {AuthGuard} from "./auth/auth.guard";
 import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
 import { ProductViewComponent } from "./admin/product-view/product-view.component";
 import {ProfileComponent} from "./page/profile/profile.component";
-import {AdminSanphamComponent} from "./admin/admin-sanpham/admin-sanpham.component";
 
 const routes: Routes = [
   {
