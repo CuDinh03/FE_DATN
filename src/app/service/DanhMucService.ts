@@ -41,6 +41,33 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
         return this.http.post<ApiResponse<DanhMucDto>>(`${this.apiUrl}` +'/create', danhMuc, { headers });
       }
 
+      deleteDanhMuc(id: string): Observable<ApiResponse<void>> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+    
+        return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
+      }
+
+      openDanhMuc(id: string): Observable<ApiResponse<void>> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+    
+        return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/open/${id}`, {headers});
+      }
+
+
+      getMyInfo(id: string): Observable<ApiResponse<DanhMucDto>> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+    
+        return this.http.get<ApiResponse<DanhMucDto>>(`${this.apiUrl}/${id}`, {headers});
+      }
       
   
   

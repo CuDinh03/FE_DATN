@@ -1,3 +1,4 @@
+import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
 import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
 import { CategoryViewComponent } from './admin/category-view/category-view.component';
 import { AccountViewComponent } from './admin/account-view/account-view.component';
@@ -24,6 +25,7 @@ const routes: Routes = [
       {path:'san-pham',component:ProductViewComponent},
       {path:'danh-muc',component:CategoryViewComponent},
       {path:'shopping',component:ShoppingViewComponent},
+      {path:'hoa-don',component:OrdersViewComponent},
       // {path:':id', component:AdminViewComponent}
       // Các route con khác của trang admin
     ]

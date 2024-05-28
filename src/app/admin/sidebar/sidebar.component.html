@@ -20,7 +20,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item" >
-                    <a class="sidebar-link" [routerLink]="['/admin/shopping']" aria-expanded="false" style="margin-bottom: 25px;">
+                    <a class="sidebar-link" [routerLink]="['/admin/shopping']" routerLinkActive="active" aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-shopping-cart"></i>
                         </span>
@@ -80,6 +80,14 @@
                     </a>
                 </li>
                 <li class="sidebar-item" >
+                    <a class="sidebar-link" [routerLink]="['/admin/hoa-don']" routerLinkActive="active" aria-expanded="false" style="margin-bottom: 25px;">
+                        <span>
+                            <i class="ti ti-file-text"></i>
+                        </span>
+                        <span class="hide-menu">Hóa đơn</span>
+                    </a>
+                </li>
+                <li class="sidebar-item" >
                     <a class="sidebar-link" href="./ui-card.html" aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-ticket"></i>
@@ -88,18 +96,18 @@
                     </a>
                 </li>
                 <li class="sidebar-item" >
-                    
+
                     <a class="sidebar-link" href="./ui-forms.html" aria-expanded="false" >
                         <span>
                             <i class="ti ti-message-report"></i>
                         </span>
                         <span class="hide-menu">Báo cáo</span>
                     </a>
-             
+
                 </li>
             </ul>
         </nav>
-        
+
         <!-- End Sidebar navigation -->
     </div>
     <!-- End Sidebar scroll-->
