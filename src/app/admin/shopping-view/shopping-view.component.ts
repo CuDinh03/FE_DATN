@@ -45,7 +45,7 @@ export class ShoppingViewComponent {
 
   private handleApiResponse(response: ApiResponse<any>): void {
     if (response && response.result) {
-      this.listHoaDon = response.result.content;
+      this.listHoaDon = response.result;
     } else {
       console.log('Không tìm thấy danh sách hóa đơn nào');
     }
