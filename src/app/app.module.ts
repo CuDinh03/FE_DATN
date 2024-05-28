@@ -22,9 +22,10 @@ import { ShoppingCartComponent } from './page/shopping-cart/shopping-cart.compon
 import { RegisterComponent } from './auth/register/register.component';
 import { SidebarComponent } from './admin/sidebar/sidebar.component';
 import { ProfileComponent } from './page/profile/profile.component';
-import { AdminSanphamComponent } from './admin/admin-sanpham/admin-sanpham.component';
-import { AdminHoadonComponent } from './admin/admin-hoadon/admin-hoadon.component';
-
+import { ProductViewComponent } from './admin/product-view/product-view.component';
+import { AccountViewComponent } from './admin/account-view/account-view.component';
+import { CategoryViewComponent } from './admin/category-view/category-view.component';
+import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
 
 @NgModule({
   declarations: [
@@ -47,16 +48,19 @@ import { AdminHoadonComponent } from './admin/admin-hoadon/admin-hoadon.componen
     RegisterComponent,
     SidebarComponent,
     ProfileComponent,
-    AdminSanphamComponent,
-    AdminHoadonComponent
+    ProductViewComponent,
+    AccountViewComponent,
+    CategoryViewComponent,
+    ShoppingViewComponent
+    
     ],
-    imports: [
-        BrowserModule,
+  imports: [
+    BrowserModule,
         AppRoutingModule,
         FormsModule,
         HttpClientModule,
         ReactiveFormsModule,
-    ],
+  ],
   providers: [TaiKhoanService],
   bootstrap: [HomeComponent]
 })

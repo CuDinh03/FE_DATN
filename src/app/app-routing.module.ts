@@ -1,3 +1,6 @@
+import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
+import { CategoryViewComponent } from './admin/category-view/category-view.component';
+import { AccountViewComponent } from './admin/account-view/account-view.component';
 import {RouterModule,Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
 import {MainViewComponent} from "./page/main-view/main-view.component";
@@ -8,6 +11,7 @@ import {ProductDetailComponent} from "./page/product-detail/product-detail.compo
 import {RegisterComponent} from "./auth/register/register.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
+import { ProductViewComponent } from "./admin/product-view/product-view.component";
 import {ProfileComponent} from "./page/profile/profile.component";
 import {AdminSanphamComponent} from "./admin/admin-sanpham/admin-sanpham.component";
 
@@ -17,9 +21,10 @@ const routes: Routes = [
     canActivate: [AuthGuard], // Sử dụng canActivate với AuthGuard
     children: [
       { path: '', component: AdminViewComponent },
-      { path:'san-pham', component: AdminSanphamComponent},
-      { path:'hoa-don', component: AdminSanphamComponent},
-
+      { path: 'tai-khoan', component: AccountViewComponent },
+      {path:'san-pham',component:ProductViewComponent},
+      {path:'danh-muc',component:CategoryViewComponent},
+      {path:'shopping',component:ShoppingViewComponent},
       // {path:':id', component:AdminViewComponent}
       // Các route con khác của trang admin
     ]
@@ -31,6 +36,7 @@ const routes: Routes = [
   {path:'list-p',component:ShopCategoryComponent},
   {path:'detail/:id',component:ProductDetailComponent},
   {path:'register',component:RegisterComponent},
+  {path:'shopping-cart',component:ShoppingCartComponent},
   {path:'shopping-cart',component:ShoppingCartComponent},
   {path:'sign-up',component:RegisterComponent},
   {path:'profile',component:ProfileComponent},

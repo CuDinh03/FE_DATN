@@ -27,7 +27,7 @@ export class RegisterComponent {
         this.accountForm = this.formBuilder.group({
             tenDangNhap: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(10)]],
             matKhau: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
-            xacNhanMatKhau: ['', Validators.required]
+            xacNhanMatKhau: ['', [Validators.required,Validators.minLength(8), Validators.maxLength(16)]]
         });
     }
 
