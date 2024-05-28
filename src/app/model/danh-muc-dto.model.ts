@@ -1,6 +1,6 @@
 export interface DanhMucDto{
-    id: String;
-    ma: String;
-    ten: String;
-    trangThai: Boolean;
+    id: string;
+    ma: string;
+    ten: string;
+    trangThai: boolean;
 }
