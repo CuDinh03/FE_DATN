@@ -28,6 +28,7 @@ export class CategoryViewComponent implements OnInit {
   errorMessage: string = '';
   danhMucForm: FormGroup; 
   id: string;
+  selectedDanhMuc: any;
 
   constructor(private apiService: DanhMucService, private formBuilder: FormBuilder,
     private router: Router, private auth: AuthenticationService, private router1: ActivatedRoute) {
@@ -118,6 +119,8 @@ export class CategoryViewComponent implements OnInit {
       this.loadDanhMuc();
       this.router.navigate(['/admin/danh-muc']);
     })
+
+    
   }
 
 
