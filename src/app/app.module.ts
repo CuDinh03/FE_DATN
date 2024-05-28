@@ -26,6 +26,7 @@ import { ProductViewComponent } from './admin/product-view/product-view.componen
 import { AccountViewComponent } from './admin/account-view/account-view.component';
 import { CategoryViewComponent } from './admin/category-view/category-view.component';
 import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
+import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.compo
     ProductViewComponent,
     AccountViewComponent,
     CategoryViewComponent,
-    ShoppingViewComponent
+    ShoppingViewComponent,
+    OrdersViewComponent
     
     ],
   imports: [
