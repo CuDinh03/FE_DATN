@@ -13,6 +13,7 @@ import {AuthGuard} from "./auth/auth.guard";
 import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
 import { ProductViewComponent } from "./admin/product-view/product-view.component";
 import {ProfileComponent} from "./page/profile/profile.component";
+import {AdminSanphamComponent} from "./admin/admin-sanpham/admin-sanpham.component";
 
 const routes: Routes = [
   {
@@ -38,8 +39,9 @@ const routes: Routes = [
   {path:'shopping-cart',component:ShoppingCartComponent},
   {path:'shopping-cart',component:ShoppingCartComponent},
   {path:'sign-up',component:RegisterComponent},
-  {path:'profile',component:ProfileComponent}
-  
+  {path:'profile',component:ProfileComponent},
+  // { path: '**', redirectTo: '/trang-chu' } // Đường dẫn cho các trang không tồn tại
+
 ];
 
 
