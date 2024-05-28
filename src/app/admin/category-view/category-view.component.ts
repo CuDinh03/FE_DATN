@@ -34,7 +34,7 @@ export class CategoryViewComponent implements OnInit {
     private router: Router, private auth: AuthenticationService, private router1: ActivatedRoute) {
       this.danhMucForm = this.formBuilder.group({
         ten: ['', [Validators.required]],
-        ma: ['', [Validators.required]],
+        ma: [''],
         trangThai: ['']
       });
 
@@ -81,15 +81,15 @@ export class CategoryViewComponent implements OnInit {
           console.log(data);
           this.loadDanhMuc;
           this.router.navigate(['/admin/danh-muc']);
+          alert('Thêm thành công')
+          
         },
         (error: HttpErrorResponse) => {
           console.error(error);
           if (error.error.code === ErrorCode.CATEGORY_EXISTED) {
             this.errorMessage = 'Danh mục đã tồn tại.';
-            alert('danh mục đã tồn tại')
-          } else if (error.error.code === ErrorCode.USERNAME_INVALID) {
-            this.errorMessage = 'Tên danh mục không được để trống.';
-          } else if (error.error.code === ErrorCode.PASSWORD_INVALID) {
+            alert('Danh mục đã tồn tại')
+          }  else if (error.error.code === ErrorCode.PASSWORD_INVALID) {
             this.errorMessage = 'Mã danh mục không được để trống';
           } else {
             this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';

@@ -146,15 +146,17 @@
                       <div class="row alig n-items-start">
                         <form [formGroup]="danhMucForm" (ngSubmit)="createDanhMuc()">
                             <div class="mb-3">
-                              <label for="ma" class="form-label">Mã</label>
-                              <input type="text" class="form-control" formControlName="ma" id="ma">
-                              <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched)">
+                              <span><label for="ma" class="form-label">Mã</label></span>
+                                
+                                <span> - </span>
+                              
+                              <!-- <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched)">
                                 <div *ngIf="f['ma'].errors">
                                   <div id="validationServer03Feedback">
                                     <small style="color: red;">Không được để trống</small>
                                   </div>
                                 </div>
-                              </div>
+                              </div> -->
                             </div>
                             <div class="mb-4">
                               <label for="ten" class="form-label">Tên</label>
