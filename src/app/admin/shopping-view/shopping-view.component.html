@@ -62,7 +62,7 @@
                                     <h5 class="card-title fw-semibold">Bán hàng tại quầy</h5>
                                 </div>
                                 <div>
-                                    <a class="btn btn-primary" href="#">Tạo hóa đơn</a>
+                                    <a class="btn btn-primary" style="color: white;" (click)="createHoaDon()">Tạo hóa đơn</a>
                                 </div>
                             </div>
 
@@ -71,7 +71,7 @@
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist" >
                                         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                                            aria-selected="true" *ngFor="let listHoaDon of listHoaDon.slice(0,5);">{{listHoaDon.idHoaDon.ma}}</button>                                   
+                                            aria-selected="true"*ngFor="let listHoaDon of listHoaDon">{{listHoaDon.idHoaDon.ma}}</button>                                   
                                     </div>
                                 </nav>
 
@@ -388,3 +388,18 @@
         </div>
     </div>
 </div>
+
+<div id="limitReachedModal" class="modal" [class.show]="isModalVisible">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>Thông báo</h2>
+      </div>
+      <div class="modal-body">
+        <p>Chỉ được thêm tối đa 5 hóa đơn.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="closeModal()">OK</button>
+      </div>
+    </div>
+  </div>
