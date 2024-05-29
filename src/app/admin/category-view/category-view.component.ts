@@ -18,39 +18,56 @@ import { ErrorCode } from "../../model/ErrorCode";
 })
 export class CategoryViewComponent implements OnInit {
 
-  danhMuc: any[] = [];
+  danhMuc: DanhMucDto[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
+  showSuccessAlert = false;
   pageSize = 5;
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
   danhMucForm: FormGroup; 
   id: string;
-  selectedDanhMuc: any;
+  successMessage = '';
+  selectedDanhMuc: DanhMucDto | null = null;
+  isEditMode = false;
 
-  constructor(private apiService: DanhMucService, private formBuilder: FormBuilder,
-    private router: Router, private auth: AuthenticationService, private router1: ActivatedRoute) {
-      this.danhMucForm = this.formBuilder.group({
-        ten: ['', [Validators.required]],
-        ma: [''],
-        trangThai: ['']
-      });
+  constructor(
+    private apiService: DanhMucService, 
+    private formBuilder: FormBuilder,
+    private router: Router, 
+    private auth: AuthenticationService, 
+    private route: ActivatedRoute
+  ) {
+    this.danhMucForm = this.formBuilder.group({
+      ten: ['', [Validators.required]],
+      ma: [''],
+      id: [''],
+      trangThai: ['']
+    });
 
-      this.id = this.router1.snapshot.params['id'];
-
-      
+    this.id = this.route.snapshot.params['id'];
   }
-  
 
   ngOnInit(): void {
     this.loadDanhMuc();
-    
   }
 
   get f() {
     return this.danhMucForm.controls;
+  }
+
+  onSubmit(): void {
+    this.submitted = true;
+    if (this.danhMucForm.invalid) {
+      return;
+    }
+    if (this.isEditMode) {
+      this.updateDanhMuc();
+    } else {
+      this.createDanhMuc();
+    }
   }
 
   loadDanhMuc(): void {
@@ -59,9 +76,7 @@ export class CategoryViewComponent implements OnInit {
         this.danhMuc = response.result.content;
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
-        console.log("view danh muc");
       });
-      
   }
 
   onPageChange(page: number): void {
@@ -78,27 +93,68 @@ export class CategoryViewComponent implements OnInit {
     this.apiService.createDanhMuc(danhMucData)
       .subscribe(
         (data: ApiResponse<DanhMucDto>) => {
-          console.log(data);
-          this.loadDanhMuc;
-          this.router.navigate(['/admin/danh-muc']);
-          alert('Thêm thành công')
-          
+          this.showSuccessAlert = true;
+          this.loadDanhMuc();
+          setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
+          this.danhMucForm.reset();
+          this.isEditMode = false;
         },
         (error: HttpErrorResponse) => {
-          console.error(error);
-          if (error.error.code === ErrorCode.CATEGORY_EXISTED) {
-            this.errorMessage = 'Danh mục đã tồn tại.';
-            alert('Danh mục đã tồn tại')
-          }  else if (error.error.code === ErrorCode.PASSWORD_INVALID) {
-            this.errorMessage = 'Mã danh mục không được để trống';
-          } else {
-            this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
-          }
+          this.handleError(error);
         }
       );
   }
 
-  logout() {
+  updateDanhMuc(): void {
+    this.submitted = true;
+    if (this.danhMucForm.invalid) {
+      return;
+    }
+    const danhMucData: DanhMucDto = this.danhMucForm.value;
+    this.apiService.updateDanhMuc(danhMucData).subscribe(
+      () => {
+        this.showSuccessAlert = true;
+        this.loadDanhMuc();
+        setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
+        this.danhMucForm.reset();
+        this.isEditMode = false; // Đặt lại chế độ
+      },
+      (error: HttpErrorResponse) => {
+        this.handleError(error);
+      }
+    );
+  }
+
+  
+
+  findById(id: string): void {
+    this.apiService.findById(id)
+      .subscribe(
+        (response: ApiResponse<DanhMucDto>) => {
+          this.danhMucForm.patchValue({
+            id: response.result.id,
+            ma: response.result.ma,
+            ten: response.result.ten,
+            trangThai: response.result.trangThai.toString() // Chuyển đổi boolean thành string
+          });
+          this.isEditMode = true;
+        },
+        (error: HttpErrorResponse) => {
+          this.handleError(error);
+        }
+      );
+  }
+
+  handleError(error: HttpErrorResponse): void {
+    console.error(error);
+    if (error.error.code === ErrorCode.PASSWORD_INVALID) {
+      this.errorMessage = 'Mã danh mục không được để trống';
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
+
+  logout(): void {
     this.auth.logout();
     this.router.navigate(['/log-in']).then(() => {
       console.log('Redirected to /log-in');
@@ -107,21 +163,21 @@ export class CategoryViewComponent implements OnInit {
     });
   }
 
-  delete(id:any) {
-    this.apiService.deleteDanhMuc(id).subscribe(response => {
+  delete(id: any): void {
+    this.apiService.deleteDanhMuc(id).subscribe(() => {
       this.loadDanhMuc();
       this.router.navigate(['/admin/danh-muc']);
-    })
+    });
   }
 
-  openDanhMuc(id:any) {
-    this.apiService.openDanhMuc(id).subscribe(response => {
+  openDanhMuc(id: any): void {
+    this.apiService.openDanhMuc(id).subscribe(() => {
       this.loadDanhMuc();
       this.router.navigate(['/admin/danh-muc']);
-    })
-
-    
+    });
   }
 
-
+  closeSuccessAlert(): void {
+    this.showSuccessAlert = false;
+  }
 }

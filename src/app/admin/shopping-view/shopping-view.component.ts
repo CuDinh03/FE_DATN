@@ -1,13 +1,15 @@
-
-
-import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { HoaDonService } from './../../service/HoaDonService';
+import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { HoaDonService } from 'src/app/service/HoaDonService';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Validators } from '@angular/forms';
+import { AuthenticationService } from './../../service/AuthenticationService';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
-import { ApiResponse } from 'src/app/model/ApiResponse';
-
-
+import { ApiResponse } from "../../model/ApiResponse";
+import { ErrorCode } from "../../model/ErrorCode";
 
 @Component({
   selector: 'app-shopping-view',
@@ -60,7 +62,6 @@ export class ShoppingViewComponent {
       
   }
   
-
 
   logout() {
     // Gọi phương thức logout từ AuthenticationService
