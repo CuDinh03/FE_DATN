@@ -1,6 +1,6 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-shopping-view',
@@ -14,7 +14,7 @@ export class ShoppingViewComponent {
     
   }
 
-  
+
 
   logout() {
     // Gọi phương thức logout từ AuthenticationService
