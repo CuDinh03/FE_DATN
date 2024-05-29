@@ -57,7 +57,7 @@
             <div class="card-body">
               <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                 <div class="mb-3 mb-sm-0">
-                  <h5 class="card-title fw-semibold">Danh sách tài khoản</h5>
+                  <h5 class="card-title fw-semibold">Danh sách danh mục</h5>
                 </div>
                 <!-- <div *ngIf="errorMessage" class="alert alert-danger position-fixed top-50 start-50 translate-middle"
                   role="alert">
@@ -131,7 +131,7 @@
                       </button>
                 </div>
                 <div *ngIf="danhMuc.length === 0">
-                  <p>Không có tài khoản nào được tìm thấy.</p>
+                  <p>Không có danh mục nào được tìm thấy.</p>
                 </div>
               </div>
 
@@ -146,15 +146,17 @@
                       <div class="row alig n-items-start">
                         <form [formGroup]="danhMucForm" (ngSubmit)="createDanhMuc()">
                             <div class="mb-3">
-                              <label for="ma" class="form-label">Mã</label>
-                              <input type="text" class="form-control" formControlName="ma" id="ma">
-                              <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched)">
+                              <span><label for="ma" class="form-label">Mã</label></span>
+                                
+                                <span> - </span>
+                              
+                              <!-- <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched)">
                                 <div *ngIf="f['ma'].errors">
                                   <div id="validationServer03Feedback">
                                     <small style="color: red;">Không được để trống</small>
                                   </div>
                                 </div>
-                              </div>
+                              </div> -->
                             </div>
                             <div class="mb-4">
                               <label for="ten" class="form-label">Tên</label>

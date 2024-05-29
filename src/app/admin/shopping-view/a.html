@@ -68,12 +68,16 @@
 
                             <div>
                                 <nav>
-                                    <div class="nav nav-tabs" id="nav-tab" role="tablist" >
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                                            aria-selected="true"
-                                            *ngFor="let listHoaDon of listHoaDon.slice(0,5);"
-                                             >{{listHoaDon.idHoaDon.ma}}</button>                                   
+                                            aria-selected="true">HD0111103</button>
+                                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-profile" type="button" role="tab"
+                                            aria-controls="nav-profile" aria-selected="false">HD0111104</button>
+                                        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-contact" type="button" role="tab"
+                                            aria-controls="nav-contact" aria-selected="false">HD0111105</button>
                                     </div>
                                 </nav>
 
@@ -134,7 +138,7 @@
                                     <div class="tab-pane fade" id="nav-contact" role="tabpanel"
                                         aria-labelledby="nav-contact-tab" tabindex="0">...</div>
                                 </div>
-
+                                
                             </div>
 
                         </div>
@@ -155,15 +159,11 @@
                                                 <input type="text" class="form-control" formControlName="ma"
                                                     aria-describedby="textHelp" id="ma">
                                             </div>
-                                            <div class="row align-items-center">
-                                                <div class="col-8 mb-4">
-                                                  <label for="ten" class="form-label">Khách hàng</label>
-                                                  <input type="text" class="form-control" formControlName="sdt" id="sdt">
-                                                </div>
-                                                <div class="col-4 mb-4">
-                                                  <button class="btn btn-primary mt-4">Thêm</button>
-                                                </div>
-                                              </div>
+                                            <div class="mb-4">
+                                                <label for="ten" class="form-label">Khách hàng</label>
+                                                <input type="text" class="form-control" formControlName="sdt" id="sdt">
+                                                <i>-</i>
+                                            </div>
                                             <div class="mb-4">
                                                 <label for="trangThai" class="form-label">Voucher</label>
                                                 <select class="form-select" aria-label="Default select example">
@@ -182,48 +182,9 @@
                                             </div>
                                             <div class="mb-4">
                                                 <label for="ma" class="form-label">Tổng tiền</label>
-                                                <input type="text" class="form-control" formControlName="tongTien"
-                                                    id="tongTien">
+                                                <input type="text" class="form-control" formControlName="tienKhachDua"
+                                                    id="tienKhachDua">
                                             </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền khách đưa</label>
-                                                <input type="text" class="form-control" />
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền giảm</label>
-                                                <input type="text" class="form-control" />
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền trả lại: </label>
-                                                <span><i> - </i></span>
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Thành tiền: </label>
-                                                <span><i> - </i></span>
-                                            </div>
-                                            <span>
-                                                <a class="btn btn-outline-info me-3" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
-                                                    <span>
-                                                        <i class="ti ti-wallet"></i>
-                                                    </span>
-                                                    <span class="hide-menu">Thanh toán</span>
-                                                </a>
-                                            </span>
-                                            <span>
-                                                <a class="btn btn-outline-danger" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
-                                                    <span>
-                                                        <i class="ti ti-x"></i>
-                                                    </span>
-                                                    <span class="hide-menu">Hủy đơn</span>
-                                                </a>
-                                            </span>
-                                            
-                                        </form>
-                                        <!-- <form>
-                        
-                                           
                                             <div class="mb-4">
                                                 <label for="ma" class="form-label">Tiền khách đưa</label>
                                                 <input type="text" class="form-control" formControlName="tienKhachDua"
@@ -260,7 +221,7 @@
                                                     <span class="hide-menu">Hủy đơn</span>
                                                 </a>
                                             </span>
-                                        </form> -->
+                                        </form>
                                     </div>
                                 </div>
                                 <div id="earning"></div>
@@ -366,7 +327,7 @@
                                             <td>12</td>
                                             <td>Tết</td>
                                             <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
-                                                    <i class="ti ti-plus" ></i>
+                                                    <i class="ti ti-plus"></i>
                                                 </a></td>
                                         </tr>
                                     </tbody>
