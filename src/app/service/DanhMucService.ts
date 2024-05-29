@@ -69,7 +69,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
         return this.http.get<ApiResponse<DanhMucDto>>(`${this.apiUrl}/${id}`, {headers});
       }
       
-      updateDanhMuc(danhMuc: DanhMucDto): Observable<ApiResponse<void>> {
+      updateDanhMuc(id: string, danhMuc: DanhMucDto): Observable<ApiResponse<void>> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`

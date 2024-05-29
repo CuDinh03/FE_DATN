@@ -52,6 +52,9 @@ export class CategoryViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDanhMuc();
+    if (this.id) {
+      this.findById(this.id);
+    }
   }
 
   get f() {
@@ -111,7 +114,7 @@ export class CategoryViewComponent implements OnInit {
       return;
     }
     const danhMucData: DanhMucDto = this.danhMucForm.value;
-    this.apiService.updateDanhMuc(danhMucData).subscribe(
+    this.apiService.updateDanhMuc(danhMucData.id, danhMucData).subscribe(
       () => {
         this.showSuccessAlert = true;
         this.loadDanhMuc();

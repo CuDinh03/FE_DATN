@@ -363,9 +363,12 @@
                                             <td>120.000đ</td>
                                             <td>12</td>
                                             <td>Tết</td>
-                                            <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
-                                                    <i class="ti ti-plus" ></i>
+                                            <td><a data-bs-toggle="modal" data-bs-target="#exampleModal" href="/edit" style="color: #7A98FE;font-size: 20px;">
+                                                    <i class="ti ti-plus"></i>
                                                 </a></td>
+
+                                        <!-- Button trigger modal -->
+  
                                         </tr>
                                     </tbody>
                                 </table>
@@ -388,3 +391,23 @@
         </div>
     </div>
 </div>
+
+
+ <!-- Modal thêm số lượng vào giỏ hàng -->
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Nhập số lượng</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+         <input type="number" class="form-control">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Thêm</button>
+        </div>
+      </div>
+    </div>
+  </div>
