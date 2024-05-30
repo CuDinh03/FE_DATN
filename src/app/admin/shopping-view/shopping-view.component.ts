@@ -17,46 +17,36 @@ import { SanPhamService } from 'src/app/service/SanPhamService';
   templateUrl: './shopping-view.component.html',
   styleUrls: ['./shopping-view.component.css']
 })
-
 export class ShoppingViewComponent {
   listHoaDon: any[] = [];
   hoaDon: any = {};
+  danhMuc: any[] = [];
+  totalElements = 0;
+  totalPages = 0;
+  currentPage = 0;
+  pageSize = 5;
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
   selectedDanhMuc: any;
+  maxHoaDon = 5;
+  isModalVisible = false;
   listSanPham: any[] = [];
   listHoaDonChiTiet: any[] = [];
 
-
-  constructor(private auth: AuthenticationService,
-    private router: Router,
-    private hoaDonService: HoaDonService,
-    private apiService: DanhMucService,
-    private sanPhamService: SanPhamService
-  ) {
-    // Khởi tạo danhMucForm ở đây
-
-  maxHoaDon = 5;
-  isModalVisible = false;
-
-  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService) {
+  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService, private spctservive: SanPhamService) {
       // Khởi tạo danhMucForm ở đây
     
   }
-
   ngOnInit(): void {
     this.loadHoaDon();
     this.getAllSanPham();
-    // api get all hoa don
-
   }
 
   getHoaDonChiTietByIdHoaDon(id: string) {
     // call api hoa don chi tiet theo id hoa don
     // this.listHoaDonChiTiet
   }
-
 
   loadHoaDon(): void {
     this.hoaDonService.getAll()
@@ -66,15 +56,16 @@ export class ShoppingViewComponent {
       );
   }
 
+  
   getAllSanPham(): void {
-    this.sanPhamService.getAll().subscribe(
-      res => {
-        this.listSanPham = res.result;
+    this.spctservive.getAll().subscribe(
+      response => {
+        this.listSanPham = response.result;
         console.log(this.listSanPham)
+
       }
     )
-  }
-
+    }
 
   private handleApiResponse(response: ApiResponse<any>): void {
     if (response && response.result) {
@@ -83,17 +74,7 @@ export class ShoppingViewComponent {
       console.log('Không tìm thấy danh sách hóa đơn nào');
     }
   }
-
-  loadDanhMuc(): void {
-    this.apiService.getDanhMuc(this.currentPage, this.pageSize)
-      .subscribe(response => {
-        this.danhMuc = response.result.content;
-        this.totalElements = response.result.totalElements;
-        this.totalPages = response.result.totalPages;
-        console.log("view danh muc");
-      });
-  }
-
+  
 
   logout() {
     // Gọi phương thức logout từ AuthenticationService
@@ -131,4 +112,16 @@ export class ShoppingViewComponent {
   closeModal(): void {
     this.isModalVisible = false;
   }
+
+  loadDanhMuc(): void {
+    this.apiService.getDanhMuc(this.currentPage, this.pageSize)
+      .subscribe(response => {
+        this.danhMuc = response.result.content;
+        this.totalElements = response.result.totalElements;
+        this.totalPages = response.result.totalPages;
+        console.log("view danh muc");
+      });
+  }
+
 }
+

@@ -47,9 +47,9 @@ export class CategoryViewComponent implements OnInit {
       trangThai: ['']
     });
 
-      this.id = this.router1.snapshot.params['id'];
+    this.id = this.route.snapshot.params['id'];
   }
-  
+
   ngOnInit(): void {
     this.loadDanhMuc();
     if (this.id) {
@@ -61,7 +61,17 @@ export class CategoryViewComponent implements OnInit {
     return this.danhMucForm.controls;
   }
 
-
+  onSubmit(): void {
+    this.submitted = true;
+    if (this.danhMucForm.invalid) {
+      return;
+    }
+    if (this.isEditMode) {
+      this.updateDanhMuc();
+    } else {
+      this.createDanhMuc();
+    }
+  }
 
   loadDanhMuc(): void {
     this.apiService.getDanhMuc(this.currentPage, this.pageSize)
@@ -71,8 +81,6 @@ export class CategoryViewComponent implements OnInit {
         this.totalPages = response.result.totalPages;
       });
   }
-
-
 
   onPageChange(page: number): void {
     this.currentPage = page;

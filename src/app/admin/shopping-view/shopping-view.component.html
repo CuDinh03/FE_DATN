@@ -69,27 +69,26 @@
 
                             <div *ngIf="listHoaDon.length > 0">
                                 <nav>
-                                    <div class="nav nav-tabs" id="nav-tab" role="tablist" >
-                                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                                            aria-selected="true">{{ listHoaDon.idHoaDon?.ma }}</button>                                   
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <!-- hoaDon = 1 row hoaDonChiTiet  -->
                                         <button *ngFor="let hoaDon of listHoaDon.slice(0, 4); let i = index"
                                             class="nav-link" [class.active]="i === 0" id="nav-home-tab-{{i}}"
                                             data-bs-toggle="tab" [attr.data-bs-target]="'#nav-home-' + i" type="button"
                                             role="tab" [attr.aria-controls]="'nav-home-' + i"
                                             [attr.aria-selected]="i === 0">
+                                            <!-- MAHOADON (tab) -->
                                             {{hoaDon.idHoaDon.ma}}
                                         </button>
                                     </div>
                                 </nav>
 
                                 <div class="tab-content" id="nav-tabContent">
+                                    <!-- hoaDon = 1 row hoaDonChiTiet  -->
                                     <div *ngFor="let hoaDon of listHoaDon.slice(0, 4); let i = index"
                                         class="tab-pane fade" [class.show]="i === 0" [class.active]="i === 0"
                                         id="nav-home-{{i}}" role="tabpanel" [attr.aria-labelledby]="'nav-home-tab-' + i"
                                         tabindex="0">
-                                        <!-- Nội dung của hóa đơn ở đây -->
+                                        
                                         <div class="d-flex justify-content-end mt-3 mb-3">
                                             <a class="btn btn-primary" style="color: white;">Làm mới</a>
                                         </div>
@@ -108,11 +107,13 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
+
+                                                        <!-- SANPHAMCHITET từ hoaDonChiTiet  -->
                                                         <td>{{ hoaDon.idSanPham.idSanPham.ten }}</td>
                                                         <td>{{ hoaDon.idSanPham.idMauSac.ten }}</td>
-                                                        <td>{{ hoaDon.idSanPham.idKichThuoc.ten}}</td>
-                                                        <td>{{ hoaDon.soLuong}}</td>
-                                                        <td>{{ hoaDon.giaBan}}</td>
+                                                        <td>{{ hoaDon.idSanPham.idKichThuoc.ten }}</td>
+                                                        <td>+1 khi thêm sp vào giỏ </td>
+                                                        <td>{{ hoaDon.idSanPham.giaBan }}</td>
                                                         <td>
                                                             <span><a href="/edit"
                                                                     style="color: #7A98FE;font-size: 16px;">
@@ -367,26 +368,6 @@
                                             <td>120.000đ</td>
                                             <td>12</td>
                                             <td>Tết</td>
-                                            <td><a data-bs-toggle="modal" data-bs-target="#exampleModal" href="/edit" style="color: #7A98FE;font-size: 20px;">
-                                                    <i class="ti ti-plus"></i>
-                                                </a></td>
-
-                                        <!-- Button trigger modal -->
-  
-                                        </tr>
-                                        <tr style="height: 30px;" *ngFor="let element of listSanPham; let i = index">
-
-                                            <td (click)="getHoaDonChiTietByIdHoaDon(element.id)"> {{ i + 1 }}</td>
-                                            <td>{{ element.idSanPham.ma }}</td>
-                                            <td>{{ element.idSanPham.ten }}</td>
-                                            <td>{{ element.idDanhMuc.ten }}</td>
-                                            <td>{{ element.idMauSac.ten }}</td>
-                                            <td>{{ element.idKichThuoc.ten }}</td>
-                                            <td>{{ element.idChatLieu.ten }}</td>
-                                            <td>{{ element.idThuongHieu.ten }}</td>
-                                            <td>{{ element.giaBan }}</td>
-                                            <td>12</td>
-                                            <td>Tết</td>
                                             <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
                                                     <i class="ti ti-plus"></i>
                                                 </a></td>
@@ -429,7 +410,6 @@
         </div>
     </div>
 </div>
-
 
  <!-- Modal thêm số lượng vào giỏ hàng -->
  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
