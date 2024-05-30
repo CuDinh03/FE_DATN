@@ -20,27 +20,17 @@ import { SanPhamService } from 'src/app/service/SanPhamService';
 
 export class ShoppingViewComponent {
   listHoaDon: any[] = [];
-  danhMuc: any[] = [];
-  totalElements = 0;
-  totalPages = 0;
-  currentPage = 0;
-  pageSize = 5;
+  hoaDon: any = {};
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
   selectedDanhMuc: any;
-  listSanPham: any[] = [];
-  listHoaDonChiTiet: any[] = [];
+  maxHoaDon = 5;
+  isModalVisible = false;
 
-
-  constructor(private auth: AuthenticationService,
-    private router: Router,
-    private hoaDonService: HoaDonService,
-    private apiService: DanhMucService,
-    private sanPhamService: SanPhamService
-  ) {
-    // Khởi tạo danhMucForm ở đây
-
+  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService) {
+      // Khởi tạo danhMucForm ở đây
+    
   }
 
   ngOnInit(): void {
@@ -81,17 +71,7 @@ export class ShoppingViewComponent {
       console.log('Không tìm thấy danh sách hóa đơn nào');
     }
   }
-
-  loadDanhMuc(): void {
-    this.apiService.getDanhMuc(this.currentPage, this.pageSize)
-      .subscribe(response => {
-        this.danhMuc = response.result.content;
-        this.totalElements = response.result.totalElements;
-        this.totalPages = response.result.totalPages;
-        console.log("view danh muc");
-      });
-  }
-
+  
 
   logout() {
     // Gọi phương thức logout từ AuthenticationService
@@ -109,5 +89,24 @@ export class ShoppingViewComponent {
     });
   }
 
-  
+  createHoaDon(): void {
+    this.submitted = true;
+    if(this.listHoaDon.length >= this.maxHoaDon){
+      this.openModal();
+      return;
+    }
+    this.hoaDonService.createHoaDon(this.hoaDon).subscribe(data => {
+      console.log(data);
+      this.loadHoaDon(); 
+      this.router.navigate(['/admin/shopping']);
+    }, err => console.log(err));
+  }
+
+  openModal(): void {
+    this.isModalVisible = true;
+  }
+
+  closeModal(): void {
+    this.isModalVisible = false;
+  }
 }

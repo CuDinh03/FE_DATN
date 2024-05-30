@@ -73,7 +73,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
       }
 
 
-      getMyInfo(id: string): Observable<ApiResponse<DanhMucDto>> {
+      findById(id: string): Observable<ApiResponse<DanhMucDto>> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
@@ -82,6 +82,13 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
         return this.http.get<ApiResponse<DanhMucDto>>(`${this.apiUrl}/${id}`, {headers});
       }
       
+      updateDanhMuc(id: string, danhMucData: DanhMucDto): Observable<ApiResponse<void>> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+        return this.http.put<ApiResponse<void>>(`${this.apiUrl}/${id}`, danhMucData, { headers });
+      }
   
   
   }
