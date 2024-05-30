@@ -32,10 +32,9 @@ export class ShoppingViewComponent {
   maxHoaDon = 5;
   isModalVisible = false;
   listSanPham: any[] = [];
-  listHoaDonChiTiet: any[] = [];
 
-  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService, private spctservive: SanPhamService) {
-      // Khởi tạo danhMucForm ở đây
+  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService, private sanPhamService : SanPhamService) {
+      // Khởi tạo danhMucForm ở đâ
     
   }
   ngOnInit(): void {
@@ -48,6 +47,9 @@ export class ShoppingViewComponent {
     // this.listHoaDonChiTiet
   }
 
+
+  
+  // => list hoa don chi tiet 
   loadHoaDon(): void {
     this.hoaDonService.getAll()
       .subscribe(
@@ -112,16 +114,5 @@ export class ShoppingViewComponent {
   closeModal(): void {
     this.isModalVisible = false;
   }
-
-  loadDanhMuc(): void {
-    this.apiService.getDanhMuc(this.currentPage, this.pageSize)
-      .subscribe(response => {
-        this.danhMuc = response.result.content;
-        this.totalElements = response.result.totalElements;
-        this.totalPages = response.result.totalPages;
-        console.log("view danh muc");
-      });
-  }
-
 }
 
