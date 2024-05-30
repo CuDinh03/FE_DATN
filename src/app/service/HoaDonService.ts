@@ -12,7 +12,6 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
   
     apiUrl = 'http://localhost:9091/api/hoa-don-chi-tiet';
   
-  
     constructor(private http: HttpClient) {}
   
       

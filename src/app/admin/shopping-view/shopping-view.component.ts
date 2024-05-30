@@ -10,12 +10,14 @@ import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
+import { SanPhamService } from 'src/app/service/SanPhamService';
 
 @Component({
   selector: 'app-shopping-view',
   templateUrl: './shopping-view.component.html',
   styleUrls: ['./shopping-view.component.css']
 })
+
 export class ShoppingViewComponent {
   listHoaDon: any[] = [];
   hoaDon: any = {};
@@ -23,6 +25,18 @@ export class ShoppingViewComponent {
   submitted = false;
   errorMessage: string = '';
   selectedDanhMuc: any;
+  listSanPham: any[] = [];
+  listHoaDonChiTiet: any[] = [];
+
+
+  constructor(private auth: AuthenticationService,
+    private router: Router,
+    private hoaDonService: HoaDonService,
+    private apiService: DanhMucService,
+    private sanPhamService: SanPhamService
+  ) {
+    // Khởi tạo danhMucForm ở đây
+
   maxHoaDon = 5;
   isModalVisible = false;
 
@@ -30,9 +44,19 @@ export class ShoppingViewComponent {
       // Khởi tạo danhMucForm ở đây
     
   }
+
   ngOnInit(): void {
     this.loadHoaDon();
+    this.getAllSanPham();
+    // api get all hoa don
+
   }
+
+  getHoaDonChiTietByIdHoaDon(id: string) {
+    // call api hoa don chi tiet theo id hoa don
+    // this.listHoaDonChiTiet
+  }
+
 
   loadHoaDon(): void {
     this.hoaDonService.getAll()
@@ -42,6 +66,16 @@ export class ShoppingViewComponent {
       );
   }
 
+  getAllSanPham(): void {
+    this.sanPhamService.getAll().subscribe(
+      res => {
+        this.listSanPham = res.result;
+        console.log(this.listSanPham)
+      }
+    )
+  }
+
+
   private handleApiResponse(response: ApiResponse<any>): void {
     if (response && response.result) {
       this.listHoaDon = response.result;
@@ -49,7 +83,17 @@ export class ShoppingViewComponent {
       console.log('Không tìm thấy danh sách hóa đơn nào');
     }
   }
-  
+
+  loadDanhMuc(): void {
+    this.apiService.getDanhMuc(this.currentPage, this.pageSize)
+      .subscribe(response => {
+        this.danhMuc = response.result.content;
+        this.totalElements = response.result.totalElements;
+        this.totalPages = response.result.totalPages;
+        console.log("view danh muc");
+      });
+  }
+
 
   logout() {
     // Gọi phương thức logout từ AuthenticationService
