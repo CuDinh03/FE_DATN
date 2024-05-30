@@ -97,6 +97,7 @@ export class CategoryViewComponent implements OnInit {
       .subscribe(
         (data: ApiResponse<DanhMucDto>) => {
           this.showSuccessAlert = true;
+          this.successMessage = 'Thêm thành công'
           this.loadDanhMuc();
           setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
           this.danhMucForm.reset();
@@ -117,6 +118,7 @@ export class CategoryViewComponent implements OnInit {
     this.apiService.updateDanhMuc(danhMucData.id, danhMucData).subscribe(
       () => {
         this.showSuccessAlert = true;
+        this.successMessage = 'Sửa thành công'
         this.loadDanhMuc();
         setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
         this.danhMucForm.reset();
