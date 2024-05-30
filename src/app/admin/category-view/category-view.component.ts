@@ -39,11 +39,8 @@ export class CategoryViewComponent implements OnInit {
       });
 
       this.id = this.router1.snapshot.params['id'];
-
-      
   }
   
-
   ngOnInit(): void {
     this.loadDanhMuc();
     
@@ -52,6 +49,8 @@ export class CategoryViewComponent implements OnInit {
   get f() {
     return this.danhMucForm.controls;
   }
+
+
 
   loadDanhMuc(): void {
     this.apiService.getDanhMuc(this.currentPage, this.pageSize)
@@ -63,6 +62,8 @@ export class CategoryViewComponent implements OnInit {
       });
       
   }
+
+
 
   onPageChange(page: number): void {
     this.currentPage = page;

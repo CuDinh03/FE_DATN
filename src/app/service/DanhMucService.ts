@@ -12,9 +12,9 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
   
     apiUrl = 'http://localhost:9091/api/danh-muc';
   
-  
     constructor(private http: HttpClient) {}
   
+    
       getDanhMuc(page: number, size: number): Observable<ApiResponse<any>> {
           const token = localStorage.getItem('token');
   
@@ -29,6 +29,19 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
   
           return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       createDanhMuc(danhMuc: DanhMucDto): Observable<ApiResponse<DanhMucDto>> {
         const token = localStorage.getItem('token');

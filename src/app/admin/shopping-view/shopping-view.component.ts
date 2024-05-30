@@ -10,12 +10,14 @@ import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
+import { SanPhamService } from 'src/app/service/SanPhamService';
 
 @Component({
   selector: 'app-shopping-view',
   templateUrl: './shopping-view.component.html',
   styleUrls: ['./shopping-view.component.css']
 })
+
 export class ShoppingViewComponent {
   listHoaDon: any[] = [];
   danhMuc: any[] = [];
@@ -27,13 +29,32 @@ export class ShoppingViewComponent {
   submitted = false;
   errorMessage: string = '';
   selectedDanhMuc: any;
-  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService) {
-      // Khởi tạo danhMucForm ở đây
-    
+  listSanPham: any[] = [];
+  listHoaDonChiTiet: any[] = [];
+
+
+  constructor(private auth: AuthenticationService,
+    private router: Router,
+    private hoaDonService: HoaDonService,
+    private apiService: DanhMucService,
+    private sanPhamService: SanPhamService
+  ) {
+    // Khởi tạo danhMucForm ở đây
+
   }
+
   ngOnInit(): void {
     this.loadHoaDon();
+    this.getAllSanPham();
+    // api get all hoa don
+
   }
+
+  getHoaDonChiTietByIdHoaDon(id: string) {
+    // call api hoa don chi tiet theo id hoa don
+    // this.listHoaDonChiTiet
+  }
+
 
   loadHoaDon(): void {
     this.hoaDonService.getAll()
@@ -42,6 +63,16 @@ export class ShoppingViewComponent {
         (error: any) => console.error('Error loading invoices:', error)
       );
   }
+
+  getAllSanPham(): void {
+    this.sanPhamService.getAll().subscribe(
+      res => {
+        this.listSanPham = res.result;
+        console.log(this.listSanPham)
+      }
+    )
+  }
+
 
   private handleApiResponse(response: ApiResponse<any>): void {
     if (response && response.result) {
@@ -59,9 +90,8 @@ export class ShoppingViewComponent {
         this.totalPages = response.result.totalPages;
         console.log("view danh muc");
       });
-      
   }
-  
+
 
   logout() {
     // Gọi phương thức logout từ AuthenticationService
@@ -78,4 +108,6 @@ export class ShoppingViewComponent {
       console.error('Error navigating to /login:', err);
     });
   }
+
+  
 }
