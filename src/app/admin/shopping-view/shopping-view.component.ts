@@ -27,9 +27,10 @@ export class ShoppingViewComponent {
   selectedDanhMuc: any;
   maxHoaDon = 5;
   isModalVisible = false;
+  listSanPham: any[] = [];
 
-  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService) {
-      // Khởi tạo danhMucForm ở đây
+  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService, private sanPhamService : SanPhamService) {
+      // Khởi tạo danhMucForm ở đâ
     
   }
 
@@ -46,6 +47,8 @@ export class ShoppingViewComponent {
   }
 
 
+  
+  // => list hoa don chi tiet 
   loadHoaDon(): void {
     this.hoaDonService.getAll()
       .subscribe(
