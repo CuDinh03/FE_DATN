@@ -8,7 +8,7 @@ import { ApiResponse } from "../model/ApiResponse";
     providedIn: 'root'
   })
 
-  export class SanPhamService {
+  export class SanPhamCTService {
   
     apiUrl = 'http://localhost:9091/ct-san-pham';
   
@@ -25,4 +25,6 @@ import { ApiResponse } from "../model/ApiResponse";
 
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, {headers});
       }
+
+      
   }

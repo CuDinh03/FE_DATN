@@ -1,4 +1,3 @@
-import { HoaDonService } from './../../service/HoaDonService';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -10,7 +9,9 @@ import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
-import { SanPhamService } from 'src/app/service/SanPhamService';
+import { HoaDonCTService } from 'src/app/service/HoaDonCTService';
+import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
+import { HoaDonService } from 'src/app/service/HoaDonService';
 
 @Component({
   selector: 'app-shopping-view',
@@ -27,11 +28,16 @@ export class ShoppingViewComponent {
   selectedDanhMuc: any;
   maxHoaDon = 5;
   isModalVisible = false;
-  listSanPham: any[] = [];
+  listSanPhamCT: any[] = [];
+  listHoaDonCT: any[] = [];
 
-  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService, private sanPhamService : SanPhamService) {
-      // Khởi tạo danhMucForm ở đâ
-    
+
+  constructor(private auth: AuthenticationService, private router: Router,
+    private hoaDonCTService: HoaDonCTService,
+    private hoaDonService: HoaDonService,
+    private apiService: DanhMucService,
+    private sanPhamCTService: SanPhamCTService) {
+    // Khởi tạo danhMucForm ở đâ
   }
 
   ngOnInit(): void {
@@ -41,14 +47,19 @@ export class ShoppingViewComponent {
 
   }
 
+  
   getHoaDonChiTietByIdHoaDon(id: string) {
-    // call api hoa don chi tiet theo id hoa don
-    // this.listHoaDonChiTiet
+      this.hoaDonCTService.getListHoaDonCTByIdHoaDon(id)
+      .subscribe(
+        response => {
+          this.listHoaDonCT = response.result;
+          console.log(this.listHoaDonCT)
+        } 
+      )
   }
 
 
-  
-  // => list hoa don chi tiet 
+  // => list hoa don
   loadHoaDon(): void {
     this.hoaDonService.getAll()
       .subscribe(
@@ -57,16 +68,17 @@ export class ShoppingViewComponent {
       );
   }
 
+  // => list san pham chi tiet
   getAllSanPham(): void {
-    this.sanPhamService.getAll().subscribe(
+    this.sanPhamCTService.getAll().subscribe(
       res => {
-        this.listSanPham = res.result;
-        console.log(this.listSanPham)
+        this.listSanPhamCT = res.result;
+        console.log(this.listSanPhamCT)
       }
     )
   }
 
-
+  // => list hoa don
   private handleApiResponse(response: ApiResponse<any>): void {
     if (response && response.result) {
       this.listHoaDon = response.result;
@@ -74,7 +86,7 @@ export class ShoppingViewComponent {
       console.log('Không tìm thấy danh sách hóa đơn nào');
     }
   }
-  
+
 
   logout() {
     // Gọi phương thức logout từ AuthenticationService
@@ -94,13 +106,13 @@ export class ShoppingViewComponent {
 
   createHoaDon(): void {
     this.submitted = true;
-    if(this.listHoaDon.length >= this.maxHoaDon){
+    if (this.listHoaDon.length >= this.maxHoaDon) {
       this.openModal();
       return;
     }
-    this.hoaDonService.createHoaDon(this.hoaDon).subscribe(data => {
+    this.hoaDonCTService.createHoaDonCT(this.hoaDon).subscribe(data => {
       console.log(data);
-      this.loadHoaDon(); 
+      this.loadHoaDon();
       this.router.navigate(['/admin/shopping']);
     }, err => console.log(err));
   }

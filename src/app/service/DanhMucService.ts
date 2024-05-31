@@ -30,17 +30,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
           return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
       }
 
-
-
-
-
-
-
-
-
-
-
-
+      
 
 
       createDanhMuc(danhMuc: DanhMucDto): Observable<ApiResponse<DanhMucDto>> {
@@ -53,6 +43,8 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
     
         return this.http.post<ApiResponse<DanhMucDto>>(`${this.apiUrl}` +'/create', danhMuc, { headers });
       }
+
+
 
       deleteDanhMuc(id: string): Observable<ApiResponse<void>> {
         const token = localStorage.getItem('token');
