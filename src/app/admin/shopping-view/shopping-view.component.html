@@ -69,71 +69,69 @@
                                 </div>
                             </div>
 
-                            <div *ngIf="listHoaDon.length > 0">
+                            <div *ngIf="listHoaDonGioHang.length > 0">
                                 <nav>
-                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <button *ngFor="let hoaDon of listHoaDon.slice(0,5); let i = index"
+                                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button *ngFor="let hoaDon of listHoaDonGioHang.slice(0,5); let i = index"
                                             class="nav-link" [class.active]="i === 0" id="nav-home-tab-{{i}}"
                                             data-bs-toggle="tab" [attr.data-bs-target]="'#nav-home-' + i" type="button"
                                             role="tab" [attr.aria-controls]="'nav-home-' + i"
-                                            [attr.aria-selected]="i === 0" (click)="loadHoaDonChiTiet(hoaDon.id)">
-                                            {{hoaDon.ma}}
-                                        </button>
-                                    </div>
+                                            [attr.aria-selected]="i === 0" (click)="loadGioHangChiTiet(hoaDon.idGioHang.id)">
+                                      {{hoaDon.idHoaDon.ma}}
+                                    </button>
+                                  </div>
                                 </nav>
+                              
                                 <div class="tab-content" id="nav-tabContent">
-                                    <div *ngFor="let hoaDon of listHoaDon.slice(0,5); let i = index"
-                                        class="tab-pane fade" [class.show]="i === 0" [class.active]="i === 0"
-                                        id="nav-home-{{i}}" role="tabpanel" [attr.aria-labelledby]="'nav-home-tab-' + i"
-                                        tabindex="0">
-
-                                        <div class="d-flex justify-content-end mt-3 mb-3">
-                                            <a class="btn btn-primary" style="color: white;">Làm mới</a>
-                                        </div>
-                                        <div class="container-fluid">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Tên sản phẩm</th>
-                                                        <th>Màu sắc</th>
-                                                        <th>Kích thước</th>
-                                                        <th>Số lượng</th>
-                                                        <th>Đơn giá</th>
-                                                        <th>Thao tác</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let chiTiet of chiTietHoaDon">
-                                                        <td>{{ chiTiet.idSanPhamChiTiet.idSanPham.ten }}</td>
-                                                        <td>{{ chiTiet.idSanPhamChiTiet.idMauSac.ten }}</td>
-                                                        <td>{{ chiTiet.idSanPhamChiTiet.idKichThuoc.ten }}</td>
-                                                        <td>{{ chiTiet.soLuong }}</td>
-                                                        <td>{{ chiTiet.giaBan }}</td>
-
-                                                        <td>
-                                                          <span><a href="/edit" style="color: #7A98FE; font-size: 16px;">
-                                                            <i class="ti ti-edit"></i>
-                                                          </a></span>
-                                                          <span><a href="/delete" style="color: #F87777; font-size: 16px;">
-                                                            <i class="ti ti-x"></i>
-                                                          </a></span>
-                                                        </td>
-                                                </tbody>
-                                                <div *ngIf="noProductsFound">
-                                                    <p>Chưa có sản phẩm nào</p>
-                                                  </div>
-                                            </table>
-                                        </div>
-                                        <div class="mt-3 d-flex justify-content-end">
-                                            <button class="btn btn-primary">
-                                                < </button>
-                                                    <span style="margin: 5px">Trang 1</span>
-                                                    <button class="btn btn-primary"> >
-                                                    </button>
-                                        </div>
+                                  <div *ngFor="let hoaDon of listHoaDonGioHang.slice(0,5); let i = index"
+                                       class="tab-pane fade" [class.show]="i === 0" [class.active]="i === 0"
+                                       id="nav-home-{{i}}" role="tabpanel" [attr.aria-labelledby]="'nav-home-tab-' + i"
+                                       tabindex="0">
+                                    <div class="d-flex justify-content-end mt-3 mb-3">
+                                      <a class="btn btn-primary" style="color: white;">Làm mới</a>
                                     </div>
+                                    <div class="container-fluid">
+                                      <table class="table">
+                                        <thead>
+                                          <tr>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Màu sắc</th>
+                                            <th>Kích thước</th>
+                                            <th>Số lượng</th>
+                                            <th>Đơn giá</th>
+                                            <th>Thao tác</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let chiTiet of gioHangChiTiet">
+                                            <td>{{ chiTiet.idSanPham.idSanPham.ten }}</td>
+                                            <td>{{ chiTiet.idSanPham.idMauSac.ten }}</td>
+                                            <td>{{ chiTiet.idSanPham.idKichThuoc.ten }}</td>
+                                            <td>{{ chiTiet.soLuong }}</td>
+                                            <td>{{ chiTiet.giaBan }}</td>
+                                            <td>
+                                              <span><a href="/edit" style="color: #7A98FE; font-size: 16px;">
+                                                <i class="ti ti-edit"></i>
+                                              </a></span>
+                                              <span><a href="/delete" style="color: #F87777; font-size: 16px;">
+                                                <i class="ti ti-x"></i>
+                                              </a></span>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                      <div *ngIf="noProductsFound">
+                                        <p>Chưa có sản phẩm nào</p>
+                                      </div>
+                                    </div>
+                                    <div class="mt-3 d-flex justify-content-end">
+                                      <button class="btn btn-primary"><</button>
+                                      <span style="margin: 5px">Trang 1</span>
+                                      <button class="btn btn-primary">></button>
+                                    </div>
+                                  </div>
                                 </div>
-                            </div>
+                              </div>                              
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,6 @@
 
+import { GioHangChiTietService } from './../../service/GioHangChiTietService';
+import { HoaDonGioHangService } from './../../service/HoaDonGioHangService';
 import { HoaDonService } from './../../service/HoaDonService';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -12,10 +14,6 @@ import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
 import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
-import { HoaDonCTService } from 'src/app/service/HoaDonCTService';
-import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
-import { HoaDonService } from 'src/app/service/HoaDonService';
-
 
 @Component({
   selector: 'app-shopping-view',
@@ -25,6 +23,7 @@ import { HoaDonService } from 'src/app/service/HoaDonService';
 
 export class ShoppingViewComponent {
   listHoaDon: any[] = [];
+  listHoaDonGioHang: any[] = [];
   hoaDon: any = {};
   startFrom = 1;
   submitted = false;
@@ -32,16 +31,22 @@ export class ShoppingViewComponent {
   selectedDanhMuc: any;
   maxHoaDon = 5;
   isModalVisible = false;
-  chiTietHoaDon: any[] = [];
+  gioHangChiTiet: any[] = [];
   noProductsFound: boolean = false;
 
-  constructor(private auth: AuthenticationService,private router: Router, private hoaDonChiTietService: HoaDonChiTietService, private apiService: DanhMucService,
-    private hoaDonService: HoaDonService) {
+  constructor(private auth: AuthenticationService,
+    private router: Router, 
+    private hoaDonChiTietService: HoaDonChiTietService, 
+    private apiService: DanhMucService,
+    private hoaDonService: HoaDonService,
+    private hoaDonGioHangService: HoaDonGioHangService,
+    private gioHangChiTietService: GioHangChiTietService) {
       // Khởi tạo danhMucForm ở đây
   }
 
   ngOnInit(): void {
     this.loadHoaDon();
+    this.loadHoaDonGioHang();
     
   }
 
@@ -53,23 +58,26 @@ export class ShoppingViewComponent {
   //     );
   // }
 
-  loadHoaDonChiTiet(idHoaDon: string): void {
-    this.hoaDonChiTietService.getAll(idHoaDon).subscribe(
+  loadGioHangChiTiet(idGioHang: string): void {
+    this.gioHangChiTietService.getAll(idGioHang).subscribe(
       (response: ApiResponse<any>) => {
         if (response.result && response.result.length > 0) {
-          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
-          this.chiTietHoaDon = response.result;
+          this.gioHangChiTiet = response.result;
           this.noProductsFound = false;
         } else {
-          // Nếu không có hóa đơn chi tiết, đặt noProductsFound là true
           this.noProductsFound = true;
+          this.gioHangChiTiet = [];
         }
       },
       (error: HttpErrorResponse) => {
-        this.handleErrorGetAllHoaDonCT(error);
+        if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+          this.noProductsFound = true;
+          this.gioHangChiTiet = [];
+        } else {
+          console.error('Unexpected error:', error);
+        }
       }
     );
-    
   }
 
   handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
@@ -77,6 +85,22 @@ export class ShoppingViewComponent {
     if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
       this.errorMessage = 'Chưa có sản phẩm nào';
     }
+  }
+
+  loadHoaDonGioHang(): void {
+    this.hoaDonGioHangService.getAll().subscribe(
+      (response: ApiResponse<any>) => {
+        if (response.result && response.result.length > 0) {
+          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
+          this.listHoaDonGioHang = response.result;
+        } else {
+          console.log(response);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.handleErrorGetAllHoaDonCT(error);
+      }
+    );
   }
   
 
@@ -89,14 +113,14 @@ export class ShoppingViewComponent {
     }
 
   // => list san pham chi tiet
-  getAllSanPham(): void {
-    this.sanPhamCTService.getAll().subscribe(
-      res => {
-        this.listSanPhamCT = res.result;
-        console.log(this.listSanPhamCT)
-      }
-    )
-  }
+  // getAllSanPham(): void {
+  //   this.sanPhamCTService.getAll().subscribe(
+  //     res => {
+  //       this.listSanPhamCT = res.result;
+  //       console.log(this.listSanPhamCT)
+  //     }
+  //   )
+  // }
 
   // => list hoa don
   private handleApiResponse(response: ApiResponse<any>): void {
