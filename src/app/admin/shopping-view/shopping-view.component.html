@@ -112,8 +112,9 @@
                                                         <td>{{ hoaDon.idSanPham.idSanPham.ten }}</td>
                                                         <td>{{ hoaDon.idSanPham.idMauSac.ten }}</td>
                                                         <td>{{ hoaDon.idSanPham.idKichThuoc.ten }}</td>
-                                                        <td>+1 khi thêm sp vào giỏ </td>
-                                                        <td>{{ hoaDon.idSanPham.giaBan }}</td>
+                                                        <td>{{ hoaDon.soLuong}}</td>
+                                                      
+                                                        <td>{{ hoaDon.giaBan }}</td>
                                                         <td>
                                                             <span><a href="/edit"
                                                                     style="color: #7A98FE;font-size: 16px;">
@@ -383,7 +384,9 @@
                                             <td>{{ element.idChatLieu.ten }}</td>
                                             <td>{{ element.idThuongHieu.ten }}</td>
                                             <td>{{ element.giaBan }}</td>
-                                            <td>12</td>
+
+                                            <td>{{ element.soLuong }}</td>
+
                                             <td>Tết</td>
                                             <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
                                                     <i class="ti ti-plus"></i>
