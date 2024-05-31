@@ -1,7 +1,9 @@
-import {ShoppingViewComponent} from './admin/shopping-view/shopping-view.component';
-import {CategoryViewComponent} from './admin/category-view/category-view.component';
-import {AccountViewComponent} from './admin/account-view/account-view.component';
-import {RouterModule, Routes} from "@angular/router";
+
+import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
+import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
+import { CategoryViewComponent } from './admin/category-view/category-view.component';
+import { AccountViewComponent } from './admin/account-view/account-view.component';
+import {RouterModule,Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
 import {MainViewComponent} from "./page/main-view/main-view.component";
 import {AdminViewComponent} from "./admin/admin-view/admin-view.component";
@@ -26,6 +28,7 @@ const routes: Routes = [
       {path: 'danh-muc', component: CategoryViewComponent},
       {path: 'shopping', component: ShoppingViewComponent},
       {path: 'voucher', component: VoucherViewComponent},
+      {path:'hoa-don',component:OrdersViewComponent},
       // Các route con khác của trang admin
     ]
   },

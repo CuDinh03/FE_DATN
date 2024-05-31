@@ -1,10 +1,22 @@
-import {Router} from '@angular/router';
-import {AuthenticationService} from './../../service/AuthenticationService';
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild , OnInit } from '@angular/core';
 import {VoucherService} from "../../service/VoucherService";
-import {ApiResponse} from "../../model/ApiResponse";
 import {KhachHangService} from "../../service/KhachHangService";
-import * as bootstrap from "bootstrap";
+// import * as bootstrap from "bootstrap";
+import { HoaDonService } from './../../service/HoaDonService';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Validators } from '@angular/forms';
+import { AuthenticationService } from './../../service/AuthenticationService';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
+import { DanhMucService } from 'src/app/service/DanhMucService';
+import { ApiResponse } from "../../model/ApiResponse";
+import { ErrorCode } from "../../model/ErrorCode";
+import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
+import { HoaDonCTService } from 'src/app/service/HoaDonCTService';
+import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
+import { HoaDonService } from 'src/app/service/HoaDonService';
 
 
 @Component({
@@ -12,6 +24,7 @@ import * as bootstrap from "bootstrap";
   templateUrl: './shopping-view.component.html',
   styleUrls: ['./shopping-view.component.css']
 })
+
 export class ShoppingViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   vouchers: any[] = [];
@@ -23,21 +36,33 @@ export class ShoppingViewComponent {
   customer: any = null;
   newCustomer: any = {ten: ''};
   sdtValue: string = '';
-
   voucher: any;
   // searchControl = new FormControl('');
   results: string[] = [];
+  listHoaDon: any[] = [];
+  hoaDon: any = {};
+  startFrom = 1;
+  submitted = false;
+  errorMessage: string = '';
+  selectedDanhMuc: any;
+  maxHoaDon = 5;
+  isModalVisible = false;
+  chiTietHoaDon: any[] = [];
+  noProductsFound: boolean = false;
+
 
 
   constructor(
               private router: Router,
               private voucherService: VoucherService,
-              private khachHangService: KhachHangService
+              private khachHangService: KhachHangService,
+    private hoaDonChiTietService: HoaDonChiTietService, 
+    private apiService: DanhMucService,
+    private hoaDonService: HoaDonService
   ) {
     // Khởi tạo Form ở đây
 
   };
-
 
 
   showModal(): void {
@@ -213,4 +238,94 @@ export class ShoppingViewComponent {
     }
   }
 
+
+
+  ngOnInit(): void {
+    this.loadHoaDon();
+    
+  }
+
+  // loadHoaDonChiTiet(): void {
+  //   this.hoaDonService.getAll()
+  //     .subscribe(
+  //       (response: ApiResponse<any>) => this.handleApiResponse(response),
+  //       (error: any) => console.error('Error loading invoices:', error)
+  //     );
+  // }
+
+  loadHoaDonChiTiet(idHoaDon: string): void {
+    this.hoaDonChiTietService.getAll(idHoaDon).subscribe(
+      (response: ApiResponse<any>) => {
+        if (response.result && response.result.length > 0) {
+          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
+          this.chiTietHoaDon = response.result;
+          this.noProductsFound = false;
+        } else {
+          // Nếu không có hóa đơn chi tiết, đặt noProductsFound là true
+          this.noProductsFound = true;
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.handleErrorGetAllHoaDonCT(error);
+      }
+    );
+    
+  }
+
+  handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
+    console.error(error);
+    if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+      this.errorMessage = 'Chưa có sản phẩm nào';
+    }
+  }
+  
+
+  loadHoaDon(): void {
+      this.hoaDonService.getAll()
+        .subscribe(
+          (response: ApiResponse<any>) => this.handleApiResponse(response),
+          (error: any) => console.error('Error loading invoices:', error)
+        );
+    }
+
+  // => list san pham chi tiet
+  getAllSanPham(): void {
+    this.sanPhamCTService.getAll().subscribe(
+      res => {
+        this.listSanPhamCT = res.result;
+        console.log(this.listSanPhamCT)
+      }
+    )
+  }
+
+  // => list hoa don
+  private handleApiResponse(response: ApiResponse<any>): void {
+    if (response && response.result) {
+      this.listHoaDon = response.result;
+    } else {
+      console.log('Không tìm thấy danh sách hóa đơn nào');
+    }
+}
+
+  createHoaDon(): void {
+    this.submitted = true;
+    if (this.listHoaDon.length >= this.maxHoaDon) {
+      this.openModal();
+      return;
+    }
+    this.hoaDonChiTietService.createHoaDon(this.hoaDon).subscribe(data => {
+
+      console.log(data);
+      this.loadHoaDon();
+      this.router.navigate(['/admin/shopping']);
+    }, err => console.log(err));
+  }
+
+  openModal(): void {
+    this.isModalVisible = true;
+  }
+
+  closeModal(): void {
+    this.isModalVisible = false;
+  }
 }
