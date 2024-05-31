@@ -1,4 +1,4 @@
-import { HoaDonService } from './../../service/HoaDonService';
+import { HoaDonChiTietService } from '../../service/HoaDonChiTietService';
 
 import { AuthenticationService } from './../../service/AuthenticationService';
 import { Component } from '@angular/core';
@@ -26,7 +26,7 @@ export class OrdersViewComponent {
   errorMessage: string = '';
 
 
-  constructor(private apiService: HoaDonService, private formBuilder: FormBuilder,
+  constructor(private apiService: HoaDonChiTietService, private formBuilder: FormBuilder,
     private router: Router, private auth: AuthenticationService) {
       // Khởi tạo danhMucForm ở đây
     
@@ -35,19 +35,19 @@ export class OrdersViewComponent {
 
 
   ngOnInit(): void {
-    this.loadHoaDon();
+    // this.loadHoaDon();
   }
   // get f() {
   //   return this.danhMucForm.controls;
   // }
 
-  loadHoaDon(): void {
-    this.apiService.getAll()
-      .subscribe(
-        (response: ApiResponse<any>) => this.handleApiResponse(response),
-        (error: any) => console.error('Error loading invoices:', error)
-      );
-  }
+  // loadHoaDon(): void {
+  //   this.apiService.getAll()
+  //     .subscribe(
+  //       (response: ApiResponse<any>) => this.handleApiResponse(response),
+  //       (error: any) => console.error('Error loading invoices:', error)
+  //     );
+  // }
 
   private handleApiResponse(response: ApiResponse<any>): void {
     if (response && response.result) {
