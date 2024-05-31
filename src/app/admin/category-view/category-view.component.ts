@@ -32,6 +32,7 @@ export class CategoryViewComponent implements OnInit {
   successMessage = '';
   selectedDanhMuc: DanhMucDto | null = null;
   isEditMode = false;
+  
 
   constructor(
     private apiService: DanhMucService, 

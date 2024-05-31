@@ -72,18 +72,17 @@
                             <div *ngIf="listHoaDon.length > 0">
                                 <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <button *ngFor="let hoaDon of listHoaDon.slice(0, 4); let i = index"
+                                        <button *ngFor="let hoaDon of listHoaDon.slice(0,5); let i = index"
                                             class="nav-link" [class.active]="i === 0" id="nav-home-tab-{{i}}"
                                             data-bs-toggle="tab" [attr.data-bs-target]="'#nav-home-' + i" type="button"
                                             role="tab" [attr.aria-controls]="'nav-home-' + i"
-                                            [attr.aria-selected]="i === 0">
-                                            <!-- MAHOADON (tab) -->
-                                            {{ hoaDon.ma }}
+                                            [attr.aria-selected]="i === 0" (click)="loadHoaDonChiTiet(hoaDon.id)">
+                                            {{hoaDon.ma}}
                                         </button>
                                     </div>
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
-                                    <div *ngFor="let hoaDon of listHoaDon.slice(0, 4); let i = index"
+                                    <div *ngFor="let hoaDon of listHoaDon.slice(0,5); let i = index"
                                         class="tab-pane fade" [class.show]="i === 0" [class.active]="i === 0"
                                         id="nav-home-{{i}}" role="tabpanel" [attr.aria-labelledby]="'nav-home-tab-' + i"
                                         tabindex="0">
@@ -104,30 +103,25 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <!-- lấy ra tất cả hóa đơn chi tiết dựa vào id_hoa_don_id  trong bảng hóa đơn chi tiết -->
+                                                    <tr *ngFor="let chiTiet of chiTietHoaDon">
+                                                        <td>{{ chiTiet.idSanPhamChiTiet.idSanPham.ten }}</td>
+                                                        <td>{{ chiTiet.idSanPhamChiTiet.idMauSac.ten }}</td>
+                                                        <td>{{ chiTiet.idSanPhamChiTiet.idKichThuoc.ten }}</td>
+                                                        <td>{{ chiTiet.soLuong }}</td>
+                                                        <td>{{ chiTiet.giaBan }}</td>
 
-                                                        <!-- SANPHAMCHITET từ hoaDonChiTiet  -->
-
-                                                        <td>{{ hoaDon.id }}</td>
-
-                                                        <!-- <td>{{ getHoaDonChiTietByIdHoaDon(hoaDon.id)}}</td> -->
-                                                        <!-- <td>{{ hoaDon.idSanPham.idKichThuoc.ten}}</td>
-                                                        <td>+1 khi thêm sp vào giỏ </td>
-                                                        <td>{{ hoaDon.idSanPham.giaBan }}</td> -->
-                                                        
                                                         <td>
-                                                            <span><a href="/edit"
-                                                                    style="color: #7A98FE;font-size: 16px;">
-                                                                    <i class="ti ti-edit"></i>
-                                                                </a></span>
-                                                            <span><a href="/delete"
-                                                                    style="color: #F87777;font-size: 16px;">
-                                                                    <i class="ti ti-x"></i>
-                                                                </a></span>
+                                                          <span><a href="/edit" style="color: #7A98FE; font-size: 16px;">
+                                                            <i class="ti ti-edit"></i>
+                                                          </a></span>
+                                                          <span><a href="/delete" style="color: #F87777; font-size: 16px;">
+                                                            <i class="ti ti-x"></i>
+                                                          </a></span>
                                                         </td>
-                                                    </tr>
                                                 </tbody>
+                                                <div *ngIf="noProductsFound">
+                                                    <p>Chưa có sản phẩm nào</p>
+                                                  </div>
                                             </table>
                                         </div>
                                         <div class="mt-3 d-flex justify-content-end">
@@ -140,7 +134,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
