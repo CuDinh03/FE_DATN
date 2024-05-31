@@ -62,32 +62,28 @@
                                     <h5 class="card-title fw-semibold">Bán hàng tại quầy</h5>
                                 </div>
                                 <div>
-                                    <span class="me-2"><a class="btn btn-danger" style="color: white;">Xóa hóa
-                                            đơn</a></span>
-                                    <span><a class="btn btn-primary" style="color: white;" (click)="createHoaDon()">Tạo
-                                            hóa đơn</a></span>
+                                    <a class="btn btn-primary" href="#">Tạo hóa đơn</a>
                                 </div>
                             </div>
 
-                            <div *ngIf="listHoaDon.length > 0">
+                            <div>
                                 <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <button *ngFor="let hoaDon of listHoaDon.slice(0, 4); let i = index"
-                                            class="nav-link" [class.active]="i === 0" id="nav-home-tab-{{i}}"
-                                            data-bs-toggle="tab" [attr.data-bs-target]="'#nav-home-' + i" type="button"
-                                            role="tab" [attr.aria-controls]="'nav-home-' + i"
-                                            [attr.aria-selected]="i === 0">
-                                            <!-- MAHOADON (tab) -->
-                                            {{ hoaDon.ma }}
-                                        </button>
+                                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                            aria-selected="true">HD0111103</button>
+                                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-profile" type="button" role="tab"
+                                            aria-controls="nav-profile" aria-selected="false">HD0111104</button>
+                                        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-contact" type="button" role="tab"
+                                            aria-controls="nav-contact" aria-selected="false">HD0111105</button>
                                     </div>
                                 </nav>
-                                <div class="tab-content" id="nav-tabContent">
-                                    <div *ngFor="let hoaDon of listHoaDon.slice(0, 4); let i = index"
-                                        class="tab-pane fade" [class.show]="i === 0" [class.active]="i === 0"
-                                        id="nav-home-{{i}}" role="tabpanel" [attr.aria-labelledby]="'nav-home-tab-' + i"
-                                        tabindex="0">
 
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                                        aria-labelledby="nav-home-tab" tabindex="0">
                                         <div class="d-flex justify-content-end mt-3 mb-3">
                                             <a class="btn btn-primary" style="color: white;">Làm mới</a>
                                         </div>
@@ -95,33 +91,33 @@
                                             <table class="table">
                                                 <thead>
                                                     <tr>
+                                                        <th>#</th>
+                                                        <th>Mã sản phẩm</th>
                                                         <th>Tên sản phẩm</th>
                                                         <th>Màu sắc</th>
                                                         <th>Kích thước</th>
                                                         <th>Số lượng</th>
                                                         <th>Đơn giá</th>
+                                                        <th>Tổng tiền</th>
                                                         <th>Thao tác</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <!-- lấy ra tất cả hóa đơn chi tiết dựa vào id_hoa_don_id  trong bảng hóa đơn chi tiết -->
-
-                                                        <!-- SANPHAMCHITET từ hoaDonChiTiet  -->
-
-                                                        <td>{{ hoaDon.id }}</td>
-
-                                                        <!-- <td>{{ getHoaDonChiTietByIdHoaDon(hoaDon.id)}}</td> -->
-                                                        <!-- <td>{{ hoaDon.idSanPham.idKichThuoc.ten}}</td>
-                                                        <td>+1 khi thêm sp vào giỏ </td>
-                                                        <td>{{ hoaDon.idSanPham.giaBan }}</td> -->
-                                                        
+                                                        <td>1</td>
+                                                        <td>SP01</td>
+                                                        <td>Áo nam</td>
+                                                        <td>Xanh</td>
+                                                        <td>M</td>
+                                                        <td>2</td>
+                                                        <td>120.000</td>
+                                                        <td>240.000</td>
                                                         <td>
                                                             <span><a href="/edit"
                                                                     style="color: #7A98FE;font-size: 16px;">
                                                                     <i class="ti ti-edit"></i>
                                                                 </a></span>
-                                                            <span><a href="/delete"
+                                                            <span><a href="/edit"
                                                                     style="color: #F87777;font-size: 16px;">
                                                                     <i class="ti ti-x"></i>
                                                                 </a></span>
@@ -134,11 +130,15 @@
                                             <button class="btn btn-primary">
                                                 < </button>
                                                     <span style="margin: 5px">Trang 1</span>
-                                                    <button class="btn btn-primary"> >
-                                                    </button>
+                                                    <button class="btn btn-primary"> > </button>
                                         </div>
                                     </div>
+                                    <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                                        aria-labelledby="nav-profile-tab" tabindex="0">...</div>
+                                    <div class="tab-pane fade" id="nav-contact" role="tabpanel"
+                                        aria-labelledby="nav-contact-tab" tabindex="0">...</div>
                                 </div>
+                                
                             </div>
 
                         </div>
@@ -159,15 +159,10 @@
                                                 <input type="text" class="form-control" formControlName="ma"
                                                     aria-describedby="textHelp" id="ma">
                                             </div>
-                                            <div class="row align-items-center">
-                                                <div class="col-8 mb-4">
-                                                    <label for="ten" class="form-label">Khách hàng</label>
-                                                    <input type="text" class="form-control" formControlName="sdt"
-                                                        id="sdt">
-                                                </div>
-                                                <div class="col-4 mb-4">
-                                                    <button class="btn btn-primary mt-4">Thêm</button>
-                                                </div>
+                                            <div class="mb-4">
+                                                <label for="ten" class="form-label">Khách hàng</label>
+                                                <input type="text" class="form-control" formControlName="sdt" id="sdt">
+                                                <i>-</i>
                                             </div>
                                             <div class="mb-4">
                                                 <label for="trangThai" class="form-label">Voucher</label>
@@ -187,48 +182,9 @@
                                             </div>
                                             <div class="mb-4">
                                                 <label for="ma" class="form-label">Tổng tiền</label>
-                                                <input type="text" class="form-control" formControlName="tongTien"
-                                                    id="tongTien">
+                                                <input type="text" class="form-control" formControlName="tienKhachDua"
+                                                    id="tienKhachDua">
                                             </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền khách đưa</label>
-                                                <input type="text" class="form-control" />
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền giảm</label>
-                                                <input type="text" class="form-control" />
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền trả lại: </label>
-                                                <span><i> - </i></span>
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Thành tiền: </label>
-                                                <span><i> - </i></span>
-                                            </div>
-                                            <span>
-                                                <a class="btn btn-outline-info me-3" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
-                                                    <span>
-                                                        <i class="ti ti-wallet"></i>
-                                                    </span>
-                                                    <span class="hide-menu">Thanh toán</span>
-                                                </a>
-                                            </span>
-                                            <span>
-                                                <a class="btn btn-outline-danger" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
-                                                    <span>
-                                                        <i class="ti ti-x"></i>
-                                                    </span>
-                                                    <span class="hide-menu">Hủy đơn</span>
-                                                </a>
-                                            </span>
-
-                                        </form>
-                                        <!-- <form>
-                        
-                                           
                                             <div class="mb-4">
                                                 <label for="ma" class="form-label">Tiền khách đưa</label>
                                                 <input type="text" class="form-control" formControlName="tienKhachDua"
@@ -265,7 +221,7 @@
                                                     <span class="hide-menu">Hủy đơn</span>
                                                 </a>
                                             </span>
-                                        </form> -->
+                                        </form>
                                     </div>
                                 </div>
                                 <div id="earning"></div>
@@ -374,23 +330,6 @@
                                                     <i class="ti ti-plus"></i>
                                                 </a></td>
                                         </tr>
-                                        <tr style="height: 30px;" *ngFor="let element of listSanPhamCT; let i = index">
-
-                                            <td> {{ i + 1 }}</td>
-                                            <td>{{ element.idSanPham.ma }}</td>
-                                            <td>{{ element.idSanPham.ten }}</td>
-                                            <td>{{ element.idDanhMuc.ten }}</td>
-                                            <td>{{ element.idMauSac.ten }}</td>
-                                            <td>{{ element.idKichThuoc.ten }}</td>
-                                            <td>{{ element.idChatLieu.ten }}</td>
-                                            <td>{{ element.idThuongHieu.ten }}</td>
-                                            <td>{{ element.giaBan }}</td>
-                                            <td>12</td>
-                                            <td>Tết</td>
-                                            <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
-                                                    <i class="ti ti-plus"></i>
-                                                </a></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                                 <div>
@@ -409,21 +348,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<div id="limitReachedModal" class="modal" [class.show]="isModalVisible">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close" (click)="closeModal()">&times;</span>
-            <h2>Thông báo</h2>
-        </div>
-        <div class="modal-body">
-            <p>Chỉ được thêm tối đa 5 hóa đơn.</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" (click)="closeModal()">OK</button>
         </div>
     </div>
 </div>

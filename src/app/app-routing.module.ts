@@ -1,3 +1,4 @@
+import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
 import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
 import { CategoryViewComponent } from './admin/category-view/category-view.component';
 import { AccountViewComponent } from './admin/account-view/account-view.component';
@@ -13,7 +14,6 @@ import {AuthGuard} from "./auth/auth.guard";
 import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
 import { ProductViewComponent } from "./admin/product-view/product-view.component";
 import {ProfileComponent} from "./page/profile/profile.component";
-import {AdminSanphamComponent} from "./admin/admin-sanpham/admin-sanpham.component";
 
 const routes: Routes = [
   {
@@ -25,6 +25,7 @@ const routes: Routes = [
       {path:'san-pham',component:ProductViewComponent},
       {path:'danh-muc',component:CategoryViewComponent},
       {path:'shopping',component:ShoppingViewComponent},
+      {path:'hoa-don',component:OrdersViewComponent},
       // {path:':id', component:AdminViewComponent}
       // Các route con khác của trang admin
     ]

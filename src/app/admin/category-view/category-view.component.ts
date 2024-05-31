@@ -1,46 +1,76 @@
-import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Validators } from '@angular/forms';
+import { AuthenticationService } from './../../service/AuthenticationService';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
-import {ApiResponse} from "../../model/ApiResponse";
+import { ApiResponse } from "../../model/ApiResponse";
+import { ErrorCode } from "../../model/ErrorCode";
+
 
 @Component({
   selector: 'app-category-view',
   templateUrl: './category-view.component.html',
   styleUrls: ['./category-view.component.css']
 })
-export class CategoryViewComponent {
+export class CategoryViewComponent implements OnInit {
 
-  danhMuc: any[] = [];
+  danhMuc: DanhMucDto[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
+  showSuccessAlert = false;
   pageSize = 5;
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
-  danhMucForm: FormGroup; // Sử dụng FormGroup để quản lý form và validation
+  danhMucForm: FormGroup; 
+  id: string;
+  successMessage = '';
+  selectedDanhMuc: DanhMucDto | null = null;
+  isEditMode = false;
 
+  constructor(
+    private apiService: DanhMucService, 
+    private formBuilder: FormBuilder,
+    private router: Router, 
+    private auth: AuthenticationService, 
+    private route: ActivatedRoute
+  ) {
+    this.danhMucForm = this.formBuilder.group({
+      ten: ['', [Validators.required]],
+      ma: [''],
+      id: [''],
+      trangThai: ['']
+    });
 
-  constructor(private apiService: DanhMucService, private formBuilder: FormBuilder,
-    private router: Router, private auth: AuthenticationService) {
-      // Khởi tạo danhMucForm ở đây
-      this.danhMucForm = this.formBuilder.group({
-        // Khai báo các trường trong form tại đây
-        ten:[''],
-        ma:[''],
-        trangThai:['']
-      });
+    this.id = this.route.snapshot.params['id'];
   }
 
   ngOnInit(): void {
     this.loadDanhMuc();
+    if (this.id) {
+      this.findById(this.id);
+    }
   }
+
   get f() {
     return this.danhMucForm.controls;
+  }
+
+  onSubmit(): void {
+    this.submitted = true;
+    if (this.danhMucForm.invalid) {
+      return;
+    }
+    if (this.isEditMode) {
+      this.updateDanhMuc();
+    } else {
+      this.createDanhMuc();
+    }
   }
 
   loadDanhMuc(): void {
@@ -49,9 +79,10 @@ export class CategoryViewComponent {
         this.danhMuc = response.result.content;
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
-        console.log("view danh muc");
       });
   }
+
+
 
   onPageChange(page: number): void {
     this.currentPage = page;
@@ -59,34 +90,101 @@ export class CategoryViewComponent {
   }
 
   createDanhMuc(): void {
-
     this.submitted = true;
-    if (this.danhMucForm.invalid){
+    if (this.danhMucForm.invalid) {
       return;
     }
     const danhMucData: DanhMucDto = this.danhMucForm.value;
     this.apiService.createDanhMuc(danhMucData)
       .subscribe(
-        (data : ApiResponse<DanhMucDto> )  => {
-      console.log(data);
-      this.router.navigate(['/admin/danh-muc']);
-    },
-          err => console.log(err));
+        (data: ApiResponse<DanhMucDto>) => {
+          this.showSuccessAlert = true;
+          this.successMessage = 'Thêm thành công'
+          this.loadDanhMuc();
+          setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
+          this.danhMucForm.reset();
+          this.isEditMode = false;
+        },
+        (error: HttpErrorResponse) => {
+          this.handleError(error);
+        }
+      );
   }
 
-  logout() {
-    // Gọi phương thức logout từ AuthenticationService
+  updateDanhMuc(): void {
+    this.submitted = true;
+    if (this.danhMucForm.invalid) {
+      return;
+    }
+    const danhMucData: DanhMucDto = this.danhMucForm.value;
+    this.apiService.updateDanhMuc(danhMucData.id, danhMucData).subscribe(
+      () => {
+        this.showSuccessAlert = true;
+        this.successMessage = 'Sửa thành công'
+        this.loadDanhMuc();
+        setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
+        this.danhMucForm.reset();
+        this.isEditMode = false; // Đặt lại chế độ
+      },
+      (error: HttpErrorResponse) => {
+        this.handleError(error);
+      }
+    );
+  }
+
+  
+
+  findById(id: string): void {
+    this.apiService.findById(id)
+      .subscribe(
+        (response: ApiResponse<DanhMucDto>) => {
+          this.danhMucForm.patchValue({
+            id: response.result.id,
+            ma: response.result.ma,
+            ten: response.result.ten,
+            trangThai: response.result.trangThai.toString() // Chuyển đổi boolean thành string
+          });
+          this.isEditMode = true;
+        },
+        (error: HttpErrorResponse) => {
+          this.handleError(error);
+        }
+      );
+  }
+
+  handleError(error: HttpErrorResponse): void {
+    console.error(error);
+    if (error.error.code === ErrorCode.PASSWORD_INVALID) {
+      this.errorMessage = 'Mã danh mục không được để trống';
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
+
+  logout(): void {
     this.auth.logout();
-    // Redirect đến trang đăng nhập sau khi đăng xuất
     this.router.navigate(['/log-in']).then(() => {
-      console.log('Redirected to /login');
-      this.router.navigate(['/log-in']).then(() => {
-        console.log('Redirected to /log-in');
-      }).catch(err => {
-        console.error('Error navigating to /log-in:', err);
-      });
+      console.log('Redirected to /log-in');
     }).catch(err => {
-      console.error('Error navigating to /login:', err);
+      console.error('Error navigating to /log-in:', err);
     });
+  }
+
+  delete(id: any): void {
+    this.apiService.deleteDanhMuc(id).subscribe(() => {
+      this.loadDanhMuc();
+      this.router.navigate(['/admin/danh-muc']);
+    });
+  }
+
+  openDanhMuc(id: any): void {
+    this.apiService.openDanhMuc(id).subscribe(() => {
+      this.loadDanhMuc();
+      this.router.navigate(['/admin/danh-muc']);
+    });
+  }
+
+  closeSuccessAlert(): void {
+    this.showSuccessAlert = false;
   }
 }
