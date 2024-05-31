@@ -26,6 +26,8 @@ import { ProductViewComponent } from './admin/product-view/product-view.componen
 import { AccountViewComponent } from './admin/account-view/account-view.component';
 import { CategoryViewComponent } from './admin/category-view/category-view.component';
 import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
+import { VoucherViewComponent } from './admin/voucher-view/voucher-view.component';
+import { AdminHeaderComponent } from './admin/admin-header/admin-header.component';
 import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
 
 @NgModule({
@@ -53,6 +55,8 @@ import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
     AccountViewComponent,
     CategoryViewComponent,
     ShoppingViewComponent,
+    VoucherViewComponent,
+    AdminHeaderComponent,
     OrdersViewComponent
     
     ],
