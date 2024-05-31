@@ -83,6 +83,8 @@ export class CategoryViewComponent implements OnInit {
       });
   }
 
+
+
   onPageChange(page: number): void {
     this.currentPage = page;
     this.loadDanhMuc();

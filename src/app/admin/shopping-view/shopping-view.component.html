@@ -62,8 +62,10 @@
                                     <h5 class="card-title fw-semibold">Bán hàng tại quầy</h5>
                                 </div>
                                 <div>
-                                    <span class="me-2"><a class="btn btn-danger" style="color: white;">Xóa hóa đơn</a></span>
-                                    <span><a class="btn btn-primary" style="color: white;" (click)="createHoaDon()">Tạo hóa đơn</a></span>
+                                    <span class="me-2"><a class="btn btn-danger" style="color: white;">Xóa hóa
+                                            đơn</a></span>
+                                    <span><a class="btn btn-primary" style="color: white;" (click)="createHoaDon()">Tạo
+                                            hóa đơn</a></span>
                                 </div>
                             </div>
 
@@ -79,13 +81,12 @@
                                         </button>
                                     </div>
                                 </nav>
-
                                 <div class="tab-content" id="nav-tabContent">
                                     <div *ngFor="let hoaDon of listHoaDon.slice(0,5); let i = index"
                                         class="tab-pane fade" [class.show]="i === 0" [class.active]="i === 0"
                                         id="nav-home-{{i}}" role="tabpanel" [attr.aria-labelledby]="'nav-home-tab-' + i"
                                         tabindex="0">
-                                        <!-- Nội dung của hóa đơn ở đây -->
+
                                         <div class="d-flex justify-content-end mt-3 mb-3">
                                             <a class="btn btn-primary" style="color: white;">Làm mới</a>
                                         </div>
@@ -99,7 +100,6 @@
                                                         <th>Số lượng</th>
                                                         <th>Đơn giá</th>
                                                         <th>Thao tác</th>
-                                                        
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -109,6 +109,7 @@
                                                         <td>{{ chiTiet.idSanPhamChiTiet.idKichThuoc.ten }}</td>
                                                         <td>{{ chiTiet.soLuong }}</td>
                                                         <td>{{ chiTiet.giaBan }}</td>
+
                                                         <td>
                                                           <span><a href="/edit" style="color: #7A98FE; font-size: 16px;">
                                                             <i class="ti ti-edit"></i>
@@ -360,6 +361,23 @@
                                             <td>Cotton</td>
                                             <td>Nike</td>
                                             <td>120.000đ</td>
+                                            <td>12</td>
+                                            <td>Tết</td>
+                                            <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
+                                                    <i class="ti ti-plus"></i>
+                                                </a></td>
+                                        </tr>
+                                        <tr style="height: 30px;" *ngFor="let element of listSanPhamCT; let i = index">
+
+                                            <td> {{ i + 1 }}</td>
+                                            <td>{{ element.idSanPham.ma }}</td>
+                                            <td>{{ element.idSanPham.ten }}</td>
+                                            <td>{{ element.idDanhMuc.ten }}</td>
+                                            <td>{{ element.idMauSac.ten }}</td>
+                                            <td>{{ element.idKichThuoc.ten }}</td>
+                                            <td>{{ element.idChatLieu.ten }}</td>
+                                            <td>{{ element.idThuongHieu.ten }}</td>
+                                            <td>{{ element.giaBan }}</td>
                                             <td>12</td>
                                             <td>Tết</td>
                                             <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">

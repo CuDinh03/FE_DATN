@@ -1,5 +1,5 @@
-import { HoaDonService } from './../../service/HoaDonService';
 
+import { HoaDonService } from './../../service/HoaDonService';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -12,12 +12,17 @@ import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
 import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
+import { HoaDonCTService } from 'src/app/service/HoaDonCTService';
+import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
+import { HoaDonService } from 'src/app/service/HoaDonService';
+
 
 @Component({
   selector: 'app-shopping-view',
   templateUrl: './shopping-view.component.html',
   styleUrls: ['./shopping-view.component.css']
 })
+
 export class ShoppingViewComponent {
   listHoaDon: any[] = [];
   hoaDon: any = {};
@@ -33,8 +38,8 @@ export class ShoppingViewComponent {
   constructor(private auth: AuthenticationService,private router: Router, private hoaDonChiTietService: HoaDonChiTietService, private apiService: DanhMucService,
     private hoaDonService: HoaDonService) {
       // Khởi tạo danhMucForm ở đây
-    
   }
+
   ngOnInit(): void {
     this.loadHoaDon();
     
@@ -83,6 +88,17 @@ export class ShoppingViewComponent {
         );
     }
 
+  // => list san pham chi tiet
+  getAllSanPham(): void {
+    this.sanPhamCTService.getAll().subscribe(
+      res => {
+        this.listSanPhamCT = res.result;
+        console.log(this.listSanPhamCT)
+      }
+    )
+  }
+
+  // => list hoa don
   private handleApiResponse(response: ApiResponse<any>): void {
     if (response && response.result) {
       this.listHoaDon = response.result;
@@ -90,7 +106,7 @@ export class ShoppingViewComponent {
       console.log('Không tìm thấy danh sách hóa đơn nào');
     }
   }
-  
+
 
   logout() {
     // Gọi phương thức logout từ AuthenticationService
@@ -110,13 +126,14 @@ export class ShoppingViewComponent {
 
   createHoaDon(): void {
     this.submitted = true;
-    if(this.listHoaDon.length >= this.maxHoaDon){
+    if (this.listHoaDon.length >= this.maxHoaDon) {
       this.openModal();
       return;
     }
     this.hoaDonChiTietService.createHoaDon(this.hoaDon).subscribe(data => {
+
       console.log(data);
-      this.loadHoaDon(); 
+      this.loadHoaDon();
       this.router.navigate(['/admin/shopping']);
     }, err => console.log(err));
   }

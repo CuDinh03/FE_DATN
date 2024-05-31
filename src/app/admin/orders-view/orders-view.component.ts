@@ -1,5 +1,5 @@
-import { HoaDonChiTietService } from '../../service/HoaDonChiTietService';
 
+import { HoaDonChiTietService } from '../../service/HoaDonChiTietService';
 import { AuthenticationService } from './../../service/AuthenticationService';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import {ApiResponse} from "../../model/ApiResponse";
+import { HoaDonCTService } from 'src/app/service/HoaDonCTService';
 
 @Component({
   selector: 'app-orders-view',
@@ -24,7 +25,6 @@ export class OrdersViewComponent {
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
-
 
   constructor(private apiService: HoaDonChiTietService, private formBuilder: FormBuilder,
     private router: Router, private auth: AuthenticationService) {
