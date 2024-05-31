@@ -27,6 +27,7 @@ import { AccountViewComponent } from './admin/account-view/account-view.componen
 import { CategoryViewComponent } from './admin/category-view/category-view.component';
 import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
 import { VoucherViewComponent } from './admin/voucher-view/voucher-view.component';
+import { AdminHeaderComponent } from './admin/admin-header/admin-header.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { VoucherViewComponent } from './admin/voucher-view/voucher-view.componen
     AccountViewComponent,
     CategoryViewComponent,
     ShoppingViewComponent,
-    VoucherViewComponent
+    VoucherViewComponent,
+    AdminHeaderComponent
     
     ],
   imports: [
