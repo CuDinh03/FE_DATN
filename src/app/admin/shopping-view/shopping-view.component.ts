@@ -60,7 +60,7 @@ export class ShoppingViewComponent {
 
   
   getAllSanPham(): void {
-    this.spctservive.getAll().subscribe(
+    this.sanPhamService.getAll().subscribe(
       response => {
         this.listSanPham = response.result;
         console.log(this.listSanPham)
