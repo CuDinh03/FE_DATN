@@ -28,6 +28,7 @@ export class ShoppingViewComponent {
   maxHoaDon = 5;
   isModalVisible = false;
   chiTietHoaDon: any[] = [];
+  noProductsFound: boolean = false;
 
   constructor(private auth: AuthenticationService,private router: Router, private hoaDonChiTietService: HoaDonChiTietService, private apiService: DanhMucService,
     private hoaDonService: HoaDonService) {
@@ -50,15 +51,29 @@ export class ShoppingViewComponent {
   loadHoaDonChiTiet(idHoaDon: string): void {
     this.hoaDonChiTietService.getAll(idHoaDon).subscribe(
       (response: ApiResponse<any>) => {
-        if (response && response.result) {
+        if (response.result && response.result.length > 0) {
+          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
           this.chiTietHoaDon = response.result;
+          this.noProductsFound = false;
         } else {
-          console.log('Không tìm thấy chi tiết hóa đơn nào');
+          // Nếu không có hóa đơn chi tiết, đặt noProductsFound là true
+          this.noProductsFound = true;
         }
       },
-      (error: any) => console.error('Error loading invoice details:', error)
+      (error: HttpErrorResponse) => {
+        this.handleErrorGetAllHoaDonCT(error);
+      }
     );
+    
   }
+
+  handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
+    console.error(error);
+    if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+      this.errorMessage = 'Chưa có sản phẩm nào';
+    }
+  }
+  
 
   loadHoaDon(): void {
       this.hoaDonService.getAll()
