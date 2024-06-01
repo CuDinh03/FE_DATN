@@ -1,22 +1,14 @@
-import {Component, ElementRef, ViewChild , OnInit } from '@angular/core';
+import {Component, ElementRef, ViewChild, OnInit} from '@angular/core';
 import {VoucherService} from "../../service/VoucherService";
 import {KhachHangService} from "../../service/KhachHangService";
-// import * as bootstrap from "bootstrap";
-import { HoaDonService } from './../../service/HoaDonService';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Validators } from '@angular/forms';
-import { AuthenticationService } from './../../service/AuthenticationService';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
-import { DanhMucService } from 'src/app/service/DanhMucService';
-import { ApiResponse } from "../../model/ApiResponse";
-import { ErrorCode } from "../../model/ErrorCode";
-import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
-import { HoaDonCTService } from 'src/app/service/HoaDonCTService';
-import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
-import { HoaDonService } from 'src/app/service/HoaDonService';
+import {Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
+import {DanhMucService} from 'src/app/service/DanhMucService';
+import {ApiResponse} from "../../model/ApiResponse";
+import {ErrorCode} from "../../model/ErrorCode";
+import {HoaDonChiTietService} from 'src/app/service/HoaDonChiTietService';
+import {SanPhamCTService} from 'src/app/service/SanPhamCTService';
+import {HoaDonService} from 'src/app/service/HoaDonService';
 
 
 @Component({
@@ -49,14 +41,15 @@ export class ShoppingViewComponent {
   isModalVisible = false;
   chiTietHoaDon: any[] = [];
   noProductsFound: boolean = false;
-
+  listSanPhamCT: any[] = [];
 
 
   constructor(
-              private router: Router,
-              private voucherService: VoucherService,
-              private khachHangService: KhachHangService,
-    private hoaDonChiTietService: HoaDonChiTietService, 
+    private router: Router,
+    private voucherService: VoucherService,
+    private khachHangService: KhachHangService,
+    private sanPhamCTService: SanPhamCTService,
+    private hoaDonChiTietService: HoaDonChiTietService,
     private apiService: DanhMucService,
     private hoaDonService: HoaDonService
   ) {
@@ -189,7 +182,7 @@ export class ShoppingViewComponent {
               localStorage.setItem('kh', JSON.stringify(response.result));
               this.router.navigate(['/admin/shopping']);
             } else {
-              this.showAddCustomerModal();
+              // this.showAddCustomerModal();
             }
           }
         );
@@ -207,42 +200,41 @@ export class ShoppingViewComponent {
     }
   }
 
-  showAddCustomerModal() {
-    const modalElement = document.getElementById('addCustomerModal');
-    if (modalElement) {
-      const modal = new bootstrap.Modal(modalElement);
-      modal.show();
-    }
-  }
-  addCustomer() {
-    // this.khachHangService.addKhachHang(this.newCustomer)
-    //   .subscribe(
-    //     (response: ApiResponse<any>) => {
-    //       if (response.result) {
-    //         this.customer = response.result;
-    //         localStorage.setItem('kh', JSON.stringify(response.result));
-    //         this.router.navigate(['/admin/shopping']);
-    //         this.hideAddCustomerModal();
-    //       }
-    //     }
-    //   );
-  }
+  // showAddCustomerModal() {
+  //   const modalElement = document.getElementById('addCustomerModal');
+  //   if (modalElement) {
+  //     const modal = new bootstrap.Modal(modalElement);
+  //     modal.show();
+  //   }
+  // }
+  // addCustomer() {
+  //   // this.khachHangService.addKhachHang(this.newCustomer)
+  //   //   .subscribe(
+  //   //     (response: ApiResponse<any>) => {
+  //   //       if (response.result) {
+  //   //         this.customer = response.result;
+  //   //         localStorage.setItem('kh', JSON.stringify(response.result));
+  //   //         this.router.navigate(['/admin/shopping']);
+  //   //         this.hideAddCustomerModal();
+  //   //       }
+  //   //     }
+  //   //   );
+  // }
 
-  hideAddCustomerModal() {
-    const modalElement = document.getElementById('addCustomerModal');
-    if (modalElement) {
-      const modal = bootstrap.Modal.getInstance(modalElement);
-      if (modal) {
-        modal.hide();
-      }
-    }
-  }
-
+  // hideAddCustomerModal() {
+  //   const modalElement = document.getElementById('addCustomerModal');
+  //   if (modalElement) {
+  //     const modal = bootstrap.Modal.getInstance(modalElement);
+  //     if (modal) {
+  //       modal.hide();
+  //     }
+  //   }
+  // }
 
 
   ngOnInit(): void {
     this.loadHoaDon();
-    
+
   }
 
   // loadHoaDonChiTiet(): void {
@@ -269,7 +261,7 @@ export class ShoppingViewComponent {
         this.handleErrorGetAllHoaDonCT(error);
       }
     );
-    
+
   }
 
   handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
@@ -278,15 +270,15 @@ export class ShoppingViewComponent {
       this.errorMessage = 'Chưa có sản phẩm nào';
     }
   }
-  
+
 
   loadHoaDon(): void {
-      this.hoaDonService.getAll()
-        .subscribe(
-          (response: ApiResponse<any>) => this.handleApiResponse(response),
-          (error: any) => console.error('Error loading invoices:', error)
-        );
-    }
+    this.hoaDonService.getAll()
+      .subscribe(
+        (response: ApiResponse<any>) => this.handleApiResponse(response),
+        (error: any) => console.error('Error loading invoices:', error)
+      );
+  }
 
   // => list san pham chi tiet
   getAllSanPham(): void {
@@ -305,7 +297,7 @@ export class ShoppingViewComponent {
     } else {
       console.log('Không tìm thấy danh sách hóa đơn nào');
     }
-}
+  }
 
   createHoaDon(): void {
     this.submitted = true;

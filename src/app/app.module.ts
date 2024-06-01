@@ -29,6 +29,7 @@ import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.compo
 import { VoucherViewComponent } from './admin/voucher-view/voucher-view.component';
 import { AdminHeaderComponent } from './admin/admin-header/admin-header.component';
 import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
+import { CustomerViewComponent } from './admin/customer-view/customer-view.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
     ShoppingViewComponent,
     VoucherViewComponent,
     AdminHeaderComponent,
-    OrdersViewComponent
+    OrdersViewComponent,
+    CustomerViewComponent
     
     ],
   imports: [
