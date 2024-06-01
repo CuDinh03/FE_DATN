@@ -107,13 +107,15 @@
                                             <td>{{ chiTiet.idSanPham.idSanPham.ten }}</td>
                                             <td>{{ chiTiet.idSanPham.idMauSac.ten }}</td>
                                             <td>{{ chiTiet.idSanPham.idKichThuoc.ten }}</td>
-                                            <td>{{ chiTiet.soLuong }}</td>
-                                            <td>{{ chiTiet.giaBan }}</td>
                                             <td>
-                                              <span><a href="/edit" style="color: #7A98FE; font-size: 16px;">
-                                                <i class="ti ti-edit"></i>
-                                              </a></span>
-                                              <span><a href="/delete" style="color: #F87777; font-size: 16px;">
+                                                <input type="number" style="width: 50px;" [(ngModel)]="chiTiet.soLuong" min="0">
+                                            </td>
+                                            <td>{{ chiTiet.idSanPham.giaBan }}</td>
+                                            <td>
+                                                <span><a class="btn" (click)="updateGioHangChiTiet(chiTiet.id, chiTiet.soLuong)" style="color: #7A98FE; font-size: 16px;">
+                                                    <i class="ti ti-edit"></i>
+                                                  </a></span>
+                                              <span><a class="btn" style="color: #F87777; font-size: 16px;">
                                                 <i class="ti ti-x"></i>
                                               </a></span>
                                             </td>
@@ -216,7 +218,6 @@
                                                     <span class="hide-menu">Hủy đơn</span>
                                                 </a>
                                             </span>
-
                                         </form>
                                         <!-- <form>
                         

@@ -40,13 +40,14 @@ export class ShoppingViewComponent {
   constructor(private auth: AuthenticationService,
     private router: Router, 
     private hoaDonGioHangService: HoaDonGioHangService,
-    private gioHangChiTietService: GioHangChiTietService) {
+    private gioHangChiTietService: GioHangChiTietService,) {
       // Khởi tạo danhMucForm ở đây
     
   }
   ngOnInit(): void {
     this.loadHoaDonGioHang();
   }
+
 
   loadGioHangChiTiet(idGioHang: string): void {
     this.gioHangChiTietService.getAll(idGioHang, this.page, this.size).subscribe(
@@ -96,6 +97,17 @@ export class ShoppingViewComponent {
   }
   
 
+  updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
+    this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
+      (response: ApiResponse<any>) => {
+        console.log(response.message);
+        this.loadGioHangChiTiet(this.listHoaDonGioHang[0].idGioHang.id);
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Error updating gio hang:', error);
+      }
+    );
+  }
   
 
   logout() {

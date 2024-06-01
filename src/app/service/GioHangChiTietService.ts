@@ -26,7 +26,17 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
     
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/${id}`, { headers, params });
       }
-     
+      
+      updateGioHang(id: string, soLuong: number): Observable<ApiResponse<any>> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+    
+        let params = new HttpParams().set('soLuong', soLuong.toString());
+    
+        return this.http.put<ApiResponse<any>>(`${this.apiUrl}/${id}`, null, { headers, params });
+      }
   
   
   }
