@@ -1,7 +1,7 @@
-
 import { GioHangChiTietService } from './../../service/GioHangChiTietService';
 import { HoaDonGioHangService } from './../../service/HoaDonGioHangService';
 import { HoaDonService } from './../../service/HoaDonService';
+
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -20,7 +20,6 @@ import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
   templateUrl: './shopping-view.component.html',
   styleUrls: ['./shopping-view.component.css']
 })
-
 export class ShoppingViewComponent {
   listHoaDon: any[] = [];
   listHoaDonGioHang: any[] = [];
@@ -32,37 +31,28 @@ export class ShoppingViewComponent {
   maxHoaDon = 5;
   isModalVisible = false;
   gioHangChiTiet: any[] = [];
+  page = 0;
+  size = 5;
   noProductsFound: boolean = false;
+  totalItems: number = 0;
+  totalPages: number = 0;
 
   constructor(private auth: AuthenticationService,
     private router: Router, 
-    private hoaDonChiTietService: HoaDonChiTietService, 
-    private apiService: DanhMucService,
-    private hoaDonService: HoaDonService,
     private hoaDonGioHangService: HoaDonGioHangService,
     private gioHangChiTietService: GioHangChiTietService) {
       // Khởi tạo danhMucForm ở đây
-  }
-
-  ngOnInit(): void {
-    this.loadHoaDon();
-    this.loadHoaDonGioHang();
     
   }
-
-  // loadHoaDonChiTiet(): void {
-  //   this.hoaDonService.getAll()
-  //     .subscribe(
-  //       (response: ApiResponse<any>) => this.handleApiResponse(response),
-  //       (error: any) => console.error('Error loading invoices:', error)
-  //     );
-  // }
+  ngOnInit(): void {
+    this.loadHoaDonGioHang();
+  }
 
   loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAll(idGioHang).subscribe(
+    this.gioHangChiTietService.getAll(idGioHang, this.page, this.size).subscribe(
       (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          this.gioHangChiTiet = response.result;
+        if (response.result && response.result.content && response.result.content.length > 0) {
+          this.gioHangChiTiet = response.result.content;
           this.noProductsFound = false;
         } else {
           this.noProductsFound = true;
@@ -79,6 +69,8 @@ export class ShoppingViewComponent {
       }
     );
   }
+  
+
 
   handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
     console.error(error);
@@ -104,33 +96,7 @@ export class ShoppingViewComponent {
   }
   
 
-  loadHoaDon(): void {
-      this.hoaDonService.getAll()
-        .subscribe(
-          (response: ApiResponse<any>) => this.handleApiResponse(response),
-          (error: any) => console.error('Error loading invoices:', error)
-        );
-    }
-
-  // => list san pham chi tiet
-  // getAllSanPham(): void {
-  //   this.sanPhamCTService.getAll().subscribe(
-  //     res => {
-  //       this.listSanPhamCT = res.result;
-  //       console.log(this.listSanPhamCT)
-  //     }
-  //   )
-  // }
-
-  // => list hoa don
-  private handleApiResponse(response: ApiResponse<any>): void {
-    if (response && response.result) {
-      this.listHoaDon = response.result;
-    } else {
-      console.log('Không tìm thấy danh sách hóa đơn nào');
-    }
-  }
-
+  
 
   logout() {
     // Gọi phương thức logout từ AuthenticationService
@@ -150,14 +116,13 @@ export class ShoppingViewComponent {
 
   createHoaDon(): void {
     this.submitted = true;
-    if (this.listHoaDon.length >= this.maxHoaDon) {
+    if(this.listHoaDon.length >= this.maxHoaDon){
       this.openModal();
       return;
     }
-    this.hoaDonChiTietService.createHoaDon(this.hoaDon).subscribe(data => {
-
+    this.hoaDonGioHangService.createHoaDon(this.hoaDon).subscribe(data => {
       console.log(data);
-      this.loadHoaDon();
+      this.loadHoaDonGioHang();
       this.router.navigate(['/admin/shopping']);
     }, err => console.log(err));
   }
@@ -168,5 +133,13 @@ export class ShoppingViewComponent {
 
   closeModal(): void {
     this.isModalVisible = false;
+  }
+  onPageChange(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.page = page;
+      if (this.listHoaDonGioHang.length > 0) {
+        this.loadGioHangChiTiet(this.listHoaDonGioHang[0].idGioHang.id);
+      }
+    }
   }
 }
