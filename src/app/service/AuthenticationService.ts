@@ -35,7 +35,7 @@ export class AuthenticationService {
     const decodedToken = JSON.parse(atob(token.split('.')[1]));
     return decodedToken.scope;
   }
-
+  
   logout(): void {
     // Xoá token khi đăng xuất
     localStorage.removeItem('token');

@@ -15,16 +15,32 @@ import { ApiResponse } from "../model/ApiResponse";
     constructor(private http: HttpClient) {}
 
 
-    getAll(): Observable<ApiResponse<any>> {
-        const token = localStorage.getItem('token');
+    // getAll(): Observable<ApiResponse<any>> {
+    //     const token = localStorage.getItem('token');
     
+    //     // Thêm token vào header của yêu cầu
+    //     const headers = new HttpHeaders({
+    //       'Authorization': `Bearer ${token}`
+    //     });
+
+    //     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, {headers});
+    //   }
+
+      // phan trang
+      getSanPhamChiTiet(page: number, size: number): Observable<ApiResponse<any>> {
+        const token = localStorage.getItem('token');
+
         // Thêm token vào header của yêu cầu
         const headers = new HttpHeaders({
-          'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`
         });
 
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, {headers});
-      }
+        let params = new HttpParams();
+        params = params.append('page', page.toString());
+        params = params.append('size', size.toString());
 
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
+    }
+    
       
   }

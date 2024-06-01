@@ -13,6 +13,86 @@ import { HoaDonCTService } from 'src/app/service/HoaDonCTService';
 import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
 import { HoaDonService } from 'src/app/service/HoaDonService';
 
+interface SanPham {
+  id: string;
+  ten: string;
+  ma: string;
+  ngayTao: string;
+  ngaySua: string;
+  trangThai: boolean;
+}
+
+interface HinhAnh {
+  id: string;
+  ma: string;
+  url: string;
+  ngayTao: string;
+  ngaySua: string;
+  trangThai: boolean;
+}
+
+interface ThuongHieu {
+  id: string;
+  ten: string;
+  ma: string;
+  ngayTao: string;
+  ngaySua: string;
+  trangThai: boolean;
+}
+
+interface ChatLieu {
+  id: string;
+  ma: string;
+  ten: string;
+  ngayTao: string;
+  ngaySua: string;
+  trangThai: boolean;
+}
+
+interface DanhMuc {
+  id: string;
+  ma: string;
+  ten: string;
+  ngayTao: string;
+  ngaySua: string;
+  trangThai: boolean;
+}
+
+interface KichThuoc {
+  id: string;
+  ten: string;
+  ma: string;
+  ngayTao: string;
+  ngaySua: string;
+  trangThai: boolean;
+}
+
+interface MauSac {
+  id: string;
+  ten: string;
+  ma: string;
+  ngayTao: string;
+  ngaySua: string;
+  trangThai: boolean;
+}
+
+
+interface ChiTietSanPhamDto {
+  id : string;
+  ma : string;
+  idSanPham: SanPham;
+  idHinhAnh : HinhAnh;
+  idThuongHieu: ThuongHieu;
+  idChatLieu: ChatLieu;
+  idDanhMuc: DanhMuc;
+  idKichThuoc : KichThuoc;
+  idMauSac: MauSac;
+  trangThai: boolean;
+  giaBan: number;
+  soLuong: number;
+}
+
+
 @Component({
   selector: 'app-shopping-view',
   templateUrl: './shopping-view.component.html',
@@ -32,6 +112,11 @@ export class ShoppingViewComponent {
   listHoaDonCT: any[] = [];
 
 
+  chiTietSanPham: ChiTietSanPhamDto[] = [];
+  currentPage = 0;
+  totalPages = 0;
+
+
   constructor(private auth: AuthenticationService, private router: Router,
     private hoaDonCTService: HoaDonCTService,
     private hoaDonService: HoaDonService,
@@ -42,20 +127,33 @@ export class ShoppingViewComponent {
 
   ngOnInit(): void {
     this.loadHoaDon();
-    this.getAllSanPham();
-    // api get all hoa don
+    this.loadSanPhamChiTiet();
 
+    // this.getAllSanPham();
   }
 
-  
-  getHoaDonChiTietByIdHoaDon(id: string) {
-      this.hoaDonCTService.getListHoaDonCTByIdHoaDon(id)
-      .subscribe(
-        response => {
-          this.listHoaDonCT = response.result;
-          console.log(this.listHoaDonCT)
-        } 
-      )
+
+  loadSanPhamChiTiet(){
+    this.sanPhamCTService.getSanPhamChiTiet(this.currentPage, 5)
+    .subscribe(respone => {
+      this.chiTietSanPham = respone.result.content;
+      this.totalPages = respone.result.totalPages;
+      console.log(this.sanPhamCTService);
+    })
+  }
+
+  nextPage(){
+    if(this.currentPage < this.totalPages -1){
+      this.currentPage ++;
+      this.loadSanPhamChiTiet();
+    }
+  }
+
+  prevPage(){
+    if(this.currentPage > 0){
+      this.currentPage --;
+      this.loadSanPhamChiTiet();
+    }
   }
 
 
@@ -69,14 +167,14 @@ export class ShoppingViewComponent {
   }
 
   // => list san pham chi tiet
-  getAllSanPham(): void {
-    this.sanPhamCTService.getAll().subscribe(
-      res => {
-        this.listSanPhamCT = res.result;
-        console.log(this.listSanPhamCT)
-      }
-    )
-  }
+  // getAllSanPham(): void {
+  //   this.sanPhamCTService.getAll().subscribe(
+  //     res => {
+  //       this.listSanPhamCT = res.result;
+  //       console.log(this.listSanPhamCT)
+  //     }
+  //   )
+  // }
 
   // => list hoa don
   private handleApiResponse(response: ApiResponse<any>): void {

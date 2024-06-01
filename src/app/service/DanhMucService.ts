@@ -14,7 +14,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
   
     constructor(private http: HttpClient) {}
   
-    
+    // phan trang
       getDanhMuc(page: number, size: number): Observable<ApiResponse<any>> {
           const token = localStorage.getItem('token');
   
