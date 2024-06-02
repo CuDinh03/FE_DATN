@@ -1,37 +1,33 @@
-import {Component, ElementRef, ViewChild, OnInit} from '@angular/core';
-import {VoucherService} from "../../service/VoucherService";
-import {KhachHangService} from "../../service/KhachHangService";
-import {Router} from '@angular/router';
-import {HttpErrorResponse} from '@angular/common/http';
-import {DanhMucService} from 'src/app/service/DanhMucService';
-import {ApiResponse} from "../../model/ApiResponse";
-import {ErrorCode} from "../../model/ErrorCode";
-import {HoaDonChiTietService} from 'src/app/service/HoaDonChiTietService';
-import {SanPhamCTService} from 'src/app/service/SanPhamCTService';
-import {HoaDonService} from 'src/app/service/HoaDonService';
+import { KhachHangService } from './../../service/KhachHangService';
+import { VoucherService } from './../../service/VoucherService';
+import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
+import { GioHangChiTietService } from './../../service/GioHangChiTietService';
+import { HoaDonGioHangService } from './../../service/HoaDonGioHangService';
+import { HoaDonService } from './../../service/HoaDonService';
 
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Validators } from '@angular/forms';
+import { AuthenticationService } from './../../service/AuthenticationService';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
+import { DanhMucService } from 'src/app/service/DanhMucService';
+import { ApiResponse } from "../../model/ApiResponse";
+import { ErrorCode } from "../../model/ErrorCode";
+import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
 
 @Component({
   selector: 'app-shopping-view',
   templateUrl: './shopping-view.component.html',
   styleUrls: ['./shopping-view.component.css']
 })
-
 export class ShoppingViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   vouchers: any[] = [];
-  totalElements = 0;
-  totalPages = 0;
-  currentPage = 0;
-  pageSize = 5;
-  listVoucher: any[] = [];
-  customer: any = null;
-  newCustomer: any = {ten: ''};
-  sdtValue: string = '';
-  voucher: any;
-  // searchControl = new FormControl('');
-  results: string[] = [];
   listHoaDon: any[] = [];
+  listHoaDonGioHang: any[] = [];
   hoaDon: any = {};
   startFrom = 1;
   submitted = false;
@@ -39,24 +35,135 @@ export class ShoppingViewComponent {
   selectedDanhMuc: any;
   maxHoaDon = 5;
   isModalVisible = false;
-  chiTietHoaDon: any[] = [];
+  gioHangChiTiet: any[] = [];
+  page = 0;
+  voucher: any;
+  size = 5;
   noProductsFound: boolean = false;
-  listSanPhamCT: any[] = [];
+  totalElements = 0;
+  totalPages: number = 0;
+  listSanPhamChiTiet: any[] = [];
+  currentPage = 0;
+  pageSize = 6;
+  customer: any = null;
+  newCustomer: any = {ten: ''};
+  sdtValue: string = '';
+  results: string[] = [];
+  listVoucher: any[] = [];
 
+ 
 
-  constructor(
-    private router: Router,
+  constructor(private auth: AuthenticationService,
+    private router: Router, 
+    private hoaDonGioHangService: HoaDonGioHangService,
+    private gioHangChiTietService: GioHangChiTietService,
+    private chiTietSanPhamService: SanPhamCTService,
     private voucherService: VoucherService,
-    private khachHangService: KhachHangService,
-    private sanPhamCTService: SanPhamCTService,
-    private hoaDonChiTietService: HoaDonChiTietService,
-    private apiService: DanhMucService,
-    private hoaDonService: HoaDonService
-  ) {
-    // Khởi tạo Form ở đây
+    private khachHangService: KhachHangService
 
-  };
+    ) {
+      // Khởi tạo danhMucForm ở đây
+    
+  }
+  ngOnInit(): void {
+    this.loadHoaDonGioHang();
+    this.loadChiTietSP();
+  }
 
+
+  loadGioHangChiTiet(idGioHang: string): void {
+    this.gioHangChiTietService.getAll(idGioHang).subscribe(
+            (response: ApiResponse<any>) => {
+        if (response.result && response.result.length > 0) {
+            this.gioHangChiTiet = response.result;
+            this.noProductsFound = false; // Đặt noProductsFound là false khi có dữ liệu sản phẩm
+        } else {
+            this.noProductsFound = true; // Đặt noProductsFound là true khi không có dữ liệu sản phẩm
+            this.gioHangChiTiet = [];
+        }
+    },
+    (error: HttpErrorResponse) => {
+        if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+            this.noProductsFound = true;
+            this.gioHangChiTiet = [];
+        } else {
+            console.error('Unexpected error:', error);
+        }
+    }
+);
+}
+  
+loadChiTietSP(): void {
+  this.chiTietSanPhamService.getSanPhamChiTiet(this.page, this.size)
+    .subscribe(response => {
+      this.listSanPhamChiTiet = response.result.content;
+      this.totalElements = response.result.totalElements;
+      this.totalPages = response.result.totalPages;
+    });
+}
+
+  handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
+    console.error(error);
+    if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+      this.errorMessage = 'Chưa có sản phẩm nào';
+    }
+  }
+
+  onPageChangeSanPhamCT(page: number): void {
+    this.page = page;
+    this.loadChiTietSP();
+  }
+
+  loadHoaDonGioHang(): void {
+    this.hoaDonGioHangService.getAll().subscribe(
+      (response: ApiResponse<any>) => {
+        if (response.result && response.result.length > 0) {
+          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
+          this.listHoaDonGioHang = response.result;
+        } else {
+          console.log(response);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.handleErrorGetAllHoaDonCT(error);
+      }
+    );
+  }
+
+  updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
+    this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
+        (response: ApiResponse<any>) => {
+            console.log(response.message);
+            // Hiển thị thông báo sửa số lượng thành công
+            alert('Sửa số lượng thành công!');
+            this.loadChiTietSP();
+        },
+        (error: HttpErrorResponse) => {
+            console.error('Error updating gio hang:', error);
+        }
+    );
+}
+  
+  createHoaDon(): void {
+    this.submitted = true;
+    if(this.listHoaDonGioHang.length >= 5){
+      alert('Chỉ được thêm tối đa 5 hóa đơn')
+      
+      return;
+    }
+    this.hoaDonGioHangService.createHoaDon(this.hoaDon).subscribe(data => {
+      console.log(data);
+      this.loadHoaDonGioHang();
+      this.router.navigate(['/admin/shopping']);
+    }, err => console.log(err));
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadVoucher();
+    }
+  }
 
   showModal(): void {
     if (this.voucherModal && this.voucherModal.nativeElement) {
@@ -102,13 +209,6 @@ export class ShoppingViewComponent {
     if (this.voucherModal && this.voucherModal.nativeElement) {
       this.voucherModal.nativeElement.classList.remove('show');
       this.voucherModal.nativeElement.style.display = 'none';
-    }
-  }
-
-  onPageChange(page: number): void {
-    if (page >= 0 && page < this.totalPages) {
-      this.currentPage = page;
-      this.loadVoucher();
     }
   }
 
@@ -231,93 +331,14 @@ export class ShoppingViewComponent {
   //   }
   // }
 
+   formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    
+    const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if necessary
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Get month (0-based index, hence the +1) and pad with leading zero if necessary
+    const year = date.getFullYear(); // Get full year
+    
+    return `${day}/${month}/${year}`; // Return in the desired format (dd/MM/yyyy)
+}
 
-  ngOnInit(): void {
-    this.loadHoaDon();
-
-  }
-
-  // loadHoaDonChiTiet(): void {
-  //   this.hoaDonService.getAll()
-  //     .subscribe(
-  //       (response: ApiResponse<any>) => this.handleApiResponse(response),
-  //       (error: any) => console.error('Error loading invoices:', error)
-  //     );
-  // }
-
-  loadHoaDonChiTiet(idHoaDon: string): void {
-    this.hoaDonChiTietService.getAll(idHoaDon).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
-          this.chiTietHoaDon = response.result;
-          this.noProductsFound = false;
-        } else {
-          // Nếu không có hóa đơn chi tiết, đặt noProductsFound là true
-          this.noProductsFound = true;
-        }
-      },
-      (error: HttpErrorResponse) => {
-        this.handleErrorGetAllHoaDonCT(error);
-      }
-    );
-
-  }
-
-  handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
-    console.error(error);
-    if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
-      this.errorMessage = 'Chưa có sản phẩm nào';
-    }
-  }
-
-
-  loadHoaDon(): void {
-    this.hoaDonService.getAll()
-      .subscribe(
-        (response: ApiResponse<any>) => this.handleApiResponse(response),
-        (error: any) => console.error('Error loading invoices:', error)
-      );
-  }
-
-  // => list san pham chi tiet
-  getAllSanPham(): void {
-    this.sanPhamCTService.getAll().subscribe(
-      res => {
-        this.listSanPhamCT = res.result;
-        console.log(this.listSanPhamCT)
-      }
-    )
-  }
-
-  // => list hoa don
-  private handleApiResponse(response: ApiResponse<any>): void {
-    if (response && response.result) {
-      this.listHoaDon = response.result;
-    } else {
-      console.log('Không tìm thấy danh sách hóa đơn nào');
-    }
-  }
-
-  createHoaDon(): void {
-    this.submitted = true;
-    if (this.listHoaDon.length >= this.maxHoaDon) {
-      this.openModal();
-      return;
-    }
-    this.hoaDonChiTietService.createHoaDon(this.hoaDon).subscribe(data => {
-
-      console.log(data);
-      this.loadHoaDon();
-      this.router.navigate(['/admin/shopping']);
-    }, err => console.log(err));
-  }
-
-  openModal(): void {
-    this.isModalVisible = true;
-  }
-
-  closeModal(): void {
-    this.isModalVisible = false;
-  }
 }

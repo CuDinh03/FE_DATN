@@ -68,6 +68,7 @@ import { CustomerViewComponent } from './admin/customer-view/customer-view.compo
         FormsModule,
         HttpClientModule,
         ReactiveFormsModule,
+        
   ],
   providers: [TaiKhoanService],
   bootstrap: [HomeComponent]
