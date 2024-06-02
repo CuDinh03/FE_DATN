@@ -4,7 +4,6 @@ import {TaiKhoanService} from "../../service/TaiKhoanService";
 import {HttpClient} from "@angular/common/http";
 import {AuthenticationService} from "../../service/AuthenticationService";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, of} from "rxjs";
 import {ApiResponse} from "../../model/ApiResponse";
 
 
@@ -113,20 +112,5 @@ export class AccountViewComponent {
     }
   }
 
-  logout() {
-    // Gọi phương thức logout từ AuthenticationService
-    this.auth.logout();
-    // Redirect đến trang đăng nhập sau khi đăng xuất
-    this.router.navigate(['/log-in']).then(() => {
-      console.log('Redirected to /login');
-      this.router.navigate(['/log-in']).then(() => {
-        console.log('Redirected to /log-in');
-      }).catch(err => {
-        console.error('Error navigating to /log-in:', err);
-      });
-    }).catch(err => {
-      console.error('Error navigating to /login:', err);
-    });
-  }
 
 }
