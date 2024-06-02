@@ -109,6 +109,11 @@ loadChiTietSP(): void {
     }
   }
 
+  onPageChangeSanPhamCT(page: number): void {
+    this.page = page;
+    this.loadChiTietSP();
+  }
+
   loadHoaDonGioHang(): void {
     this.hoaDonGioHangService.getAll().subscribe(
       (response: ApiResponse<any>) => {

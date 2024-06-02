@@ -119,7 +119,7 @@
                                             </div>
                                             <div class="row align-items-center">
                                                 <div class="container-fluid mb-4">
-                                                    <div class="row">
+                                                    <div class="row d-flex justify-content-between">
                                                         <label for="ten" class="form-label">Khách hàng</label>
                                                         <div class="col-8">
                                                             <input type="text" class="form-control" id="sdt" name="sdt"
@@ -136,15 +136,12 @@
                                                             }}</i>
                                                     </i>
                                                 </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label">Voucher</label>
-                                                    <div *ngIf="voucher != null">
-                                                        <span class="form-label">{{voucher.ten}}</span>
-                                                    </div>
-                                                    <br>
-                                                    <button type="button" class="btn btn-info"
-                                                        (click)="showModal()">Chọn</button>
+                                                <div class="mb-2">
+                                                    <span><label class="form-label me-2">Voucher:</label></span>
+                                                    <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">  {{voucher.ten}}</span>
                                                 </div>
+                                                <button type="button" class="btn btn-info mb-4"
+                                                        (click)="showModal()">Chọn Voucher</button>
                                                 <div class="mb-4">
                                                     <label class="form-label">Phương thức thanh toán</label>
                                                     <select class="form-select" aria-label="Default select example">
@@ -173,24 +170,24 @@
                                                     <label for="ma" class="form-label">Thành tiền: </label>
                                                     <span><i> - </i></span>
                                                 </div>
-                                                <span>
-                                                    <a class="btn btn-outline-info me-2" href="/admin"
-                                                        aria-expanded="false" style="margin-bottom: 25px;">
-                                                        <span>
-                                                            <i class="ti ti-wallet"></i>
-                                                        </span>
-                                                        <span class="hide-menu">Thanh toán</span>
-                                                    </a>
-                                                </span>
-                                                <span>
-                                                    <a class="btn btn-outline-danger" href="/admin"
-                                                        aria-expanded="false" style="margin-bottom: 25px;">
-                                                        <span>
-                                                            <i class="ti ti-x"></i>
-                                                        </span>
-                                                        <span class="hide-menu">Hủy đơn</span>
-                                                    </a>
-                                                </span>
+                                                <div class="d-flex" style="margin-bottom: 25px;">
+                                                    <span>
+                                                        <a class="btn btn-outline-info me-3" href="/admin" aria-expanded="false">
+                                                            <span>
+                                                                <i class="ti ti-wallet"></i>
+                                                            </span>
+                                                            <span class="hide-menu">Thanh toán</span>
+                                                        </a>
+                                                    </span>
+                                                    <span>
+                                                        <a class="btn btn-outline-danger" href="/admin" aria-expanded="false">
+                                                            <span>
+                                                                <i class="ti ti-x"></i>
+                                                            </span>
+                                                            <span class="hide-menu">Hủy đơn</span>
+                                                        </a>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
@@ -242,7 +239,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <table class="table text-nowrap mb-0 align-middle col-12 mb-3">
+                                    <table class="table text-nowrap mb-0 col-12 mb-3">
                                         <thead class="text-dark fs-4">
                                             <tr>
                                                 <th class="border-bottom-0" scope="col">
@@ -301,13 +298,14 @@
                                         </tbody>
                                     </table>
                                     <div>
-                                        <div class="d-flex justify-content-between">
-                                            <button (click)="onPageChange(currentPage - 1)" class="btn btn-secondary"
-                                                [disabled]="currentPage === 0">
-                                                Previous
+                                        <div class="d-flex justify-content-end">
+                                            <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary"
+                                                [disabled]="page === 0">
+                                                <
                                             </button>
-                                            <button (click)="onPageChange(currentPage + 1)" class="btn btn-secondary"
-                                                [disabled]="currentPage === totalPages - 1">Next
+                                            <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                                            <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"
+                                                [disabled]="page === totalPages - 1"> >
                                             </button>
                                         </div>
                                     </div>
