@@ -1,3 +1,4 @@
+import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
 import { GioHangChiTietService } from './../../service/GioHangChiTietService';
 import { HoaDonGioHangService } from './../../service/HoaDonGioHangService';
 import { HoaDonService } from './../../service/HoaDonService';
@@ -34,44 +35,55 @@ export class ShoppingViewComponent {
   page = 0;
   size = 5;
   noProductsFound: boolean = false;
-  totalItems: number = 0;
+  totalElements = 0;
   totalPages: number = 0;
+  listSanPhamChiTiet: any[] = [];
 
   constructor(private auth: AuthenticationService,
     private router: Router, 
     private hoaDonGioHangService: HoaDonGioHangService,
-    private gioHangChiTietService: GioHangChiTietService,) {
+    private gioHangChiTietService: GioHangChiTietService,
+    private chiTietSanPhamService: SanPhamCTService
+    ) {
       // Khởi tạo danhMucForm ở đây
     
   }
   ngOnInit(): void {
     this.loadHoaDonGioHang();
+    this.loadChiTietSP();
   }
 
 
   loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAll(idGioHang, this.page, this.size).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.content && response.result.content.length > 0) {
-          this.gioHangChiTiet = response.result.content;
-          this.noProductsFound = false;
+    this.gioHangChiTietService.getAll(idGioHang).subscribe(
+            (response: ApiResponse<any>) => {
+        if (response.result && response.result.length > 0) {
+            this.gioHangChiTiet = response.result;
+            this.noProductsFound = false; // Đặt noProductsFound là false khi có dữ liệu sản phẩm
         } else {
-          this.noProductsFound = true;
-          this.gioHangChiTiet = [];
+            this.noProductsFound = true; // Đặt noProductsFound là true khi không có dữ liệu sản phẩm
+            this.gioHangChiTiet = [];
         }
-      },
-      (error: HttpErrorResponse) => {
+    },
+    (error: HttpErrorResponse) => {
         if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
-          this.noProductsFound = true;
-          this.gioHangChiTiet = [];
+            this.noProductsFound = true;
+            this.gioHangChiTiet = [];
         } else {
-          console.error('Unexpected error:', error);
+            console.error('Unexpected error:', error);
         }
-      }
-    );
-  }
+    }
+);
+}
   
-
+loadChiTietSP(): void {
+  this.chiTietSanPhamService.getSanPhamChiTiet(this.page, this.size)
+    .subscribe(response => {
+      this.listSanPhamChiTiet = response.result.content;
+      this.totalElements = response.result.totalElements;
+      this.totalPages = response.result.totalPages;
+    });
+}
 
   handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
     console.error(error);
@@ -99,15 +111,19 @@ export class ShoppingViewComponent {
 
   updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
     this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
-      (response: ApiResponse<any>) => {
-        console.log(response.message);
-        this.loadGioHangChiTiet(this.listHoaDonGioHang[0].idGioHang.id);
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Error updating gio hang:', error);
-      }
+        (response: ApiResponse<any>) => {
+            console.log(response.message);
+            // Hiển thị thông báo sửa số lượng thành công
+            alert('Sửa số lượng thành công!');
+            // Load lại danh sách hóa đơn và sản phẩm chi tiết
+            this.loadHoaDonGioHang();
+            this.loadChiTietSP();
+        },
+        (error: HttpErrorResponse) => {
+            console.error('Error updating gio hang:', error);
+        }
     );
-  }
+}
   
 
   logout() {
@@ -147,11 +163,8 @@ export class ShoppingViewComponent {
     this.isModalVisible = false;
   }
   onPageChange(page: number): void {
-    if (page >= 0 && page < this.totalPages) {
-      this.page = page;
-      if (this.listHoaDonGioHang.length > 0) {
-        this.loadGioHangChiTiet(this.listHoaDonGioHang[0].idGioHang.id);
-      }
-    }
+    this.page = page;
+    this.loadChiTietSP();
   }
+
 }

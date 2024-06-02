@@ -15,16 +15,14 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
   
     constructor(private http: HttpClient) {}
   
-    getAll(id: string, page: number, size: number): Observable<ApiResponse<any>> {
+    getAll(id: string): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-        let params = new HttpParams()
-          .set('page', page.toString())
-          .set('size', size.toString());
+
     
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/${id}`, { headers, params });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/${id}`, { headers });
       }
       
       updateGioHang(id: string, soLuong: number): Observable<ApiResponse<any>> {
