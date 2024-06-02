@@ -1,57 +1,12 @@
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-    <app-sidebar></app-sidebar>
-    <!--  Main wrapper -->
-    <div class="body-wrapper">
-        <!--  Header Start -->
-        <header class="app-header">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <ul class="navbar-nav">
-                    <li class="nav-item d-block d-xl-none">
-                        <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
-                            <i class="ti ti-menu-2"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                            <i class="ti ti-bell-ringing"></i>
-                            <div class="notification bg-primary rounded-circle"></div>
-                        </a>
-                    </li>
-                </ul>
-                <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-                    <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35"
-                                    class="rounded-circle">
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
-                                aria-labelledby="drop2">
-                                <div class="message-body">
-                                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                        <i class="ti ti-user fs-6"></i>
-                                        <p class="mb-0 fs-3">My Profile</p>
-                                    </a>
-                                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                        <i class="ti ti-mail fs-6"></i>
-                                        <p class="mb-0 fs-3">My Account</p>
-                                    </a>
-                                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                        <i class="ti ti-list-check fs-6"></i>
-                                        <p class="mb-0 fs-3">My Task</p>
-                                    </a>
-                                    <a (click)="logout()" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-        <!--  Header End -->
-        <div class="container-fluid">
+     data-sidebar-position="fixed" data-header-position="fixed">
+  <app-sidebar></app-sidebar>
+  <!--  Main wrapper -->
+  <div class="body-wrapper">
+
+    <app-admin-header></app-admin-header>
+    <!--  Header End -->
+    <div class="container-fluid">
             <!--  Row 1 -->
             <div class="row">
                 <div class="col-lg-8 d-flex align-items-strech">
@@ -149,6 +104,7 @@
                     </div>
                 </div>
 
+
                 <div class="col-lg-4">
                     <div class="row">
                         <div class="col-lg-12">
@@ -162,26 +118,27 @@
                                                     aria-describedby="textHelp" id="ma">
                                             </div>
                                             <div class="row align-items-center">
-                                                <div class="col-8 mb-4">
-                                                    <label for="ten" class="form-label">Khách hàng</label>
-                                                    <input type="text" class="form-control" formControlName="sdt"
-                                                        id="sdt">
-                                                </div>
-                                                <div class="col-4 mb-4">
-                                                    <button class="btn btn-primary mt-4">Thêm</button>
-                                                </div>
-                                            </div>
+                      <div class="mb-4">
+                        <label for="sdt" class="form-label">Khách hàng</label>
+                        <div *ngIf="customer != null">
+                          <span class="form-label">{{ customer.ten }}</span>
+                        </div>
+                        <input type="text" class="form-control" id="sdt" name="sdt" [(ngModel)]="sdtValue"
+                               (ngModelChange)="onSdtInputChange()">
+                        <br>
+                        <button type="button" class="btn btn-info" (click)="getCustomer()">Chọn</button>
+                      </div>
+
+                      <div class="mb-4">
+                        <label class="form-label">Voucher</label>
+                        <div *ngIf="voucher != null">
+                          <span class="form-label">{{voucher.ten}}</span>
+                        </div>
+                        <br>
+                        <button type="button" class="btn btn-info" (click)="showModal()">Chọn</button>
+                      </div>
                                             <div class="mb-4">
-                                                <label for="trangThai" class="form-label">Voucher</label>
-                                                <select class="form-select" aria-label="Default select example">
-                                                    <option selected>Voucher 1</option>
-                                                    <option value="1">Voucher 2</option>
-                                                    <option value="2">Voucher 3</option>
-                                                    <option value="3">Voucher 4</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="trangThai" class="form-label">Phương thức thanh toán</label>
+                                                <label  class="form-label">Phương thức thanh toán</label>
                                                 <select class="form-select" aria-label="Default select example">
                                                     <option selected>Tiền mặt</option>
                                                     <option value="1">Chuyển khoản</option>
@@ -226,10 +183,11 @@
                                                     <span class="hide-menu">Hủy đơn</span>
                                                 </a>
                                             </span>
+                                            </div>
                                         </form>
                                         <!-- <form>
-                        
-                                           
+
+
                                             <div class="mb-4">
                                                 <label for="ma" class="form-label">Tiền khách đưa</label>
                                                 <input type="text" class="form-control" formControlName="tienKhachDua"
@@ -250,22 +208,24 @@
                                             </div>
                                             <span>
                                                 <a class="btn btn-outline-info me-3" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
+                                                   style="margin-bottom: 25px;">
                                                     <span>
                                                         <i class="ti ti-wallet"></i>
                                                     </span>
                                                     <span class="hide-menu">Thanh toán</span>
                                                 </a>
                                             </span>
-                                            <span>
+                      <span>
                                                 <a class="btn btn-outline-danger" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
+                                                   style="margin-bottom: 25px;">
                                                     <span>
                                                         <i class="ti ti-x"></i>
                                                     </span>
                                                     <span class="hide-menu">Hủy đơn</span>
                                                 </a>
                                             </span>
+                    </form>
+                  </div>
                                         </form> -->
                                     </div>
                                 </div>
@@ -273,7 +233,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-12 d-flex align-items-strech">
@@ -290,25 +249,25 @@
                                             <option value="2">Tên</option>
                                         </select>
                                     </span>
-                                    <span class="ms-2">
+                  <span class="ms-2">
                                         <select class="form-select ">
                                             <option value="1">Chất liệu</option>
                                             <option value="2">Tên</option>
                                         </select>
                                     </span>
-                                    <span class="ms-2">
+                  <span class="ms-2">
                                         <select class="form-select">
                                             <option value="1">Kích thước</option>
                                             <option value="2">Tên</option>
                                         </select>
                                     </span>
-                                    <span class="ms-2">
+                  <span class="ms-2">
                                         <select class="form-select">
                                             <option value="1">Thương Hiệu</option>
                                             <option value="2">Tên</option>
                                         </select>
                                     </span>
-                                    <span class="ms-2">
+                  <span class="ms-2">
                                         <select class="form-select">
                                             <option value="1">Danh mục</option>
                                             <option value="2">Tên</option>
@@ -376,15 +335,14 @@
                                     </tbody>
                                 </table>
                                 <div>
-                                    <div class="mt-3 d-flex justify-content-end">
-                                        <button class="btn btn-primary" (click)="onPageChange(page - 1)"
-                                            [disabled]="page === 0">
-                                            < </button>
-                                                <span style="margin: 5px">Trang {{ page + 1 }}</span>
-                                                <button class="btn btn-primary" (click)="onPageChange(page + 1)"
-                                                    [disabled]="page === totalPages - 1">>
-                                                </button>
-                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button (click)="onPageChange(currentPage - 1)" class="btn btn-secondary" [disabled]="currentPage === 0">
+                                          Previous
+                                        </button>
+                                        <button (click)="onPageChange(currentPage + 1)" class="btn btn-secondary"
+                                                [disabled]="currentPage === totalPages - 1">Next
+                                        </button>
+                                      </div>
                                 </div>
                             </div>
                         </div>
@@ -393,22 +351,88 @@
                         </div> -->
                     </div>
                 </div>
+              </div>
             </div>
+            <!-- <div *ngIf="danhMuc.length === 0">
+                <p>Không có danh mục nào được tìm thấy.</p>
+            </div> -->
+          </div>
+
+
+<div class="modal fade" #voucherModal tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="accountModalLabel">Danh sách voucher</h5>
+
+        <button type="button" class="btn-close" (click)="closeVoucherModal()" aria-label="Close"></button>
+
+      </div>
+
+      <div class="modal-body">
+        <form class="d-flex" role="search">
+          <!--          <input class="form-control me-2" type="search" [formControl]="searchControl" placeholder="Tìm kiếm"-->
+          <!--                 aria-label="Search">-->
+          <button class="btn btn-outline-success" type="submit">Tìm</button>
+        </form>
+        <ul *ngIf="results.length > 0">
+          <li *ngFor="let result of results">{{ result }}</li>
+        </ul>
+        <hr>
+        <div *ngIf="vouchers && vouchers.length > 0">
+          <div class="row">
+            <div *ngFor="let voucher of vouchers" class="col-md-4 mb-4">
+              <div class="card voucher-card">
+                <div class="card-body">
+                  <h5 class="card-title">{{voucher.ma}}</h5>
+                  <p class="card-text">{{voucher.ten}}</p>
+                  <button type="button" (click)="getVoucherById(voucher.id)" class="btn btn-primary">+</button>
+                  <p>{{voucher.soLuong}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+        <div class="d-flex justify-content-between">
+          <button (click)="onPageChange(currentPage - 1)" class="btn btn-secondary" [disabled]="currentPage === 0">
+            Previous
+          </button>
+          <button (click)="onPageChange(currentPage + 1)" class="btn btn-secondary"
+                  [disabled]="currentPage === totalPages - 1">Next
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
-<div id="limitReachedModal" class="modal" [class.show]="isModalVisible">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close" (click)="closeModal()">&times;</span>
-            <h2>Thông báo</h2>
-        </div>
-        <div class="modal-body">
-            <p>Chỉ được thêm tối đa 5 hóa đơn.</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" (click)="closeModal()">OK</button>
-        </div>
-    </div>
+
+<!-- Modal thêm mới khách hàng -->
+<!--<div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="modal-header">-->
+<!--        <h5 class="modal-title" id="addCustomerModalLabel">Thêm mới khách hàng</h5>-->
+<!--        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--      </div>-->
+<!--      <div class="modal-body">-->
+<!--        <form (ngSubmit)="addCustomer()">-->
+<!--          <div class="mb-3">-->
+<!--            <label for="customerName" class="form-label">Tên khách hàng</label>-->
+<!--            <input type="text" class="form-control" id="customerName" [(ngModel)]="newCustomer.ten" name="customerName"-->
+<!--                   required>-->
+<!--          </div>-->
+<!--          &lt;!&ndash; Thêm các thông tin khách hàng khác nếu cần &ndash;&gt;-->
+<!--          <button type="submit" class="btn btn-primary">Thêm</button>-->
+<!--        </form>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+
+
 </div>
+
+
