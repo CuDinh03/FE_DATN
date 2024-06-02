@@ -1,30 +1,32 @@
+import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
+import { GioHangChiTietService } from './../../service/GioHangChiTietService';
+import { HoaDonGioHangService } from './../../service/HoaDonGioHangService';
 import { HoaDonService } from './../../service/HoaDonService';
+
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Validators } from '@angular/forms';
 import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
-import { SanPhamService } from 'src/app/service/SanPhamService';
-import { CartService } from 'src/app/service/CartService';
-import { Product } from 'src/app/model/product.model';
+import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
 
 @Component({
   selector: 'app-shopping-view',
   templateUrl: './shopping-view.component.html',
   styleUrls: ['./shopping-view.component.css']
 })
-export class ShoppingViewComponent implements OnInit{
+export class ShoppingViewComponent {
+
   listHoaDon: any[] = [];
+  listHoaDonGioHang: any[] = [];
   hoaDon: any = {};
   danhMuc: any[] = [];
-  totalElements = 0;
-  totalPages = 0;
   currentPage = 0;
   pageSize = 5;
   startFrom = 1;
@@ -33,53 +35,99 @@ export class ShoppingViewComponent implements OnInit{
   selectedDanhMuc: any;
   maxHoaDon = 5;
   isModalVisible = false;
-  listSanPham: any[] = [];
-  items:Product[] = [];
+  gioHangChiTiet: any[] = [];
+  page = 0;
+  size = 5;
+  noProductsFound: boolean = false;
+  totalElements = 0;
+  totalPages: number = 0;
+  listSanPhamChiTiet: any[] = [];
+ 
 
-  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService, private sanPhamService : SanPhamService,private cartService: CartService) {
-      // Khởi tạo danhMucForm ở đâ
+  constructor(private auth: AuthenticationService,
+    private router: Router, 
+    private hoaDonGioHangService: HoaDonGioHangService,
+    private gioHangChiTietService: GioHangChiTietService,
+    private chiTietSanPhamService: SanPhamCTService
+    ) {
+      // Khởi tạo danhMucForm ở đây
     
   }
   ngOnInit(): void {
-    this.loadHoaDon();
-    this.getAllSanPham();
-    this.items = this.cartService.getItems();
-  }
-
-  getHoaDonChiTietByIdHoaDon(id: string) {
-    // call api hoa don chi tiet theo id hoa don
-    // this.listHoaDonChiTiet
+    this.loadHoaDonGioHang();
+    this.loadChiTietSP();
   }
 
 
+  loadGioHangChiTiet(idGioHang: string): void {
+    this.gioHangChiTietService.getAll(idGioHang).subscribe(
+            (response: ApiResponse<any>) => {
+        if (response.result && response.result.length > 0) {
+            this.gioHangChiTiet = response.result;
+            this.noProductsFound = false; // Đặt noProductsFound là false khi có dữ liệu sản phẩm
+        } else {
+            this.noProductsFound = true; // Đặt noProductsFound là true khi không có dữ liệu sản phẩm
+            this.gioHangChiTiet = [];
+        }
+    },
+    (error: HttpErrorResponse) => {
+        if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+            this.noProductsFound = true;
+            this.gioHangChiTiet = [];
+        } else {
+            console.error('Unexpected error:', error);
+        }
+    }
+);
+}
   
-  // => list hoa don chi tiet 
-  loadHoaDon(): void {
-    this.hoaDonService.getAll()
-      .subscribe(
-        (response: ApiResponse<any>) => this.handleApiResponse(response),
-        (error: any) => console.error('Error loading invoices:', error)
-      );
+loadChiTietSP(): void {
+  this.chiTietSanPhamService.getSanPhamChiTiet(this.page, this.size)
+    .subscribe(response => {
+      this.listSanPhamChiTiet = response.result.content;
+      this.totalElements = response.result.totalElements;
+      this.totalPages = response.result.totalPages;
+    });
+}
+
+  handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
+    console.error(error);
+    if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+      this.errorMessage = 'Chưa có sản phẩm nào';
+    }
   }
 
-  
-  getAllSanPham(): void {
-    this.sanPhamService.getAll().subscribe(
-      response => {
-        this.listSanPham = response.result;
-        console.log(this.listSanPham)
-
+  loadHoaDonGioHang(): void {
+    this.hoaDonGioHangService.getAll().subscribe(
+      (response: ApiResponse<any>) => {
+        if (response.result && response.result.length > 0) {
+          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
+          this.listHoaDonGioHang = response.result;
+        } else {
+          console.log(response);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.handleErrorGetAllHoaDonCT(error);
       }
-    )
-    }
-
-  private handleApiResponse(response: ApiResponse<any>): void {
-    if (response && response.result) {
-      this.listHoaDon = response.result;
-    } else {
-      console.log('Không tìm thấy danh sách hóa đơn nào');
-    }
+    );
   }
+  
+  
+
+  updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
+    this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
+        (response: ApiResponse<any>) => {
+            console.log(response.message);
+            // Hiển thị thông báo sửa số lượng thành công
+            alert('Sửa số lượng thành công!');
+            this.loadChiTietSP();
+        },
+        (error: HttpErrorResponse) => {
+            console.error('Error updating gio hang:', error);
+        }
+    );
+}
   
 
   logout() {
@@ -100,13 +148,14 @@ export class ShoppingViewComponent implements OnInit{
 
   createHoaDon(): void {
     this.submitted = true;
-    if(this.listHoaDon.length >= this.maxHoaDon){
-      this.openModal();
+    if(this.listHoaDonGioHang.length >= 5){
+      alert('Chỉ được thêm tối đa 5 hóa đơn')
+      
       return;
     }
-    this.hoaDonService.createHoaDon(this.hoaDon).subscribe(data => {
+    this.hoaDonGioHangService.createHoaDon(this.hoaDon).subscribe(data => {
       console.log(data);
-      this.loadHoaDon(); 
+      this.loadHoaDonGioHang();
       this.router.navigate(['/admin/shopping']);
     }, err => console.log(err));
   }
@@ -118,10 +167,9 @@ export class ShoppingViewComponent implements OnInit{
   closeModal(): void {
     this.isModalVisible = false;
   }
-
-  removeFromCart(productId:number) {
-    this.cartService.removeFromCart(productId);
-    this.items = this.cartService.getItems();  // Cập nhật lại danh sách sản phẩm trong giỏ hàng
+  onPageChange(page: number): void {
+    this.page = page;
+    this.loadChiTietSP();
   }
-}
 
+}

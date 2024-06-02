@@ -1,4 +1,3 @@
-
 import { ApiResponse } from '../model/ApiResponse';
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
@@ -9,35 +8,33 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
 @Injectable({
     providedIn: 'root'
   })
-  export class HoaDonService {
+  export class HoaDonChiTietService {
   
-    apiUrl = 'http://localhost:9091/api/hoa-don';
+    apiUrl = 'http://localhost:9091/api/hoa-don-chi-tiet';
   
   
     constructor(private http: HttpClient) {}
   
-      
-    getAll(): Observable<ApiResponse<any>> {
+      getAll(id: string): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
-
-        // Thêm token vào header của yêu cầu
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${token}`
-        });
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { headers });
-    }
-
     
-    // Phương thức lấy hóa đơn theo ID
-    getHoaDonById(id: string): Observable<ApiResponse<any>> {
-        const token = localStorage.getItem('token');
-
         // Thêm token vào header của yêu cầu
         const headers = new HttpHeaders({
-            'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/${id}`, {headers});
+      }
 
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
-    }
-}
-
+      createHoaDon(hoaDonChiTiet: any): Observable<ApiResponse<any>> {
+        const token = localStorage.getItem('token');
+    
+        // Thêm token vào header của yêu cầu
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+    
+        return this.http.post<ApiResponse<any>>(`${this.apiUrl}` +'/create', hoaDonChiTiet, { headers });
+      }
+  
+  
+  }
