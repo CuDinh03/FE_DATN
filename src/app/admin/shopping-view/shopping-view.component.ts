@@ -44,7 +44,7 @@ export class ShoppingViewComponent {
   totalPages: number = 0;
   listSanPhamChiTiet: any[] = [];
   currentPage = 0;
-  pageSize = 5;
+  pageSize = 6;
   customer: any = null;
   newCustomer: any = {ten: ''};
   sdtValue: string = '';
@@ -325,5 +325,15 @@ loadChiTietSP(): void {
   //     }
   //   }
   // }
+
+   formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    
+    const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if necessary
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Get month (0-based index, hence the +1) and pad with leading zero if necessary
+    const year = date.getFullYear(); // Get full year
+    
+    return `${day}/${month}/${year}`; // Return in the desired format (dd/MM/yyyy)
+}
 
 }
