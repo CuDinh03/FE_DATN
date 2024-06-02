@@ -62,6 +62,7 @@ import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
         FormsModule,
         HttpClientModule,
         ReactiveFormsModule,
+        
   ],
   providers: [TaiKhoanService],
   bootstrap: [HomeComponent]

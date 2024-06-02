@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Validators } from '@angular/forms';
 import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
@@ -22,6 +22,7 @@ import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
   styleUrls: ['./shopping-view.component.css']
 })
 export class ShoppingViewComponent {
+
   listHoaDon: any[] = [];
   listHoaDonGioHang: any[] = [];
   hoaDon: any = {};
@@ -38,6 +39,7 @@ export class ShoppingViewComponent {
   totalElements = 0;
   totalPages: number = 0;
   listSanPhamChiTiet: any[] = [];
+ 
 
   constructor(private auth: AuthenticationService,
     private router: Router, 
@@ -108,6 +110,7 @@ loadChiTietSP(): void {
     );
   }
   
+  
 
   updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
     this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
@@ -115,8 +118,6 @@ loadChiTietSP(): void {
             console.log(response.message);
             // Hiển thị thông báo sửa số lượng thành công
             alert('Sửa số lượng thành công!');
-            // Load lại danh sách hóa đơn và sản phẩm chi tiết
-            this.loadHoaDonGioHang();
             this.loadChiTietSP();
         },
         (error: HttpErrorResponse) => {
@@ -144,8 +145,9 @@ loadChiTietSP(): void {
 
   createHoaDon(): void {
     this.submitted = true;
-    if(this.listHoaDon.length >= this.maxHoaDon){
-      this.openModal();
+    if(this.listHoaDonGioHang.length >= 5){
+      alert('Chỉ được thêm tối đa 5 hóa đơn')
+      
       return;
     }
     this.hoaDonGioHangService.createHoaDon(this.hoaDon).subscribe(data => {
