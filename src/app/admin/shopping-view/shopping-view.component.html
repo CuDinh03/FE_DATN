@@ -106,8 +106,8 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-
+                                                    <tr >
+                                                    
                                                         <!-- SANPHAMCHITET từ hoaDonChiTiet  -->
                                                         <td>{{ hoaDon.idSanPham.idSanPham.ten }}</td>
                                                         <td>{{ hoaDon.idSanPham.idMauSac.ten }}</td>
@@ -121,7 +121,7 @@
                                                                 </a></span>
                                                             <span><a href="/delete"
                                                                     style="color: #F87777;font-size: 16px;">
-                                                                    <i class="ti ti-x"></i>
+                                                                    <i (click)="removeFromCart(hoaDon.idHoaDon)" class="ti ti-x"></i>
                                                                 </a></span>
                                                         </td>
                                                     </tr>
@@ -356,7 +356,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr style="height: 30px;">
+                                        <!-- <tr style="height: 30px;">
                                             <td>1</td>
                                             <td>SP01</td>
                                             <td>Áo nam</td>
@@ -371,7 +371,7 @@
                                             <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
                                                     <i class="ti ti-plus"></i>
                                                 </a></td>
-                                        </tr>
+                                        </tr> -->
                                         <tr style="height: 30px;" *ngFor="let element of listSanPham; let i = index">
 
                                             <td (click)="getHoaDonChiTietByIdHoaDon(element.id)"> {{ i + 1 }}</td>
@@ -385,7 +385,7 @@
                                             <td>{{ element.giaBan }}</td>
                                             <td>{{ element.soLuong }}</td>
                                             <td>Tết</td>
-                                            <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
+                                            <td><a data-bs-toggle="modal" href="#exampleModal" role="button" style="color: #7A98FE;font-size: 20px;">
                                                     <i class="ti ti-plus"></i>
                                                 </a></td>
                                         </tr>

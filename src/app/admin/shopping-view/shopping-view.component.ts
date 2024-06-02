@@ -11,13 +11,15 @@ import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
 import { SanPhamService } from 'src/app/service/SanPhamService';
+import { CartService } from 'src/app/service/CartService';
+import { Product } from 'src/app/model/product.model';
 
 @Component({
   selector: 'app-shopping-view',
   templateUrl: './shopping-view.component.html',
   styleUrls: ['./shopping-view.component.css']
 })
-export class ShoppingViewComponent {
+export class ShoppingViewComponent implements OnInit{
   listHoaDon: any[] = [];
   hoaDon: any = {};
   danhMuc: any[] = [];
@@ -32,14 +34,16 @@ export class ShoppingViewComponent {
   maxHoaDon = 5;
   isModalVisible = false;
   listSanPham: any[] = [];
+  items:Product[] = [];
 
-  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService, private sanPhamService : SanPhamService) {
+  constructor(private auth: AuthenticationService,private router: Router, private hoaDonService: HoaDonService, private apiService: DanhMucService, private sanPhamService : SanPhamService,private cartService: CartService) {
       // Khởi tạo danhMucForm ở đâ
     
   }
   ngOnInit(): void {
     this.loadHoaDon();
     this.getAllSanPham();
+    this.items = this.cartService.getItems();
   }
 
   getHoaDonChiTietByIdHoaDon(id: string) {
@@ -113,6 +117,11 @@ export class ShoppingViewComponent {
 
   closeModal(): void {
     this.isModalVisible = false;
+  }
+
+  removeFromCart(productId:number) {
+    this.cartService.removeFromCart(productId);
+    this.items = this.cartService.getItems();  // Cập nhật lại danh sách sản phẩm trong giỏ hàng
   }
 }
 
