@@ -17,8 +17,7 @@
                                     <h5 class="card-title fw-semibold">Bán hàng tại quầy</h5>
                                 </div>
                                 <div>
-                                    <span class="me-2"><a class="btn btn-danger" style="color: white;">Xóa hóa
-                                            đơn</a></span>
+                                    
                                     <span><a class="btn btn-primary" style="color: white;" (click)="createHoaDon()">Tạo
                                             hóa đơn</a></span>
                                 </div>
@@ -32,9 +31,9 @@
                                             data-bs-toggle="tab" [attr.data-bs-target]="'#nav-home-' + i" type="button"
                                             role="tab" [attr.aria-controls]="'nav-home-' + i"
                                             [attr.aria-selected]="i === 0"
-                                            (click)="loadGioHangChiTiet(hoaDon.idGioHang.id)"
-                                            (click)="loadHoaDonById(hoaDon.idHoaDon.id)">
-                                            {{hoaDon.idHoaDon.ma}}
+                                            (click)="loadGioHangChiTiet(hoaDon.gioHang.id)"
+                                            (click)="loadHoaDonById(hoaDon.hoaDon.id)">
+                                            {{hoaDon.hoaDon.ma}}
                                         </button>
                                     </div>
                                 </nav>
@@ -47,7 +46,10 @@
 
                                         <div class="container-fluid" *ngIf="!noProductsFound">
                                             <div class="d-flex justify-content-end mt-3 mb-3">
-                                                <a class="btn btn-primary" style="color: white;">Làm mới</a>
+                                                <span class="me-2"><a class="btn btn-danger" style="color: white;" (click)="deleteHoaDon(hoaDon.hoaDon.id)">Xóa hóa
+                                                    đơn</a></span>
+                                                <span>
+                                                    <a class="btn btn-primary" style="color: white;">Làm mới</a></span>
                                             </div>
                                             <table class="table">
                                                 <thead>
@@ -62,14 +64,14 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let chiTiet of gioHangChiTiet">
-                                                        <td>{{ chiTiet.idSanPham.idSanPham.ten }}</td>
-                                                        <td>{{ chiTiet.idSanPham.idMauSac.ten }}</td>
-                                                        <td>{{ chiTiet.idSanPham.idKichThuoc.ten }}</td>
+                                                        <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
+                                                        <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
+                                                        <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
                                                         <td>
                                                             <input type="number" style="width: 50px;"
                                                                 [(ngModel)]="chiTiet.soLuong" min="0">
                                                         </td>
-                                                        <td>{{ chiTiet.idSanPham.giaBan }}</td>
+                                                        <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
                                                         <td>
 
                                                             <span>
@@ -283,13 +285,13 @@
                                                 *ngFor="let sanPhamChiTiet of listSanPhamChiTiet; let i = index">
 
                                                 <td> {{ i + 1 }}</td>
-                                                <td>{{ sanPhamChiTiet.idSanPham.ma }}</td>
-                                                <td>{{ sanPhamChiTiet.idSanPham.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idDanhMuc.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idMauSac.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idKichThuoc.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idChatLieu.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idThuongHieu.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.sanPham.ma }}</td>
+                                                <td>{{ sanPhamChiTiet.sanPham.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.danhMuc.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.mauSac.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.kichThuoc.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.chatLieu.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
                                                 <td>{{ sanPhamChiTiet.giaBan }}</td>
                                                 <td>{{ sanPhamChiTiet.soLuong }}</td>
                                                 <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">

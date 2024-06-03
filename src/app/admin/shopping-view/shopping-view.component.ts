@@ -94,6 +94,22 @@ export class ShoppingViewComponent {
 );
 }
 
+deleteHoaDon(id: any): void {
+  const isConfirmed = confirm('Bạn có chắc chắn muốn xóa hóa đơn này không?');
+
+  // Nếu người dùng xác nhận xóa
+  if (isConfirmed) {
+    // Gọi service để xóa hóa đơn
+    this.hoaDonService.deleteHoaDon(id).subscribe(() => {
+      // Cập nhật lại dữ liệu
+      this.loadHoaDonGioHang();
+      // Hiển thị thông báo xóa thành công
+      alert('Xóa hóa đơn thành công!');
+      // Chuyển hướng về trang shopping
+      this.router.navigate(['/admin/shopping']);
+    });
+  }
+}
 
 loadHoaDonById(idHoaDon: string): void {
   this.hoaDonService.getHoaDonById(idHoaDon)
