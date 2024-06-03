@@ -32,7 +32,8 @@
                                             role="tab" [attr.aria-controls]="'nav-home-' + i"
                                             [attr.aria-selected]="i === 0"
                                             (click)="loadGioHangChiTiet(hoaDon.gioHang.id)"
-                                            (click)="loadHoaDonById(hoaDon.hoaDon.id)">
+                                            (click)="loadHoaDonById(hoaDon.hoaDon.id)"
+                                            (click)="loadGioHangById(hoaDon.gioHang.id)">
                                             {{hoaDon.hoaDon.ma}}
                                         </button>
                                     </div>
@@ -241,7 +242,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="container-fluid">
                                     <table class="table text-nowrap mb-0 col-12 mb-3">
                                         <thead class="text-dark fs-4">
                                             <tr>
@@ -294,9 +295,11 @@
                                                 <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
                                                 <td>{{ sanPhamChiTiet.giaBan }}</td>
                                                 <td>{{ sanPhamChiTiet.soLuong }}</td>
-                                                <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
+                                                 
+                                                <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;" (click)="themSanPhamVaoGioHang()"
+                                                    (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)">
                                                         <i class="ti ti-plus"></i>
-                                                    </a></td>
+                                                    </button></td>
                                             </tr>
                                         </tbody>
                                     </table>

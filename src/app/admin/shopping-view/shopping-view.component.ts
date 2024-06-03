@@ -4,7 +4,6 @@ import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
 import { GioHangChiTietService } from './../../service/GioHangChiTietService';
 import { HoaDonGioHangService } from './../../service/HoaDonGioHangService';
 import { HoaDonService } from './../../service/HoaDonService';
-
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,6 +16,8 @@ import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
 import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
+import { GioHangService } from 'src/app/service/GioHangService';
+import { GioHangChiTietDto } from 'src/app/model/gio-hang-chi-tiet-dto.model';
 
 @Component({
   selector: 'app-shopping-view',
@@ -27,6 +28,8 @@ export class ShoppingViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   vouchers: any[] = [];
   listHoaDon: any = {};
+  gioHang: any = {};
+  chiTietSanPham: any = {};
   listHoaDonGioHang: any[] = [];
   hoaDon: any = {};
   startFrom = 1;
@@ -60,7 +63,8 @@ export class ShoppingViewComponent {
     private chiTietSanPhamService: SanPhamCTService,
     private voucherService: VoucherService,
     private khachHangService: KhachHangService,
-    private hoaDonService: HoaDonService
+    private hoaDonService: HoaDonService,
+    private gioHangService: GioHangService
 
     ) {
       // Khởi tạo danhMucForm ở đây
@@ -84,7 +88,7 @@ export class ShoppingViewComponent {
         }
     },
     (error: HttpErrorResponse) => {
-        if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+        if (error.error.code === ErrorCode.NO_CARTDETAIl_FOUND) {
             this.noProductsFound = true;
             this.gioHangChiTiet = [];
         } else {
@@ -111,6 +115,7 @@ deleteHoaDon(id: any): void {
   }
 }
 
+
 loadHoaDonById(idHoaDon: string): void {
   this.hoaDonService.getHoaDonById(idHoaDon)
       .subscribe(
@@ -118,13 +123,73 @@ loadHoaDonById(idHoaDon: string): void {
           if (response.result) {
             this.listHoaDon = response.result;
             this.maHoaDon = this.listHoaDon.ma;
-            localStorage.setItem('listHoaDon', JSON.stringify(response.result));
+            localStorage.setItem('hoaDon', JSON.stringify(response.result));
             this.router.navigate(['/admin/shopping'])
             console.log(this.listHoaDon.ma);
             
           }
         })
 }
+
+loadGioHangById(idGioHang: string): void {
+  this.gioHangService.getGioHangById(idGioHang)
+      .subscribe(
+        (response: ApiResponse<any>) => {
+          if (response.result) {
+            this.gioHang = response.result;
+            localStorage.setItem('gioHang', JSON.stringify(response.result));
+            this.router.navigate(['/admin/shopping'])
+          }
+        })
+}
+
+loadChiTietSanPhamById(idChiTietSanPham: string): void {
+  this.chiTietSanPhamService.getChiTietSanPhamById(idChiTietSanPham)
+      .subscribe(
+        (response: ApiResponse<any>) => {
+          if (response.result) {
+            this.chiTietSanPham = response.result;
+            localStorage.setItem('chiTietSanPham', JSON.stringify(response.result));
+            this.router.navigate(['/admin/shopping'])
+          }
+        })
+}
+
+themSanPhamVaoGioHang(): void {
+  const storedGioHang = localStorage.getItem('gioHang');
+  const storedChiTietSanPham = localStorage.getItem('chiTietSanPham');
+
+  if (storedGioHang && storedChiTietSanPham) {
+    const gioHang = JSON.parse(storedGioHang);
+    const chiTietSanPham = JSON.parse(storedChiTietSanPham);
+
+    const gioHangChiTietDto: GioHangChiTietDto = {
+      id: '',
+      soLuong: 1, // Or any other quantity you need
+      chiTietSanPham: chiTietSanPham,
+      gioHang: gioHang,
+      tongTienGiam: 0, // Assuming default values, you may update as per requirements
+      trangThai: true, // Assuming default values, you may update as per requirements
+      ngayTao: new Date(),
+      ngaySua: new Date()
+    };
+
+    this.gioHangChiTietService.themSanPhamVaoGioHang(gioHangChiTietDto).subscribe(
+      (response: ApiResponse<any>) => {
+        if (response.result) {
+          this.loadGioHangChiTiet(response.result.gioHang.id);
+         alert('Thêm sản phẩm thành công');
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Thêm không thành công:', error);
+      }
+    );
+  } else {
+    console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm nào trong local storage');
+  }
+}
+
 
 loadMaHoaDonFromLocalStorage(): void {
   const storedHoaDon = localStorage.getItem('listHoaDon');
