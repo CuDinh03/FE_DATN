@@ -26,7 +26,7 @@ import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
 export class ShoppingViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   vouchers: any[] = [];
-  listHoaDon: any[] = [];
+  listHoaDon: any = {};
   listHoaDonGioHang: any[] = [];
   hoaDon: any = {};
   startFrom = 1;
@@ -50,7 +50,7 @@ export class ShoppingViewComponent {
   sdtValue: string = '';
   results: string[] = [];
   listVoucher: any[] = [];
-
+  maHoaDon: string = '';
  
 
   constructor(private auth: AuthenticationService,
@@ -59,7 +59,8 @@ export class ShoppingViewComponent {
     private gioHangChiTietService: GioHangChiTietService,
     private chiTietSanPhamService: SanPhamCTService,
     private voucherService: VoucherService,
-    private khachHangService: KhachHangService
+    private khachHangService: KhachHangService,
+    private hoaDonService: HoaDonService
 
     ) {
       // Khởi tạo danhMucForm ở đây
@@ -68,8 +69,8 @@ export class ShoppingViewComponent {
   ngOnInit(): void {
     this.loadHoaDonGioHang();
     this.loadChiTietSP();
+    this.loadMaHoaDonFromLocalStorage();
   }
-
 
   loadGioHangChiTiet(idGioHang: string): void {
     this.gioHangChiTietService.getAll(idGioHang).subscribe(
@@ -91,6 +92,30 @@ export class ShoppingViewComponent {
         }
     }
 );
+}
+
+
+loadHoaDonById(idHoaDon: string): void {
+  this.hoaDonService.getHoaDonById(idHoaDon)
+      .subscribe(
+        (response: ApiResponse<any>) => {
+          if (response.result) {
+            this.listHoaDon = response.result;
+            this.maHoaDon = this.listHoaDon.ma;
+            localStorage.setItem('listHoaDon', JSON.stringify(response.result));
+            this.router.navigate(['/admin/shopping'])
+            console.log(this.listHoaDon.ma);
+            
+          }
+        })
+}
+
+loadMaHoaDonFromLocalStorage(): void {
+  const storedHoaDon = localStorage.getItem('listHoaDon');
+  if (storedHoaDon) {
+    const hoaDon = JSON.parse(storedHoaDon);
+    this.maHoaDon = hoaDon.ma; // Giả sử mã hóa đơn nằm ở thuộc tính 'ma'
+  }
 }
   
 loadChiTietSP(): void {
@@ -120,6 +145,7 @@ loadChiTietSP(): void {
         if (response.result && response.result.length > 0) {
           // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
           this.listHoaDonGioHang = response.result;
+          
         } else {
           console.log(response);
         }

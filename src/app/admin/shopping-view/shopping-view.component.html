@@ -32,7 +32,8 @@
                                             data-bs-toggle="tab" [attr.data-bs-target]="'#nav-home-' + i" type="button"
                                             role="tab" [attr.aria-controls]="'nav-home-' + i"
                                             [attr.aria-selected]="i === 0"
-                                            (click)="loadGioHangChiTiet(hoaDon.idGioHang.id)">
+                                            (click)="loadGioHangChiTiet(hoaDon.idGioHang.id)"
+                                            (click)="loadHoaDonById(hoaDon.idHoaDon.id)">
                                             {{hoaDon.idHoaDon.ma}}
                                         </button>
                                     </div>
@@ -113,9 +114,10 @@
                                     <div class="row alig n-items-start">
                                         <form>
                                             <div class="mb-4">
-                                                <label for="ma" class="form-label">Mã hóa đơn</label>
-                                                <input type="text" class="form-control" formControlName="ma"
-                                                    aria-describedby="textHelp" id="ma">
+                                                <label for="ma" class="form-label me-2">Mã hóa đơn:  </label>
+                                                <!-- <input type="text" class="form-control" formControlName="ma" [(ngModel)]="maHoaDon"
+                                                    aria-describedby="textHelp" id="ma"> -->
+                                                    {{ listHoaDon.ma }}
                                             </div>
                                             <div class="row align-items-center">
                                                 <div class="container-fluid mb-4">
@@ -132,8 +134,7 @@
                                                         </div>
                                                     </div>
                                                     <i *ngIf="customer != null">
-                                                        <i class="form-label" style="color: grey;">{{ customer.ten
-                                                            }}</i>
+                                                        <i class="form-label" style="color: grey;">{{ customer.ten }}</i>
                                                     </i>
                                                 </div>
                                                 <div class="mb-2">
