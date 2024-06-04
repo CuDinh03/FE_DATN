@@ -1,3 +1,4 @@
+import { GioHangChiTietDto } from './../model/gio-hang-chi-tiet-dto.model';
 import { ApiResponse } from '../model/ApiResponse';
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
@@ -34,6 +35,15 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
         let params = new HttpParams().set('soLuong', soLuong.toString());
     
         return this.http.put<ApiResponse<any>>(`${this.apiUrl}/${id}`, null, { headers, params });
+      }
+
+      themSanPhamVaoGioHang(gioHangChiTiet: GioHangChiTietDto): Observable<ApiResponse<GioHangChiTietDto>> {
+        const token = localStorage.getItem('token');
+        // Thêm token vào header của yêu cầu
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+        return this.http.post<ApiResponse<GioHangChiTietDto>>(`${this.apiUrl}/create`,gioHangChiTiet, { headers });
       }
   
   
