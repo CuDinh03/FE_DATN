@@ -1,3 +1,5 @@
+
+import { error } from '@angular/compiler-cli/src/transformers/util';
 import { KhachHangService } from './../../service/KhachHangService';
 import { VoucherService } from './../../service/VoucherService';
 import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
@@ -54,6 +56,8 @@ export class ShoppingViewComponent {
   results: string[] = [];
   listVoucher: any[] = [];
   maHoaDon: string = '';
+  danhMucList: DanhMucDto[] = [];
+
  
 
   constructor(private auth: AuthenticationService,
@@ -64,7 +68,8 @@ export class ShoppingViewComponent {
     private voucherService: VoucherService,
     private khachHangService: KhachHangService,
     private hoaDonService: HoaDonService,
-    private gioHangService: GioHangService
+    private gioHangService: GioHangService,
+    private danhMucService : DanhMucService
 
     ) {
       // Khởi tạo danhMucForm ở đây
@@ -74,6 +79,7 @@ export class ShoppingViewComponent {
     this.loadHoaDonGioHang();
     this.loadChiTietSP();
     this.loadMaHoaDonFromLocalStorage();
+    this.loadDanhMuc();
   }
 
   loadGioHangChiTiet(idGioHang: string): void {
@@ -98,20 +104,54 @@ export class ShoppingViewComponent {
 );
 }
 
-deleteHoaDon(id: any): void {
-  const isConfirmed = confirm('Bạn có chắc chắn muốn xóa hóa đơn này không?');
+loadDanhMuc(): void {
+  this.danhMucService.getAllDanhMuc().subscribe(
+    (response: ApiResponse<DanhMucDto[]>) => {
+      if (response.result) {
+        this.danhMucList = response.result;
+      }
+    },
+    (error: HttpErrorResponse) => {
+      console.error('Error loading danh muc:', error);
+    }
+  );
+}
 
-  // Nếu người dùng xác nhận xóa
-  if (isConfirmed) {
-    // Gọi service để xóa hóa đơn
-    this.hoaDonService.deleteHoaDon(id).subscribe(() => {
-      // Cập nhật lại dữ liệu
-      this.loadHoaDonGioHang();
-      // Hiển thị thông báo xóa thành công
-      alert('Xóa hóa đơn thành công!');
-      // Chuyển hướng về trang shopping
-      this.router.navigate(['/admin/shopping']);
-    });
+calculateTotal(): number {
+  let total = 0;
+  this.gioHangChiTiet.forEach((item: any) => {
+    total += item.soLuong * item.chiTietSanPham.giaBan;
+  });
+  return total;
+}
+
+deleteHoaDonFromLocalStorage(): void {
+  const storedHoaDon = localStorage.getItem('hoaDon');
+  if (storedHoaDon) {
+    const hoaDon: any = JSON.parse(storedHoaDon);
+    const idHoaDon = hoaDon.id;
+
+    const isConfirmed = confirm('Bạn có chắc chắn muốn xóa hóa đơn này không?');
+  
+    if (isConfirmed) {
+      this.hoaDonService.deleteHoaDon(idHoaDon).subscribe(
+        (response: ApiResponse<any>) => {
+          if (response.code === 0) { // Giả sử API trả về một thuộc tính 'success'
+            this.loadHoaDonGioHang(); // Tải lại danh sách hóa đơn
+            alert('Xóa hóa đơn thành công!');
+            this.router.navigate(['/admin/shopping']);
+          } else {
+            alert('Có lỗi xảy ra khi xóa hóa đơn.');
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.error('Có lỗi xảy ra khi xóa hóa đơn:', error);
+          alert('Có lỗi xảy ra khi xóa hóa đơn.');
+        }
+      );
+    }
+  } else {
+    console.error('Không tìm thấy thông tin hóa đơn trong localStorage');
   }
 }
 
@@ -238,24 +278,57 @@ loadChiTietSP(): void {
   }
 
   updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
+    const originalSoLuong = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet).soLuong;
     this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
-        (response: ApiResponse<any>) => {
-            console.log(response.message);
-            // Hiển thị thông báo sửa số lượng thành công
-            alert('Sửa số lượng thành công!');
-            this.loadChiTietSP();
-        },
-        (error: HttpErrorResponse) => {
-            console.error('Error updating gio hang:', error);
-        }
+      (response: ApiResponse<any>) => {
+          console.log(response.message);
+          // Hiển thị thông báo sửa số lượng thành công
+          alert('Sửa số lượng thành công!');
+          this.loadChiTietSP();
+          this.loadGioHangChiTiet(this.hoaDon.id);
+      },
+      (error: HttpErrorResponse) => {
+          if (error.status === 400 ) {
+              // Hiển thị thông báo lỗi khi số lượng vượt quá số lượng sản phẩm chi tiết
+              alert('Số lượng nhập vào vượt quá số lượng sản phẩm chi tiết hiện có. Vui lòng nhập lại!');
+              const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
+                if (item) {
+                    item.soLuong = originalSoLuong;
+                }
+          } else {
+              console.error('Error updating gio hang:', error);
+          }
+      }
+  );
+}
+
+resetGioHang(): void {
+  // Đặt lại số lượng sản phẩm về 0
+  this.gioHangChiTiet.forEach(item => {
+    item.soLuong = 0;
+  });
+
+  // Cập nhật giỏ hàng chi tiết bằng cách gọi API cho từng sản phẩm
+  this.gioHangChiTiet.forEach(item => {
+    this.gioHangChiTietService.updateGioHang(item.id, item.soLuong).subscribe(
+      (response: ApiResponse<any>) => {
+        console.log(response.message);
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Error updating gio hang:', error);
+      }
     );
+  });
+
+  // Load lại chi tiết giỏ hàng và chi tiết sản phẩm sau khi cập nhật
+  this.loadGioHangChiTiet(this.gioHang.id);  // Giả sử `this.gioHang.id` là ID của giỏ hàng hiện tại
+  this.loadChiTietSP();
 }
   
   createHoaDon(): void {
     this.submitted = true;
     if(this.listHoaDonGioHang.length >= 5){
       alert('Chỉ được thêm tối đa 5 hóa đơn')
-      
       return;
     }
     this.hoaDonGioHangService.createHoaDon(this.hoaDon).subscribe(data => {

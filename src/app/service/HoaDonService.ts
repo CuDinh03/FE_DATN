@@ -48,5 +48,20 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
     
         return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
       }
+
+      getHoaDon(page: number, size: number): Observable<ApiResponse<any>> {
+        const token = localStorage.getItem('token');
+
+        // Thêm token vào header của yêu cầu
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+
+        let params = new HttpParams();
+        params = params.append('page', page.toString());
+        params = params.append('size', size.toString());
+
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/allPage`, { params, headers });
+    }
 }
 
