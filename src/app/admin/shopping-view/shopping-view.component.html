@@ -17,7 +17,6 @@
                                     <h5 class="card-title fw-semibold">Bán hàng tại quầy</h5>
                                 </div>
                                 <div>
-                                    
                                     <span><a class="btn btn-primary" style="color: white;" (click)="createHoaDon()">Tạo
                                             hóa đơn</a></span>
                                 </div>
@@ -70,19 +69,12 @@
                                                                 [(ngModel)]="chiTiet.soLuong" min="0">
                                                         </td>
                                                         <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
-                                                        <td>
-                                                            
-
+                                                        <td class="d-flex justify-content-center text-center">
                                                             <span>
                                                                 <a class="btn"
                                                                     (click)="updateGioHangChiTiet(chiTiet.id, chiTiet.soLuong)"
                                                                     style="color: #7A98FE; font-size: 16px;">
                                                                     <i class="ti ti-edit"></i>
-                                                                </a>
-                                                            </span>
-                                                            <span>
-                                                                <a class="btn" style="color: #F87777; font-size: 16px;">
-                                                                    <i class="ti ti-x"></i>
                                                                 </a>
                                                             </span>
                                                         </td>
@@ -160,8 +152,8 @@
                                                     <input type="text" class="form-control" />
                                                 </div>
                                                 <div class="mb-4">
-                                                    <label for="ma" class="form-label">Tiền giảm</label>
-                                                    <input type="text" class="form-control" />
+                                                    <label for="ma" class="form-label me-3" >Tiền giảm: </label>
+                                                    <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">  {{voucher.giaTriGiam}}</span>
                                                 </div>
                                                 <div class="mb-4">
                                                     <label for="ma" class="form-label">Tiền trả lại: </label>

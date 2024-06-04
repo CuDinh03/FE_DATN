@@ -2,7 +2,7 @@
   <div class="main_menu">
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container">
-        <a class="navbar-brand logo_h" href="index.html"><img src="assets/shopping/img/logo.png" alt=""></a>
+        <a class="navbar-brand logo_h" href="index.html"><h3>MT-Shirt</h3></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="icon-bar"></span>
@@ -11,52 +11,71 @@
         </button>
         <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
           <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-            <li class="nav-item active"><a class="nav-link" href="/trang-chu">Home</a></li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/trang-chu" style="font-size: 12px; position: relative;">HÀNG MỚI VỀ
+                <span class="new-badge">NEW</span>
+              </a>
+            </li>
             <li class="nav-item submenu dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                 aria-expanded="false">Shop</a>
+                 aria-expanded="false" style="font-size: 12px">QUẦN NAM</a>
               <ul class="dropdown-menu">
-                <li class="nav-item"><a class="nav-link" href="/list-p">Shop Category</a></li>
-                <!--                <li class="nav-item"><a class="nav-link" href="single-product.html">Product Details</a></li>-->
-                <li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
-                <li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
-                <li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần jeans</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần chinos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần kaki</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần âu</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần jogger</a></li>
               </ul>
             </li>
             <li class="nav-item submenu dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                 aria-expanded="false">Blog</a>
+                 aria-expanded="false" style="font-size: 12px">ÁO NAM</a>
               <ul class="dropdown-menu">
-                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-                <li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Áo sơ mi</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Áo vest</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Áo Polo</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Áo thun</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Áo hoodie</a></li>
               </ul>
             </li>
             <li class="nav-item submenu dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                 aria-expanded="false">Pages</a>
+                 aria-expanded="false" style="font-size: 12px">BÁN CHẠY</a>
               <ul class="dropdown-menu">
-                <li class="nav-item"><a class="nav-link" href="/log-in">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="/sign-up">Register</a></li>
-                <li class="nav-item"><a class="nav-link" href="tracking-order.html">Tracking</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Áo bán chạy</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần bán chạy</a></li>
               </ul>
             </li>
-            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-          </ul>
-
-          <ul class="nav-shop">
-            <li class="nav-item"><input type="text" class="form-control" placeholder="Tìm kiếm"></li>
             <li class="nav-item">
-              <button><i class="ti-search"></i></button>
+              <a class="nav-link" href="#" style="font-size: 12px; position: relative;">HÀNG MỚI VỀ
+                <span class="sale-badge">SALE</span>
+              </a>
             </li>
-            <li class="nav-item"><a type="button" href="/shopping-cart" style="text-decoration: none"
-                                    class="nav-link"><i class="ti-shopping-cart"></i></a></li>
-            <!--            <li class="nav-item"><a class="button button-header" href="#">Buy Now</a></li>-->
           </ul>
 
-          <ul class="nav-shop">
-<!--            <li class="nav-item" >-->
-<!--              <a class="button button-header" (click)="logout()">Đăng Xuất</a>-->
-<!--            </li>-->
+        <div class="d-flex class me-5">
+          <span><input type="text" class="form-control" placeholder="Tìm kiếm" *ngIf="showSearch"></span>
+            <span class="me-3">
+              <span><button class="btn" (click)="toggleSearch()"><i class="ti ti-search" style="font-size: 20px; color: black;"></i></button></span>
+            </span>
+            <span *ngIf="isLoggedInCart">
+              <a href="/shopping-cart" style="text-decoration: none; color: black;" class="btn">
+                <i class="ti ti-shopping-cart" style="font-size: 20px"></i>
+              </a>
+            </span>
+        </div>
+          
+          <div *ngIf="!isLoggedInCart">
+              <span>
+                <a href="/log-in" class="auth-link">Đăng nhập</a>
+              </span>
+              /
+              <span>
+                <a href="/sign-up" class="auth-link">Đăng ký</a>
+              </span>
+          </div>
+          
+          <ul *ngIf="isLoggedInCart">
             <div class="navbar-collapse justify-content-end px-0" id="navbarNav" >
               <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
                 <li class="nav-item dropdown"*ngIf="isLoggedIn()">
@@ -88,7 +107,6 @@
                 </li>
               </ul>
             </div>
-
           </ul>
         </div>
       </div>
