@@ -13,86 +13,6 @@ import { HoaDonCTService } from 'src/app/service/HoaDonCTService';
 import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
 import { HoaDonService } from 'src/app/service/HoaDonService';
 
-interface SanPham {
-  id: string;
-  ten: string;
-  ma: string;
-  ngayTao: string;
-  ngaySua: string;
-  trangThai: boolean;
-}
-
-interface HinhAnh {
-  id: string;
-  ma: string;
-  url: string;
-  ngayTao: string;
-  ngaySua: string;
-  trangThai: boolean;
-}
-
-interface ThuongHieu {
-  id: string;
-  ten: string;
-  ma: string;
-  ngayTao: string;
-  ngaySua: string;
-  trangThai: boolean;
-}
-
-interface ChatLieu {
-  id: string;
-  ma: string;
-  ten: string;
-  ngayTao: string;
-  ngaySua: string;
-  trangThai: boolean;
-}
-
-interface DanhMuc {
-  id: string;
-  ma: string;
-  ten: string;
-  ngayTao: string;
-  ngaySua: string;
-  trangThai: boolean;
-}
-
-interface KichThuoc {
-  id: string;
-  ten: string;
-  ma: string;
-  ngayTao: string;
-  ngaySua: string;
-  trangThai: boolean;
-}
-
-interface MauSac {
-  id: string;
-  ten: string;
-  ma: string;
-  ngayTao: string;
-  ngaySua: string;
-  trangThai: boolean;
-}
-
-
-interface ChiTietSanPhamDto {
-  id : string;
-  ma : string;
-  idSanPham: SanPham;
-  idHinhAnh : HinhAnh;
-  idThuongHieu: ThuongHieu;
-  idChatLieu: ChatLieu;
-  idDanhMuc: DanhMuc;
-  idKichThuoc : KichThuoc;
-  idMauSac: MauSac;
-  trangThai: boolean;
-  giaBan: number;
-  soLuong: number;
-}
-
-
 @Component({
   selector: 'app-shopping-view',
   templateUrl: './shopping-view.component.html',
@@ -112,10 +32,12 @@ export class ShoppingViewComponent {
   listHoaDonCT: any[] = [];
 
 
-  chiTietSanPham: ChiTietSanPhamDto[] = [];
+  chiTietSanPham: any[] = [];
   currentPage = 0;
   totalPages = 0;
-
+  totalElements = 0;
+  page = 0;
+  size = 5;
 
   constructor(private auth: AuthenticationService, private router: Router,
     private hoaDonCTService: HoaDonCTService,
@@ -127,35 +49,24 @@ export class ShoppingViewComponent {
 
   ngOnInit(): void {
     this.loadHoaDon();
-    this.loadSanPhamChiTiet();
+    this.loadChiTietSP();
 
-    // this.getAllSanPham();
   }
 
-
-  loadSanPhamChiTiet(){
-    this.sanPhamCTService.getSanPhamChiTiet(this.currentPage, 5)
-    .subscribe(respone => {
-      this.chiTietSanPham = respone.result.content;
-      this.totalPages = respone.result.totalPages;
-      console.log(this.sanPhamCTService);
-    })
+  // Load CTSP + phan trang
+  loadChiTietSP(): void {
+    this.sanPhamCTService.getSanPhamChiTiet(this.page, this.size)
+      .subscribe(response => {
+        this.chiTietSanPham = response.result.content;
+        this.totalElements = response.result.totalElements;
+        this.totalPages = response.result.totalPages;
+      });
   }
-
-  nextPage(){
-    if(this.currentPage < this.totalPages -1){
-      this.currentPage ++;
-      this.loadSanPhamChiTiet();
-    }
+  
+  onPageChangeSanPhamCT(page: number): void {
+    this.page = page;
+    this.loadChiTietSP();
   }
-
-  prevPage(){
-    if(this.currentPage > 0){
-      this.currentPage --;
-      this.loadSanPhamChiTiet();
-    }
-  }
-
 
   // => list hoa don
   loadHoaDon(): void {
@@ -165,16 +76,6 @@ export class ShoppingViewComponent {
         (error: any) => console.error('Error loading invoices:', error)
       );
   }
-
-  // => list san pham chi tiet
-  // getAllSanPham(): void {
-  //   this.sanPhamCTService.getAll().subscribe(
-  //     res => {
-  //       this.listSanPhamCT = res.result;
-  //       console.log(this.listSanPhamCT)
-  //     }
-  //   )
-  // }
 
   // => list hoa don
   private handleApiResponse(response: ApiResponse<any>): void {
