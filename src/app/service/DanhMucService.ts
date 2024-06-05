@@ -31,7 +31,14 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
       }
 
       
-
+      getAllDanhMuc(): Observable<ApiResponse<any>> {
+        const token = localStorage.getItem('token');
+        // Thêm token vào header của yêu cầu
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, { headers });
+    }
 
       createDanhMuc(danhMuc: DanhMucDto): Observable<ApiResponse<DanhMucDto>> {
         const token = localStorage.getItem('token');

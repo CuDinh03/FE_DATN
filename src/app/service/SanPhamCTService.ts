@@ -8,27 +8,36 @@ import { ApiResponse } from "../model/ApiResponse";
   providedIn: 'root'
 })
 
-export class SanPhamCTService {
+  export class SanPhamCTService {
+  
+    apiUrl = 'http://localhost:9091/api/chi-tiet-san-pham';
+  
+    constructor(private http: HttpClient) {}
 
-  apiUrl = 'http://localhost:9091/ct-san-pham';
 
-  constructor(private http: HttpClient) { }
+    getSanPhamChiTiet(page: number, size: number): Observable<ApiResponse<any>> {
+      const token = localStorage.getItem('token');
 
-  // phan trang
-  getSanPhamChiTiet(page: number, size: number): Observable<ApiResponse<any>> {
+      // Thêm token vào header của yêu cầu
+      const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+      });
+
+      let params = new HttpParams();
+      params = params.append('page', page.toString());
+      params = params.append('size', size.toString());
+
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
+  }
+
+  getChiTietSanPhamById(id: string): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
-
     // Thêm token vào header của yêu cầu
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`
     });
-
-    let params = new HttpParams();
-    params = params.append('page', page.toString());
-    params = params.append('size', size.toString());
-
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
-  }
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
+}
 
 
 }

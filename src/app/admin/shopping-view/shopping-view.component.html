@@ -3,53 +3,8 @@
     <app-sidebar></app-sidebar>
     <!--  Main wrapper -->
     <div class="body-wrapper">
-        <!--  Header Start -->
-        <header class="app-header">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <ul class="navbar-nav">
-                    <li class="nav-item d-block d-xl-none">
-                        <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
-                            <i class="ti ti-menu-2"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                            <i class="ti ti-bell-ringing"></i>
-                            <div class="notification bg-primary rounded-circle"></div>
-                        </a>
-                    </li>
-                </ul>
-                <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-                    <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35"
-                                    class="rounded-circle">
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
-                                aria-labelledby="drop2">
-                                <div class="message-body">
-                                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                        <i class="ti ti-user fs-6"></i>
-                                        <p class="mb-0 fs-3">My Profile</p>
-                                    </a>
-                                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                        <i class="ti ti-mail fs-6"></i>
-                                        <p class="mb-0 fs-3">My Account</p>
-                                    </a>
-                                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                        <i class="ti ti-list-check fs-6"></i>
-                                        <p class="mb-0 fs-3">My Task</p>
-                                    </a>
-                                    <a (click)="logout()" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
+
+        <app-admin-header></app-admin-header>
         <!--  Header End -->
         <div class="container-fluid">
             <!--  Row 1 -->
@@ -62,35 +17,37 @@
                                     <h5 class="card-title fw-semibold">Bán hàng tại quầy</h5>
                                 </div>
                                 <div>
-                                    <span class="me-2"><a class="btn btn-danger" style="color: white;">Xóa hóa
-                                            đơn</a></span>
                                     <span><a class="btn btn-primary" style="color: white;" (click)="createHoaDon()">Tạo
                                             hóa đơn</a></span>
                                 </div>
                             </div>
-                            <div *ngIf="listHoaDon.length > 0">
+
+                            <div>
                                 <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <button *ngFor="let hoaDon of listHoaDon.slice(0, 4); let i = index"
+                                        <button *ngFor="let hoaDon of listHoaDonGioHang.slice(0,5); let i = index"
                                             class="nav-link" [class.active]="i === 0" id="nav-home-tab-{{i}}"
                                             data-bs-toggle="tab" [attr.data-bs-target]="'#nav-home-' + i" type="button"
                                             role="tab" [attr.aria-controls]="'nav-home-' + i"
-                                            [attr.aria-selected]="i === 0">
-                                            <!-- MAHOADON (tab) -->
-                                            {{ hoaDon.ma }}
+                                            [attr.aria-selected]="i === 0"
+                                            (click)="loadGioHangChiTiet(hoaDon.gioHang.id)"
+                                            (click)="loadHoaDonById(hoaDon.hoaDon.id)"
+                                            (click)="loadGioHangById(hoaDon.gioHang.id)">
+                                            {{hoaDon.hoaDon.ma}}
                                         </button>
                                     </div>
                                 </nav>
+
                                 <div class="tab-content" id="nav-tabContent">
-                                    <div *ngFor="let hoaDon of listHoaDon.slice(0, 4); let i = index"
+                                    <div *ngFor="let hoaDon of listHoaDonGioHang.slice(0,5); let i = index"
                                         class="tab-pane fade" [class.show]="i === 0" [class.active]="i === 0"
                                         id="nav-home-{{i}}" role="tabpanel" [attr.aria-labelledby]="'nav-home-tab-' + i"
                                         tabindex="0">
 
-                                        <div class="d-flex justify-content-end mt-3 mb-3">
-                                            <a class="btn btn-primary" style="color: white;">Làm mới</a>
-                                        </div>
-                                        <div class="container-fluid">
+                                        <div class="container-fluid" *ngIf="!noProductsFound">
+                                            <div class="d-flex justify-content-end mt-3 mb-3">
+                                                    <a class="btn btn-primary" style="color: white;" (click)="resetGioHang()">Làm mới</a>
+                                            </div>
                                             <table class="table">
                                                 <thead>
                                                     <tr>
@@ -103,42 +60,43 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <!-- lấy ra tất cả hóa đơn chi tiết dựa vào id_hoa_don_id  trong bảng hóa đơn chi tiết -->
-
-                                                        <!-- SANPHAMCHITET từ hoaDonChiTiet  -->
-
-                                                        <td>{{ hoaDon.id }}</td>
-
+                                                    <tr *ngFor="let chiTiet of gioHangChiTiet">
+                                                        <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
+                                                        <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
+                                                        <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
                                                         <td>
-                                                            <span><a href="/edit"
-                                                                    style="color: #7A98FE;font-size: 16px;">
+                                                            <input type="number" style="width: 50px;"
+                                                                [(ngModel)]="chiTiet.soLuong" min="0">
+                                                        </td>
+                                                        <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
+                                                        <td class="d-flex justify-content-center text-center">
+                                                            <span>
+                                                                <a class="btn"
+                                                                    (click)="updateGioHangChiTiet(chiTiet.id, chiTiet.soLuong)"
+                                                                    style="color: #7A98FE; font-size: 16px;">
                                                                     <i class="ti ti-edit"></i>
-                                                                </a></span>
-                                                            <span><a href="/delete"
-                                                                    style="color: #F87777;font-size: 16px;">
-                                                                    <i class="ti ti-x"></i>
-                                                                </a></span>
+                                                                </a>
+                                                            </span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                            <div class="mt-3 d-flex justify-content-end">
+                                                <button class="btn btn-primary">
+                                                    < </button>
+                                                        <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                                                        <button class="btn btn-primary"> > </button>
+                                            </div>
                                         </div>
-                                        <div class="mt-3 d-flex justify-content-end">
-                                            <button class="btn btn-primary">
-                                                < </button>
-                                                    <span style="margin: 5px">Trang 1</span>
-                                                    <button class="btn btn-primary"> >
-                                                    </button>
+                                        <div *ngIf="noProductsFound" class="m-5 d-flex justify-content-center">
+                                            <p>Chưa có sản phẩm nào</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
 
 
                 <div class="col-lg-4">
@@ -149,117 +107,82 @@
                                     <div class="row alig n-items-start">
                                         <form>
                                             <div class="mb-4">
-                                                <label for="ma" class="form-label">Mã hóa đơn</label>
-                                                <input type="text" class="form-control" formControlName="ma"
-                                                    aria-describedby="textHelp" id="ma">
+                                                <label for="ma" class="form-label me-2">Mã hóa đơn:  </label>
+                                                <!-- <input type="text" class="form-control" formControlName="ma" [(ngModel)]="maHoaDon"
+                                                    aria-describedby="textHelp" id="ma"> -->
+                                                    {{ listHoaDon.ma }}
                                             </div>
                                             <div class="row align-items-center">
-                                                <div class="col-8 mb-4">
-                                                    <label for="ten" class="form-label">Khách hàng</label>
-                                                    <input type="text" class="form-control" formControlName="sdt"
-                                                        id="sdt">
+                                                <div class="container-fluid mb-4">
+                                                    <div class="row d-flex justify-content-between">
+                                                        <label for="ten" class="form-label">Khách hàng</label>
+                                                        <div class="col-8">
+                                                            <input type="text" class="form-control" id="sdt" name="sdt"
+                                                                [(ngModel)]="sdtValue"
+                                                                (ngModelChange)="onSdtInputChange()">
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <button type="button" class="btn btn-info"
+                                                                (click)="getCustomer()">Chọn</button>
+                                                        </div>
+                                                    </div>
+                                                    <i *ngIf="customer != null">
+                                                        <i class="form-label" style="color: grey;">{{ customer.ten }}</i>
+                                                    </i>
                                                 </div>
-                                                <div class="col-4 mb-4">
-                                                    <button class="btn btn-primary mt-4">Thêm</button>
+                                                <div class="mb-2">
+                                                    <span><label class="form-label me-2">Voucher:</label></span>
+                                                    <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">  {{voucher.ten}}</span>
+                                                </div>
+                                                <button type="button" class="btn btn-info mb-4"
+                                                        (click)="showModal()">Chọn Voucher</button>
+                                                <div class="mb-4">
+                                                    <label class="form-label">Phương thức thanh toán</label>
+                                                    <select class="form-select" aria-label="Default select example">
+                                                        <option selected>Tiền mặt</option>
+                                                        <option value="1">Chuyển khoản</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="ma" class="form-label me-3">Tổng tiền: </label>
+                                                    {{ calculateTotal() }}
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="ma" class="form-label">Tiền khách đưa</label>
+                                                    <input type="text" class="form-control" />
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="ma" class="form-label me-3" >Tiền giảm: </label>
+                                                    <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">  {{voucher.giaTriGiam}}</span>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="ma" class="form-label">Tiền trả lại: </label>
+                                                    <span><i> - </i></span>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="ma" class="form-label">Thành tiền: </label>
+                                                    <span><i> - </i></span>
+                                                </div>
+                                                <div class="d-flex" style="margin-bottom: 25px;">
+                                                    <span>
+                                                        <a class="btn btn-outline-info me-3" href="/admin" aria-expanded="false">
+                                                            <span>
+                                                                <i class="ti ti-wallet"></i>
+                                                            </span>
+                                                            <span class="hide-menu">Thanh toán</span>
+                                                        </a>
+                                                    </span>
+                                                    <span>
+                                                        <a class="btn btn-outline-danger" style="color: #F87777;" (click)="deleteHoaDonFromLocalStorage()" aria-expanded="false">
+                                                            <span>
+                                                                <i class="ti ti-x"></i>
+                                                            </span>
+                                                            <span class="hide-menu">Hủy đơn</span>
+                                                        </a>
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div class="mb-4">
-                                                <label for="trangThai" class="form-label">Voucher</label>
-                                                <select class="form-select" aria-label="Default select example">
-                                                    <option selected>Voucher 1</option>
-                                                    <option value="1">Voucher 2</option>
-                                                    <option value="2">Voucher 3</option>
-                                                    <option value="3">Voucher 4</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="trangThai" class="form-label">Phương thức thanh toán</label>
-                                                <select class="form-select" aria-label="Default select example">
-                                                    <option selected>Tiền mặt</option>
-                                                    <option value="1">Chuyển khoản</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tổng tiền</label>
-                                                <input type="text" class="form-control" formControlName="tongTien"
-                                                    id="tongTien">
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền khách đưa</label>
-                                                <input type="text" class="form-control" />
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền giảm</label>
-                                                <input type="text" class="form-control" />
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền trả lại: </label>
-                                                <span><i> - </i></span>
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Thành tiền: </label>
-                                                <span><i> - </i></span>
-                                            </div>
-                                            <span>
-                                                <a class="btn btn-outline-info me-3" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
-                                                    <span>
-                                                        <i class="ti ti-wallet"></i>
-                                                    </span>
-                                                    <span class="hide-menu">Thanh toán</span>
-                                                </a>
-                                            </span>
-                                            <span>
-                                                <a class="btn btn-outline-danger" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
-                                                    <span>
-                                                        <i class="ti ti-x"></i>
-                                                    </span>
-                                                    <span class="hide-menu">Hủy đơn</span>
-                                                </a>
-                                            </span>
-
                                         </form>
-                                        <!-- <form>
-                        
-                                           
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền khách đưa</label>
-                                                <input type="text" class="form-control" formControlName="tienKhachDua"
-                                                    id="tienKhachDua">
-                                            </div>
-                                            <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền giảm</label>
-                                                <input type="text" class="form-control" formControlName="tienKhachDua"
-                                                    id="tienKhachDua">
-                                            </div>
-                                            <div class="mb-4">
-                                                <span> <label for="ma" class="form-label">Tiền trả lại: </label></span>
-                                                <span><i> - </i></span>
-                                            </div>
-                                            <div class="mb-4">
-                                                <span> <label for="ma" class="form-label">Thành tiền: </label></span>
-                                                <span><i> - </i></span>
-                                            </div>
-                                            <span>
-                                                <a class="btn btn-outline-info me-3" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
-                                                    <span>
-                                                        <i class="ti ti-wallet"></i>
-                                                    </span>
-                                                    <span class="hide-menu">Thanh toán</span>
-                                                </a>
-                                            </span>
-                                            <span>
-                                                <a class="btn btn-outline-danger" href="/admin" aria-expanded="false"
-                                                    style="margin-bottom: 25px;">
-                                                    <span>
-                                                        <i class="ti ti-x"></i>
-                                                    </span>
-                                                    <span class="hide-menu">Hủy đơn</span>
-                                                </a>
-                                            </span>
-                                        </form> -->
                                     </div>
                                 </div>
                                 <div id="earning"></div>
@@ -267,152 +190,226 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12 d-flex align-items-strech">
-                    <div class="card" style="width: 1116px;">
-                        <div class="card-body">
-                            <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                <div class="mb-3 mb-sm-0">
-                                    <h5 class="card-title fw-semibold">Sản phẩm</h5>
+                <div class="row">
+                    <div class="col-12 d-flex align-items-strech">
+                        <div class="card" style="width: 1116px;">
+                            <div class="card-body">
+                                <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                    <div class="mb-3 mb-sm-0">
+                                        <h5 class="card-title fw-semibold">Sản phẩm</h5>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <span>
+                                            <select class="form-select ">
+                                                <option value="1">Màu sắc</option>
+                                                <option value="2">Tên</option>
+                                            </select>
+                                        </span>
+                                        <span class="ms-2">
+                                            <select class="form-select ">
+                                                <option value="1">Chất liệu</option>
+                                                <option value="2">Tên</option>
+                                            </select>
+                                        </span>
+                                        <span class="ms-2">
+                                            <select class="form-select">
+                                                <option value="1">Kích thước</option>
+                                                <option value="2">Tên</option>
+                                            </select>
+                                        </span>
+                                        <span class="ms-2">
+                                            <select class="form-select">
+                                                <option value="1">Thương Hiệu</option>
+                                                <option value="2">Tên</option>
+                                            </select>
+                                        </span>
+                                        <span class="ms-2">
+                                            <select class="form-select">
+                                              <option value="0">Danh mục</option>
+                                              <option *ngFor="let danhMuc of danhMucList" [value]="danhMuc.id">{{ danhMuc.ten }}</option>
+                                            </select>
+                                          </span>                                          
+                                    </div>
                                 </div>
-                                <div class="d-flex justify-content-end">
-                                    <span>
-                                        <select class="form-select ">
-                                            <option value="1">Màu sắc</option>
-                                            <option value="2">Tên</option>
-                                        </select>
-                                    </span>
-                                    <span class="ms-2">
-                                        <select class="form-select ">
-                                            <option value="1">Chất liệu</option>
-                                            <option value="2">Tên</option>
-                                        </select>
-                                    </span>
-                                    <span class="ms-2">
-                                        <select class="form-select">
-                                            <option value="1">Kích thước</option>
-                                            <option value="2">Tên</option>
-                                        </select>
-                                    </span>
-                                    <span class="ms-2">
-                                        <select class="form-select">
-                                            <option value="1">Thương Hiệu</option>
-                                            <option value="2">Tên</option>
-                                        </select>
-                                    </span>
-                                    <span class="ms-2">
-                                        <select class="form-select">
-                                            <option value="1">Danh mục</option>
-                                            <option value="2">Tên</option>
-                                        </select>
-                                    </span>
+                                <div class="container-fluid">
+                                    <table class="table text-nowrap mb-0 col-12 mb-3">
+                                        <thead class="text-dark fs-4">
+                                            <tr>
+                                                <th class="border-bottom-0" scope="col">
+                                                    <h6 class="fw-semibold mb-0">#</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Mã sản phẩm</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Tên sản phẩm</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Danh mục</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Màu sắc</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Kích thước</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Chất liệu</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Thương hiệu</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Giá bán</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Số lượng</h6>
+                                                </th>
+                                                <th scope="col">
+                                                    <h6 class="fw-semibold mb-0">Thao tác</h6>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="height: 30px;"
+                                                *ngFor="let sanPhamChiTiet of listSanPhamChiTiet; let i = index">
+
+                                                <td> {{ i + 1 }}</td>
+                                                <td>{{ sanPhamChiTiet.sanPham.ma }}</td>
+                                                <td>{{ sanPhamChiTiet.sanPham.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.danhMuc.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.mauSac.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.kichThuoc.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.chatLieu.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.giaBan }}</td>
+                                                <td>{{ sanPhamChiTiet.soLuong }}</td>  
+                                                <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;" (click)="themSanPhamVaoGioHang()"
+                                                    (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)">
+                                                        <i class="ti ti-plus"></i>
+                                                    </button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div>
+                                        <div class="d-flex justify-content-end">
+                                            <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary"
+                                                [disabled]="page === 0">
+                                                <
+                                            </button>
+                                            <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                                            <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"
+                                                [disabled]="page === totalPages - 1"> >
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <table class="table text-nowrap mb-0 align-middle col-12 mb-3">
-                                    <thead class="text-dark fs-4">
-                                        <tr>
-                                            <th class="border-bottom-0" scope="col">
-                                                <h6 class="fw-semibold mb-0">#</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Mã sản phẩm</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Tên sản phẩm</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Danh mục</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Màu sắc</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Kích thước</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Chất liệu</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Thương hiệu</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Giá bán</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Số lượng</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Khuyến mãi</h6>
-                                            </th>
-                                            <th scope="col">
-                                                <h6 class="fw-semibold mb-0">Thao tác</h6>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style="height: 30px;" *ngFor="let element of chiTietSanPham; let i = index">
+                            <!-- <div *ngIf="danhMuc.length === 0">
+                            <p>Không có danh mục nào được tìm thấy.</p>
+                        </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div *ngIf="danhMuc.length === 0">
+                <p>Không có danh mục nào được tìm thấy.</p>
+            </div> -->
+        </div>
 
-                                            <td> {{ i + 1 }}</td>
-                                            <td>{{ element.idSanPham.ma }}</td>
-                                            <td>{{ element.idSanPham.ten }}</td>
-                                            <td>{{ element.idDanhMuc.ten }}</td>
-                                            <td>{{ element.idMauSac.ten }}</td>
-                                            <td>{{ element.idKichThuoc.ten }}</td>
-                                            <td>{{ element.idChatLieu.ten }}</td>
-                                            <td>{{ element.idThuongHieu.ten }}</td>
-                                            <td>{{ element.giaBan }}</td>
-                                            <td>{{ element.soLuong }}</td>
-                                            <td>Tết</td>
-                                            <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
-                                                    <i class="ti ti-plus"></i>
-                                                </a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div>
-                                    <div class="d-flex justify-content-end">
-                                        <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary"
-                                            [disabled]="page === 0">
-                                            < </button>
-                                                <span style="margin: 5px">Trang {{ page + 1 }}</span>
-                                                <button (click)="onPageChangeSanPhamCT(page + 1)"
-                                                    class="btn btn-secondary" [disabled]="page === totalPages - 1"> >
-                                                </button>
+
+        <div class="modal fade" #voucherModal tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="accountModalLabel">Danh sách voucher</h5>
+
+                        <button type="button" class="btn-close" (click)="closeVoucherModal()"
+                            aria-label="Close"></button>
+
+                    </div>
+
+                    <div class="modal-body">
+                        <form class="d-flex" role="search">
+                            <!--          <input class="form-control me-2" type="search" [formControl]="searchControl" placeholder="Tìm kiếm"-->
+                            <!--                 aria-label="Search">-->
+                            <button class="btn btn-outline-success" type="submit">Tìm</button>
+                        </form>
+                        <ul *ngIf="results.length > 0">
+                            <li *ngFor="let result of results">{{ result }}</li>
+                        </ul>
+                        <hr>
+                        <div *ngIf="vouchers && vouchers.length > 0" >
+                            <div class="row ms-2">
+                                <div *ngFor="let voucher of vouchers" class="col-md-4 mb-4 d-flex">
+                                    <div class="">
+                                        <div class=" container-fluid row rounded shadow"
+                                            style="border-left: 12px solid #49BEFF;">
+                                            <div class="col-4 d-flex justify-content-center align-items-center text-center p-2"
+                                                style="border-right: 1px dashed #ccc;">
+                                                <h5>{{voucher.ma}}</h5>
+                                            </div>
+                                            <div class="col-8">
+                                                <h6 class="mt-3">
+                                                    <span>Giảm: </span>
+                                                    <span>{{voucher.giaTriGiam}}%</span>
+                                                </h6>
+                                                <small class="mb-2">
+                                                    <span>cho đơn tối đa từ </span> 
+                                                    <span>{{voucher.giaTriToiThieu}}đ</span> 
+                                                </small>
+                                                <br>
+                                                <i style="display: inline; font-size: 11px;" class="mb-3">
+                                                    <span style="display: inline; margin-right: 4px;">HSD: </span>
+                                                    <span style="display: inline; margin-right: 4px;">{{formatDate(voucher.ngayKetThuc)}}</span>
+                                                </i>
+                                                <button type="button" (click)="getVoucherById(voucher.id)"
+                                                    style="border: none; background: #49BEFF; color: #fff; padding: 2px 12px; border-radius: 20px;font-size: 12px; margin-top: 15px; margin-bottom: 20px;">Sử dụng</button>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <!-- <div class="mt-3 d-flex justify-content-end">
-                                        <button class="btn btn-primary" (click)="prevPage()"
-                                            [disabled]="currentPage === 0"> Previous </button>
-                                        <span style="margin: 5px"> Trang {{currentPage + 1}}</span>
-                                        <button class="btn btn-primary" (click)="nextPage()"
-                                            [disabled]="currentPage >= totalPages - 1"> Next </button>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>
-                        <!-- <div *ngIf="danhMuc.length === 0">
-                            <p>Không có danh mục nào được tìm thấy.</p>
-                        </div> -->
+                        <div class="d-flex justify-content-between">
+                            <button (click)="onPageChange(currentPage - 1)" class="btn btn-secondary"
+                                [disabled]="currentPage === 0">
+                                Previous
+                            </button>
+                            <button (click)="onPageChange(currentPage + 1)" class="btn btn-secondary"
+                                [disabled]="currentPage === totalPages - 1">Next
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div id="limitReachedModal" class="modal" [class.show]="isModalVisible">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close" (click)="closeModal()">&times;</span>
-            <h2>Thông báo</h2>
-        </div>
-        <div class="modal-body">
-            <p>Chỉ được thêm tối đa 5 hóa đơn.</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" (click)="closeModal()">OK</button>
-        </div>
+
+        <!-- Modal thêm mới khách hàng -->
+        <!--<div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">-->
+        <!--  <div class="modal-dialog">-->
+        <!--    <div class="modal-content">-->
+        <!--      <div class="modal-header">-->
+        <!--        <h5 class="modal-title" id="addCustomerModalLabel">Thêm mới khách hàng</h5>-->
+        <!--        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+        <!--      </div>-->
+        <!--      <div class="modal-body">-->
+        <!--        <form (ngSubmit)="addCustomer()">-->
+        <!--          <div class="mb-3">-->
+        <!--            <label for="customerName" class="form-label">Tên khách hàng</label>-->
+        <!--            <input type="text" class="form-control" id="customerName" [(ngModel)]="newCustomer.ten" name="customerName"-->
+        <!--                   required>-->
+        <!--          </div>-->
+        <!--          &lt;!&ndash; Thêm các thông tin khách hàng khác nếu cần &ndash;&gt;-->
+        <!--          <button type="submit" class="btn btn-primary">Thêm</button>-->
+        <!--        </form>-->
+        <!--      </div>-->
+        <!--    </div>-->
+        <!--  </div>-->
+        <!--</div>-->
+
+
+
+
     </div>
-</div>
