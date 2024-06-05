@@ -8,8 +8,23 @@ import {Router} from "@angular/router";
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+  showSearch: boolean = false;
+  isLoggedInCart: boolean = false;
 
   constructor(private auth: AuthenticationService, private router: Router) {
+  }
+
+  ngOnInit() {
+    // Kiểm tra trạng thái đăng nhập của người dùng
+    this.checkLoginStatus();
+  }
+
+  toggleSearch() {
+    this.showSearch = !this.showSearch;
+  }
+  checkLoginStatus() {
+    const token = localStorage.getItem('token');
+    this.isLoggedInCart = !!token;
   }
 
   isLoggedIn(): boolean {
@@ -27,6 +42,7 @@ export class HeaderComponent {
   logout() {
     // Gọi phương thức logout từ AuthenticationService
     this.auth.logout();
+    window.location.reload();
     // Redirect đến trang đăng nhập sau khi đăng xuất
     this.router.navigate(['/trang-chu']).then(() => {
       console.log('Redirected to /trang-chu');

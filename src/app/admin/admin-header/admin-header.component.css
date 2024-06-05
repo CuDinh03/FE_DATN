@@ -1,0 +1,15 @@
+.avatar-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .online-dot {
+    position: absolute;
+    bottom: 15px;
+    right: 12px;
+    width: 10px;
+    height: 10px;
+    background-color: #00FF00; /* Màu xanh */
+    border-radius: 50%; /* Để làm cho chấm tròn */
+    border: 2px solid #fff; /* Viền trắng cho chấm */
+  }
