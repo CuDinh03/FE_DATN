@@ -50,7 +50,6 @@ export class ShoppingViewComponent {
   ngOnInit(): void {
     this.loadHoaDon();
     this.loadChiTietSP();
-
   }
 
   // Load CTSP + phan trang
@@ -76,7 +75,7 @@ export class ShoppingViewComponent {
         (error: any) => console.error('Error loading invoices:', error)
       );
   }
-
+  
   // => list hoa don
   private handleApiResponse(response: ApiResponse<any>): void {
     if (response && response.result) {
