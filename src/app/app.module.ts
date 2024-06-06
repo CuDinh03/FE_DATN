@@ -59,7 +59,7 @@ import { CustomerViewComponent } from './admin/customer-view/customer-view.compo
     VoucherViewComponent,
     AdminHeaderComponent,
     OrdersViewComponent,
-    CustomerViewComponent
+    CustomerViewComponent,
     
     ],
   imports: [

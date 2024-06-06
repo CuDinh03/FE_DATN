@@ -39,5 +39,24 @@ import { ApiResponse } from "../model/ApiResponse";
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
 }
 
+getAllSanPhamChiTiet(): Observable<ApiResponse<any>> {
+  const token = localStorage.getItem('token');
+
+  // Thêm token vào header của yêu cầu
+  const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+  });
+
+  return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, {headers });
+}
+
+getAnhDanhSach(chiTietSanPhamId: string): Observable<any> {
+  const token = localStorage.getItem('token');
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+    });
+  return this.http.get<any>(`${this.apiUrl}/all/${chiTietSanPhamId}`, {headers});
+}
       
   }

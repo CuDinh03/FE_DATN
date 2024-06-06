@@ -1,8 +1,8 @@
 
 export interface GioHangChiTietDto {
   id: string;
-  gioHangId: string;
-  chiTietSanPhamId: string;
+  gioHang: string;
+  chiTietSanPham: string;
   soLuong: number;
   ngayTao: Date;
   ngaySua: Date;

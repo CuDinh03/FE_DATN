@@ -266,8 +266,8 @@ themSanPhamVaoGioHang(): void {
     const gioHangChiTietDto: GioHangChiTietDto = {
       id: '',
       soLuong: 1, // Or any other quantity you need
-      chiTietSanPhamId: chiTietSanPham,
-      gioHangId: gioHang,
+      chiTietSanPham: chiTietSanPham,
+      gioHang: gioHang,
       tongTienGiam: 0, // Assuming default values, you may update as per requirements
       trangThai: true, // Assuming default values, you may update as per requirements
       ngayTao: new Date(),
