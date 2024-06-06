@@ -1,44 +1,56 @@
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
      data-sidebar-position="fixed" data-header-position="fixed">
-  <div
-    class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="d-flex align-items-center justify-content-center w-100">
-      <div class="row justify-content-center w-100">
-        <div class="col-md-8 col-lg-6 col-xxl-3">
-          <div class="card mb-0">
-            <div class="card-body">
-<!--              <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">-->
-<!--                <img src="assets/admin/assets/images/logos/dark-logo.svg" width="180" alt="">-->
-<!--              </a>-->
-              <p class="text-center">Chào mừng bạn đến với MT-Shirt</p>
-              <form [formGroup]="accountForm" (ngSubmit)="createAccount()">
-                <div class="mb-3">
-                  <label for="tenDangNhap" class="form-label">Tên đăng nhập</label>
-                  <input type="text" class="form-control" formControlName="tenDangNhap" id="tenDangNhap" aria-describedby="textHelp">
+    <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+        <div class="d-flex align-items-center justify-content-center w-100">
+            <div class="row justify-content-center w-100">
+                <div class="col-md-8 col-lg-6 col-xxl-3">
+                    <div class="card mb-0">
+                        <div class="card-body">
+                            <p class="text-center">Chào mừng bạn đến với MT-Shirt</p>
+                            <form [formGroup]="accountForm" (ngSubmit)="createAccount()">
+                                <div class="mb-3">
+                                    <label for="tenDangNhap" class="form-label">Tên đăng nhập</label>
+                                    <input type="text" class="form-control" formControlName="tenDangNhap" id="tenDangNhap" aria-describedby="textHelp">
+                                    <div *ngIf="submitted && f['tenDangNhap'].errors" class="invalid-feedback d-block">
+                                        <div *ngIf="f['tenDangNhap'].errors?.['required']">Tên đăng nhập là bắt buộc.</div>
+                                        <div *ngIf="f['tenDangNhap'].errors?.['minlength']">Tên đăng nhập phải có ít nhất 6 ký tự.</div>
+                                        <div *ngIf="f['tenDangNhap'].errors?.['maxlength']">Tên đăng nhập không được vượt quá 10 ký tự.</div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="matKhau" class="form-label">Mật khẩu</label>
+                                    <input type="password" class="form-control" formControlName="matKhau" id="matKhau">
+                                    <div *ngIf="submitted && f['matKhau'].errors" class="invalid-feedback d-block">
+                                        <div *ngIf="f['matKhau'].errors?.['required']">Mật khẩu là bắt buộc.</div>
+                                        <div *ngIf="f['matKhau'].errors?.['minlength']">Mật khẩu phải có ít nhất 8 ký tự.</div>
+                                        <div *ngIf="f['matKhau'].errors?.['maxlength']">Mật khẩu không được vượt quá 16 ký tự.</div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="xacNhanMatKhau" class="form-label">Nhập lại mật khẩu</label>
+                                    <input type="password" class="form-control" formControlName="xacNhanMatKhau" id="xacNhanMatKhau">
+                                    <div *ngIf="submitted && f['xacNhanMatKhau'].errors" class="invalid-feedback d-block">
+                                        <div *ngIf="f['xacNhanMatKhau'].errors?.['required']">Xác nhận mật khẩu là bắt buộc.</div>
+                                        <div *ngIf="f['xacNhanMatKhau'].errors?.['minlength']">Xác nhận mật khẩu phải có ít nhất 8 ký tự.</div>
+                                        <div *ngIf="f['xacNhanMatKhau'].errors?.['maxlength']">Xác nhận mật khẩu không được vượt quá 16 ký tự.</div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Đăng ký</button>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <p class="fs-4 mb-0 fw-bold">Nếu bạn đã có tài khoản!</p>
+                                    <a class="text-primary fw-bold ms-2" href="/log-in">Đăng nhập</a>
+                                </div>
+                            </form>
+                            <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">
+                                {{ errorMessage }}
+                            </div>
+                            <div *ngIf="successMessage" class="alert alert-success mt-3" role="alert">
+                                {{ successMessage }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                  <label for="matKhau" class="form-label">Mật khẩu</label>
-                  <input type="password" class="form-control" formControlName="matKhau" id="matKhau" id="matKhau">
-                </div>
-                <div class="mb-4">
-                  <label for="xacNhanMatKhau" class="form-label">Nhập lại mật khẩu</label>
-                  <input type="password" class="form-control" formControlName="xacNhanMatKhau" id="xacNhanMatKhau" id="xacNhanMatKhau">
-                </div>
-                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Đăng ký</button>
-                <div class="d-flex align-items-center justify-content-center">
-                  <p class="fs-4 mb-0 fw-bold">Nếu bạn đã có tài khoản!</p>
-                  <a class="text-primary fw-bold ms-2" href="/log-in">Đăng nhập</a>
-                </div>
-              </form>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
-
-<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-  {{ errorMessage }}
-</div>
-
