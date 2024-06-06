@@ -1,3 +1,5 @@
+import { HoaDonDto } from './../../model/hoa-don-dto.model';
+import { ThanhToanDto } from './../../model/thanh-toan-dto.model';
 
 import { error } from '@angular/compiler-cli/src/transformers/util';
 import { KhachHangService } from './../../service/KhachHangService';
@@ -20,6 +22,7 @@ import { ErrorCode } from "../../model/ErrorCode";
 import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
 import { GioHangService } from 'src/app/service/GioHangService';
 import { GioHangChiTietDto } from 'src/app/model/gio-hang-chi-tiet-dto.model';
+import { ThanhToanService } from 'src/app/service/ThanhToanService';
 
 @Component({
   selector: 'app-shopping-view',
@@ -57,6 +60,7 @@ export class ShoppingViewComponent {
   listVoucher: any[] = [];
   maHoaDon: string = '';
   danhMucList: DanhMucDto[] = [];
+  thanhToanDto: ThanhToanDto;
 
  
 
@@ -69,10 +73,24 @@ export class ShoppingViewComponent {
     private khachHangService: KhachHangService,
     private hoaDonService: HoaDonService,
     private gioHangService: GioHangService,
-    private danhMucService : DanhMucService
+    private danhMucService : DanhMucService,
+    private thanhToanService: ThanhToanService
 
     ) {
-      // Khởi tạo danhMucForm ở đây
+      this.thanhToanDto = {
+        hoaDonDto: {
+          id: '',
+          ma: '',
+          khachHangId: '',
+          nhanVienId: '',
+          tongTien:'',
+          tongTienGiam: '',
+          ngayTao: new Date(),
+          ngaySua: new Date(),
+          trangThai: true,
+        },
+        gioHangChiTietDtoList: []
+      };
     
   }
   ngOnInit(): void {
@@ -80,6 +98,26 @@ export class ShoppingViewComponent {
     this.loadChiTietSP();
     this.loadMaHoaDonFromLocalStorage();
     this.loadDanhMuc();
+  }
+
+  onSubmitPayment() {
+    this.thanhToanService.thanhToan(this.thanhToanDto).subscribe(
+      
+      (response: ApiResponse<ThanhToanDto>) => {
+        if (response.message === 'Thanh toán thành công') {
+    
+          
+          console.log('Payment successful:', response.result);
+        } else {
+          // Handle payment error
+          console.log('Payment failed:', response.message);
+        }
+      },
+      (error) => {
+        // Handle HTTP error
+        console.error('HTTP error:', error);
+      }
+    );
   }
 
   loadGioHangChiTiet(idGioHang: string): void {
@@ -206,8 +244,8 @@ themSanPhamVaoGioHang(): void {
     const gioHangChiTietDto: GioHangChiTietDto = {
       id: '',
       soLuong: 1, // Or any other quantity you need
-      chiTietSanPham: chiTietSanPham,
-      gioHang: gioHang,
+      chiTietSanPhamId: chiTietSanPham,
+      gioHangId: gioHang,
       tongTienGiam: 0, // Assuming default values, you may update as per requirements
       trangThai: true, // Assuming default values, you may update as per requirements
       ngayTao: new Date(),

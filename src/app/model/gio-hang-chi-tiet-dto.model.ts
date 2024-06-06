@@ -1,13 +1,13 @@
 
 export interface GioHangChiTietDto {
   id: string;
+  gioHangId: string;
+  chiTietSanPhamId: string;
   soLuong: number;
-  chiTietSanPham: object;
-  gioHang: object;
-  tongTienGiam: number;
-  trangThai: boolean;
   ngayTao: Date;
   ngaySua: Date;
+  trangThai: boolean;
+  tongTienGiam: number;
+ 
 }
-  
   
