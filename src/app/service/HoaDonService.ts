@@ -10,13 +10,13 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
     providedIn: 'root'
   })
   export class HoaDonService {
-  
+
     apiUrl = 'http://localhost:9091/api/hoa-don';
-  
-  
+
+
     constructor(private http: HttpClient) {}
-  
-      
+
+
     getAll(): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
 
@@ -27,7 +27,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { headers });
     }
 
-    
+
     // Phương thức lấy hóa đơn theo ID
     getHoaDonById(id: string): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
@@ -40,12 +40,22 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
     }
 
+    getHoaDonByMa(ma: string): Observable<ApiResponse<any>>{
+      const token = localStorage.getItem('token');
+
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${ma}`, { headers });
+    }
+
     deleteHoaDon(id: string): Observable<ApiResponse<void>> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-    
+
         return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
       }
 

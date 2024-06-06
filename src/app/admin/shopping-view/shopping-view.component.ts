@@ -62,10 +62,10 @@ export class ShoppingViewComponent {
   danhMucList: DanhMucDto[] = [];
   thanhToanDto: ThanhToanDto;
 
- 
+
 
   constructor(private auth: AuthenticationService,
-    private router: Router, 
+    private router: Router,
     private hoaDonGioHangService: HoaDonGioHangService,
     private gioHangChiTietService: GioHangChiTietService,
     private chiTietSanPhamService: SanPhamCTService,
@@ -74,7 +74,8 @@ export class ShoppingViewComponent {
     private hoaDonService: HoaDonService,
     private gioHangService: GioHangService,
     private danhMucService : DanhMucService,
-    private thanhToanService: ThanhToanService
+    private thanhToanService: ThanhToanService,
+    private activatedRoute: ActivatedRoute
 
     ) {
       this.thanhToanDto = {
@@ -91,22 +92,43 @@ export class ShoppingViewComponent {
         },
         gioHangChiTietDtoList: []
       };
-    
+
   }
   ngOnInit(): void {
     this.loadHoaDonGioHang();
     this.loadChiTietSP();
     this.loadMaHoaDonFromLocalStorage();
     this.loadDanhMuc();
+
+    this.activatedRoute.paramMap.subscribe(params => {
+      const maHoaDon = params.get('ma');
+      if (maHoaDon) {
+        this.hoaDonService.getHoaDonByMa(maHoaDon).subscribe(
+          data => {
+            this.hoaDon= data.result;
+            localStorage.setItem('dbhoadon',this.hoaDon);
+          },
+          error => {
+            console.error('Error fetching invoice data', error);
+          }
+        );
+      }
+    });
+
   }
 
   onSubmitPayment() {
+
+    // this.maHoaDon = this.router.snpa
+
+    // this.hoaDonService.getHoaDonByMa()
+
     this.thanhToanService.thanhToan(this.thanhToanDto).subscribe(
-      
+
       (response: ApiResponse<ThanhToanDto>) => {
         if (response.message === 'Thanh toán thành công') {
-    
-          
+
+
           console.log('Payment successful:', response.result);
         } else {
           // Handle payment error
@@ -170,7 +192,7 @@ deleteHoaDonFromLocalStorage(): void {
     const idHoaDon = hoaDon.id;
 
     const isConfirmed = confirm('Bạn có chắc chắn muốn xóa hóa đơn này không?');
-  
+
     if (isConfirmed) {
       this.hoaDonService.deleteHoaDon(idHoaDon).subscribe(
         (response: ApiResponse<any>) => {
@@ -204,7 +226,7 @@ loadHoaDonById(idHoaDon: string): void {
             localStorage.setItem('hoaDon', JSON.stringify(response.result));
             this.router.navigate(['/admin/shopping'])
             console.log(this.listHoaDon.ma);
-            
+
           }
         })
 }
@@ -276,7 +298,7 @@ loadMaHoaDonFromLocalStorage(): void {
     this.maHoaDon = hoaDon.ma; // Giả sử mã hóa đơn nằm ở thuộc tính 'ma'
   }
 }
-  
+
 loadChiTietSP(): void {
   this.chiTietSanPhamService.getSanPhamChiTiet(this.page, this.size)
     .subscribe(response => {
@@ -304,7 +326,7 @@ loadChiTietSP(): void {
         if (response.result && response.result.length > 0) {
           // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
           this.listHoaDonGioHang = response.result;
-          
+
         } else {
           console.log(response);
         }
@@ -362,7 +384,7 @@ resetGioHang(): void {
   this.loadGioHangChiTiet(this.gioHang.id);  // Giả sử `this.gioHang.id` là ID của giỏ hàng hiện tại
   this.loadChiTietSP();
 }
-  
+
   createHoaDon(): void {
     this.submitted = true;
     if(this.listHoaDonGioHang.length >= 5){
@@ -551,11 +573,11 @@ resetGioHang(): void {
 
    formatDate(dateString: string): string {
     const date = new Date(dateString);
-    
+
     const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if necessary
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Get month (0-based index, hence the +1) and pad with leading zero if necessary
     const year = date.getFullYear(); // Get full year
-    
+
     return `${day}/${month}/${year}`; // Return in the desired format (dd/MM/yyyy)
 }
 

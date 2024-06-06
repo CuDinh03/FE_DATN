@@ -107,13 +107,13 @@
                                     <div class="row align-items-start">
                                         <form (ngSubmit)="onSubmitPayment()">
                                             <div class="mb-4">
-                                              <label for="ma" class="form-label me-2">Mã hóa đơn:</label>
-                                              {{ listHoaDon.ma }}
+                                              <label id="ma" class="form-label me-2">Mã hóa đơn:</label>
+                                              {{ listHoaDon?.ma }}
                                             </div>
                                             <div class="row align-items-center">
                                               <div class="container-fluid mb-4">
                                                 <div class="row d-flex justify-content-between">
-                                                  <label for="ten" class="form-label">Khách hàng</label>
+                                                  <label  class="form-label">Khách hàng</label>
                                                   <div class="col-8">
                                                     <input type="text" class="form-control" id="sdt" name="sdt" [(ngModel)]="thanhToanDto.hoaDonDto.khachHangId" (ngModelChange)="onSdtInputChange()" />
                                                   </div>
@@ -138,23 +138,23 @@
                                                 </select>
                                               </div>
                                               <div class="mb-4">
-                                                <label for="ma" class="form-label me-3">Tổng tiền:</label>
+                                                <label  class="form-label me-3">Tổng tiền:</label>
                                                 {{ calculateTotal() }}
                                               </div>
                                               <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền khách đưa</label>
+                                                <label class="form-label">Tiền khách đưa</label>
                                                 <input type="text" class="form-control"/>
                                               </div>
                                               <div class="mb-4">
-                                                <label for="ma" class="form-label me-3">Tiền giảm:</label>
+                                                <label  class="form-label me-3">Tiền giảm:</label>
                                                 <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">{{ voucher.giaTriGiam }}</span>
                                               </div>
                                               <div class="mb-4">
-                                                <label for="ma" class="form-label">Tiền trả lại:</label>
+                                                <label  class="form-label">Tiền trả lại:</label>
                                                 <span><i> - </i></span>
                                               </div>
                                               <div class="mb-4">
-                                                <label for="ma" class="form-label">Thành tiền:</label>
+                                                <label  class="form-label">Thành tiền:</label>
                                                 <span><i> - </i></span>
                                               </div>
                                               <div class="d-flex" style="margin-bottom: 25px;">
@@ -176,9 +176,9 @@
                                                 </span>
                                               </div>
                                             </div>
-                                          </form>                                          
+                                          </form>
                                       </div>
-                                      
+
                                 </div>
                                 <div id="earning"></div>
                             </div>
@@ -223,7 +223,7 @@
                                               <option value="0">Danh mục</option>
                                               <option *ngFor="let danhMuc of danhMucList" [value]="danhMuc.id">{{ danhMuc.ten }}</option>
                                             </select>
-                                          </span>                                          
+                                          </span>
                                     </div>
                                 </div>
                                 <div class="container-fluid">
@@ -278,7 +278,7 @@
                                                 <td>{{ sanPhamChiTiet.chatLieu.ten }}</td>
                                                 <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
                                                 <td>{{ sanPhamChiTiet.giaBan }}</td>
-                                                <td>{{ sanPhamChiTiet.soLuong }}</td>  
+                                                <td>{{ sanPhamChiTiet.soLuong }}</td>
                                                 <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;" (click)="themSanPhamVaoGioHang()"
                                                     (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)">
                                                         <i class="ti ti-plus"></i>
@@ -350,8 +350,8 @@
                                                     <span>{{voucher.giaTriGiam}}%</span>
                                                 </h6>
                                                 <small class="mb-2">
-                                                    <span>cho đơn tối đa từ </span> 
-                                                    <span>{{voucher.giaTriToiThieu}}đ</span> 
+                                                    <span>cho đơn tối đa từ </span>
+                                                    <span>{{voucher.giaTriToiThieu}}đ</span>
                                                 </small>
                                                 <br>
                                                 <i style="display: inline; font-size: 11px;" class="mb-3">
@@ -408,3 +408,4 @@
 
 
     </div>
+</div>
