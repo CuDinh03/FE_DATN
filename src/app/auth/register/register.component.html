@@ -15,6 +15,7 @@
                                         <div *ngIf="f['tenDangNhap'].errors?.['required']">Tên đăng nhập là bắt buộc.</div>
                                         <div *ngIf="f['tenDangNhap'].errors?.['minlength']">Tên đăng nhập phải có ít nhất 6 ký tự.</div>
                                         <div *ngIf="f['tenDangNhap'].errors?.['maxlength']">Tên đăng nhập không được vượt quá 10 ký tự.</div>
+                                        <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
                                     </div>
                                 </div>
                                 <div class="mb-4">
