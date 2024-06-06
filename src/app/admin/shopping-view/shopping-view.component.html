@@ -32,7 +32,9 @@
                                             [attr.aria-selected]="i === 0"
                                             (click)="loadGioHangChiTiet(hoaDon.gioHang.id)"
                                             (click)="loadHoaDonById(hoaDon.hoaDon.id)"
-                                            (click)="loadGioHangById(hoaDon.gioHang.id)">
+                                            (click)="loadGioHangById(hoaDon.gioHang.id)"
+                                            (click)="findHoaDonByMa(hoaDon.hoaDon.ma)">
+                                            
                                             {{hoaDon.hoaDon.ma}}
                                         </button>
                                     </div>
@@ -107,8 +109,8 @@
                                     <div class="row align-items-start">
                                         <form (ngSubmit)="onSubmitPayment()">
                                             <div class="mb-4">
-                                              <label id="ma" class="form-label me-2">Mã hóa đơn:</label>
-                                              {{ listHoaDon?.ma }}
+                                              <label  class="form-label me-2">Mã hóa đơn:</label>
+                                              {{ hoaDon.ma }}
                                             </div>
                                             <div class="row align-items-center">
                                               <div class="container-fluid mb-4">
@@ -143,19 +145,19 @@
                                               </div>
                                               <div class="mb-4">
                                                 <label class="form-label">Tiền khách đưa</label>
-                                                <input type="text" class="form-control"/>
+                                                <input type="text" class="form-control" [(ngModel)]="tienKhachDua" (input)="calculateTienTraLai()" />
                                               </div>
                                               <div class="mb-4">
                                                 <label  class="form-label me-3">Tiền giảm:</label>
-                                                <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">{{ voucher.giaTriGiam }}</span>
+                                                <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">{{ calculateGiamGia() }}</span>
                                               </div>
                                               <div class="mb-4">
-                                                <label  class="form-label">Tiền trả lại:</label>
-                                                <span><i> - </i></span>
+                                                <label class="form-label">Thành tiền</label>
+                                                <input type="text" class="form-control" [value]="thanhTien" readonly />
                                               </div>
                                               <div class="mb-4">
-                                                <label  class="form-label">Thành tiền:</label>
-                                                <span><i> - </i></span>
+                                                <label class="form-label">Tiền trả lại</label>
+                                                <input type="text" class="form-control" [value]="tienTraLai" readonly />
                                               </div>
                                               <div class="d-flex" style="margin-bottom: 25px;">
                                                 <span>

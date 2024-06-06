@@ -37,7 +37,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
             'Authorization': `Bearer ${token}`
         });
 
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/detail/${id}`, { headers });
     }
 
     getHoaDonByMa(ma: string): Observable<ApiResponse<any>>{
