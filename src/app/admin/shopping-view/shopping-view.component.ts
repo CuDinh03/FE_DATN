@@ -68,7 +68,6 @@ export class ShoppingViewComponent {
 
 
 
-
   constructor(private auth: AuthenticationService,
     private router: Router,
     private hoaDonGioHangService: HoaDonGioHangService,
@@ -83,8 +82,21 @@ export class ShoppingViewComponent {
     private activatedRoute: ActivatedRoute
 
     ) {
-      // Khởi tạo danhMucForm ở đây
-    
+      this.thanhToanDto = {
+        hoaDonDto: {
+          id: '',
+          ma: '',
+          khachHangId: '',
+          nhanVienId: '',
+          tongTien:'',
+          tongTienGiam: '',
+          ngayTao: new Date(),
+          ngaySua: new Date(),
+          trangThai: true,
+        },
+        gioHangChiTietDtoList: []
+      };
+
   }
   ngOnInit(): void {
     this.loadHoaDonGioHang();
@@ -109,6 +121,7 @@ export class ShoppingViewComponent {
   
       const tongTien = this.calculateThanhTien();
       hoaDon.tongTien = tongTien;
+      
 
       const ThanhToanDto: ThanhToanDto = {
         hoaDonDto: hoaDon,
@@ -368,12 +381,22 @@ loadChiTietSP(): void {
 
   updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
     const originalSoLuong = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet).soLuong;
+    if (soLuong < 0) {
+      alert('Số lượng không được nhỏ hơn 0. Vui lòng nhập lại!');
+      const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
+      if (item) {
+        item.soLuong = originalSoLuong;
+      }
+      return;
+    }
     this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
       (response: ApiResponse<any>) => {
           console.log(response.message);
           // Hiển thị thông báo sửa số lượng thành công
           alert('Sửa số lượng thành công!');
           this.loadChiTietSP();
+          this.loadGioHangChiTiet(response.result.gioHang.id);
+
       },
       (error: HttpErrorResponse) => {
           if (error.status === 400 ) {
@@ -463,6 +486,16 @@ resetGioHang(): void {
     }
   }
 
+  // loadListVoucher() {
+  //     this.voucherService.getListVoucher()
+  //         .subscribe(
+  //             (response: ApiResponse<any>) => {
+  //                 if (response.result) {
+  //                     this.listVoucher = response.result
+  //                 }
+  //             })
+  // }
+
   closeVoucherModal(): void {
     if (this.voucherModal && this.voucherModal.nativeElement) {
       this.voucherModal.nativeElement.classList.remove('show');
@@ -528,9 +561,8 @@ resetGioHang(): void {
   ///customer
 
   getCustomer() {
-    localStorage.removeItem('kh');
     if (!this.sdtValue) {
-      this.customer = { ten: "Khách lẻ" };
+      this.customer = {ten: "Khách lẻ"};
       this.router.navigate(['/admin/shopping']);
     } else {
       this.khachHangService.getKhachHang(this.sdtValue)
@@ -541,13 +573,8 @@ resetGioHang(): void {
               localStorage.setItem('kh', JSON.stringify(response.result));
               this.router.navigate(['/admin/shopping']);
             } else {
-              // Xử lý trường hợp không có kết quả từ dịch vụ
-              console.log("Không tìm thấy thông tin khách hàng");
+              // this.showAddCustomerModal();
             }
-          },
-          (error) => {
-            // Xử lý lỗi từ dịch vụ
-            console.error("Lỗi khi gọi dịch vụ:", error);
           }
         );
     }
@@ -555,10 +582,12 @@ resetGioHang(): void {
 
   onSdtInputChange() {
     if (this.sdtValue) {
+      // Nếu có số điện thoại được nhập vào, tự động lấy thông tin khách hàng
       this.getCustomer();
     } else {
-      this.customer = { ten: "Khách lẻ" };
-      localStorage.removeItem('kh');
+      // Nếu không có số điện thoại, đặt lại thông tin khách hàng thành Khách lẻ
+      this.customer = {ten: "Khách lẻ"};
+      localStorage.removeItem('kh') // xoá kh đi để ko lưu lại thông tin khách hàng vừa nhập hoặc đang nhập
     }
   }
 
