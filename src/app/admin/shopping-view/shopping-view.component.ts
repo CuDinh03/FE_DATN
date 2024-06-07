@@ -392,25 +392,30 @@ loadChiTietSP(): void {
     this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
       (response: ApiResponse<any>) => {
           console.log(response.message);
-          // Hiển thị thông báo sửa số lượng thành công
-          alert('Sửa số lượng thành công!');
+          if (soLuong === 0) {
+            alert('Xóa thành công!');
+          } else {
+            alert('Sửa số lượng thành công!');
+          }
           this.loadChiTietSP();
           this.loadGioHangChiTiet(response.result.gioHang.id);
-
       },
       (error: HttpErrorResponse) => {
           if (error.status === 400 ) {
-              // Hiển thị thông báo lỗi khi số lượng vượt quá số lượng sản phẩm chi tiết
               alert('Số lượng nhập vào vượt quá số lượng sản phẩm chi tiết hiện có. Vui lòng nhập lại!');
               const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
-                if (item) {
-                    item.soLuong = originalSoLuong;
-                }
+              if (item) {
+                  item.soLuong = originalSoLuong;
+              }
           } else {
               console.error('Error updating gio hang:', error);
           }
       }
-  );
+    );
+  }
+
+deleteGioHangChiTiet(idGioHangChiTiet: string): void {
+  this.updateGioHangChiTiet(idGioHangChiTiet, 0);
 }
 
 resetGioHang(): void {
