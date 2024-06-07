@@ -2,7 +2,7 @@
   id: string; // UUID của khách hàng
   ma: string; // Mã của khách hàng
   ten: string; // Tên của khách hàng
-  idTaiKhoan: string; // UUID của tài khoản liên kết với khách hàng
+  taiKhoan: string; // UUID của tài khoản liên kết với khách hàng
   email: string; // Địa chỉ email của khách hàng
   sdt: string; // Số điện thoại của khách hàng
   gioiTinh: boolean; // Giới tính của khách hàng (true: Nam, false: Nữ)

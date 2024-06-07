@@ -36,12 +36,58 @@ export class KhachHangService{
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${sdt}`, {headers});
   }
 
-  themKhachHang(khach: KhachHangDto):Observable<ApiResponse<KhachHangDto>>{
+  
+  getAllKhachHang(): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, { headers });
+}
+
+  createKhachHang(khach: KhachHangDto):Observable<ApiResponse<KhachHangDto>>{
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
     return this.http.post<ApiResponse<KhachHangDto>>(this.apiUrl + '/create', khach,{headers});
+  }
+
+  deleteKhachHang(id: string): Observable<ApiResponse<void>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
+  }
+
+  openKhachHang(id: string): Observable<ApiResponse<void>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/open/${id}`, {headers});
+  }
+
+
+  findById(id: string): Observable<ApiResponse<KhachHangDto>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<KhachHangDto>>(`${this.apiUrl}/${id}`, {headers});
+  }
+  
+  updateKhachHang(id: string, khachHangData: KhachHangDto): Observable<ApiResponse<void>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/${id}`, khachHangData, { headers });
   }
 
 }
