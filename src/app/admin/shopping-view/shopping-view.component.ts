@@ -58,10 +58,10 @@ export class ShoppingViewComponent {
   maHoaDon: string = '';
   danhMucList: DanhMucDto[] = [];
 
- 
+
 
   constructor(private auth: AuthenticationService,
-    private router: Router, 
+    private router: Router,
     private hoaDonGioHangService: HoaDonGioHangService,
     private gioHangChiTietService: GioHangChiTietService,
     private chiTietSanPhamService: SanPhamCTService,
@@ -73,7 +73,7 @@ export class ShoppingViewComponent {
 
     ) {
       // Khởi tạo danhMucForm ở đây
-    
+
   }
   ngOnInit(): void {
     this.loadHoaDonGioHang();
@@ -132,7 +132,7 @@ deleteHoaDonFromLocalStorage(): void {
     const idHoaDon = hoaDon.id;
 
     const isConfirmed = confirm('Bạn có chắc chắn muốn xóa hóa đơn này không?');
-  
+
     if (isConfirmed) {
       this.hoaDonService.deleteHoaDon(idHoaDon).subscribe(
         (response: ApiResponse<any>) => {
@@ -166,7 +166,7 @@ loadHoaDonById(idHoaDon: string): void {
             localStorage.setItem('hoaDon', JSON.stringify(response.result));
             this.router.navigate(['/admin/shopping'])
             console.log(this.listHoaDon.ma);
-            
+
           }
         })
 }
@@ -238,7 +238,7 @@ loadMaHoaDonFromLocalStorage(): void {
     this.maHoaDon = hoaDon.ma; // Giả sử mã hóa đơn nằm ở thuộc tính 'ma'
   }
 }
-  
+
 loadChiTietSP(): void {
   this.chiTietSanPhamService.getSanPhamChiTiet(this.page, this.size)
     .subscribe(response => {
@@ -266,7 +266,7 @@ loadChiTietSP(): void {
         if (response.result && response.result.length > 0) {
           // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
           this.listHoaDonGioHang = response.result;
-          
+
         } else {
           console.log(response);
         }
@@ -324,7 +324,7 @@ resetGioHang(): void {
   this.loadGioHangChiTiet(this.gioHang.id);  // Giả sử `this.gioHang.id` là ID của giỏ hàng hiện tại
   this.loadChiTietSP();
 }
-  
+
   createHoaDon(): void {
     this.submitted = true;
     if(this.listHoaDonGioHang.length >= 5){
@@ -374,16 +374,6 @@ resetGioHang(): void {
       console.log("Invalid size value");
     }
   }
-
-  // loadListVoucher() {
-  //     this.voucherService.getListVoucher()
-  //         .subscribe(
-  //             (response: ApiResponse<any>) => {
-  //                 if (response.result) {
-  //                     this.listVoucher = response.result
-  //                 }
-  //             })
-  // }
 
   closeVoucherModal(): void {
     if (this.voucherModal && this.voucherModal.nativeElement) {
@@ -450,8 +440,9 @@ resetGioHang(): void {
   ///customer
 
   getCustomer() {
+    localStorage.removeItem('kh');
     if (!this.sdtValue) {
-      this.customer = {ten: "Khách lẻ"};
+      this.customer = { ten: "Khách lẻ" };
       this.router.navigate(['/admin/shopping']);
     } else {
       this.khachHangService.getKhachHang(this.sdtValue)
@@ -462,8 +453,13 @@ resetGioHang(): void {
               localStorage.setItem('kh', JSON.stringify(response.result));
               this.router.navigate(['/admin/shopping']);
             } else {
-              // this.showAddCustomerModal();
+              // Xử lý trường hợp không có kết quả từ dịch vụ
+              console.log("Không tìm thấy thông tin khách hàng");
             }
+          },
+          (error) => {
+            // Xử lý lỗi từ dịch vụ
+            console.error("Lỗi khi gọi dịch vụ:", error);
           }
         );
     }
@@ -471,12 +467,10 @@ resetGioHang(): void {
 
   onSdtInputChange() {
     if (this.sdtValue) {
-      // Nếu có số điện thoại được nhập vào, tự động lấy thông tin khách hàng
       this.getCustomer();
     } else {
-      // Nếu không có số điện thoại, đặt lại thông tin khách hàng thành Khách lẻ
-      this.customer = {ten: "Khách lẻ"};
-      localStorage.removeItem('kh') // xoá kh đi để ko lưu lại thông tin khách hàng vừa nhập hoặc đang nhập
+      this.customer = { ten: "Khách lẻ" };
+      localStorage.removeItem('kh');
     }
   }
 
@@ -513,11 +507,11 @@ resetGioHang(): void {
 
    formatDate(dateString: string): string {
     const date = new Date(dateString);
-    
+
     const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if necessary
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Get month (0-based index, hence the +1) and pad with leading zero if necessary
     const year = date.getFullYear(); // Get full year
-    
+
     return `${day}/${month}/${year}`; // Return in the desired format (dd/MM/yyyy)
 }
 
