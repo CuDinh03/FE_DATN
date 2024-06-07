@@ -1,11 +1,14 @@
 import { DecimalPipe } from "@angular/common";
 
 export interface HoaDonDto {
-   id: string;
-  idHoaDon: string;
-  idSanPham: string;
-  soLuong: number;
-  
+  id: string;
+  ma: string;
+  ten: string;
+  nhanVien: string;
+  khachHang: string;
+  tongTien: number;
+  tongTienGiam: number;
+  trangThai: boolean;
 }
   
   

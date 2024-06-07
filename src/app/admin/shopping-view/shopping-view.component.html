@@ -17,8 +17,6 @@
                                     <h5 class="card-title fw-semibold">Bán hàng tại quầy</h5>
                                 </div>
                                 <div>
-                                    <span class="me-2"><a class="btn btn-danger" style="color: white;">Xóa hóa
-                                            đơn</a></span>
                                     <span><a class="btn btn-primary" style="color: white;" (click)="createHoaDon()">Tạo
                                             hóa đơn</a></span>
                                 </div>
@@ -32,8 +30,10 @@
                                             data-bs-toggle="tab" [attr.data-bs-target]="'#nav-home-' + i" type="button"
                                             role="tab" [attr.aria-controls]="'nav-home-' + i"
                                             [attr.aria-selected]="i === 0"
-                                            (click)="loadGioHangChiTiet(hoaDon.idGioHang.id)">
-                                            {{hoaDon.idHoaDon.ma}}
+                                            (click)="loadGioHangChiTiet(hoaDon.gioHang.id)"
+                                            (click)="loadHoaDonById(hoaDon.hoaDon.id)"
+                                            (click)="loadGioHangById(hoaDon.gioHang.id)">
+                                            {{hoaDon.hoaDon.ma}}
                                         </button>
                                     </div>
                                 </nav>
@@ -46,7 +46,7 @@
 
                                         <div class="container-fluid" *ngIf="!noProductsFound">
                                             <div class="d-flex justify-content-end mt-3 mb-3">
-                                                <a class="btn btn-primary" style="color: white;">Làm mới</a>
+                                                    <a class="btn btn-primary" style="color: white;" (click)="resetGioHang()">Làm mới</a>
                                             </div>
                                             <table class="table">
                                                 <thead>
@@ -61,26 +61,20 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let chiTiet of gioHangChiTiet">
-                                                        <td>{{ chiTiet.idSanPham.idSanPham.ten }}</td>
-                                                        <td>{{ chiTiet.idSanPham.idMauSac.ten }}</td>
-                                                        <td>{{ chiTiet.idSanPham.idKichThuoc.ten }}</td>
+                                                        <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
+                                                        <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
+                                                        <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
                                                         <td>
                                                             <input type="number" style="width: 50px;"
                                                                 [(ngModel)]="chiTiet.soLuong" min="0">
                                                         </td>
-                                                        <td>{{ chiTiet.idSanPham.giaBan }}</td>
-                                                        <td>
-
+                                                        <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
+                                                        <td class="d-flex justify-content-center text-center">
                                                             <span>
                                                                 <a class="btn"
                                                                     (click)="updateGioHangChiTiet(chiTiet.id, chiTiet.soLuong)"
                                                                     style="color: #7A98FE; font-size: 16px;">
                                                                     <i class="ti ti-edit"></i>
-                                                                </a>
-                                                            </span>
-                                                            <span>
-                                                                <a class="btn" style="color: #F87777; font-size: 16px;">
-                                                                    <i class="ti ti-x"></i>
                                                                 </a>
                                                             </span>
                                                         </td>
@@ -113,9 +107,10 @@
                                     <div class="row alig n-items-start">
                                         <form>
                                             <div class="mb-4">
-                                                <label for="ma" class="form-label">Mã hóa đơn</label>
-                                                <input type="text" class="form-control" formControlName="ma"
-                                                    aria-describedby="textHelp" id="ma">
+                                                <label for="ma" class="form-label me-2">Mã hóa đơn:  </label>
+                                                <!-- <input type="text" class="form-control" formControlName="ma" [(ngModel)]="maHoaDon"
+                                                    aria-describedby="textHelp" id="ma"> -->
+                                                    {{ listHoaDon.ma }}
                                             </div>
                                             <div class="row align-items-center">
                                                 <div class="container-fluid mb-4">
@@ -132,8 +127,7 @@
                                                         </div>
                                                     </div>
                                                     <i *ngIf="customer != null">
-                                                        <i class="form-label" style="color: grey;">{{ customer.ten
-                                                            }}</i>
+                                                        <i class="form-label" style="color: grey;">{{ customer.ten }}</i>
                                                     </i>
                                                 </div>
                                                 <div class="mb-2">
@@ -150,17 +144,16 @@
                                                     </select>
                                                 </div>
                                                 <div class="mb-4">
-                                                    <label for="ma" class="form-label">Tổng tiền</label>
-                                                    <input type="text" class="form-control" formControlName="tongTien"
-                                                        id="tongTien">
+                                                    <label for="ma" class="form-label me-3">Tổng tiền: </label>
+                                                    {{ calculateTotal() }}
                                                 </div>
                                                 <div class="mb-4">
                                                     <label for="ma" class="form-label">Tiền khách đưa</label>
                                                     <input type="text" class="form-control" />
                                                 </div>
                                                 <div class="mb-4">
-                                                    <label for="ma" class="form-label">Tiền giảm</label>
-                                                    <input type="text" class="form-control" />
+                                                    <label for="ma" class="form-label me-3" >Tiền giảm: </label>
+                                                    <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">  {{voucher.giaTriGiam}}</span>
                                                 </div>
                                                 <div class="mb-4">
                                                     <label for="ma" class="form-label">Tiền trả lại: </label>
@@ -180,7 +173,7 @@
                                                         </a>
                                                     </span>
                                                     <span>
-                                                        <a class="btn btn-outline-danger" href="/admin" aria-expanded="false">
+                                                        <a class="btn btn-outline-danger" style="color: #F87777;" (click)="deleteHoaDonFromLocalStorage()" aria-expanded="false">
                                                             <span>
                                                                 <i class="ti ti-x"></i>
                                                             </span>
@@ -232,13 +225,13 @@
                                         </span>
                                         <span class="ms-2">
                                             <select class="form-select">
-                                                <option value="1">Danh mục</option>
-                                                <option value="2">Tên</option>
+                                              <option value="0">Danh mục</option>
+                                              <option *ngFor="let danhMuc of danhMucList" [value]="danhMuc.id">{{ danhMuc.ten }}</option>
                                             </select>
-                                        </span>
+                                          </span>                                          
                                     </div>
                                 </div>
-                                <div>
+                                <div class="container-fluid">
                                     <table class="table text-nowrap mb-0 col-12 mb-3">
                                         <thead class="text-dark fs-4">
                                             <tr>
@@ -282,18 +275,19 @@
                                                 *ngFor="let sanPhamChiTiet of listSanPhamChiTiet; let i = index">
 
                                                 <td> {{ i + 1 }}</td>
-                                                <td>{{ sanPhamChiTiet.idSanPham.ma }}</td>
-                                                <td>{{ sanPhamChiTiet.idSanPham.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idDanhMuc.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idMauSac.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idKichThuoc.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idChatLieu.ten }}</td>
-                                                <td>{{ sanPhamChiTiet.idThuongHieu.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.sanPham.ma }}</td>
+                                                <td>{{ sanPhamChiTiet.sanPham.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.danhMuc.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.mauSac.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.kichThuoc.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.chatLieu.ten }}</td>
+                                                <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
                                                 <td>{{ sanPhamChiTiet.giaBan }}</td>
-                                                <td>{{ sanPhamChiTiet.soLuong }}</td>
-                                                <td><a href="/edit" style="color: #7A98FE;font-size: 20px;">
+                                                <td>{{ sanPhamChiTiet.soLuong }}</td>  
+                                                <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;" (click)="themSanPhamVaoGioHang()"
+                                                    (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)">
                                                         <i class="ti ti-plus"></i>
-                                                    </a></td>
+                                                    </button></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -419,3 +413,4 @@
 
 
     </div>
+</div>

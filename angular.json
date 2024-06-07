@@ -25,6 +25,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/assets/shopping/css/style.css",
               "src/assets/admin/assets/css/styles.min.css"
             ],
