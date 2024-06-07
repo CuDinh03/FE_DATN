@@ -71,7 +71,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
         HttpClientModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
-    MatSnackBarModule
+        MatSnackBarModule
 
   ],
   providers: [TaiKhoanService],
