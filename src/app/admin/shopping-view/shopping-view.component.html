@@ -32,7 +32,9 @@
                                             [attr.aria-selected]="i === 0"
                                             (click)="loadGioHangChiTiet(hoaDon.gioHang.id)"
                                             (click)="loadHoaDonById(hoaDon.hoaDon.id)"
-                                            (click)="loadGioHangById(hoaDon.gioHang.id)">
+                                            (click)="loadGioHangById(hoaDon.gioHang.id)"
+                                            (click)="findHoaDonByMa(hoaDon.hoaDon.ma)">
+                                            
                                             {{hoaDon.hoaDon.ma}}
                                         </button>
                                     </div>
@@ -104,86 +106,81 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row alig n-items-start">
-                                        <form>
+                                    <div class="row align-items-start">
+                                        <form (ngSubmit)="onSubmitPayment()">
                                             <div class="mb-4">
-                                                <label for="ma" class="form-label me-2">Mã hóa đơn:  </label>
-                                                <!-- <input type="text" class="form-control" formControlName="ma" [(ngModel)]="maHoaDon"
-                                                    aria-describedby="textHelp" id="ma"> -->
-                                                    {{ listHoaDon.ma }}
+                                              <label  class="form-label me-2">Mã hóa đơn:</label>
+                                              {{ hoaDon.ma }}
                                             </div>
                                             <div class="row align-items-center">
-                                                <div class="container-fluid mb-4">
-                                                    <div class="row d-flex justify-content-between">
-                                                        <label for="ten" class="form-label">Khách hàng</label>
-                                                        <div class="col-8">
-                                                            <input type="text" class="form-control" id="sdt" name="sdt"
-                                                                [(ngModel)]="sdtValue"
-                                                                (ngModelChange)="onSdtInputChange()">
-                                                        </div>
-                                                        <div class="col-4">
-                                                            <button type="button" class="btn btn-info"
-                                                                (click)="getCustomer()">Chọn</button>
-                                                        </div>
-                                                    </div>
-                                                    <i *ngIf="customer != null">
-                                                        <i class="form-label" style="color: grey;">{{ customer.ten }}</i>
-                                                    </i>
+                                              <div class="container-fluid mb-4">
+                                                <div class="row d-flex justify-content-between">
+                                                  <label  class="form-label">Khách hàng</label>
+                                                  <div class="col-8">
+                                                    <input type="text" class="form-control" id="sdt" name="sdt" [(ngModel)]="thanhToanDto.hoaDonDto.khachHangId" (ngModelChange)="onSdtInputChange()" />
+                                                  </div>
+                                                  <div class="col-4">
+                                                    <button type="button" class="btn btn-info" (click)="getCustomer()">Chọn</button>
+                                                  </div>
                                                 </div>
-                                                <div class="mb-2">
-                                                    <span><label class="form-label me-2">Voucher:</label></span>
-                                                    <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">  {{voucher.ten}}</span>
-                                                </div>
-                                                <button type="button" class="btn btn-info mb-4"
-                                                        (click)="showModal()">Chọn Voucher</button>
-                                                <div class="mb-4">
-                                                    <label class="form-label">Phương thức thanh toán</label>
-                                                    <select class="form-select" aria-label="Default select example">
-                                                        <option selected>Tiền mặt</option>
-                                                        <option value="1">Chuyển khoản</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label for="ma" class="form-label me-3">Tổng tiền: </label>
-                                                    {{ calculateTotal() }}
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label for="ma" class="form-label">Tiền khách đưa</label>
-                                                    <input type="text" class="form-control" />
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label for="ma" class="form-label me-3" >Tiền giảm: </label>
-                                                    <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">  {{voucher.giaTriGiam}}</span>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label for="ma" class="form-label">Tiền trả lại: </label>
-                                                    <span><i> - </i></span>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label for="ma" class="form-label">Thành tiền: </label>
-                                                    <span><i> - </i></span>
-                                                </div>
-                                                <div class="d-flex" style="margin-bottom: 25px;">
+                                                <i *ngIf="customer != null">
+                                                  <i class="form-label" style="color: grey;">{{ customer.ten }}</i>
+                                                </i>
+                                              </div>
+                                              <div class="mb-2">
+                                                <span><label class="form-label me-2">Voucher:</label></span>
+                                                <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">{{ voucher.ten }}</span>
+                                              </div>
+                                              <button type="button" class="btn btn-info mb-4" (click)="showModal()">Chọn Voucher</button>
+                                              <div class="mb-4">
+                                                <label class="form-label">Phương thức thanh toán</label>
+                                                <select class="form-select" name="trangThai" aria-label="Default select example">
+                                                  <option selected value="Tiền mặt">Tiền mặt</option>
+                                                  <option value="Chuyển khoản">Chuyển khoản</option>
+                                                </select>
+                                              </div>
+                                              <div class="mb-4">
+                                                <label  class="form-label me-3">Tổng tiền:</label>
+                                                {{ calculateTotal() }}
+                                              </div>
+                                              <div class="mb-4">
+                                                <label class="form-label">Tiền khách đưa</label>
+                                                <input type="text" class="form-control" [(ngModel)]="tienKhachDua" (input)="calculateTienTraLai()" />
+                                              </div>
+                                              <div class="mb-4">
+                                                <label  class="form-label me-3">Tiền giảm:</label>
+                                                <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">{{ calculateGiamGia() }}</span>
+                                              </div>
+                                              <div class="mb-4">
+                                                <label class="form-label">Thành tiền</label>
+                                                <input type="text" class="form-control" [value]="thanhTien" readonly />
+                                              </div>
+                                              <div class="mb-4">
+                                                <label class="form-label">Tiền trả lại</label>
+                                                <input type="text" class="form-control" [value]="tienTraLai" readonly />
+                                              </div>
+                                              <div class="d-flex" style="margin-bottom: 25px;">
+                                                <span>
+                                                  <button type="submit" class="btn btn-outline-info me-3">
                                                     <span>
-                                                        <a class="btn btn-outline-info me-3" href="/admin" aria-expanded="false">
-                                                            <span>
-                                                                <i class="ti ti-wallet"></i>
-                                                            </span>
-                                                            <span class="hide-menu">Thanh toán</span>
-                                                        </a>
+                                                      <i class="ti ti-wallet"></i>
                                                     </span>
+                                                    <span class="hide-menu">Thanh toán</span>
+                                                  </button>
+                                                </span>
+                                                <span>
+                                                  <button type="button" class="btn btn-outline-danger" style="color: #F87777;" (click)="deleteHoaDonFromLocalStorage()">
                                                     <span>
-                                                        <a class="btn btn-outline-danger" style="color: #F87777;" (click)="deleteHoaDonFromLocalStorage()" aria-expanded="false">
-                                                            <span>
-                                                                <i class="ti ti-x"></i>
-                                                            </span>
-                                                            <span class="hide-menu">Hủy đơn</span>
-                                                        </a>
+                                                      <i class="ti ti-x"></i>
                                                     </span>
-                                                </div>
+                                                    <span class="hide-menu">Hủy đơn</span>
+                                                  </button>
+                                                </span>
+                                              </div>
                                             </div>
-                                        </form>
-                                    </div>
+                                          </form>
+                                      </div>
+
                                 </div>
                                 <div id="earning"></div>
                             </div>
@@ -228,7 +225,7 @@
                                               <option value="0">Danh mục</option>
                                               <option *ngFor="let danhMuc of danhMucList" [value]="danhMuc.id">{{ danhMuc.ten }}</option>
                                             </select>
-                                          </span>                                          
+                                          </span>
                                     </div>
                                 </div>
                                 <div class="container-fluid">
@@ -283,7 +280,7 @@
                                                 <td>{{ sanPhamChiTiet.chatLieu.ten }}</td>
                                                 <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
                                                 <td>{{ sanPhamChiTiet.giaBan }}</td>
-                                                <td>{{ sanPhamChiTiet.soLuong }}</td>  
+                                                <td>{{ sanPhamChiTiet.soLuong }}</td>
                                                 <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;" (click)="themSanPhamVaoGioHang()"
                                                     (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)">
                                                         <i class="ti ti-plus"></i>
@@ -355,8 +352,8 @@
                                                     <span>{{voucher.giaTriGiam}}%</span>
                                                 </h6>
                                                 <small class="mb-2">
-                                                    <span>cho đơn tối đa từ </span> 
-                                                    <span>{{voucher.giaTriToiThieu}}đ</span> 
+                                                    <span>cho đơn tối đa từ </span>
+                                                    <span>{{voucher.giaTriToiThieu}}đ</span>
                                                 </small>
                                                 <br>
                                                 <i style="display: inline; font-size: 11px;" class="mb-3">
@@ -413,3 +410,4 @@
 
 
     </div>
+</div>
