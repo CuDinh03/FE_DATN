@@ -82,6 +82,7 @@ export class ShoppingViewComponent {
     this.loadDanhMuc();
   }
 
+  // ==> Danh sách giỏ hàng chi tiết 
   loadGioHangChiTiet(idGioHang: string): void {
     this.gioHangChiTietService.getAll(idGioHang).subscribe(
             (response: ApiResponse<any>) => {
@@ -104,6 +105,7 @@ export class ShoppingViewComponent {
 );
 }
 
+// ==> Danh sách danh mục
 loadDanhMuc(): void {
   this.danhMucService.getAllDanhMuc().subscribe(
     (response: ApiResponse<DanhMucDto[]>) => {
@@ -155,7 +157,7 @@ deleteHoaDonFromLocalStorage(): void {
   }
 }
 
-
+ 
 loadHoaDonById(idHoaDon: string): void {
   this.hoaDonService.getHoaDonById(idHoaDon)
       .subscribe(
@@ -238,7 +240,7 @@ loadMaHoaDonFromLocalStorage(): void {
     this.maHoaDon = hoaDon.ma; // Giả sử mã hóa đơn nằm ở thuộc tính 'ma'
   }
 }
-  
+
 loadChiTietSP(): void {
   this.chiTietSanPhamService.getSanPhamChiTiet(this.page, this.size)
     .subscribe(response => {
@@ -260,13 +262,13 @@ loadChiTietSP(): void {
     this.loadChiTietSP();
   }
 
+  // ==> Danh sách hóa đơn giỏ hàng
   loadHoaDonGioHang(): void {
     this.hoaDonGioHangService.getAll().subscribe(
       (response: ApiResponse<any>) => {
         if (response.result && response.result.length > 0) {
           // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
           this.listHoaDonGioHang = response.result;
-          
         } else {
           console.log(response);
         }
@@ -355,7 +357,6 @@ resetGioHang(): void {
 
   loadVoucher(): void {
     if (this.pageSize > 0) {
-
       this.voucherService.getVouchers(this.currentPage, this.pageSize)
         .subscribe(
           (response: ApiResponse<any>) => {
