@@ -1,12 +1,4 @@
-<!--<!doctype html>-->
-<!--<html lang="en">-->
 
-<!--<head>-->
-<!--  <meta charset="utf-8">-->
-<!--  <meta name="viewport" content="width=device-width, initial-scale=1">-->
-<!--  <title>Login</title>-->
-
-<!--</head>-->
 
 <body>
 <!--  Body Wrapper -->
@@ -19,19 +11,36 @@
         <div class="col-md-8 col-lg-6 col-xxl-3">
           <div class="card mb-0">
             <div class="card-body">
-<!--              <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">-->
-<!--&lt;!&ndash;                <img src="assets/admin/assets/images/logos/dark-logo.svg" width="180" alt="">&ndash;&gt;-->
-<!--              </a>-->
               <p class="text-center">Chào mừng bạn đến với MT-Shirt</p>
-              <form (ngSubmit)="onSubmit()">
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Tên đăng nhập</label>
-                  <input type="text" [(ngModel)]="tenDangNhap" name="username"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                  <label for="tenDangNhap" class="form-label">Tên đăng nhập</label>
+                  <input type="text" formControlName="tenDangNhap" class="form-control" id="tenDangNhap">
+                  <div *ngIf="loginForm.get('tenDangNhap')?.errors?.['required'] && (loginForm.get('tenDangNhap')?.dirty || loginForm.get('tenDangNhap')?.touched)" class="text-danger">
+                    Tên đăng nhập là bắt buộc.
+                  </div>
+                  <div *ngIf="loginForm.get('tenDangNhap')?.errors?.['minlength'] && (loginForm.get('tenDangNhap')?.dirty || loginForm.get('tenDangNhap')?.touched)" class="text-danger">
+                    Tên đăng nhập phải có ít nhất 6 ký tự.
+                  </div>
+                  <div *ngIf="loginForm.get('tenDangNhap')?.errors?.['maxlength'] && (loginForm.get('tenDangNhap')?.dirty || loginForm.get('tenDangNhap')?.touched)" class="text-danger">
+                    Tên đăng nhập không được vượt quá 10 ký tự.
+                  </div>
                 </div>
+
                 <div class="mb-4">
-                  <label for="exampleInputPassword1" class="form-label">Mật khẩu</label>
-                  <input type="password" [(ngModel)]="matKhau" name="password" class="form-control" id="exampleInputPassword1">
+                  <label for="matKhau" class="form-label">Mật khẩu</label>
+                  <input type="password" formControlName="matKhau" class="form-control" id="matKhau">
+                  <div *ngIf="loginForm.get('matKhau')?.errors?.['required'] && (loginForm.get('matKhau')?.dirty || loginForm.get('matKhau')?.touched)" class="text-danger">
+                    Mật khẩu là bắt buộc.
+                  </div>
+                  <div *ngIf="loginForm.get('matKhau')?.errors?.['minlength'] && (loginForm.get('matKhau')?.dirty || loginForm.get('matKhau')?.touched)" class="text-danger">
+                    Mật khẩu phải có ít nhất 8 ký tự.
+                  </div>
+                  <div *ngIf="loginForm.get('matKhau')?.errors?.['maxlength'] && (loginForm.get('matKhau')?.dirty || loginForm.get('matKhau')?.touched)" class="text-danger">
+                    Mật khẩu không được vượt quá 16 ký tự.
+                  </div>
                 </div>
+
                 <div class="d-flex align-items-center justify-content-between mb-4">
                   <div class="form-check">
                     <input class="form-check-input primary" type="checkbox" value="" id="flexCheckChecked" checked>
@@ -41,7 +50,9 @@
                   </div>
                   <a class="text-primary fw-bold" href="./index.html">Quên mật khẩu ?</a>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" (click)="onSubmit()">Đăng nhập</button>
+
+                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Đăng nhập</button>
+
                 <div class="d-flex align-items-center justify-content-center">
                   <p class="fs-4 mb-0 fw-bold">Bạn chưa có tài khoản ?</p>
                   <a class="text-primary fw-bold ms-2" href="/sign-up">Đăng ký</a>
@@ -56,5 +67,4 @@
 </div>
 
 
-<!--</html>-->
 

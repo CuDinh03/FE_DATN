@@ -30,6 +30,8 @@ import { VoucherViewComponent } from './admin/voucher-view/voucher-view.componen
 import { AdminHeaderComponent } from './admin/admin-header/admin-header.component';
 import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
 import { CustomerViewComponent } from './admin/customer-view/customer-view.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -60,7 +62,7 @@ import { CustomerViewComponent } from './admin/customer-view/customer-view.compo
     AdminHeaderComponent,
     OrdersViewComponent,
     CustomerViewComponent
-    
+
     ],
   imports: [
     BrowserModule,
@@ -68,7 +70,9 @@ import { CustomerViewComponent } from './admin/customer-view/customer-view.compo
         FormsModule,
         HttpClientModule,
         ReactiveFormsModule,
-        
+        BrowserAnimationsModule,
+    MatSnackBarModule
+
   ],
   providers: [TaiKhoanService],
   bootstrap: [HomeComponent]
