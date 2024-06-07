@@ -111,20 +111,4 @@ export class AdminViewComponent implements OnInit {
     }
   }
 
-  logout() {
-    // Gọi phương thức logout từ AuthenticationService
-    this.auth.logout();
-    // Redirect đến trang đăng nhập sau khi đăng xuất
-    this.router.navigate(['/log-in']).then(() => {
-      console.log('Redirected to /login');
-      this.router.navigate(['/log-in']).then(() => {
-        console.log('Redirected to /log-in');
-      }).catch(err => {
-        console.error('Error navigating to /log-in:', err);
-      });
-    }).catch(err => {
-      console.error('Error navigating to /login:', err);
-    });
-  }
-
 }

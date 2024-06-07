@@ -1,8 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../service/AuthenticationService";
 import { Router} from "@angular/router";
 import {FormGroup, FormBuilder} from "@angular/forms";
-import {DanhMucService} from "../../service/DanhMucService";
 import {VoucherService} from "../../service/VoucherService";
 
 @Component({
@@ -11,6 +10,7 @@ import {VoucherService} from "../../service/VoucherService";
     styleUrls: ['./voucher-view.component.css']
 })
 export class VoucherViewComponent {
+    @ViewChild('voucherModal') voucherModal!: ElementRef;
 
     vouchers: any[] = [];
     totalElements = 0;
@@ -21,6 +21,8 @@ export class VoucherViewComponent {
     submitted = false;
     errorMessage: string = '';
     voucherForm: FormGroup;
+    selectedVoucher: any;
+
 
     constructor(private apiService: VoucherService, private formBuilder: FormBuilder,
                 private router: Router, private auth: AuthenticationService) {
@@ -64,21 +66,25 @@ export class VoucherViewComponent {
 
     }
 
-    logout() {
-        // Gọi phương thức logout từ AuthenticationService
-        this.auth.logout();
-        // Redirect đến trang đăng nhập sau khi đăng xuất
-        this.router.navigate(['/log-in']).then(() => {
-            console.log('Redirected to /login');
-            this.router.navigate(['/log-in']).then(() => {
-                console.log('Redirected to /log-in');
-            }).catch(err => {
-                console.error('Error navigating to /log-in:', err);
-            });
-        }).catch(err => {
-            console.error('Error navigating to /login:', err);
-        });
+    openModal(account: any) {
+        this.selectedVoucher = account;
+        this.showModal();
     }
+
+    private showModal() {
+        if (this.voucherModal && this.voucherModal.nativeElement) {
+            this.voucherModal.nativeElement.classList.add('show');
+            this.voucherModal.nativeElement.style.display = 'block';
+        }
+    }
+
+    closeVoucherModal() {
+        if (this.voucherModal && this.voucherModal.nativeElement) {
+            this.voucherModal.nativeElement.classList.remove('show');
+            this.voucherModal.nativeElement.style.display = 'none';
+        }
+    }
+
 
 
 }

@@ -68,6 +68,7 @@ export class ShoppingViewComponent {
 
 
 
+
   constructor(private auth: AuthenticationService,
     private router: Router,
     private hoaDonGioHangService: HoaDonGioHangService,
@@ -82,21 +83,8 @@ export class ShoppingViewComponent {
     private activatedRoute: ActivatedRoute
 
     ) {
-      this.thanhToanDto = {
-        hoaDonDto: {
-          id: '',
-          ma: '',
-          khachHangId: '',
-          nhanVienId: '',
-          tongTien:'',
-          tongTienGiam: '',
-          ngayTao: new Date(),
-          ngaySua: new Date(),
-          trangThai: true,
-        },
-        gioHangChiTietDtoList: []
-      };
-
+      // Khởi tạo danhMucForm ở đây
+    
   }
   ngOnInit(): void {
     this.loadHoaDonGioHang();
@@ -475,16 +463,6 @@ resetGioHang(): void {
     }
   }
 
-  // loadListVoucher() {
-  //     this.voucherService.getListVoucher()
-  //         .subscribe(
-  //             (response: ApiResponse<any>) => {
-  //                 if (response.result) {
-  //                     this.listVoucher = response.result
-  //                 }
-  //             })
-  // }
-
   closeVoucherModal(): void {
     if (this.voucherModal && this.voucherModal.nativeElement) {
       this.voucherModal.nativeElement.classList.remove('show');
@@ -550,8 +528,9 @@ resetGioHang(): void {
   ///customer
 
   getCustomer() {
+    localStorage.removeItem('kh');
     if (!this.sdtValue) {
-      this.customer = {ten: "Khách lẻ"};
+      this.customer = { ten: "Khách lẻ" };
       this.router.navigate(['/admin/shopping']);
     } else {
       this.khachHangService.getKhachHang(this.sdtValue)
@@ -562,8 +541,13 @@ resetGioHang(): void {
               localStorage.setItem('kh', JSON.stringify(response.result));
               this.router.navigate(['/admin/shopping']);
             } else {
-              // this.showAddCustomerModal();
+              // Xử lý trường hợp không có kết quả từ dịch vụ
+              console.log("Không tìm thấy thông tin khách hàng");
             }
+          },
+          (error) => {
+            // Xử lý lỗi từ dịch vụ
+            console.error("Lỗi khi gọi dịch vụ:", error);
           }
         );
     }
@@ -571,12 +555,10 @@ resetGioHang(): void {
 
   onSdtInputChange() {
     if (this.sdtValue) {
-      // Nếu có số điện thoại được nhập vào, tự động lấy thông tin khách hàng
       this.getCustomer();
     } else {
-      // Nếu không có số điện thoại, đặt lại thông tin khách hàng thành Khách lẻ
-      this.customer = {ten: "Khách lẻ"};
-      localStorage.removeItem('kh') // xoá kh đi để ko lưu lại thông tin khách hàng vừa nhập hoặc đang nhập
+      this.customer = { ten: "Khách lẻ" };
+      localStorage.removeItem('kh');
     }
   }
 

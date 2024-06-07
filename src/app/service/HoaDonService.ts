@@ -11,6 +11,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
   })
   export class HoaDonService {
 
+
     apiUrl = 'http://localhost:9091/api/hoa-don';
 
 
@@ -37,17 +38,16 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
             'Authorization': `Bearer ${token}`
         });
 
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/detail/${id}`, { headers });
-    }
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
+    }    getHoaDonByMa(ma: string): Observable<ApiResponse<any>> {
+        const token = localStorage.getItem('token');
 
-    getHoaDonByMa(ma: string): Observable<ApiResponse<any>>{
-      const token = localStorage.getItem('token');
+        // Thêm token vào header của yêu cầu
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
 
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`
-      });
-
-      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${ma}`, { headers });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/find/${ma}`, { headers });
     }
 
     deleteHoaDon(id: string): Observable<ApiResponse<void>> {
