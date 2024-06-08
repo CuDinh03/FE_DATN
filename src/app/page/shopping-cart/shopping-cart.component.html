@@ -1,5 +1,4 @@
 <app-header></app-header>
-<!-- ================ start banner area ================= -->
 
 <section class="blog-banner-area" id="category">
   <div class="container h-100">
@@ -16,11 +15,7 @@
     </div>
   </div>
 </section>
-<!-- ================ end banner area ================= -->
 
-
-
-<!--================Cart Area =================-->
 <section class="cart_area">
   <div class="container">
     <div class="cart_inner">
@@ -28,177 +23,61 @@
         <table class="table">
           <thead>
           <tr>
-            <th scope="col">Product</th>
-            <th scope="col">Price</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Total</th>
+            <th scope="col" style="font-size: 14px;">Sản phẩm</th>
+            <th scope="col" style="font-size: 14px;">Giá bán</th>
+            <th scope="col" style="font-size: 14px;">Số lượng</th>
+            <th scope="col" style="font-size: 14px;">Tổng tiền</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>
-              <div class="media">
-                <div class="d-flex">
-                  <img src="assets/shopping/img/cart/cart1.png" alt="">
-                </div>
-                <div class="media-body">
-                  <p>Minimalistic shop for multipurpose use</p>
-                </div>
-              </div>
-            </td>
-            <td>
-              <h5>$360.00</h5>
-            </td>
-            <td>
-              <div class="product_count">
-                <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                       class="input-text qty">
-                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-              </div>
-            </td>
-            <td>
-              <h5>$720.00</h5>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="media">
-                <div class="d-flex">
-                  <img src="assets/shopping/img/cart/cart2.png" alt="">
-                </div>
-                <div class="media-body">
-                  <p>Minimalistic shop for multipurpose use</p>
-                </div>
-              </div>
-            </td>
-            <td>
-              <h5>$360.00</h5>
-            </td>
-            <td>
-              <div class="product_count">
-                <input type="text" name="qty" maxlength="12" value="1" title="Quantity:"
-                       class="input-text qty">
-                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-              </div>
-            </td>
-            <td>
-              <h5>$720.00</h5>
-            </td>
-          </tr>
-          <tr>
+          <tr *ngFor="let item of gioHangChiTiet">
             <td>
               <div class="media">
                 <div class="d-flex">
                   <img src="assets/shopping/img/cart/cart3.png" alt="">
                 </div>
                 <div class="media-body">
-                  <p>Minimalistic shop for multipurpose use</p>
+                  <p>{{item.chiTietSanPham.sanPham.ten}}</p>
                 </div>
               </div>
             </td>
             <td>
-              <h5>$360.00</h5>
+              <h5>{{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</h5>
             </td>
             <td>
               <div class="product_count">
-                <input type="text" name="qty" maxlength="12" value="1" title="Quantity:"
+                <input type="text" name="qty" maxlength="12" value="1" title="Quantity:" [(ngModel)]="item.soLuong" min="0"
                        class="input-text qty">
-                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                <button class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                <button class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
               </div>
             </td>
             <td>
-              <h5>$720.00</h5>
+              <h5>{{ calculateSubtotal(item) | currency:'VND':'symbol':'1.0-0' }}</h5>
             </td>
           </tr>
           <tr class="bottom_button">
             <td>
-              <a class="button" href="#">Update Cart</a>
+              <a class="button" href="#">Cập nhật giỏ hàng</a>
             </td>
+            <td> tổng tiền:  <h5>{{getCartTotal() | currency:'VND':'symbol':'1.0-0' }}</h5> </td>
+            <td> - </td>
             <td>
-
-            </td>
-            <td>
-
-            </td>
-            <td>
-              <div class="cupon_text d-flex align-items-center">
+              <div class="cupon_text d-flex justify-content-end align-items-end">
                 <input type="text" placeholder="Coupon Code">
-                <a class="primary-btn" href="#">Apply</a>
-                <a class="button" href="#">Have a Coupon?</a>
+                <a class="primary-btn" href="#">Lựa chọn</a>
               </div>
             </td>
           </tr>
-          <tr>
-            <td>
-
-            </td>
-            <td>
-
-            </td>
-            <td>
-              <h5>Subtotal</h5>
-            </td>
-            <td>
-              <h5>$2160.00</h5>
-            </td>
-          </tr>
-          <tr class="shipping_area">
-            <td class="d-none d-md-block">
-
-            </td>
-            <td>
-
-            </td>
-            <td>
-              <h5>Shipping</h5>
-            </td>
-            <td>
-              <div class="shipping_box">
-                <ul class="list">
-                  <li><a href="#">Flat Rate: $5.00</a></li>
-                  <li><a href="#">Free Shipping</a></li>
-                  <li><a href="#">Flat Rate: $10.00</a></li>
-                  <li class="active"><a href="#">Local Delivery: $2.00</a></li>
-                </ul>
-                <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
-                <select class="shipping_select">
-                  <option value="1">Bangladesh</option>
-                  <option value="2">India</option>
-                  <option value="4">Pakistan</option>
-                </select>
-                <select class="shipping_select">
-                  <option value="1">Select a State</option>
-                  <option value="2">Select a State</option>
-                  <option value="4">Select a State</option>
-                </select>
-                <input type="text" placeholder="Postcode/Zipcode">
-                <a class="gray_btn" href="#">Update Details</a>
-              </div>
-            </td>
-          </tr>
+          
           <tr class="out_button_area">
-            <td class="d-none-l">
-
-            </td>
-            <td class="">
-
-            </td>
+            <td class="d-none-l"> - </td>
+            <td class=""> - </td>
+            <td> - </td>
             <td>
-
-            </td>
-            <td>
-              <div class="checkout_btn_inner d-flex align-items-center">
-                <a class="gray_btn" href="#">Continue Shopping</a>
-                <a class="primary-btn ml-2" href="#">Proceed to checkout</a>
+              <div class="checkout_btn_inner d-flex justify-content-end align-items-center">
+                <a class="gray_btn" href="#">Tiếp tục mua hàng</a>
+                <a class="primary-btn ml-2" href="#">Thanh toán</a>
               </div>
             </td>
           </tr>
@@ -210,3 +89,8 @@
 </section>
 <!--================End Cart Area =================-->
 <app-footer></app-footer>
+
+<!-- <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                        class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                        class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button> -->
