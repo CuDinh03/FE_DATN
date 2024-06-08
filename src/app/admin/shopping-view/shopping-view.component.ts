@@ -65,6 +65,8 @@ export class ShoppingViewComponent {
   tienKhachDua: number = 0;
   thanhTien: number = 0;
   tienTraLai: number = 0;
+  showConfirmationModal: boolean = false;
+  itemToDeleteId: string = '';
 
 
 
@@ -394,6 +396,7 @@ loadChiTietSP(): void {
           console.log(response.message);
           if (soLuong === 0) {
             alert('Xóa thành công!');
+            
           } else {
             alert('Sửa số lượng thành công!');
           }
@@ -414,9 +417,23 @@ loadChiTietSP(): void {
     );
   }
 
-deleteGioHangChiTiet(idGioHangChiTiet: string): void {
-  this.updateGioHangChiTiet(idGioHangChiTiet, 0);
-}
+  confirmDelete(id: string) {
+    this.itemToDeleteId = id;
+    this.showConfirmationModal = true;
+  }
+
+  cancelDelete() {
+    this.showConfirmationModal = false;
+  }
+
+  deleteConfirmed() {
+    this.deleteGioHangChiTiet(this.itemToDeleteId);
+    this.showConfirmationModal = false;
+  }
+
+  deleteGioHangChiTiet(idGioHangChiTiet: string): void {
+    this.updateGioHangChiTiet(idGioHangChiTiet, 0);
+  }
 
 resetGioHang(): void {
   // Đặt lại số lượng sản phẩm về 0

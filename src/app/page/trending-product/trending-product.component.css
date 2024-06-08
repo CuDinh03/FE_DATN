@@ -1,0 +1,20 @@
+.rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .rating .ti-star {
+    font-size: 16px;
+    color: #ccc;
+  }
+  
+  .rating .ti-star.filled {
+    color: #f8b600;
+  }
+  
+  .rating span {
+    margin-left: 5px;
+    font-size: 14px;
+  }

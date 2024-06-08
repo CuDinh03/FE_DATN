@@ -2,9 +2,11 @@
   <div class="main_menu">
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container">
-        <a class="navbar-brand logo_h" href="index.html"><h3>MT-Shirt</h3></a>
+        <a class="navbar-brand logo_h" href="index.html">
+          <h3>MT-Shirt</h3>
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -18,7 +20,7 @@
             </li>
             <li class="nav-item submenu dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                 aria-expanded="false" style="font-size: 12px">QUẦN NAM</a>
+                aria-expanded="false" style="font-size: 12px">QUẦN NAM</a>
               <ul class="dropdown-menu">
                 <li class="nav-item"><a class="nav-link" href="#">Quần jeans</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Quần chinos</a></li>
@@ -29,7 +31,7 @@
             </li>
             <li class="nav-item submenu dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                 aria-expanded="false" style="font-size: 12px">ÁO NAM</a>
+                aria-expanded="false" style="font-size: 12px">ÁO NAM</a>
               <ul class="dropdown-menu">
                 <li class="nav-item"><a class="nav-link" href="/list-p">Áo sơ mi</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Áo vest</a></li>
@@ -40,7 +42,7 @@
             </li>
             <li class="nav-item submenu dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                 aria-expanded="false" style="font-size: 12px">BÁN CHẠY</a>
+                aria-expanded="false" style="font-size: 12px">BÁN CHẠY</a>
               <ul class="dropdown-menu">
                 <li class="nav-item"><a class="nav-link" href="#">Áo bán chạy</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Quần bán chạy</a></li>
@@ -53,40 +55,83 @@
             </li>
           </ul>
 
-        <div class="d-flex class me-5">
-          <span><input type="text" class="form-control" placeholder="Tìm kiếm" *ngIf="showSearch"></span>
-            <span class="me-3">
-              <span><button class="btn" (click)="toggleSearch()"><i class="ti ti-search" style="font-size: 20px; color: black;"></i></button></span>
+          <div class="d-flex me-5">
+            <span *ngIf="showSearch">
+              <input type="text" class="form-control" placeholder="Tìm kiếm">
             </span>
-            <span *ngIf="isLoggedInCart">
+            <span class="me-3">
+              <span (click)="toggleSearch()">
+                <button class="btn">
+                  <i class="ti ti-search" style="font-size: 20px; color: black;"></i>
+                </button>
+              </span>
+            </span>
+
+
+            <span class="position-relative" (mouseover)="onMouseOver()" (mouseleave)="onMouseLeave()">
               <a href="/shopping-cart" style="text-decoration: none; color: black;" class="btn">
                 <i class="ti ti-shopping-cart" style="font-size: 20px"></i>
+                <span class="cart-badge">{{getTotalQuantity()}}</span>
               </a>
-            </span>
-        </div>
-          
-          <div *ngIf="!isLoggedInCart">
-              <span>
-                <a href="/log-in" class="auth-link">Đăng nhập</a>
-              </span>
-              /
-              <span>
-                <a href="/sign-up" class="auth-link">Đăng ký</a>
-              </span>
-          </div>
-          
-          <ul *ngIf="isLoggedInCart">
-            <div class="navbar-collapse justify-content-end px-0" id="navbarNav" >
-              <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-                <li class="nav-item dropdown"*ngIf="isLoggedIn()">
-                  <a class="nav-link nav-icon-hover avatar-container " href="javascript:void(0)" id="drop2" 
-                     data-bs-toggle="dropdown"
-                     aria-expanded="false">
-                      <img src="assets/shopping/img/blog/author.png" alt="" width="35" height="35" class="rounded-circle">
-                      <div class="online-dot"></div> <!-- Thêm chấm xanh -->
+              <div class="mini-cart" *ngIf="isCartHovered">
+                <h5>Sản phẩm mới thêm</h5>
+                <div *ngIf="gioHangChiTiet.length > 0">
+                  <a class="mini-cart-item container-fluid row d-flex" href="#" style="text-decoration: none; color: black;" *ngFor="let item of gioHangChiTiet.slice(0,6)">
+                    <div class="col-8 d-flex justify-content-start mb-3">
+                      <span>
+                        <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[0]" alt="" class="product-image me-3">
+                      </span>
+                      <span >
+                          <p style="margin: 0;">{{ item.chiTietSanPham.sanPham.ten }} x {{ item.soLuong }}</p>
+                          <div class="d-flex justify-content-start">
+                            <span style="font-size: 11px; margin-right: 3px;">
+                              <i>{{ item.chiTietSanPham.mauSac.ten }},</i>
+                            </span>
+                            <span style="font-size: 11px;">
+                              <i>{{ item.chiTietSanPham.kichThuoc.ten }}</i>
+                            </span>
+                          </div>
+                      </span>
+                    </div>
+                    <div class="col-4 d-flex justify-content-end">
+                      <p style="margin: 0; color: #7A98FF;">{{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</p>
+                    </div>
                   </a>
-                  <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
-                       aria-labelledby="drop2">
+                  <div class="mini-cart-footer d-flex justify-content-between">
+                    <span style="font-size: 10px; margin-top: 15px; margin-left: 20px;">có {{getTotalQuantity()}} sản phẩm trong giỏ hàng</span>
+                    <span>
+                      <p>Tổng: {{ getCartTotal() | currency:'VND':'symbol':'1.0-0' }}</p>
+                      <a href="/shopping-cart" class="btn btn-primary">Xem giỏ hàng</a>
+                    </span>
+                  </div>
+                </div>
+                <div *ngIf="gioHangChiTiet.length === 0">
+                  <p>Giỏ hàng của bạn đang trống</p>
+                </div>
+              </div>
+            </span>
+          </div>
+
+          <div *ngIf="!isLoggedInCart">
+            <span>
+              <a href="/log-in" class="auth-link">Đăng nhập</a>
+            </span>
+            /
+            <span>
+              <a href="/sign-up" class="auth-link">Đăng ký</a>
+            </span>
+          </div>
+
+          <ul *ngIf="isLoggedInCart">
+            <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+              <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+                <li class="nav-item dropdown" *ngIf="isLoggedIn()">
+                  <a class="nav-link nav-icon-hover avatar-container " href="javascript:void(0)" id="drop2"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="assets/shopping/img/blog/author.png" alt="" width="35" height="35" class="rounded-circle">
+                    <div class="online-dot"></div> <!-- Thêm chấm xanh -->
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                     <div class="message-body">
                       <a href="/profile" class="d-flex align-items-center gap-2 dropdown-item">
                         <i class="ti ti-user fs-6"></i>
@@ -100,8 +145,7 @@
                         <i class="ti ti-list-check fs-6"></i>
                         <p class="mb-0 fs-3">My Task</p>
                       </a>
-                      <a (click)="logout()"
-                         class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                      <a (click)="logout()" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                     </div>
                   </div>
                 </li>
