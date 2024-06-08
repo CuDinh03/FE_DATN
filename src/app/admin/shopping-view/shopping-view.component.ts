@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { HoaDonDto } from './../../model/hoa-don-dto.model';
 import { ThanhToanDto } from './../../model/thanh-toan-dto.model';
 
@@ -81,7 +82,8 @@ export class ShoppingViewComponent {
     private gioHangService: GioHangService,
     private danhMucService : DanhMucService,
     private thanhToanService: ThanhToanService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private snackBar: MatSnackBar
 
     ) {
       this.thanhToanDto = {
@@ -109,7 +111,7 @@ export class ShoppingViewComponent {
     this.calculateTienTraLai();
 
   }
-
+  
   onSubmitPayment() {
     const storedHoaDon = localStorage.getItem('hoaDon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
@@ -133,13 +135,19 @@ export class ShoppingViewComponent {
       this.thanhToanService.thanhToan(ThanhToanDto).subscribe(
         (response: ApiResponse<ThanhToanDto>) => {
           if (response.result) {
-           alert('Thanh toán thành công thành công');
+            this.snackBar.open('Thanh toán thành công!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
            this.loadHoaDonGioHang();
           this.loadGioHangChiTiet(this.hoaDon.id);
           }
         },
         (error: HttpErrorResponse) => {
-          console.error('Thanh toán không thành công:', error);
+          this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
         }
       );
     } else {
@@ -242,10 +250,16 @@ deleteHoaDonFromLocalStorage(): void {
         (response: ApiResponse<any>) => {
           if (response.code === 0) { // Giả sử API trả về một thuộc tính 'success'
             this.loadHoaDonGioHang(); // Tải lại danh sách hóa đơn
-            alert('Xóa hóa đơn thành công!');
+            this.snackBar.open('Xóa hóa đơn thành công!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
             this.router.navigate(['/admin/shopping']);
           } else {
-            alert('Có lỗi xảy ra khi xóa hóa đơn.');
+            this.snackBar.open('Có lỗi sảy ra khi xóa hóa đơn. Vui lòng thử lại sau!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
           }
         },
         (error: HttpErrorResponse) => {
@@ -322,11 +336,17 @@ themSanPhamVaoGioHang(): void {
       (response: ApiResponse<any>) => {
         if (response.result) {
           this.loadGioHangChiTiet(response.result.gioHang.id);
-         alert('Thêm sản phẩm thành công');
+          this.snackBar.open('Thêm sản phẩm thành công!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
         }
       },
       (error: HttpErrorResponse) => {
-        console.error('Thêm không thành công:', error);
+        this.snackBar.open('Thêm sản phẩm không thành công. Vui lòng thử lại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
       }
     );
   } else {
@@ -384,7 +404,10 @@ loadChiTietSP(): void {
   updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
     const originalSoLuong = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet).soLuong;
     if (soLuong < 0) {
-      alert('Số lượng không được nhỏ hơn 0. Vui lòng nhập lại!');
+      this.snackBar.open('Số lượng không được nhỏ hơn 0. Vui lòng nhập lại!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
       const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
       if (item) {
         item.soLuong = originalSoLuong;
@@ -395,17 +418,26 @@ loadChiTietSP(): void {
       (response: ApiResponse<any>) => {
           console.log(response.message);
           if (soLuong === 0) {
-            alert('Xóa thành công!');
+            this.snackBar.open('Xóa thành công!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
             
           } else {
-            alert('Sửa số lượng thành công!');
+            this.snackBar.open('Sửa số lượng thành công!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
           }
           this.loadChiTietSP();
           this.loadGioHangChiTiet(response.result.gioHang.id);
       },
       (error: HttpErrorResponse) => {
           if (error.status === 400 ) {
-              alert('Số lượng nhập vào vượt quá số lượng sản phẩm chi tiết hiện có. Vui lòng nhập lại!');
+            this.snackBar.open('Số lượng nhập vào vượt quá số lượng hiện có. Vui lòng nhập lại!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
               const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
               if (item) {
                   item.soLuong = originalSoLuong;
@@ -461,11 +493,17 @@ resetGioHang(): void {
   createHoaDon(): void {
     this.submitted = true;
     if(this.listHoaDonGioHang.length >= 5){
-      alert('Chỉ được thêm tối đa 5 hóa đơn')
+      this.snackBar.open('Chỉ được tạo tối đa 5 hóa đơn!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
       return;
     }
     this.hoaDonGioHangService.createHoaDon(this.hoaDon).subscribe(data => {
-      console.log(data);
+      this.snackBar.open('Tạo hóa đơn thành công!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
       this.loadHoaDonGioHang();
       this.router.navigate(['/admin/shopping']);
     }, err => console.log(err));

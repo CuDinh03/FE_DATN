@@ -68,7 +68,7 @@
             </span>
 
 
-            <span class="position-relative" (mouseover)="onMouseOver()" (mouseleave)="onMouseLeave()">
+            <span class="position-relative" (mouseover)="onMouseOver()" (mouseleave)="onMouseLeave()" *ngIf="isLoggedIn()">
               <a href="/shopping-cart" style="text-decoration: none; color: black;" class="btn">
                 <i class="ti ti-shopping-cart" style="font-size: 20px"></i>
                 <span class="cart-badge">{{getTotalQuantity()}}</span>

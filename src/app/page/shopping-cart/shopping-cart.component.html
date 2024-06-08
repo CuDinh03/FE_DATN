@@ -47,7 +47,7 @@
               </td>
               <td>
                 <div class="product_count">
-                  <input type="text" name="qty" maxlength="12" [value]="item.soLuong" title="Quantity:"
+                  <input type="text" name="qty" maxlength="12" [value]="item.soLuong" [(ngModel)]="item.soLuong" title="Quantity:"
                     class="input-text qty">
                   <button class="increase items-count" type="button" (click)="increaseQuantity(item)"><i
                       class="lnr lnr-chevron-up"></i></button>

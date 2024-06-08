@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiResponse } from './../../model/ApiResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { KhachHangService } from './../../service/KhachHangService';
@@ -27,7 +28,8 @@ export class ShoppingCartComponent {
   constructor(private auth: AuthenticationService, private router: Router,
     private gioHangChiTietService: GioHangChiTietService,
     private gioHangService: GioHangService,
-    private khachHangService: KhachHangService
+    private khachHangService: KhachHangService,
+    private snackBar: MatSnackBar
   ) {
     
 
@@ -73,17 +75,26 @@ export class ShoppingCartComponent {
       (response: ApiResponse<any>) => {
           console.log(response.message);
           if (soLuong === 0) {
-            alert('Xóa thành công!');
+            this.snackBar.open('Xóa thành công!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
             
           } else {
-            alert('Sửa số lượng thành công!');
+            this.snackBar.open('Sửa số lượng thành công!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
           }
           this.loadGioHangChiTiet(response.result.gioHang.id);
           this.cancelDelete();
       },
       (error: HttpErrorResponse) => {
           if (error.status === 400 ) {
-              alert('Số lượng nhập vào vượt quá số lượng sản phẩm chi tiết hiện có. Vui lòng nhập lại!');
+            this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
               const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
               if (item) {
                   item.soLuong = originalSoLuong;
