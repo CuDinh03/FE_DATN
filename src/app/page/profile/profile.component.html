@@ -9,7 +9,9 @@
                              class="rounded-circle img-fluid" style="width: 150px;">
                         <h5 class="my-3">{{ khachHang?.ten }}</h5>
                         <div class="d-flex justify-content-center mb-2">
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary">Cập nhật</button>
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary"
+                            (click)="statusTransition()"
+                            >Cập nhật</button>
                             <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary ms-1">Lưu</button>
                         </div>
                     </div>
@@ -18,13 +20,20 @@
             <div class="col-lg-8">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form>
+                        <!-- 2. Xay dung giao dien -->
+                        <form [formGroup]="formKhachHang">
                             <div class="row">
                                 <div class="col-sm-3">
                                     <label for="ten" class="form-label">Full Name</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" id="ten" class="form-control" [(ngModel)]="khachHang.ten" name="ten">
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.ten}}
+                                    </label>
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="ten"
+                                    type="text" id="ten" class="form-control" name="ten">
                                 </div>
                             </div>
                             <hr>
@@ -33,7 +42,14 @@
                                     <label for="ngaySinh" class="form-label">Birthday</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="date" id="ngaySinh" class="form-control" [(ngModel)]="khachHang.ngaySinh" name="ngaySinh">
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.ngaySinh | date: 'MM/dd/yyyy'}}
+                                    </label>
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="ngaySinh"
+                                    type="date" id="ngaySinh" class="form-control"
+                                    name="ngaySinh">
                                 </div>
                             </div>
                             <hr>
@@ -42,7 +58,14 @@
                                     <label for="sdt" class="form-label">Phone</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" id="sdt" class="form-control" [(ngModel)]="khachHang.sdt" name="sdt">
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.sdt}}
+                                    </label>
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="sdt"
+                                    type="text" id="sdt" class="form-control" 
+                                    name="sdt">
                                 </div>
                             </div>
                             <hr>
@@ -51,7 +74,14 @@
                                     <label for="email" class="form-label">Email</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="email" id="email" class="form-control" [(ngModel)]="khachHang.email" name="email">
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.email}}
+                                    </label>
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="email"
+                                    type="email" id="email" class="form-control" 
+                                     name="email">
                                 </div>
                             </div>
                             <hr>
@@ -60,11 +90,22 @@
                                     <label for="diaChi" class="form-label">Address</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="text" id="diaChi" class="form-control" [(ngModel)]="khachHang.diaChi" name="diaChi">
+
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.diaChi}}
+                                    </label>
+
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="diaChi"
+                                    type="text" id="diaChi" class="form-control" name="diaChi">
                                 </div>
                             </div>
                             <hr>
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary"
+                            *ngIf="isEdit"
+                            (click)="update()"
+                            >Update</button>
                         </form>
                     </div>
                 </div>
