@@ -68,14 +68,14 @@
                             <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
                             <td class="d-flex justify-content-center text-center">
                               <span>
-                                <a class="btn" (click)="updateGioHangChiTiet(chiTiet.id, chiTiet.soLuong)"
-                                  style="color: #7A98FE; font-size: 16px;">
+                                <a class="btn"  (click)="updateGioHangChiTiet(chiTiet.id, chiTiet.soLuong)"
+                                  style="color: #7A98FE; font-size: 16px; ">
                                   <i class="ti ti-edit"></i>
                                 </a>
                               </span>
                               <span>
-                                <a class="btn" (click)="deleteGioHangChiTiet(chiTiet.id)"
-                                  style="color: #ff3700; font-size: 16px;">
+                                <a class="btn" (click)="confirmDelete(chiTiet.id)" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                  style="color: #ff3700; font-size: 16px; ">
                                   <i class="ti ti-x"></i>
                                 </a>
                               </span>
@@ -410,5 +410,23 @@
 
 
 
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" [ngClass]="{'is-active': showConfirmationModal}">
+  <div class="modal-dialog" (click)="cancelDelete()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Xác nhận xóa sản phẩm</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h4>Bạn có chắc chắn muốn xóa sản phẩm này</h4>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="deleteConfirmed()" data-bs-dismiss="modal">Xóa</button>
+    <button class="btn btn-danger" (click)="cancelDelete()" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
   </div>
 </div>

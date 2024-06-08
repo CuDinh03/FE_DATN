@@ -20,6 +20,8 @@ export class ShoppingCartComponent {
   khachHang: any;
   gioHang: any
   gioHangChiTiet: any[] = [];
+  showConfirmationModal: boolean = false;
+  itemToDeleteId: string = '';
 
 
   constructor(private auth: AuthenticationService, private router: Router,
@@ -37,10 +39,66 @@ export class ShoppingCartComponent {
     this.findShoppingCart();
   }
 
+  
+  confirmDelete(id: string) {
+    this.itemToDeleteId = id;
+    this.showConfirmationModal = true;
+  }
+
+  cancelDelete() {
+    this.showConfirmationModal = false;
+  }
+
+  deleteConfirmed() {
+    this.deleteGioHangChiTiet(this.itemToDeleteId);
+    this.showConfirmationModal = false;
+  }
+
+
+  deleteGioHangChiTiet(idGioHangChiTiet: string): void {
+    this.updateGioHangChiTiet(idGioHangChiTiet, 0);
+  }
+
+  updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
+    const originalSoLuong = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet).soLuong;
+    if (soLuong < 0) {
+      alert('Số lượng không được nhỏ hơn 0. Vui lòng nhập lại!');
+      const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
+      if (item) {
+        item.soLuong = originalSoLuong;
+      }
+      return;
+    }
+    this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
+      (response: ApiResponse<any>) => {
+          console.log(response.message);
+          if (soLuong === 0) {
+            alert('Xóa thành công!');
+            
+          } else {
+            alert('Sửa số lượng thành công!');
+          }
+          this.loadGioHangChiTiet(response.result.gioHang.id);
+          this.cancelDelete();
+      },
+      (error: HttpErrorResponse) => {
+          if (error.status === 400 ) {
+              alert('Số lượng nhập vào vượt quá số lượng sản phẩm chi tiết hiện có. Vui lòng nhập lại!');
+              const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
+              if (item) {
+                  item.soLuong = originalSoLuong;
+              }
+          } else {
+              console.error('Error updating gio hang:', error);
+          }
+      }
+    );
+  }
+
   calculateSubtotal(item: any): number {
     return item.chiTietSanPham.giaBan * item.soLuong;
   }
-  
+
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
     if (tenDangNhap) {
@@ -71,8 +129,18 @@ export class ShoppingCartComponent {
     }
   }
 
+  increaseQuantity(item: any) {
+    item.soLuong++;
+  }
+
+  decreaseQuantity(item: any) {
+    if (item.soLuong > 0) {
+      item.soLuong--;
+    }
+  }
+
   loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAll(idGioHang).subscribe(
+    this.gioHangChiTietService.getAllBỵKhachHang(idGioHang).subscribe(
       (response: ApiResponse<any>) => {
         if (response.result && response.result.length > 0) {
           this.gioHangChiTiet = response.result;

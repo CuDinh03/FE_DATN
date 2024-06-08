@@ -80,7 +80,7 @@ export class HeaderComponent {
   }
 
   loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAll(idGioHang).subscribe(
+    this.gioHangChiTietService.getAllBỵKhachHang(idGioHang).subscribe(
       (response: ApiResponse<any>) => {
         if (response.result && response.result.length > 0) {
           this.gioHangChiTiet = response.result;
