@@ -109,7 +109,7 @@ export class ProfileComponent {
       let dataKhachHang = {
         ten: formValue.ten, 
         ngaySinh: formValue.ngaySinh, 
-        sdt: formValue.sdt, 
+        sdt: formValue.sdt,
         email: formValue.email, 
         diaChi: formValue.diaChi, 
         idTaiKhoan: this.taiKhoanInfo

@@ -44,7 +44,6 @@ export class KhachHangService {
       'Authorization': `Bearer ${token}`
     });
     return this.http.post<ApiResponse<KhachHangDto>>(this.apiUrl + '/create', khach, { headers });
-
   }
 
   // ==> Call api Lấy ra khách hàng từ Id Tài khoản
@@ -54,7 +53,7 @@ export class KhachHangService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-
+    
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getKHByIdTaiKhoan/${idTaiKhoan}`, { headers });
   }
 

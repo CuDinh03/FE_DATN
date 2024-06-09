@@ -12,7 +12,6 @@
                             <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary"
                             (click)="statusTransition()"
                             >Cập nhật</button>
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary ms-1">Lưu</button>
                         </div>
                     </div>
                 </div>
@@ -24,7 +23,7 @@
                         <form [formGroup]="formKhachHang">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label for="ten" class="form-label">Full Name</label>
+                                    <label for="ten" class="form-label">Tên khách hàng:</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <label *ngIf="!isEdit">
@@ -39,11 +38,11 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label for="ngaySinh" class="form-label">Birthday</label>
+                                    <label for="ngaySinh" class="form-label">Ngày sinh: </label>
                                 </div>
                                 <div class="col-sm-9">
                                     <label *ngIf="!isEdit">
-                                        {{khachHang?.ngaySinh | date: 'MM/dd/yyyy'}}
+                                        {{khachHang?.ngaySinh | date: 'dd/MM/yyyy'}}
                                     </label>
                                     <input
                                     *ngIf="isEdit"
@@ -55,7 +54,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label for="sdt" class="form-label">Phone</label>
+                                    <label for="sdt" class="form-label">SĐT: </label>
                                 </div>
                                 <div class="col-sm-9">
                                     <label *ngIf="!isEdit">
@@ -71,7 +70,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label for="email" class="form-label">Email</label>
+                                    <label for="email" class="form-label">Email: </label>
                                 </div>
                                 <div class="col-sm-9">
                                     <label *ngIf="!isEdit">
@@ -87,7 +86,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label for="diaChi" class="form-label">Address</label>
+                                    <label for="diaChi" class="form-label">Địa chỉ: </label>
                                 </div>
                                 <div class="col-sm-9">
 
@@ -105,7 +104,7 @@
                             <button type="submit" class="btn btn-primary"
                             *ngIf="isEdit"
                             (click)="update()"
-                            >Update</button>
+                            >Lưu</button>
                         </form>
                     </div>
                 </div>
