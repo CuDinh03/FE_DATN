@@ -9,7 +9,7 @@
     <div class="container-fluid">
       <!--  Row 1 -->
       <div class="row">
-        <div class="col-lg-7 d-flex align-items-strech">
+        <div class="col-lg-12 mb-3 d-flex align-items-strech">
           <div class="card w-100">
             <div class="card-body">
               <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
@@ -75,7 +75,7 @@
                       <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
                       <td>{{khachHang.ma }}</td>
                       <td>{{khachHang.ten}}</td>
-                      <td>{{khachHang.taiKhoan}}</td>
+                      <td>{{khachHang.taiKhoan.tenDangNhap}}</td>
                       <td>{{khachHang.email}}</td>
                       <td>{{khachHang.sdt}}</td>
                       <td>{{khachHang.gioiTinh}}</td>
@@ -118,7 +118,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-12">
           <div class="row">
             <div class="col-lg-12">
               <div class="card">
@@ -154,14 +154,18 @@
 
                       <div class="mb-4">
                         <label for="taiKhoan" class="form-label">Tài khoản: </label>
-                        <input type="text" class="form-control" formControlName="taiKhoan" id="taiKhoan">
-                        <div *ngIf="f['taiKhoan'].invalid &&  (f['taiKhoan'].dirty || f['taiKhoan'].touched)">
+                        <!-- <input type="text" class="form-control" formControlName="taiKhoan" id="taiKhoan"> -->
+                        <select class="form-select">
+                          <option value="0">Tài Khoản</option>
+                          <option *ngFor="let taiKhoan of taiKhoanList" [value]="taiKhoan.id">{{ taiKhoan.tenDangNhap }}</option>
+                        </select>
+                        <!-- <div *ngIf="f['taiKhoan'].invalid &&  (f['taiKhoan'].dirty || f['taiKhoan'].touched)">
                           <div *ngIf="f['taiKhoan'].errors">
                             <div id="validationServer03Feedback">
                               <small style="color: red;">Không được để trống</small>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
 
                       <div class="mb-4">

@@ -5,8 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiResponse } from 'src/app/model/ApiResponse';
 import { ErrorCode } from 'src/app/model/ErrorCode';
 import { KhachHangDto } from 'src/app/model/khachHangDto';
+import { TaiKhoanDto } from 'src/app/model/tai-khoan-dto.model';
 import { AuthenticationService } from 'src/app/service/AuthenticationService';
 import { KhachHangService } from 'src/app/service/KhachHangService';
+import { TaiKhoanService } from 'src/app/service/TaiKhoanService';
 
 @Component({
   selector: 'app-customer-view',
@@ -14,7 +16,7 @@ import { KhachHangService } from 'src/app/service/KhachHangService';
   styleUrls: ['./customer-view.component.css']
 })
 export class CustomerViewComponent implements OnInit{
-  khachHang: KhachHangDto[] = [];
+  khachHang: any[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
@@ -28,6 +30,9 @@ export class CustomerViewComponent implements OnInit{
   successMessage = '';
   selectedDanhMuc: KhachHangDto | null = null;
   isEditMode = false;
+  taiKhoanList: TaiKhoanDto[] = [];
+
+  
   
 
   constructor(
@@ -35,7 +40,8 @@ export class CustomerViewComponent implements OnInit{
     private formBuilder: FormBuilder,
     private router: Router, 
     private auth: AuthenticationService, 
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private taiKhoanService: TaiKhoanService
   ) {
     this.khachHangForm = this.formBuilder.group({
       ten: ['', [Validators.required]],
@@ -79,7 +85,9 @@ export class CustomerViewComponent implements OnInit{
   loadKhachHang(): void {
     this.apiService.getKhs(this.currentPage, this.pageSize)
       .subscribe(response => {
+        
         this.khachHang = response.result.content;
+    
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
       });
@@ -195,4 +203,17 @@ export class CustomerViewComponent implements OnInit{
     this.showSuccessAlert = false;
   }
 
+  loadTaiKhoan(): void {
+    this.taiKhoanService.getAllTaiKhoan().subscribe(
+      (response: ApiResponse<TaiKhoanDto[]>) => {
+        if (response.result) {
+          this.taiKhoanList = response.result;
+          console.log(this.taiKhoanList)
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Error loadingtai khoan:', error);
+      }
+    );
+  }
 }
