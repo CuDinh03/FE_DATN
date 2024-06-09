@@ -17,13 +17,14 @@
 </section>
 
 <section class="cart_area">
-  <div class="container">
+  <div class="container-fluid">
     <div class="cart_inner">
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
               <th scope="col" style="font-size: 14px;">Sản phẩm</th>
+              <th scope="col" style="font-size: 14px;">Phân loại</th>
               <th scope="col" style="font-size: 14px;">Giá bán</th>
               <th scope="col" style="font-size: 14px;">Số lượng</th>
               <th scope="col" style="font-size: 14px;">Tổng tiền</th>
@@ -35,24 +36,25 @@
               <td>
                 <div class="media">
                   <div class="d-flex">
-                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[0]" alt="" class="product-image">
+                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[1]" alt="" class="product-image">
                   </div>
                   <div class="media-body">
                       <p>{{ item.chiTietSanPham.sanPham.ten }}</p>
                   </div>
               </div>
               </td>
+              <td >
+                <span>{{item.chiTietSanPham.mauSac.ten}}, </span>
+                <span>{{item.chiTietSanPham.kichThuoc.ten}}</span>
+              </td>
               <td>
                 <h5>{{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</h5>
               </td>
               <td>
-                <div class="product_count">
-                  <input type="text" name="qty" maxlength="12" [value]="item.soLuong" [(ngModel)]="item.soLuong" title="Quantity:"
-                    class="input-text qty">
-                  <button class="increase items-count" type="button" (click)="increaseQuantity(item)"><i
-                      class="lnr lnr-chevron-up"></i></button>
-                  <button class="reduced items-count" type="button" (click)="decreaseQuantity(item)"><i
-                      class="lnr lnr-chevron-down"></i></button>
+                <div class="product_count mt-2">
+                  <input type="text" name="qty" maxlength="12" title="Quantity:" [(ngModel)]="item.soLuong" class="input-text qty">
+                  <button class="increase items-count"  type="button" (click)="increaseQuantity(item)"><i class="lnr lnr-chevron-up"></i></button>
+                  <button class="reduced items-count" type="button" (click)="decreaseQuantity(item)"><i class="lnr lnr-chevron-down"></i></button>
                 </div>
               </td>
               <td>
@@ -80,6 +82,7 @@
               </td>
               <td> - </td>
               <td> - </td>
+              <td> - </td>
               <td>
                 <div class="cupon_text d-flex justify-content-end align-items-end">
                   <input type="text" placeholder="Coupon Code">
@@ -91,6 +94,7 @@
             <tr class="out_button_area">
               <td class="d-none-l"> - </td>
               <td class=""> - </td>
+              <td> - </td>
               <td> - </td>
               <td> - </td>
               <td>
