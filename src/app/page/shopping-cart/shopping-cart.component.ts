@@ -6,13 +6,13 @@ import { GioHangService } from 'src/app/service/GioHangService';
 import { GioHangChiTietService } from './../../service/GioHangChiTietService';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2, HostListener } from '@angular/core';
 
 
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
-  styleUrls: ['./shopping-cart.component.css']
+  styleUrls: ['./shopping-cart.component.css'],
 })
 export class ShoppingCartComponent {
   showSearch: boolean = false;
@@ -23,13 +23,20 @@ export class ShoppingCartComponent {
   gioHangChiTiet: any[] = [];
   showConfirmationModal: boolean = false;
   itemToDeleteId: string = '';
+  allSelected = false;
+  selectedTotal = 0;
+  showFooter: boolean = false;
+  showUpperFooter: boolean = true;
+
+
 
 
   constructor(private auth: AuthenticationService, private router: Router,
     private gioHangChiTietService: GioHangChiTietService,
     private gioHangService: GioHangService,
     private khachHangService: KhachHangService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private el: ElementRef, private renderer: Renderer2
   ) {
     
 
@@ -41,6 +48,22 @@ export class ShoppingCartComponent {
     this.findShoppingCart();
   }
 
+  @HostListener('window:scroll', [])
+  onScroll() {
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  const threshold = 200; // Ngưỡng để hiển thị footer
+
+  // Hiển thị footer trên khi vị trí cuộn vượt qua ngưỡng
+  if (scrollPosition > threshold) {
+    this.showUpperFooter = false;
+    console.log(this.showUpperFooter);
+    
+  } else {
+    this.showUpperFooter = true;
+    console.log(this.showUpperFooter);
+
+  }
+  }
   
   confirmDelete(id: string) {
     this.itemToDeleteId = id;
@@ -109,9 +132,33 @@ export class ShoppingCartComponent {
     );
   }
 
+
+
+  toggleSelectAll(event: any) {
+    const checked = event.target.checked;
+    this.gioHangChiTiet.forEach(item => item.selected = checked);
+    this.allSelected = checked;
+    this.calculateSelectedTotal();
+  }
+
   calculateSubtotal(item: any): number {
     return item.chiTietSanPham.giaBan * item.soLuong;
   }
+
+  calculateSelectedTotal(): void {
+    let total = 0;
+    this.gioHangChiTiet.forEach(item => {
+      if (item.selected) {
+        total += this.calculateSubtotal(item);
+      }
+    });
+    this.selectedTotal = total;
+  }
+
+  getSelectedTotal(): number {
+    return this.selectedTotal;
+  }
+
 
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();

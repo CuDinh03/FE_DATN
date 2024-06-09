@@ -1,115 +1,142 @@
 <app-header></app-header>
 
-<section class="blog-banner-area" id="category">
-  <div class="container h-100">
-    <div class="blog-banner">
-      <div class="text-center">
-        <h1>Shopping Cart</h1>
-        <nav aria-label="breadcrumb" class="banner-breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
-          </ol>
-        </nav>
+<section class="container mt-2">
+  <div class="header-card container shadow mb-3 bg-body">
+    <div class="row">
+      <div style="font-size: 14px; color: black; font-weight: bold;" class="col-md-3 d-flex ms-4 align-items-center">
+        <span>
+          <input type="checkbox" (change)="toggleSelectAll($event)">
+        </span>
+        <span class="ms-2">
+          Sản phẩm
+        </span>
+      </div>
+      <div style="font-size: 14px; color: black; font-weight: bold;"
+        class=" mt-2 col-md-2 d-flex justify-content-end align-items-center">
+        <p> Giá bán </p>
+      </div>
+      <div style="font-size: 14px; color: black; font-weight: bold;"
+        class=" mt-2 col-md-2 d-flex justify-content-end align-items-center">
+        <p> Số lượng </p>
+      </div>
+      <div style="font-size: 14px; color: black; font-weight: bold;"
+        class=" mt-2 col-md-2 d-flex justify-content-end align-items-center">
+        <p> Tổng tiền </p>
+      </div>
+      <div style="font-size: 14px; color: black; font-weight: bold;"
+        class=" mt-2 col-md-2 d-flex justify-content-end align-items-center">
+        <p> Thao tác </p>
       </div>
     </div>
   </div>
-</section>
-
-<section class="cart_area">
-  <div class="container">
-    <div class="cart_inner">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col" style="font-size: 14px;">Sản phẩm</th>
-              <th scope="col" style="font-size: 14px;">Giá bán</th>
-              <th scope="col" style="font-size: 14px;">Số lượng</th>
-              <th scope="col" style="font-size: 14px;">Tổng tiền</th>
-              <th scope="col" style="font-size: 14px;">Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of gioHangChiTiet">
-              <td>
-                <div class="media">
-                  <div class="d-flex">
-                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[0]" alt="" class="product-image">
-                  </div>
-                  <div class="media-body">
-                      <p>{{ item.chiTietSanPham.sanPham.ten }}</p>
-                  </div>
-              </div>
-              </td>
-              <td>
-                <h5>{{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</h5>
-              </td>
-              <td>
-                <div class="product_count">
-                  <input type="text" name="qty" maxlength="12" [value]="item.soLuong" [(ngModel)]="item.soLuong" title="Quantity:"
-                    class="input-text qty">
-                  <button class="increase items-count" type="button" (click)="increaseQuantity(item)"><i
-                      class="lnr lnr-chevron-up"></i></button>
-                  <button class="reduced items-count" type="button" (click)="decreaseQuantity(item)"><i
-                      class="lnr lnr-chevron-down"></i></button>
-                </div>
-              </td>
-              <td>
-                <h5>{{ calculateSubtotal(item) | currency:'VND':'symbol':'1.0-0' }}</h5>
-              </td>
-              <td>
-                <span>
-                  <a class="btn" (click)="updateGioHangChiTiet(item.id, item.soLuong)"
-                    style="color: #7A98FE; font-size: 16px; padding: 0;">
-                    <i class="ti ti-edit"></i>
-                  </a>
-                </span>
-                <span>
-                  <a class="btn" (click)="confirmDelete(item.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" style="color: #ff3700; font-size: 16px; padding: 0;">
-                    <i class="ti ti-x"></i>
-                  </a>
-                </span>
-              </td>
-            </tr>
-            <tr class="bottom_button">
-              <td>
-                -
-              </td>
-              <td> tổng tiền: <h5>{{getCartTotal() | currency:'VND':'symbol':'1.0-0' }}</h5>
-              </td>
-              <td> - </td>
-              <td> - </td>
-              <td>
-                <div class="cupon_text d-flex justify-content-end align-items-end">
-                  <input type="text" placeholder="Coupon Code">
-                  <a class="primary-btn" href="#">Lựa chọn</a>
-                </div>
-              </td>
-            </tr>
-
-            <tr class="out_button_area">
-              <td class="d-none-l"> - </td>
-              <td class=""> - </td>
-              <td> - </td>
-              <td> - </td>
-              <td>
-                <div class="checkout_btn_inner d-flex justify-content-end align-items-center">
-                  <a class="gray_btn" href="#">Tiếp tục mua hàng</a>
-                  <a class="primary-btn ml-2" href="#">Thanh toán</a>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <div class="body-card container-fluid shadow mb-3 bg-body" *ngFor="let item of gioHangChiTiet">
+    <div class="row">
+      <div style="font-size: 14px; color: black; padding-top: 30px; padding-bottom: 30px;"
+        class="col-md-3 d-flex ms-4 align-items-center">
+        <span>
+          <input type="checkbox" [(ngModel)]="item.selected" (change)="calculateSelectedTotal()">
+        </span>
+        <span class="ms-2">
+          <div class="media">
+            <div class="d-flex">
+              <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[1]" alt=""
+                class="product-image">
+            </div>
+            <div class="media-body">
+              <p style="color: black; font-size: 16;">{{ item.chiTietSanPham.sanPham.ten }}</p>
+            </div>
+          </div>
+        </span>
+        <span style="margin-left: 70px;">
+          <span>Phân loại</span>
+          <br>
+          <span style="color: black; font-size: 16;">{{item.chiTietSanPham.mauSac.ten}}, </span>
+          <span style="color: black; font-size: 16;">{{item.chiTietSanPham.kichThuoc.ten}}</span>
+        </span>
+      </div>
+      <div style="font-size: 16px; color: black;" class=" mt-2 col-md-2 d-flex justify-content-end align-items-center">
+        <span>{{ item.chiTietSanPham.giaBan |
+          currency:'VND':'symbol':'1.0-0'}}</span>
+      </div>
+      <div class="product_count col-md-2 d-flex justify-content-end align-items-center">
+        <input type="text" name="qty" maxlength="12" title="Quantity:" [(ngModel)]="item.soLuong"
+          class="input-text qty">
+        <button class="increase items-count" type="button" (click)="increaseQuantity(item)"><i
+            class="lnr lnr-chevron-up"></i></button>
+        <button class="reduced items-count" type="button" (click)="decreaseQuantity(item)"><i
+            class="lnr lnr-chevron-down"></i></button>
+      </div>
+      <div style="font-size: 16px; color: #5D87FF;"
+        class=" mt-2 col-md-2 d-flex justify-content-end align-items-center">
+        <p>{{ calculateSubtotal(item) | currency:'VND':'symbol':'1.0-0' }}
+        </p>
+      </div>
+      <div style="font-size: 14px; color: black;" class=" mt-2 col-md-2 d-flex justify-content-end align-items-center">
+        <span>
+          <a class="btn" (click)="updateGioHangChiTiet(item.id, item.soLuong)"
+            style="color: #7A98FE; font-size: 16px; padding: 0; margin-right: 15px;">
+            <i class="ti ti-edit"></i>
+          </a>
+        </span>
+        <span>
+          <a class="btn" (click)="confirmDelete(item.id)" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            style="color: #ff3700; font-size: 16px; padding: 0;">
+            <i class="ti ti-x"></i>
+          </a>
+        </span>
       </div>
     </div>
   </div>
+
+  <div class="footer-card container-fluid shadow mb-3 bg-body p-3" >
+    <table class="table">
+      <tr style="vertical-align: middle;">
+        <td style="width: 20%;"></td>
+        <td style="width: 20%;"></td>
+        <td ></td>
+        <td style="width: 10%;">
+          <span class="d-flex justify-content-start align-items-center" >
+            tổng tiền: <p style="color: black; font-size: 16; margin: 10px; " >{{ getSelectedTotal() | currency:'VND':'symbol':'1.0-0'}}
+            </p>
+          </span>
+        </td>
+        <td>
+          <div class="ms-4 d-flex justify-content-end align-items-center">
+            <input type="text" placeholder="Voucher"
+              style="font-size: 14px; width: 200px; color: black; padding: 6px; border-radius: 20px !important; margin-right: 15px; border: 1px solid #ccc;">
+            <a class="btn btn-primary" href="#">Lựa chọn</a>
+          </div>
+        </td>
+      </tr>
+      <tr style="vertical-align: middle;">
+        <td style="width: 20%;"></td>
+        <td colspan="3" style="width: 30%;">
+          <div style="font-size: 14px; color: black; font-weight: bold; margin-top: 20px;" >
+            <span>
+              <input type="checkbox" (change)="toggleSelectAll($event)">
+            </span>
+            <span>
+              Chọn tất cả sản phẩm
+            </span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex justify-content-end mt-3">
+            <a class="gray_btn me-3" href="#">Tiếp tục mua hàng</a>
+            <a style="font-size: 14px; width: 200px; color: rgb(255, 255, 255); padding: 10px; border-radius: 20px !important;  background-color: #5D87FF;"
+              class="d-flex justify-content-center align-items-center">Thanh toán</a>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
 </section>
+
 <!--================End Cart Area =================-->
 <app-footer></app-footer>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" [ngClass]="{'is-active': showConfirmationModal}">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  [ngClass]="{'is-active': showConfirmationModal}">
   <div class="modal-dialog" (click)="cancelDelete()">
     <div class="modal-content">
       <div class="modal-header">
@@ -121,7 +148,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-success" (click)="deleteConfirmed()" data-bs-dismiss="modal">Xóa</button>
-    <button class="btn btn-danger" (click)="cancelDelete()" data-bs-dismiss="modal">Hủy</button>
+        <button class="btn btn-danger" (click)="cancelDelete()" data-bs-dismiss="modal">Hủy</button>
       </div>
     </div>
   </div>

@@ -104,6 +104,7 @@ export class ShoppingViewComponent {
       };
 
   }
+  
   ngOnInit(): void {
     this.loadHoaDonGioHang();
     this.loadChiTietSP();
@@ -111,19 +112,17 @@ export class ShoppingViewComponent {
     this.loadDanhMuc();
     this.calculateTienTraLai();
     this.calculateTienTraLai();
-
   }
   
   onSubmitPayment() {
-    const storedHoaDon = localStorage.getItem('hoaDon');
+    const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
     const storedVoucher = localStorage.getItem('voucher');
 
 
-    if (storedHoaDon && storedGioHangChiTiet && storedVoucher ) {
+    if (storedHoaDon && storedGioHangChiTiet ) {
       const hoaDon = JSON.parse(storedHoaDon);
       const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
-      const voucher = JSON.parse(storedVoucher);
   
       const tongTien = this.calculateThanhTien();
       hoaDon.tongTien = tongTien;
@@ -191,6 +190,7 @@ export class ShoppingViewComponent {
     }
 );
 }
+
 
 loadDanhMuc(): void {
   this.danhMucService.getAllDanhMuc().subscribe(
@@ -315,49 +315,7 @@ loadChiTietSanPhamById(idChiTietSanPham: string): void {
         })
 }
 
-// themSanPhamVaoGioHang(): void {
-//   const storedGioHang = localStorage.getItem('gioHang');
-//   const storedChiTietSanPham = localStorage.getItem('chiTietSanPham');
-
-//   if (storedGioHang && storedChiTietSanPham) {
-//     const gioHang = JSON.parse(storedGioHang);
-//     const chiTietSanPham = JSON.parse(storedChiTietSanPham);
-
-//     const gioHangChiTietDto: GioHangChiTietDto = {
-//       id: '',
-//       soLuong: 1, // Or any other quantity you need
-//       chiTietSanPham: chiTietSanPham,
-//       gioHang: gioHang,
-//       tongTienGiam: 0, // Assuming default values, you may update as per requirements
-//       trangThai: true, // Assuming default values, you may update as per requirements
-//       ngayTao: new Date(),
-//       ngaySua: new Date()
-//     };
-
-//     this.gioHangChiTietService.themSanPhamVaoGioHang(gioHangChiTietDto).subscribe(
-//       (response: ApiResponse<any>) => {
-//         if (response.result) {
-//           this.loadGioHangChiTiet(response.result.gioHang.id);
-//           this.snackBar.open('Thêm sản phẩm thành công!', 'Đóng', {
-//             duration: 3000,
-//             panelClass: ['success-snackbar']
-//           });
-//         }
-//       },
-//       (error: HttpErrorResponse) => {
-//         this.snackBar.open('Thêm sản phẩm không thành công. Vui lòng thử lại!', 'Đóng', {
-//           duration: 3000,
-//           panelClass: ['error-snackbar']
-//         });
-//       }
-//     );
-//   } else {
-//     console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm nào trong local storage');
-//   }
-// }
-
 addToCart(): void {
-  // Lấy giỏ hàng và chi tiết sản phẩm từ localStorage
   const storeChiTietSanPham = localStorage.getItem('chiTietSanPham');
   const storeChiTietGioHang = localStorage.getItem('gioHang');
   
@@ -381,10 +339,8 @@ addToCart(): void {
       });
       return;
     }
-
     // Gọi phương thức addProductToCart với id giỏ hàng, id sản phẩm và số lượng
     this.addProductToCart(gioHang.id, chiTietSanPham.id, this.quantity);
-    
   } else {
     console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
   }
@@ -517,15 +473,11 @@ loadChiTietSP(): void {
     this.showConfirmationModal = true;
   }
 
-  confirmAdd(id: string) {
-    this.itemToDeleteId = id;
-    this.showConfirmationModal = true;
-  }
-
   cancelDelete() {
     this.showConfirmationModal = false;
-    this
+    this.showAddModal = false;
   }
+  
 
   deleteConfirmed() {
     this.deleteGioHangChiTiet(this.itemToDeleteId);
