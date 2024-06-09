@@ -115,7 +115,7 @@ findShoppingCart() {
 
   
   addProductToCart(idGioHang: string, idSanPhamChiTiet: string, soLuong: number): void {
-    this.gioHangChiTietService.addProductToCart(idGioHang, idSanPhamChiTiet, soLuong).subscribe(
+    this.gioHangChiTietService.addProductToCartKH(idGioHang, idSanPhamChiTiet, soLuong).subscribe(
       response => {
         this.snackBar.open('Thêm sản phẩm vào giỏ hàng thành công', 'Đóng', {
           duration: 3000,

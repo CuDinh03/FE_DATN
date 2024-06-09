@@ -67,7 +67,9 @@ export class ShoppingViewComponent {
   thanhTien: number = 0;
   tienTraLai: number = 0;
   showConfirmationModal: boolean = false;
+  showAddModal: boolean = false;
   itemToDeleteId: string = '';
+  quantity: number = 1;
 
 
 
@@ -313,45 +315,106 @@ loadChiTietSanPhamById(idChiTietSanPham: string): void {
         })
 }
 
-themSanPhamVaoGioHang(): void {
-  const storedGioHang = localStorage.getItem('gioHang');
-  const storedChiTietSanPham = localStorage.getItem('chiTietSanPham');
+// themSanPhamVaoGioHang(): void {
+//   const storedGioHang = localStorage.getItem('gioHang');
+//   const storedChiTietSanPham = localStorage.getItem('chiTietSanPham');
 
-  if (storedGioHang && storedChiTietSanPham) {
-    const gioHang = JSON.parse(storedGioHang);
-    const chiTietSanPham = JSON.parse(storedChiTietSanPham);
+//   if (storedGioHang && storedChiTietSanPham) {
+//     const gioHang = JSON.parse(storedGioHang);
+//     const chiTietSanPham = JSON.parse(storedChiTietSanPham);
 
-    const gioHangChiTietDto: GioHangChiTietDto = {
-      id: '',
-      soLuong: 1, // Or any other quantity you need
-      chiTietSanPham: chiTietSanPham,
-      gioHang: gioHang,
-      tongTienGiam: 0, // Assuming default values, you may update as per requirements
-      trangThai: true, // Assuming default values, you may update as per requirements
-      ngayTao: new Date(),
-      ngaySua: new Date()
-    };
+//     const gioHangChiTietDto: GioHangChiTietDto = {
+//       id: '',
+//       soLuong: 1, // Or any other quantity you need
+//       chiTietSanPham: chiTietSanPham,
+//       gioHang: gioHang,
+//       tongTienGiam: 0, // Assuming default values, you may update as per requirements
+//       trangThai: true, // Assuming default values, you may update as per requirements
+//       ngayTao: new Date(),
+//       ngaySua: new Date()
+//     };
 
-    this.gioHangChiTietService.themSanPhamVaoGioHang(gioHangChiTietDto).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result) {
-          this.loadGioHangChiTiet(response.result.gioHang.id);
-          this.snackBar.open('Thêm sản phẩm thành công!', 'Đóng', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
-        }
-      },
-      (error: HttpErrorResponse) => {
-        this.snackBar.open('Thêm sản phẩm không thành công. Vui lòng thử lại!', 'Đóng', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
-        });
-      }
-    );
+//     this.gioHangChiTietService.themSanPhamVaoGioHang(gioHangChiTietDto).subscribe(
+//       (response: ApiResponse<any>) => {
+//         if (response.result) {
+//           this.loadGioHangChiTiet(response.result.gioHang.id);
+//           this.snackBar.open('Thêm sản phẩm thành công!', 'Đóng', {
+//             duration: 3000,
+//             panelClass: ['success-snackbar']
+//           });
+//         }
+//       },
+//       (error: HttpErrorResponse) => {
+//         this.snackBar.open('Thêm sản phẩm không thành công. Vui lòng thử lại!', 'Đóng', {
+//           duration: 3000,
+//           panelClass: ['error-snackbar']
+//         });
+//       }
+//     );
+//   } else {
+//     console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm nào trong local storage');
+//   }
+// }
+
+addToCart(): void {
+  // Lấy giỏ hàng và chi tiết sản phẩm từ localStorage
+  const storeChiTietSanPham = localStorage.getItem('chiTietSanPham');
+  const storeChiTietGioHang = localStorage.getItem('gioHang');
+  
+  if (storeChiTietSanPham && storeChiTietGioHang) {
+    const chiTietSanPham = JSON.parse(storeChiTietSanPham);
+    
+    const gioHang = JSON.parse(storeChiTietGioHang);
+    
+    if (this.quantity <= 0) {
+      this.snackBar.open('Số lượng nhập vào phải lớn hơn 0. Vui lòng nhập lại!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+
+    if (this.quantity > chiTietSanPham.soLuong) {
+      this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+
+    // Gọi phương thức addProductToCart với id giỏ hàng, id sản phẩm và số lượng
+    this.addProductToCart(gioHang.id, chiTietSanPham.id, this.quantity);
+    
   } else {
-    console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm nào trong local storage');
+    console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
   }
+}
+increaseQuantity() {
+  this.quantity++;
+}
+
+decreaseQuantity() {
+  if (this.quantity > 1) {
+    this.quantity--;
+  }
+}
+
+addProductToCart(idGioHang: string, idSanPhamChiTiet: string, soLuong: number): void {
+  this.gioHangChiTietService.addProductToCart(idGioHang, idSanPhamChiTiet, soLuong).subscribe(
+    response => {
+      this.snackBar.open('Thêm sản phẩm vào giỏ hàng thành công', 'Đóng', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      }
+      );
+      this.loadChiTietSP();
+    this.loadGioHangChiTiet(idGioHang)
+    },
+    error => {
+      console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
+      // Xử lý lỗi ở đây nếu cần
+    }
+  );
 }
 
 
@@ -454,8 +517,14 @@ loadChiTietSP(): void {
     this.showConfirmationModal = true;
   }
 
+  confirmAdd(id: string) {
+    this.itemToDeleteId = id;
+    this.showConfirmationModal = true;
+  }
+
   cancelDelete() {
     this.showConfirmationModal = false;
+    this
   }
 
   deleteConfirmed() {

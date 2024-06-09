@@ -285,8 +285,9 @@
                         <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
                         <td>{{ sanPhamChiTiet.giaBan }}</td>
                         <td>{{ sanPhamChiTiet.soLuong }}</td>
+                        <!-- (click)="themSanPhamVaoGioHang()" -->
                         <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
-                            (click)="themSanPhamVaoGioHang()" (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)">
+                             (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)" data-bs-toggle="modal" data-bs-target="#exampleModal1">
                             <i class="ti ti-plus"></i>
                           </button></td>
                       </tr>
@@ -305,16 +306,13 @@
                   </div>
                 </div>
               </div>
-              <!-- <div *ngIf="danhMuc.length === 0">
+              <div *ngIf="chiTietSanPham.length === 0">
                             <p>Không có danh mục nào được tìm thấy.</p>
-                        </div> -->
+                        </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- <div *ngIf="danhMuc.length === 0">
-                <p>Không có danh mục nào được tìm thấy.</p>
-            </div> -->
     </div>
 
 
@@ -426,6 +424,33 @@
       <div class="modal-footer">
         <button class="btn btn-success" (click)="deleteConfirmed()" data-bs-dismiss="modal">Xóa</button>
     <button class="btn btn-danger" (click)="cancelDelete()" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" [ngClass]="{'is-active': showAddModal}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="product_count mt-2">
+          <input type="text" name="qty" maxlength="12" title="Quantity:" [(ngModel)]="quantity" class="input-text qty">
+          <button class="increase items-count" type="button" (click)="increaseQuantity()"><i class="lnr lnr-chevron-up"></i></button>
+          <button class="reduced items-count" type="button" (click)="decreaseQuantity()"><i class="lnr lnr-chevron-down"></i></button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="addToCart()">Thêm vào giỏ hàng</button>
       </div>
     </div>
   </div>
