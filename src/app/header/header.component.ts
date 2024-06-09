@@ -1,3 +1,4 @@
+import { SanPhamCTService } from './../service/SanPhamCTService';
 import { ErrorCode } from './../model/ErrorCode';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApiResponse } from './../model/ApiResponse';
@@ -21,11 +22,11 @@ export class HeaderComponent {
   gioHang: any
   gioHangChiTiet: any[] = [];
 
-
   constructor(private auth: AuthenticationService, private router: Router,
     private gioHangChiTietService: GioHangChiTietService,
     private gioHangService: GioHangService,
-    private khachHangService: KhachHangService
+    private khachHangService: KhachHangService,
+    private sanPhamCTService: SanPhamCTService
   ) {
     //   const tenDangNhap = localStorage.getItem('tenDangNhap');
     // if (tenDangNhap) {
@@ -46,8 +47,10 @@ export class HeaderComponent {
   ngOnInit() {
     // Kiểm tra trạng thái đăng nhập của người dùng
     this.checkLoginStatus();
-    this.findShoppingCart();
+    this.findShoppingCart()
   }
+
+  
 
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
@@ -59,7 +62,6 @@ export class HeaderComponent {
             this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
               (response) => {
                 const gioHang = response.result;
-                console.log(gioHang);
                 if (gioHang && gioHang.id){
                   this.loadGioHangChiTiet(gioHang.id);
                 }

@@ -68,7 +68,7 @@
             </span>
 
 
-            <span class="position-relative" (mouseover)="onMouseOver()" (mouseleave)="onMouseLeave()">
+            <span class="position-relative" (mouseover)="onMouseOver()" (mouseleave)="onMouseLeave()" *ngIf="isLoggedIn()">
               <a href="/shopping-cart" style="text-decoration: none; color: black;" class="btn">
                 <i class="ti ti-shopping-cart" style="font-size: 20px"></i>
                 <span class="cart-badge">{{getTotalQuantity()}}</span>
@@ -76,7 +76,7 @@
               <div class="mini-cart" *ngIf="isCartHovered">
                 <h5>Sản phẩm mới thêm</h5>
                 <div *ngIf="gioHangChiTiet.length > 0">
-                  <a class="mini-cart-item container-fluid row d-flex" href="#" style="text-decoration: none; color: black;" *ngFor="let item of gioHangChiTiet.slice(0,6)">
+                  <a class="mini-cart-item container-fluid row d-flex" style="text-decoration: none; color: black;" *ngFor="let item of gioHangChiTiet.slice(0,6)">
                     <div class="col-8 d-flex justify-content-start mb-3">
                       <span>
                         <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[0]" alt="" class="product-image me-3">

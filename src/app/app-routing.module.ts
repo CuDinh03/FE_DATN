@@ -46,6 +46,7 @@ const routes: Routes = [
   {path: 'shopping-cart', component: ShoppingCartComponent},
   {path: 'sign-up', component: RegisterComponent},
   {path: 'profile', component: ProfileComponent},
+  {path: 'san-pham', component: ProductDetailComponent},
   // { path: '**', redirectTo: '/trang-chu' } // Đường dẫn cho các trang không tồn tại
 
 ];

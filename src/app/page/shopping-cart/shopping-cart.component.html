@@ -47,7 +47,7 @@
               </td>
               <td>
                 <div class="product_count">
-                  <input type="text" name="qty" maxlength="12" [value]="item.soLuong" title="Quantity:"
+                  <input type="text" name="qty" maxlength="12" [value]="item.soLuong" [(ngModel)]="item.soLuong" title="Quantity:"
                     class="input-text qty">
                   <button class="increase items-count" type="button" (click)="increaseQuantity(item)"><i
                       class="lnr lnr-chevron-up"></i></button>
@@ -61,12 +61,12 @@
               <td>
                 <span>
                   <a class="btn" (click)="updateGioHangChiTiet(item.id, item.soLuong)"
-                    style="color: #7A98FE; font-size: 16px;">
+                    style="color: #7A98FE; font-size: 16px; padding: 0;">
                     <i class="ti ti-edit"></i>
                   </a>
                 </span>
                 <span>
-                  <a class="btn" (click)="confirmDelete(item.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" style="color: #ff3700; font-size: 16px;">
+                  <a class="btn" (click)="confirmDelete(item.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" style="color: #ff3700; font-size: 16px; padding: 0;">
                     <i class="ti ti-x"></i>
                   </a>
                 </span>

@@ -1,3 +1,43 @@
-.btn {
-    border: none !important;
+.product_count {
+    display: flex;
+    align-items: center;
+    font-size: 16px; /* Bạn có thể điều chỉnh kích thước font nếu cần */
+    position: relative; /* Đặt vị trí tương đối cho container để các phần tử con có thể sử dụng vị trí tuyệt đối */
+  }
+  
+  /* Điều chỉnh kích thước ô nhập liệu */
+  .product_count .qty {
+    width: 2000px; /* Đặt chiều rộng của ô nhập liệu */
+    height: 38px; /* Đặt chiều cao của ô nhập liệu */
+    font-size: 16px; /* Điều chỉnh kích thước font */
+    padding-right: 40px; /* Thêm khoảng đệm bên phải để tạo chỗ cho các nút */
+    box-sizing: border-box;
+  }
+  
+  /* Điều chỉnh kích thước của các nút */
+  .product_count .items-count {
+    width: 20px; /* Đặt chiều rộng của các nút */
+    height: 20px; /* Đặt chiều cao của các nút */
+    font-size: 16px; /* Điều chỉnh kích thước font của các biểu tượng */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none; /* Bỏ viền nếu cần */
+    background-color: #f0f0f0; /* Đặt màu nền */
+    position: absolute; /* Đặt vị trí tuyệt đối */
+    right: 0px; /* Đặt các nút ở cuối bên phải */
+  }
+  
+  /* Định vị các nút tăng giảm */
+  .product_count .increase {
+    top: 0px; /* Điều chỉnh vị trí theo chiều dọc */
+  }
+  
+  .product_count .reduced {
+    top: 17px; /* Điều chỉnh vị trí theo chiều dọc */
+  }
+  
+  .product_count .items-count i {
+    font-size: 11px; /* Điều chỉnh kích thước biểu tượng */
   }

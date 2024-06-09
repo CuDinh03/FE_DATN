@@ -73,5 +73,7 @@ export class AuthenticationService {
     localStorage.removeItem('listHoaDon');
     localStorage.removeItem('gioHangChiTiet');
     localStorage.removeItem('voucher');
+    localStorage.removeItem('sanPhamChiTiet');
+    localStorage.removeItem('findSanPhamChiTiet');
   }
 }
