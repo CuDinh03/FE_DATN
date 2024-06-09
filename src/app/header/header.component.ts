@@ -63,7 +63,6 @@ export class HeaderComponent {
               (response) => {
                 const gioHang = response.result;
                 if (gioHang && gioHang.id){
-                  localStorage.setItem('gioHang',JSON.stringify(response.result) );
                   this.loadGioHangChiTiet(gioHang.id);
                 }
               },

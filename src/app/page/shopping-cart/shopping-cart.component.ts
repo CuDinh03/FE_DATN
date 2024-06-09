@@ -74,7 +74,7 @@ export class ShoppingCartComponent {
       }
       return;
     }
-    this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
+    this.gioHangChiTietService.updateGioHangKH(idGioHangChiTiet, soLuong).subscribe(
       (response: ApiResponse<any>) => {
           console.log(response.message);
           if (soLuong === 0) {

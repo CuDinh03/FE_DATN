@@ -36,6 +36,35 @@ export class ProductDetailComponent {
  ngOnInit(): void {
   this.loadSanPhamChiTiet();
   this.reloadPage();
+  this.findShoppingCart();
+}
+
+findShoppingCart() {
+  const tenDangNhap = this.auth.getTenDangNhap();
+  if (tenDangNhap) {
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+      (response) => {
+        const khachHang = response.result;
+        if (khachHang && khachHang.id) {
+          this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
+            (response) => {
+              this.gioHang = response.result;
+              if (this.gioHang && this.gioHang.id){
+              }
+            },
+            (error) => {
+              console.error('Error fetching shopping cart:', error);
+            }
+          );
+        } else {
+          console.error('Không tìm thấy thông tin khách hàng.');
+        }
+      },
+      (error) => {
+        console.error('Error fetching customer:', error);
+      }
+    );
+  }
 }
 
   loadSanPhamChiTiet(): void{
@@ -56,11 +85,9 @@ export class ProductDetailComponent {
 
   addToCart(): void {
     // Lấy giỏ hàng và chi tiết sản phẩm từ localStorage
-    const storeGioHang = localStorage.getItem('gioHang');
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     
-    if (storeGioHang && storeChiTietSanPham) {
-      const gioHang = JSON.parse(storeGioHang);
+    if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
       
       if (this.quantity <= 0) {
@@ -80,12 +107,13 @@ export class ProductDetailComponent {
       }
   
       // Gọi phương thức addProductToCart với id giỏ hàng, id sản phẩm và số lượng
-      this.addProductToCart(gioHang.id, chiTietSanPham.id, this.quantity);
+      this.addProductToCart(this.gioHang.id, chiTietSanPham.id, this.quantity);
     } else {
       console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
     }
   }
 
+  
   addProductToCart(idGioHang: string, idSanPhamChiTiet: string, soLuong: number): void {
     this.gioHangChiTietService.addProductToCart(idGioHang, idSanPhamChiTiet, soLuong).subscribe(
       response => {
@@ -94,6 +122,7 @@ export class ProductDetailComponent {
           panelClass: ['success-snackbar']
         });
         // Xử lý kết quả ở đây nếu cần
+        this.reloadPage();
       },
       error => {
         console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);

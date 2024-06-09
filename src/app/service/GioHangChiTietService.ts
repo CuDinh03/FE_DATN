@@ -65,7 +65,18 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
             'Authorization': `Bearer ${token}`
           });
       
-          return this.http.post<ApiResponse<any>>(`${this.apiUrl}/addProductToCart`,null ,{ params, headers });
+          return this.http.post<ApiResponse<any>>(`${this.apiUrl}/addProductToCartKH`,null ,{ params, headers });
+        }
+
+        updateGioHangKH(id: string, soLuong: number): Observable<ApiResponse<any>> {
+          const token = localStorage.getItem('token');
+          const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+          });
+      
+          let params = new HttpParams().set('soLuong', soLuong.toString());
+      
+          return this.http.put<ApiResponse<any>>(`${this.apiUrl}/updateCartKH/${id}`, null, { headers, params });
         }
         
   
