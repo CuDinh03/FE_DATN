@@ -75,7 +75,7 @@
                       <a href="/delete" style="color: #F87777; font-size: 20px;" class="me-2">
                         <i class="ti ti-x"></i>
                       </a>
-                      <a href="/edit" style="color: #7A98FE;font-size: 20px;">
+                      <a (click)="openModal(voucher)" style="color: #7A98FE;font-size: 20px;">
                         <i class="ti ti-edit"></i>
                       </a>
                     </td>
@@ -128,6 +128,76 @@
 <!--          </div>-->
 <!--        </div>-->
       </div>
+
     </div>
   </div>
 </div>
+
+<div class="modal fade" #voucherModal tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="accountModalLabel">Chi tiết Tài khoản</h5>
+        <button type="button" class="btn-close" (click)="closeVoucherModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table text-nowrap mb-0 align-middle">
+          <thead class="text-dark fs-4">
+          <tr>
+<!--            <th scope="col">-->
+<!--              <h6 class="fw-semibold mb-0">Mã Voucher</h6>-->
+<!--            </th>-->
+<!--            <th scope="col">-->
+<!--              <h6 class="fw-semibold mb-0">Tên Voucher</h6>-->
+<!--            </th>-->
+            <th scope="col">
+              <h6 class="fw-semibold mb-0">Ngày bắt đầu</h6>
+            </th>
+            <th scope="col">
+              <h6 class="fw-semibold mb-0">Ngày Kết Thúc</h6>
+            </th>
+            <th scope="col">
+              <h6 class="fw-semibold mb-0">Loại giảm giá</h6>
+            </th>
+            <th scope="col">
+              <h6 class="fw-semibold mb-0">Giá trị tối thiểu</h6>
+            </th>
+            <th scope="col">
+              <h6 class="fw-semibold mb-0">Số lượng</h6>
+            </th>
+            <th scope="col">
+              <h6 class="fw-semibold mb-0">Action</h6>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+<!--            <td>-->
+<!--              <h6 class="fw-semibold mb-1 ">{{selectedVoucher?.ma }}</h6>-->
+<!--            </td>-->
+<!--            <td>{{selectedVoucher?.ten}}</td>-->
+            <td>{{selectedVoucher?.ngayBatDau | date: 'dd/MM/yyyy'}}</td>
+            <td>{{selectedVoucher?.ngayKetThuc | date: 'dd/MM/yyyy'}}</td>
+            <td>{{selectedVoucher?.loaiGiamGia}}</td>
+            <td>{{selectedVoucher?.giaTriToiThieu}}</td>
+            <td>{{selectedVoucher?.soLuong}}</td>
+
+            <td>
+              <!--                                            <a [routerLink]="'/admin/' + account.id" type="button"-->
+              <!--                                               class="btn btn-info">Chi tiết</a>-->
+              <button type="button" class="btn btn-warning  ">Cập nhật</button>
+
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <!-- Thông tin chi tiết tài khoản sẽ được hiển thị ở đây -->
+        <!--          <p>Tên đăng nhập: {{ selectedAccount?.tenDangNhap }}</p>-->
+        <!--          <p>Ngày tạo: {{ selectedAccount?.ngayTao | date: 'dd/MM/yyyy' }}</p>-->
+        <!--          <p>Chức vụ: {{ selectedAccount?.idChucVu.ten }}</p>-->
+        <!-- Thêm thông tin khác nếu cần -->
+      </div>
+    </div>
+  </div>
+</div>
+
