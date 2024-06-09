@@ -53,6 +53,20 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
         });
           return this.http.get<ApiResponse<any>>(`${this.apiUrl}/allKh/${id}`, { headers });
         }
+
+        addProductToCart(idGioHang: string, idSanPham: string, soLuong: number): Observable<ApiResponse<any>> {
+          const params = new HttpParams()
+            .set('idGioHang', idGioHang)
+            .set('idSanPham', idSanPham)
+            .set('soLuong', soLuong.toString());
+      
+          const token = localStorage.getItem('token');
+          const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+          });
+      
+          return this.http.post<ApiResponse<any>>(`${this.apiUrl}/addProductToCart`,null ,{ params, headers });
+        }
         
   
   }

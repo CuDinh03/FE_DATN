@@ -146,7 +146,7 @@ export class ShoppingViewComponent {
         (error: HttpErrorResponse) => {
           this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
             duration: 3000,
-            panelClass: ['success-snackbar']
+            panelClass: ['error-snackbar']
           });
         }
       );
@@ -345,7 +345,7 @@ themSanPhamVaoGioHang(): void {
       (error: HttpErrorResponse) => {
         this.snackBar.open('Thêm sản phẩm không thành công. Vui lòng thử lại!', 'Đóng', {
           duration: 3000,
-          panelClass: ['success-snackbar']
+          panelClass: ['error-snackbar']
         });
       }
     );
@@ -406,7 +406,7 @@ loadChiTietSP(): void {
     if (soLuong < 0) {
       this.snackBar.open('Số lượng không được nhỏ hơn 0. Vui lòng nhập lại!', 'Đóng', {
         duration: 3000,
-        panelClass: ['success-snackbar']
+        panelClass: ['error-snackbar']
       });
       const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
       if (item) {
@@ -436,7 +436,7 @@ loadChiTietSP(): void {
           if (error.status === 400 ) {
             this.snackBar.open('Số lượng nhập vào vượt quá số lượng hiện có. Vui lòng nhập lại!', 'Đóng', {
               duration: 3000,
-              panelClass: ['success-snackbar']
+              panelClass: ['error-snackbar']
             });
               const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
               if (item) {
@@ -495,14 +495,14 @@ resetGioHang(): void {
     if(this.listHoaDonGioHang.length >= 5){
       this.snackBar.open('Chỉ được tạo tối đa 5 hóa đơn!', 'Đóng', {
         duration: 3000,
-        panelClass: ['success-snackbar']
+        panelClass: ['error-snackbar']
       });
       return;
     }
     this.hoaDonGioHangService.createHoaDon(this.hoaDon).subscribe(data => {
       this.snackBar.open('Tạo hóa đơn thành công!', 'Đóng', {
         duration: 3000,
-        panelClass: ['success-snackbar']
+        panelClass: ['error-snackbar']
       });
       this.loadHoaDonGioHang();
       this.router.navigate(['/admin/shopping']);

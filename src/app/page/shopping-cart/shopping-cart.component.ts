@@ -64,7 +64,10 @@ export class ShoppingCartComponent {
   updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
     const originalSoLuong = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet).soLuong;
     if (soLuong < 0) {
-      alert('Số lượng không được nhỏ hơn 0. Vui lòng nhập lại!');
+      this.snackBar.open('Số lượng không được nhỏ hơn 0. Vui lòng nhập lại!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
       const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
       if (item) {
         item.soLuong = originalSoLuong;
@@ -93,7 +96,7 @@ export class ShoppingCartComponent {
           if (error.status === 400 ) {
             this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
               duration: 3000,
-              panelClass: ['success-snackbar']
+              panelClass: ['error-snackbar']
             });
               const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
               if (item) {
