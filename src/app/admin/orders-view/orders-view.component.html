@@ -36,9 +36,6 @@
                         <h6 class="fw-semibold mb-0">Mã</h6>
                       </th>
                       <th scope="col">
-                        <h6 class="fw-semibold mb-0">Ghi chú</h6>
-                      </th>
-                      <th scope="col">
                         <h6 class="fw-semibold mb-0">Ngày tạo</h6>
                       </th>
                       <th scope="col">
@@ -65,22 +62,20 @@
                     <tr *ngFor="let listHoaDon of listHoaDon; let i = index" style="height: 30px;">
                       <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
                       <td>{{listHoaDon.ma }}</td>
-                      <td>{{listHoaDon.ghiChu}}</td>
                       <td>{{ formatDate(listHoaDon.ngayTao) }}</td>
                       <td>{{listHoaDon.tongTien}}</td>
                       <td>
                         <p *ngIf="listHoaDon.voucher != null">{{listHoaDon.voucher.giaTriGiam}}%</p>
                         <p *ngIf="listHoaDon.voucher === null"> - </p>
                       </td>
-                      <td>{{listHoaDon.nhanVien.ten}}</td>
                       <td>
                         <p *ngIf="listHoaDon.khachHang != null">{{listHoaDon.khachHang.ten}}</p>
                         <p *ngIf="listHoaDon.khachHang === null"> - </p>
                       </td>
+                      <td>{{listHoaDon.nhanVien.ten}}</td>
                       <td [ngClass]="{'text-success': !listHoaDon.trangThai, 'text-danger': listHoaDon.trangThai}">
                         {{listHoaDon.trangThai ? 'Chưa thanh toán' : 'Đã thanh toán'}}
                       </td>
-                      <td>{{listHoaDon.nhanVien.ten}}</td>
                       <td>
                         <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
                           data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(listHoaDon.id)">
