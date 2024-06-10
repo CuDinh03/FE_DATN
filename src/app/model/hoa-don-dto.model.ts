@@ -5,6 +5,7 @@ export interface HoaDonDto {
   ma: string;
   tongTien:string;
   tongTienGiam: string;
+  voucher: string;
   khachHangId: string;
   nhanVienId: string;
   ngayTao: Date;

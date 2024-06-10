@@ -118,7 +118,7 @@
                             <label class="form-label">Khách hàng</label>
                             <div class="col-8">
                               <input type="text" class="form-control" id="sdt" name="sdt"
-                                [(ngModel)]="thanhToanDto.hoaDonDto.khachHangId" (ngModelChange)="onSdtInputChange()" />
+                                [(ngModel)]="sdtValue" (ngModelChange)="onSdtInputChange()" />
                             </div>
                             <div class="col-4">
                               <button type="button" class="btn btn-info" (click)="getCustomer()">Chọn</button>
@@ -147,7 +147,7 @@
                         </div>
                         <div class="mb-4">
                           <label class="form-label">Tiền khách đưa</label>
-                          <input type="text" class="form-control" [(ngModel)]="tienKhachDua"
+                          <input type="text" class="form-control" 
                             (input)="calculateTienTraLai()" />
                         </div>
                         <div class="mb-4">
@@ -157,11 +157,11 @@
                         </div>
                         <div class="mb-4">
                           <label class="form-label">Thành tiền</label>
-                          <input type="text" class="form-control" [value]="thanhTien" readonly />
+                          {{calculateThanhTien()}}
                         </div>
                         <div class="mb-4">
                           <label class="form-label">Tiền trả lại</label>
-                          <input type="text" class="form-control" [value]="tienTraLai" readonly />
+                          {{calculateTienTraLai()}}
                         </div>
                         <div class="d-flex" style="margin-bottom: 25px;">
                           <span>
