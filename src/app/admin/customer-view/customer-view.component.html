@@ -152,21 +152,21 @@
                         </div>
                       </div>
 
-                      <div class="mb-4">
+                      <!-- <div class="mb-4">
                         <label for="taiKhoan" class="form-label">Tài khoản: </label>
-                        <!-- <input type="text" class="form-control" formControlName="taiKhoan" id="taiKhoan"> -->
+                        
                         <select class="form-select">
                           <option value="0">Tài Khoản</option>
                           <option *ngFor="let taiKhoan of taiKhoanList" [value]="taiKhoan.id">{{ taiKhoan.tenDangNhap }}</option>
                         </select>
-                        <!-- <div *ngIf="f['taiKhoan'].invalid &&  (f['taiKhoan'].dirty || f['taiKhoan'].touched)">
+                        <div *ngIf="f['taiKhoan'].invalid &&  (f['taiKhoan'].dirty || f['taiKhoan'].touched)">
                           <div *ngIf="f['taiKhoan'].errors">
                             <div id="validationServer03Feedback">
                               <small style="color: red;">Không được để trống</small>
                             </div>
                           </div>
-                        </div> -->
-                      </div>
+                        </div>
+                      </div> -->
 
                       <div class="mb-4">
                         <label for="email" class="form-label">Email: </label>

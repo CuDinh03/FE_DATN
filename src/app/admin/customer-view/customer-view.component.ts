@@ -66,6 +66,7 @@ export class CustomerViewComponent implements OnInit{
       this.findById(this.id);
     }
     this.loadTaiKhoan();
+    this.loadVoucher();
   }
 
   get f() {
@@ -98,6 +99,7 @@ export class CustomerViewComponent implements OnInit{
   onPageChange(page: number): void {
     this.currentPage = page;
     this.loadKhachHang();
+    this.loadVoucher();
   }
 
   createKhachHang(): void {
@@ -217,5 +219,19 @@ export class CustomerViewComponent implements OnInit{
         console.error('Error loading tai khoan:', error);
       }
     );
+  }
+
+  loadVoucher():void{
+    this.apiService.getKhs(this.currentPage, this.pageSize)
+      .subscribe(response => {
+        this.khachHang = response.result.content;
+        this.totalElements = response.result.totalElements;
+        this.totalPages = response.result.totalPages;
+        console.log("view khs");
+      });
+  }
+
+  createVoucher(){
+
   }
 }
