@@ -90,4 +90,12 @@ export class KhachHangService{
     return this.http.put<ApiResponse<void>>(`${this.apiUrl}/${id}`, khachHangData, { headers });
   }
 
+  
+  findKhachHangByTenDangNhap(tenDangNhap: string): Observable<ApiResponse<any>>{
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findUsername/${tenDangNhap}`, {headers});
+  }
 }

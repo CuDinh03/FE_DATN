@@ -64,6 +64,7 @@ export class CustomerViewComponent implements OnInit{
     if (this.id) {
       this.findById(this.id);
     }
+    this.loadTaiKhoan();
   }
 
   get f() {
@@ -212,7 +213,7 @@ export class CustomerViewComponent implements OnInit{
         }
       },
       (error: HttpErrorResponse) => {
-        console.error('Error loadingtai khoan:', error);
+        console.error('Error loading tai khoan:', error);
       }
     );
   }

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,16 @@ export class AuthenticationService {
   }
 
   login(tenDangNhap: string, matKhau: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl, {tenDangNhap, matKhau});
+    return this.http.post<any>(this.apiUrl, {tenDangNhap, matKhau}).pipe(
+      tap(response => {
+        if (response.result && response.result.token) {
+          const decodedToken = this.decodeToken(response.result.token);
+          if (decodedToken && decodedToken.iss) {
+            localStorage.setItem('tenDangNhap', decodedToken.iss);
+          }
+        }
+      })
+    );
   }
 
   getToken(): string | null {
@@ -36,8 +45,35 @@ export class AuthenticationService {
     return decodedToken.scope;
   }
 
+  private decodeToken(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      return JSON.parse(atob(payload));
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  }
+
+  getTenDangNhap(): string | null {
+    return localStorage.getItem('tenDangNhap');
+  }
+
+
   logout(): void {
     // Xoá token khi đăng xuất
     localStorage.removeItem('token');
+    localStorage.removeItem('chiTietSanPham');
+    localStorage.removeItem('khachHang');
+    localStorage.removeItem('gioHang');
+    localStorage.removeItem('dbhoadon');
+    localStorage.removeItem('tenDangNhap');
+    localStorage.removeItem('hoaDon');
+    localStorage.removeItem('maHoaDon');
+    localStorage.removeItem('listHoaDon');
+    localStorage.removeItem('gioHangChiTiet');
+    localStorage.removeItem('voucher');
+    localStorage.removeItem('sanPhamChiTiet');
+    localStorage.removeItem('findSanPhamChiTiet');
   }
 }

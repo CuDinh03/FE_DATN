@@ -32,6 +32,11 @@ export class TaiKhoanService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, {params, headers});
   }
 
+
+  checkUsernameExists(username: string): Observable<ApiResponse<TaiKhoanDto>> {
+    return this.http.post<ApiResponse<TaiKhoanDto>>(`${this.apiUrl}/check-username`, { tenDangNhap: username });
+  }
+
   getAccountsByRoles(page: number, size: number, role: any): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
