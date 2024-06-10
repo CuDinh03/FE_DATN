@@ -33,6 +33,7 @@ import { count } from 'rxjs';
 })
 export class ShoppingViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
+  @ViewChild('addToCartModal') addToCartModal!: ElementRef;
   vouchers: any[] = [];
   listHoaDon: any = {};
   gioHang: any = {};
@@ -70,6 +71,7 @@ export class ShoppingViewComponent {
   showAddModal: boolean = false;
   itemToDeleteId: string = '';
   quantity: number = 1;
+  discount: number = 0;
 
 
 
@@ -85,7 +87,7 @@ export class ShoppingViewComponent {
     private danhMucService : DanhMucService,
     private thanhToanService: ThanhToanService,
     private activatedRoute: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
 
     ) {
       this.thanhToanDto = {
@@ -111,8 +113,6 @@ export class ShoppingViewComponent {
     this.loadChiTietSP();
     this.loadMaHoaDonFromLocalStorage();
     this.loadDanhMuc();
-    this.calculateTienTraLai();
-    this.calculateTienTraLai();
     this.getCustomer();
   }
   
@@ -125,9 +125,9 @@ export class ShoppingViewComponent {
       const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
       const tongTien = this.calculateThanhTien();
       hoaDon.tongTien = tongTien;
-      hoaDon.khachHang = this.customer
-      hoaDon.voucher = this.voucher
-      
+      hoaDon.khachHang = this.customer;
+      hoaDon.voucher = this.voucher;
+      hoaDon.tongTienGiam = this.discount;
 
       const ThanhToanDto: ThanhToanDto = {
         hoaDonDto: hoaDon,
@@ -158,8 +158,19 @@ export class ShoppingViewComponent {
           });
         }
       );
-    } else {
-      console.error('Không tìm thấy hóa đơn nào');
+      this.clearForm();
+      this.loadHoaDonGioHang();
+    } else if(storedHoaDon === null){
+      this.snackBar.open('Vui lòng tạo hóa đơn!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }
+    else if(storedHoaDon && storedGioHangChiTiet === null){
+      this.snackBar.open('Vui lòng chọn sản phẩm!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
     }
   }
 
@@ -220,30 +231,21 @@ calculateTotal(): number {
   return total;
 }
 
-calculateGiamGia(): number {
+calculateGiamGia(): void {
   let total = this.calculateTotal();
   const storedVoucher = localStorage.getItem('voucher');
-  let discount = 0;
 
   if (storedVoucher) {
     const voucher = JSON.parse(storedVoucher);
     const discountPercentage = voucher.giaTriGiam; // Assuming giaTriGiam is the discount percentage
-    discount = total * (discountPercentage / 100);
-    console.log(discount);
+    this.discount = total * (discountPercentage / 100);
+    console.log(this.discount);
   }
-
-  return discount;
 }
 
 calculateThanhTien(): number {
   let total = this.calculateTotal();
-  let discount = this.calculateGiamGia();
-  return total - discount;
-}
-
-calculateTienTraLai(): void {
-  this.thanhTien = this.calculateThanhTien();
-  this.tienTraLai = this.tienKhachDua - this.thanhTien;
+  return total - this.discount;
 }
 
 deleteHoaDonFromLocalStorage(): void {
@@ -280,6 +282,16 @@ deleteHoaDonFromLocalStorage(): void {
   } else {
     console.error('Không tìm thấy thông tin hóa đơn trong localStorage');
   }
+}
+
+clearForm(): void {
+
+  this.sdtValue = '';
+  this.customer = null;
+  this.voucher = null;
+  this.tienKhachDua = 0;
+  this.thanhTien = 0;
+  this.tienTraLai = 0;
 }
 
 
@@ -354,6 +366,9 @@ addToCart(): void {
       panelClass: ['error-snackbar']
     });
   }
+
+  this.quantity = 1;
+  this.closeAddToCartModal();
 }
 increaseQuantity() {
   this.quantity++;
@@ -547,6 +562,14 @@ resetGioHang(): void {
     }
   }
 
+  showModalAdd(): void {
+    if (this.addToCartModal && this.addToCartModal.nativeElement) {
+      this.addToCartModal.nativeElement.classList.add('show');
+      this.addToCartModal.nativeElement.style.display = 'block';
+      this.loadVoucher();
+    }
+  }
+
   showModal(): void {
     if (this.voucherModal && this.voucherModal.nativeElement) {
       this.voucherModal.nativeElement.classList.add('show');
@@ -594,6 +617,13 @@ resetGioHang(): void {
     }
   }
 
+  closeAddToCartModal(): void {
+    if (this.addToCartModal && this.addToCartModal.nativeElement) {
+      this.addToCartModal.nativeElement.classList.remove('show');
+      this.addToCartModal.nativeElement.style.display = 'none';
+    }
+  }
+
   getVoucherById(id: string) {
     this.voucherService.getVoucherByid(id)
       .subscribe(
@@ -601,6 +631,8 @@ resetGioHang(): void {
           if (response.result) {
             this.voucher = response.result;
             localStorage.setItem('voucher', JSON.stringify(response.result));
+            this.calculateThanhTien();
+            this.calculateGiamGia();
             this.router.navigate(['/admin/shopping'])
           }
         })
@@ -681,6 +713,19 @@ resetGioHang(): void {
       localStorage.removeItem('kh') // xoá kh đi để ko lưu lại thông tin khách hàng vừa nhập hoặc đang nhập
     }
   }
+
+  onTienKhachDua(event: any): void {
+    const numericValue = parseFloat(event); // Chuyển đổi giá trị từ chuỗi sang số
+    if (!isNaN(numericValue)) {
+        this.tienKhachDua = numericValue; // Gán giá trị vào tienKhachDua
+        this.calculateTienTraLai(); // Tính toán lại tiền trả lại
+    }
+}
+
+calculateTienTraLai(): void {
+    this.thanhTien = this.calculateThanhTien();
+    this.tienTraLai = this.tienKhachDua - this.thanhTien; // Tính toán tiền trả lại
+}
 
   // showAddCustomerModal() {
   //   const modalElement = document.getElementById('addCustomerModal');
