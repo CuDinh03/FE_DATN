@@ -95,6 +95,7 @@ export class ShoppingViewComponent {
           khachHangId: '',
           nhanVienId: '',
           tongTien:'',
+          voucher: '',
           tongTienGiam: '',
           ngayTao: new Date(),
           ngaySua: new Date(),
@@ -104,7 +105,7 @@ export class ShoppingViewComponent {
       };
 
   }
-  
+
   ngOnInit(): void {
     this.loadHoaDonGioHang();
     this.loadChiTietSP();
@@ -112,20 +113,20 @@ export class ShoppingViewComponent {
     this.loadDanhMuc();
     this.calculateTienTraLai();
     this.calculateTienTraLai();
+    this.getCustomer();
   }
   
   onSubmitPayment() {
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
-    const storedVoucher = localStorage.getItem('voucher');
-
 
     if (storedHoaDon && storedGioHangChiTiet ) {
       const hoaDon = JSON.parse(storedHoaDon);
       const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
-  
       const tongTien = this.calculateThanhTien();
       hoaDon.tongTien = tongTien;
+      hoaDon.khachHang = this.customer
+      hoaDon.voucher = this.voucher
       
 
       const ThanhToanDto: ThanhToanDto = {
@@ -142,6 +143,12 @@ export class ShoppingViewComponent {
             });
            this.loadHoaDonGioHang();
           this.loadGioHangChiTiet(this.hoaDon.id);
+          localStorage.removeItem('voucher');
+          localStorage.removeItem('kh');
+          localStorage.removeItem('dbhoadon');
+          localStorage.removeItem('gioHangChiTiet');
+          localStorage.removeItem('hoaDon');
+          localStorage.removeItem('gioHang');
           }
         },
         (error: HttpErrorResponse) => {
@@ -152,7 +159,7 @@ export class ShoppingViewComponent {
         }
       );
     } else {
-      console.error('Không tìm thấy hóa đơn hoặc giỏ hàng chi tiết nào nào trong local storage');
+      console.error('Không tìm thấy hóa đơn nào');
     }
   }
 
@@ -342,7 +349,10 @@ addToCart(): void {
     // Gọi phương thức addProductToCart với id giỏ hàng, id sản phẩm và số lượng
     this.addProductToCart(gioHang.id, chiTietSanPham.id, this.quantity);
   } else {
-    console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
+    this.snackBar.open('Không tìm thấy giỏ hàng nào. Vui lòng nhập lại!', 'Đóng', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
   }
 }
 increaseQuantity() {

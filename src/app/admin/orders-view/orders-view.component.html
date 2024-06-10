@@ -68,18 +68,26 @@
                       <td>{{listHoaDon.ghiChu}}</td>
                       <td>{{ formatDate(listHoaDon.ngayTao) }}</td>
                       <td>{{listHoaDon.tongTien}}</td>
-                      <td>{{listHoaDon.tongTienGiam}}</td>
-                      <td>{{listHoaDon.khachHang}}</td>
+                      <td>
+                        <p *ngIf="listHoaDon.voucher != null">{{listHoaDon.voucher.giaTriGiam}}%</p>
+                        <p *ngIf="listHoaDon.voucher === null"> - </p>
+                      </td>
                       <td>{{listHoaDon.nhanVien.ten}}</td>
+                      <td>
+                        <p *ngIf="listHoaDon.khachHang != null">{{listHoaDon.khachHang.ten}}</p>
+                        <p *ngIf="listHoaDon.khachHang === null"> - </p>
+                      </td>
                       <td [ngClass]="{'text-success': !listHoaDon.trangThai, 'text-danger': listHoaDon.trangThai}">
                         {{listHoaDon.trangThai ? 'Chưa thanh toán' : 'Đã thanh toán'}}
                       </td>
+                      <td>{{listHoaDon.nhanVien.ten}}</td>
                       <td>
-                        <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(listHoaDon.id)">
+                        <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
+                          data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(listHoaDon.id)">
                           <i class="ti ti-edit"></i>
                         </button>
                       </td>
-        
+
                     </tr>
                   </tbody>
                 </table>
@@ -103,10 +111,11 @@
     </div>
   </div>
 
-  
-  
+
+
   <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -116,36 +125,36 @@
         <div class="modal-body">
           <div class="container-fluid" *ngIf="!noProductsFound">
             <div class="d-flex justify-content-end mt-3 mb-3">
-                    <a class="btn btn-primary" style="color: white;">Làm mới</a>
+              <a class="btn btn-primary" style="color: white;">Làm mới</a>
             </div>
             <table class="table">
-                <thead>
-                    <tr>
-                        <th>Mã hóa đơn</th>
-                        <th>Mã sản phẩm</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Màu sắc</th>
-                        <th>Kích thước</th>
-                        <th>Số lượng</th>
-                        <th>Đơn giá</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let chiTiet of hoaDonChiTiet">
-                        <td>{{ chiTiet.hoaDon.ma }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.sanPham.ma }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
-                        <td>{{ chiTiet.soLuong }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
-                    </tr>
-                </tbody>
+              <thead>
+                <tr>
+                  <th>Mã hóa đơn</th>
+                  <th>Mã sản phẩm</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Màu sắc</th>
+                  <th>Kích thước</th>
+                  <th>Số lượng</th>
+                  <th>Đơn giá</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let chiTiet of hoaDonChiTiet">
+                  <td>{{ chiTiet.hoaDon.ma }}</td>
+                  <td>{{ chiTiet.chiTietSanPham.sanPham.ma }}</td>
+                  <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
+                  <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
+                  <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
+                  <td>{{ chiTiet.soLuong }}</td>
+                  <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
+                </tr>
+              </tbody>
             </table>
-        </div>
-        <div *ngIf="noProductsFound" class="m-5 d-flex justify-content-center">
+          </div>
+          <div *ngIf="noProductsFound" class="m-5 d-flex justify-content-center">
             <p>Chưa có sản phẩm nào</p>
-        </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -154,5 +163,3 @@
     </div>
   </div>
 </div>
-
-
