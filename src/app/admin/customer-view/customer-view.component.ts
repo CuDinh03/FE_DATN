@@ -48,7 +48,7 @@ export class CustomerViewComponent implements OnInit{
       ma: [''],
       id: [''],
       // taiKhoan:[''],
-      taiKhoan:Object,
+      taiKhoan: Object,
       email:[''],
       sdt:[''],
       gioiTinh:[''],
