@@ -32,6 +32,7 @@ import { count } from 'rxjs';
 })
 export class ShoppingViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
+  @ViewChild('addToCartModal') addToCartModal!: ElementRef;
   vouchers: any[] = [];
   listHoaDon: any = {};
   gioHang: any = {};
@@ -109,8 +110,7 @@ export class ShoppingViewComponent {
     this.loadChiTietSP();
     this.loadMaHoaDonFromLocalStorage();
     this.loadDanhMuc();
-    this.calculateTienTraLai();
-    this.calculateTienTraLai();
+    this.getCustomer();
   }
 
   onSubmitPayment() {
@@ -273,6 +273,16 @@ export class ShoppingViewComponent {
       console.error('Không tìm thấy thông tin hóa đơn trong localStorage');
     }
   }
+
+clearForm(): void {
+
+  this.sdtValue = '';
+  this.customer = null;
+  this.voucher = null;
+  this.tienKhachDua = 0;
+  this.thanhTien = 0;
+  this.tienTraLai = 0;
+}
 
 
   loadHoaDonById(idHoaDon: string): void {
@@ -536,6 +546,14 @@ export class ShoppingViewComponent {
     }
   }
 
+  showModalAdd(): void {
+    if (this.addToCartModal && this.addToCartModal.nativeElement) {
+      this.addToCartModal.nativeElement.classList.add('show');
+      this.addToCartModal.nativeElement.style.display = 'block';
+      this.loadVoucher();
+    }
+  }
+
   showModal(): void {
     if (this.voucherModal && this.voucherModal.nativeElement) {
       this.voucherModal.nativeElement.classList.add('show');
@@ -583,6 +601,13 @@ export class ShoppingViewComponent {
     }
   }
 
+  closeAddToCartModal(): void {
+    if (this.addToCartModal && this.addToCartModal.nativeElement) {
+      this.addToCartModal.nativeElement.classList.remove('show');
+      this.addToCartModal.nativeElement.style.display = 'none';
+    }
+  }
+
   getVoucherById(id: string) {
     this.voucherService.getVoucherByid(id)
       .subscribe(
@@ -590,6 +615,8 @@ export class ShoppingViewComponent {
           if (response.result) {
             this.voucher = response.result;
             localStorage.setItem('voucher', JSON.stringify(response.result));
+            this.calculateThanhTien();
+            this.calculateGiamGia();
             this.router.navigate(['/admin/shopping'])
           }
         })
@@ -670,6 +697,19 @@ export class ShoppingViewComponent {
       localStorage.removeItem('kh') // xoá kh đi để ko lưu lại thông tin khách hàng vừa nhập hoặc đang nhập
     }
   }
+
+  onTienKhachDua(event: any): void {
+    const numericValue = parseFloat(event); // Chuyển đổi giá trị từ chuỗi sang số
+    if (!isNaN(numericValue)) {
+        this.tienKhachDua = numericValue; // Gán giá trị vào tienKhachDua
+        this.calculateTienTraLai(); // Tính toán lại tiền trả lại
+    }
+}
+
+calculateTienTraLai(): void {
+    this.thanhTien = this.calculateThanhTien();
+    this.tienTraLai = this.tienKhachDua - this.thanhTien; // Tính toán tiền trả lại
+}
 
   // showAddCustomerModal() {
   //   const modalElement = document.getElementById('addCustomerModal');
