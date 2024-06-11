@@ -15,7 +15,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Validators } from '@angular/forms';
 import { AuthenticationService } from './../../service/AuthenticationService';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
@@ -74,37 +73,37 @@ export class ShoppingViewComponent {
 
 
   constructor(private auth: AuthenticationService,
-    private router: Router,
-    private hoaDonGioHangService: HoaDonGioHangService,
-    private gioHangChiTietService: GioHangChiTietService,
-    private chiTietSanPhamService: SanPhamCTService,
-    private voucherService: VoucherService,
-    private khachHangService: KhachHangService,
-    private hoaDonService: HoaDonService,
-    private gioHangService: GioHangService,
-    private danhMucService : DanhMucService,
-    private thanhToanService: ThanhToanService,
-    private activatedRoute: ActivatedRoute,
-    private snackBar: MatSnackBar
+              private router: Router,
+              private hoaDonGioHangService: HoaDonGioHangService,
+              private gioHangChiTietService: GioHangChiTietService,
+              private chiTietSanPhamService: SanPhamCTService,
+              private voucherService: VoucherService,
+              private khachHangService: KhachHangService,
+              private hoaDonService: HoaDonService,
+              private gioHangService: GioHangService,
+              private danhMucService : DanhMucService,
+              private thanhToanService: ThanhToanService,
+              private activatedRoute: ActivatedRoute,
+              private snackBar: MatSnackBar
 
-    ) {
-      this.thanhToanDto = {
-        hoaDonDto: {
-          id: '',
-          ma: '',
-          khachHangId: '',
-          nhanVienId: '',
-          tongTien:'',
-          tongTienGiam: '',
-          ngayTao: new Date(),
-          ngaySua: new Date(),
-          trangThai: true,
-        },
-        gioHangChiTietDtoList: []
-      };
+  ) {
+    this.thanhToanDto = {
+      hoaDonDto: {
+        id: '',
+        ma: '',
+        khachHangId: '',
+        nhanVienId: '',
+        tongTien:'',
+        tongTienGiam: '',
+        ngayTao: new Date(),
+        ngaySua: new Date(),
+        trangThai: true,
+      },
+      gioHangChiTietDtoList: []
+    };
 
   }
-  
+
   ngOnInit(): void {
     this.loadHoaDonGioHang();
     this.loadChiTietSP();
@@ -113,46 +112,46 @@ export class ShoppingViewComponent {
     this.calculateTienTraLai();
     this.calculateTienTraLai();
   }
-  
+
   onSubmitPayment() {
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
-    const storedVoucher = localStorage.getItem('voucher');
+      if (storedHoaDon && storedGioHangChiTiet) {
+        const hoaDon = JSON.parse(storedHoaDon);
+        const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
+
+        const tongTien = this.calculateThanhTien();
+        hoaDon.tongTien = tongTien;
+        // @ts-ignore
+        hoaDon.voucher = JSON.parse(localStorage.getItem('voucher'));
 
 
-    if (storedHoaDon && storedGioHangChiTiet ) {
-      const hoaDon = JSON.parse(storedHoaDon);
-      const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
-  
-      const tongTien = this.calculateThanhTien();
-      hoaDon.tongTien = tongTien;
-      
+        const ThanhToanDto: ThanhToanDto = {
+          hoaDonDto: hoaDon,
+          gioHangChiTietDtoList: gioHangChiTiet,
+        };
 
-      const ThanhToanDto: ThanhToanDto = {
-        hoaDonDto: hoaDon,
-        gioHangChiTietDtoList: gioHangChiTiet,
-      };
-  
-      this.thanhToanService.thanhToan(ThanhToanDto).subscribe(
-        (response: ApiResponse<ThanhToanDto>) => {
-          if (response.result) {
-            this.snackBar.open('Thanh toán thành công!', 'Đóng', {
+        this.thanhToanService.thanhToan(ThanhToanDto).subscribe(
+          (response: ApiResponse<ThanhToanDto>) => {
+            if (response.result) {
+              this.snackBar.open('Thanh toán thành công!', 'Đóng', {
+                duration: 3000,
+                panelClass: ['success-snackbar']
+              });
+              this.loadHoaDonGioHang();
+              this.loadGioHangChiTiet(this.hoaDon.id);
+            }
+          },
+          (error: HttpErrorResponse) => {
+            this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
               duration: 3000,
-              panelClass: ['success-snackbar']
+              panelClass: ['error-snackbar']
             });
-           this.loadHoaDonGioHang();
-          this.loadGioHangChiTiet(this.hoaDon.id);
           }
-        },
-        (error: HttpErrorResponse) => {
-          this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
-            duration: 3000,
-            panelClass: ['error-snackbar']
-          });
-        }
-      );
-    } else {
-      console.error('Không tìm thấy hóa đơn hoặc giỏ hàng chi tiết nào nào trong local storage');
+        );
+      } else {
+        console.error('Không tìm thấy hóa đơn hoặc giỏ hàng chi tiết nào nào trong local storage');
+
     }
   }
 
@@ -160,7 +159,7 @@ export class ShoppingViewComponent {
     this.hoaDonService.getHoaDonByMa(maHoaDon).subscribe(
       (response: ApiResponse<any>) =>{
         if(response.result){
-          this.hoaDon = response.result  
+          this.hoaDon = response.result
           localStorage.setItem('dbhoadon', JSON.stringify(this.hoaDon));
         }
       }
@@ -169,115 +168,115 @@ export class ShoppingViewComponent {
 
   loadGioHangChiTiet(idGioHang: string): void {
     this.gioHangChiTietService.getAll(idGioHang).subscribe(
-            (response: ApiResponse<any>) => {
+      (response: ApiResponse<any>) => {
         if (response.result && response.result.length > 0) {
-            this.gioHangChiTiet = response.result;
+          this.gioHangChiTiet = response.result;
           localStorage.setItem('gioHangChiTiet', JSON.stringify(this.gioHangChiTiet));
           this.thanhTien = this.calculateThanhTien();
-            this.noProductsFound = false; // Đặt noProductsFound là false khi có dữ liệu sản phẩm
+          this.noProductsFound = false; // Đặt noProductsFound là false khi có dữ liệu sản phẩm
         } else {
-            this.noProductsFound = true; // Đặt noProductsFound là true khi không có dữ liệu sản phẩm
-            this.gioHangChiTiet = [];
+          this.noProductsFound = true; // Đặt noProductsFound là true khi không có dữ liệu sản phẩm
+          this.gioHangChiTiet = [];
         }
-    },
-    (error: HttpErrorResponse) => {
+      },
+      (error: HttpErrorResponse) => {
         if (error.error.code === ErrorCode.NO_CARTDETAIl_FOUND) {
-            this.noProductsFound = true;
-            this.gioHangChiTiet = [];
+          this.noProductsFound = true;
+          this.gioHangChiTiet = [];
         } else {
-            console.error('Unexpected error:', error);
+          console.error('Unexpected error:', error);
         }
-    }
-);
-}
-
-
-loadDanhMuc(): void {
-  this.danhMucService.getAllDanhMuc().subscribe(
-    (response: ApiResponse<DanhMucDto[]>) => {
-      if (response.result) {
-        this.danhMucList = response.result;
       }
-    },
-    (error: HttpErrorResponse) => {
-      console.error('Error loading danh muc:', error);
-    }
-  );
-}
-
-calculateTotal(): number {
-  let total = 0;
-  this.gioHangChiTiet.forEach((item: any) => {
-    total += item.soLuong * item.chiTietSanPham.giaBan;
-  });
-  return total;
-}
-
-calculateGiamGia(): number {
-  let total = this.calculateTotal();
-  const storedVoucher = localStorage.getItem('voucher');
-  let discount = 0;
-
-  if (storedVoucher) {
-    const voucher = JSON.parse(storedVoucher);
-    const discountPercentage = voucher.giaTriGiam; // Assuming giaTriGiam is the discount percentage
-    discount = total * (discountPercentage / 100);
-    console.log(discount);
+    );
   }
 
-  return discount;
-}
 
-calculateThanhTien(): number {
-  let total = this.calculateTotal();
-  let discount = this.calculateGiamGia();
-  return total - discount;
-}
-
-calculateTienTraLai(): void {
-  this.thanhTien = this.calculateThanhTien();
-  this.tienTraLai = this.tienKhachDua - this.thanhTien;
-}
-
-deleteHoaDonFromLocalStorage(): void {
-  const storedHoaDon = localStorage.getItem('hoaDon');
-  if (storedHoaDon) {
-    const hoaDon: any = JSON.parse(storedHoaDon);
-    const idHoaDon = hoaDon.id;
-
-    const isConfirmed = confirm('Bạn có chắc chắn muốn xóa hóa đơn này không?');
-
-    if (isConfirmed) {
-      this.hoaDonService.deleteHoaDon(idHoaDon).subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.code === 0) { // Giả sử API trả về một thuộc tính 'success'
-            this.loadHoaDonGioHang(); // Tải lại danh sách hóa đơn
-            this.snackBar.open('Xóa hóa đơn thành công!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-            this.router.navigate(['/admin/shopping']);
-          } else {
-            this.snackBar.open('Có lỗi sảy ra khi xóa hóa đơn. Vui lòng thử lại sau!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-          }
-        },
-        (error: HttpErrorResponse) => {
-          console.error('Có lỗi xảy ra khi xóa hóa đơn:', error);
-          alert('Có lỗi xảy ra khi xóa hóa đơn.');
+  loadDanhMuc(): void {
+    this.danhMucService.getAllDanhMuc().subscribe(
+      (response: ApiResponse<DanhMucDto[]>) => {
+        if (response.result) {
+          this.danhMucList = response.result;
         }
-      );
-    }
-  } else {
-    console.error('Không tìm thấy thông tin hóa đơn trong localStorage');
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Error loading danh muc:', error);
+      }
+    );
   }
-}
+
+  calculateTotal(): number {
+    let total = 0;
+    this.gioHangChiTiet.forEach((item: any) => {
+      total += item.soLuong * item.chiTietSanPham.giaBan;
+    });
+    return total;
+  }
+
+  calculateGiamGia(): number {
+    let total = this.calculateTotal();
+    const storedVoucher = localStorage.getItem('voucher');
+    let discount = 0;
+
+    if (storedVoucher) {
+      const voucher = JSON.parse(storedVoucher);
+      const discountPercentage = voucher.giaTriGiam; // Assuming giaTriGiam is the discount percentage
+      discount = total * (discountPercentage / 100);
+      console.log(discount);
+    }
+
+    return discount;
+  }
+
+  calculateThanhTien(): number {
+    let total = this.calculateTotal();
+    let discount = this.calculateGiamGia();
+    return total - discount;
+  }
+
+  calculateTienTraLai(): void {
+    this.thanhTien = this.calculateThanhTien();
+    this.tienTraLai = this.tienKhachDua - this.thanhTien;
+  }
+
+  deleteHoaDonFromLocalStorage(): void {
+    const storedHoaDon = localStorage.getItem('hoaDon');
+    if (storedHoaDon) {
+      const hoaDon: any = JSON.parse(storedHoaDon);
+      const idHoaDon = hoaDon.id;
+
+      const isConfirmed = confirm('Bạn có chắc chắn muốn xóa hóa đơn này không?');
+
+      if (isConfirmed) {
+        this.hoaDonService.deleteHoaDon(idHoaDon).subscribe(
+          (response: ApiResponse<any>) => {
+            if (response.code === 0) { // Giả sử API trả về một thuộc tính 'success'
+              this.loadHoaDonGioHang(); // Tải lại danh sách hóa đơn
+              this.snackBar.open('Xóa hóa đơn thành công!', 'Đóng', {
+                duration: 3000,
+                panelClass: ['success-snackbar']
+              });
+              this.router.navigate(['/admin/shopping']);
+            } else {
+              this.snackBar.open('Có lỗi sảy ra khi xóa hóa đơn. Vui lòng thử lại sau!', 'Đóng', {
+                duration: 3000,
+                panelClass: ['success-snackbar']
+              });
+            }
+          },
+          (error: HttpErrorResponse) => {
+            console.error('Có lỗi xảy ra khi xóa hóa đơn:', error);
+            alert('Có lỗi xảy ra khi xóa hóa đơn.');
+          }
+        );
+      }
+    } else {
+      console.error('Không tìm thấy thông tin hóa đơn trong localStorage');
+    }
+  }
 
 
-loadHoaDonById(idHoaDon: string): void {
-  this.hoaDonService.getHoaDonById(idHoaDon)
+  loadHoaDonById(idHoaDon: string): void {
+    this.hoaDonService.getHoaDonById(idHoaDon)
       .subscribe(
         (response: ApiResponse<any>) => {
           if (response.result) {
@@ -289,10 +288,10 @@ loadHoaDonById(idHoaDon: string): void {
 
           }
         })
-}
+  }
 
-loadGioHangById(idGioHang: string): void {
-  this.gioHangService.getGioHangById(idGioHang)
+  loadGioHangById(idGioHang: string): void {
+    this.gioHangService.getGioHangById(idGioHang)
       .subscribe(
         (response: ApiResponse<any>) => {
           if (response.result) {
@@ -301,10 +300,10 @@ loadGioHangById(idGioHang: string): void {
             this.router.navigate(['/admin/shopping'])
           }
         })
-}
+  }
 
-loadChiTietSanPhamById(idChiTietSanPham: string): void {
-  this.chiTietSanPhamService.getChiTietSanPhamById(idChiTietSanPham)
+  loadChiTietSanPhamById(idChiTietSanPham: string): void {
+    this.chiTietSanPhamService.getChiTietSanPhamById(idChiTietSanPham)
       .subscribe(
         (response: ApiResponse<any>) => {
           if (response.result) {
@@ -313,83 +312,83 @@ loadChiTietSanPhamById(idChiTietSanPham: string): void {
             this.router.navigate(['/admin/shopping'])
           }
         })
-}
-
-addToCart(): void {
-  const storeChiTietSanPham = localStorage.getItem('chiTietSanPham');
-  const storeChiTietGioHang = localStorage.getItem('gioHang');
-  
-  if (storeChiTietSanPham && storeChiTietGioHang) {
-    const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-    
-    const gioHang = JSON.parse(storeChiTietGioHang);
-    
-    if (this.quantity <= 0) {
-      this.snackBar.open('Số lượng nhập vào phải lớn hơn 0. Vui lòng nhập lại!', 'Đóng', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
-      return;
-    }
-
-    if (this.quantity > chiTietSanPham.soLuong) {
-      this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
-      return;
-    }
-    // Gọi phương thức addProductToCart với id giỏ hàng, id sản phẩm và số lượng
-    this.addProductToCart(gioHang.id, chiTietSanPham.id, this.quantity);
-  } else {
-    console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
   }
-}
-increaseQuantity() {
-  this.quantity++;
-}
 
-decreaseQuantity() {
-  if (this.quantity > 1) {
-    this.quantity--;
-  }
-}
+  addToCart(): void {
+    const storeChiTietSanPham = localStorage.getItem('chiTietSanPham');
+    const storeChiTietGioHang = localStorage.getItem('gioHang');
 
-addProductToCart(idGioHang: string, idSanPhamChiTiet: string, soLuong: number): void {
-  this.gioHangChiTietService.addProductToCart(idGioHang, idSanPhamChiTiet, soLuong).subscribe(
-    response => {
-      this.snackBar.open('Thêm sản phẩm vào giỏ hàng thành công', 'Đóng', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
+    if (storeChiTietSanPham && storeChiTietGioHang) {
+      const chiTietSanPham = JSON.parse(storeChiTietSanPham);
+
+      const gioHang = JSON.parse(storeChiTietGioHang);
+
+      if (this.quantity <= 0) {
+        this.snackBar.open('Số lượng nhập vào phải lớn hơn 0. Vui lòng nhập lại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+        return;
       }
-      );
-      this.loadChiTietSP();
-    this.loadGioHangChiTiet(idGioHang)
-    },
-    error => {
-      console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
-      // Xử lý lỗi ở đây nếu cần
+
+      if (this.quantity > chiTietSanPham.soLuong) {
+        this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
+      // Gọi phương thức addProductToCart với id giỏ hàng, id sản phẩm và số lượng
+      this.addProductToCart(gioHang.id, chiTietSanPham.id, this.quantity);
+    } else {
+      console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
     }
-  );
-}
-
-
-loadMaHoaDonFromLocalStorage(): void {
-  const storedHoaDon = localStorage.getItem('listHoaDon');
-  if (storedHoaDon) {
-    const hoaDon = JSON.parse(storedHoaDon);
-    this.maHoaDon = hoaDon.ma; // Giả sử mã hóa đơn nằm ở thuộc tính 'ma'
   }
-}
+  increaseQuantity() {
+    this.quantity++;
+  }
 
-loadChiTietSP(): void {
-  this.chiTietSanPhamService.getSanPhamChiTiet(this.page, this.size)
-    .subscribe(response => {
-      this.listSanPhamChiTiet = response.result.content;
-      this.totalElements = response.result.totalElements;
-      this.totalPages = response.result.totalPages;
-    });
-}
+  decreaseQuantity() {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
+  addProductToCart(idGioHang: string, idSanPhamChiTiet: string, soLuong: number): void {
+    this.gioHangChiTietService.addProductToCart(idGioHang, idSanPhamChiTiet, soLuong).subscribe(
+      response => {
+        this.snackBar.open('Thêm sản phẩm vào giỏ hàng thành công', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          }
+        );
+        this.loadChiTietSP();
+        this.loadGioHangChiTiet(idGioHang)
+      },
+      error => {
+        console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
+        // Xử lý lỗi ở đây nếu cần
+      }
+    );
+  }
+
+
+  loadMaHoaDonFromLocalStorage(): void {
+    const storedHoaDon = localStorage.getItem('listHoaDon');
+    if (storedHoaDon) {
+      const hoaDon = JSON.parse(storedHoaDon);
+      this.maHoaDon = hoaDon.ma; // Giả sử mã hóa đơn nằm ở thuộc tính 'ma'
+    }
+  }
+
+  loadChiTietSP(): void {
+    this.chiTietSanPhamService.getSanPhamChiTiet(this.page, this.size)
+      .subscribe(response => {
+        this.listSanPhamChiTiet = response.result.content;
+        this.totalElements = response.result.totalElements;
+        this.totalPages = response.result.totalPages;
+      });
+  }
 
   handleErrorGetAllHoaDonCT(error: HttpErrorResponse): void {
     console.error(error);
@@ -435,35 +434,35 @@ loadChiTietSP(): void {
     }
     this.gioHangChiTietService.updateGioHang(idGioHangChiTiet, soLuong).subscribe(
       (response: ApiResponse<any>) => {
-          console.log(response.message);
-          if (soLuong === 0) {
-            this.snackBar.open('Xóa thành công!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-            
-          } else {
-            this.snackBar.open('Sửa số lượng thành công!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-          }
-          this.loadChiTietSP();
-          this.loadGioHangChiTiet(response.result.gioHang.id);
+        console.log(response.message);
+        if (soLuong === 0) {
+          this.snackBar.open('Xóa thành công!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+
+        } else {
+          this.snackBar.open('Sửa số lượng thành công!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        }
+        this.loadChiTietSP();
+        this.loadGioHangChiTiet(response.result.gioHang.id);
       },
       (error: HttpErrorResponse) => {
-          if (error.status === 400 ) {
-            this.snackBar.open('Số lượng nhập vào vượt quá số lượng hiện có. Vui lòng nhập lại!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['error-snackbar']
-            });
-              const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
-              if (item) {
-                  item.soLuong = originalSoLuong;
-              }
-          } else {
-              console.error('Error updating gio hang:', error);
+        if (error.status === 400 ) {
+          this.snackBar.open('Số lượng nhập vào vượt quá số lượng hiện có. Vui lòng nhập lại!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+          const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
+          if (item) {
+            item.soLuong = originalSoLuong;
           }
+        } else {
+          console.error('Error updating gio hang:', error);
+        }
       }
     );
   }
@@ -477,7 +476,7 @@ loadChiTietSP(): void {
     this.showConfirmationModal = false;
     this.showAddModal = false;
   }
-  
+
 
   deleteConfirmed() {
     this.deleteGioHangChiTiet(this.itemToDeleteId);
@@ -488,28 +487,28 @@ loadChiTietSP(): void {
     this.updateGioHangChiTiet(idGioHangChiTiet, 0);
   }
 
-resetGioHang(): void {
-  // Đặt lại số lượng sản phẩm về 0
-  this.gioHangChiTiet.forEach(item => {
-    item.soLuong = 0;
-  });
+  resetGioHang(): void {
+    // Đặt lại số lượng sản phẩm về 0
+    this.gioHangChiTiet.forEach(item => {
+      item.soLuong = 0;
+    });
 
-  // Cập nhật giỏ hàng chi tiết bằng cách gọi API cho từng sản phẩm
-  this.gioHangChiTiet.forEach(item => {
-    this.gioHangChiTietService.updateGioHang(item.id, item.soLuong).subscribe(
-      (response: ApiResponse<any>) => {
-        console.log(response.message);
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Error updating gio hang:', error);
-      }
-    );
-  });
+    // Cập nhật giỏ hàng chi tiết bằng cách gọi API cho từng sản phẩm
+    this.gioHangChiTiet.forEach(item => {
+      this.gioHangChiTietService.updateGioHang(item.id, item.soLuong).subscribe(
+        (response: ApiResponse<any>) => {
+          console.log(response.message);
+        },
+        (error: HttpErrorResponse) => {
+          console.error('Error updating gio hang:', error);
+        }
+      );
+    });
 
-  // Load lại chi tiết giỏ hàng và chi tiết sản phẩm sau khi cập nhật
-  this.loadGioHangChiTiet(this.gioHang.id);  // Giả sử `this.gioHang.id` là ID của giỏ hàng hiện tại
-  this.loadChiTietSP();
-}
+    // Load lại chi tiết giỏ hàng và chi tiết sản phẩm sau khi cập nhật
+    this.loadGioHangChiTiet(this.gioHang.id);  // Giả sử `this.gioHang.id` là ID của giỏ hàng hiện tại
+    this.loadChiTietSP();
+  }
 
   createHoaDon(): void {
     this.submitted = true;
@@ -703,7 +702,7 @@ resetGioHang(): void {
   //   }
   // }
 
-   formatDate(dateString: string): string {
+  formatDate(dateString: string): string {
     const date = new Date(dateString);
 
     const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if necessary
@@ -711,6 +710,6 @@ resetGioHang(): void {
     const year = date.getFullYear(); // Get full year
 
     return `${day}/${month}/${year}`; // Return in the desired format (dd/MM/yyyy)
-}
+  }
 
 }
