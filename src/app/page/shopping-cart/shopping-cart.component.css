@@ -2,6 +2,7 @@
     max-width: 80px;
     /* Thay đổi giá trị này theo kích thước mong muốn */
     height: auto;
+    margin-right: 5px;
 }
 
 .header-card{
@@ -65,13 +66,13 @@ div .product_count .items-count {
 
 /* Định vị các nút tăng giảm */
 div .product_count .increase {
-    top: 52px;
+    top: 2.4rem;
     /* Điều chỉnh vị trí theo chiều dọc */
     border: none !important;
 }
 
 .product_count .reduced {
-    top: 72px;
+    top: 3.6rem;
     /* Điều chỉnh vị trí theo chiều dọc */
 }
 
