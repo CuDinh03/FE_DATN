@@ -14,8 +14,10 @@
   .img-thumbnail {
     cursor: pointer;
     transition: transform 0.2s;
-    max-width: 150px;  /* Adjust size as needed */
-    max-height: 150px; /* Adjust size as needed */
+    max-width: 90px;  /* Adjust size as needed */
+    max-height: 90px; /* Adjust size as needed */
+    margin-top: 5px;
+
   }
   
   .img-thumbnail:hover {
@@ -24,11 +26,12 @@
   
   .large-image-container {
     padding-left: 0;   /* Reduce padding to bring the images closer */
+    margin-top: 5px;
   }
   
   .large-image {
-    max-width: 90%;
-    height: auto;
+    max-width: 100%;
+    height: 100%;
   }
   
   .product-info {
