@@ -118,7 +118,7 @@
                             <label class="form-label">Khách hàng</label>
                             <div class="col-8">
                               <input type="text" class="form-control" id="sdt" name="sdt"
-                                     [(ngModel)]="thanhToanDto.hoaDonDto.khachHangId" (ngModelChange)="onSdtInputChange()" />
+                                     [(ngModel)]="sdtValue" (ngModelChange)="onSdtInputChange()" />
                             </div>
                             <div class="col-4">
                               <button type="button" class="btn btn-info" (click)="getCustomer()">Chọn</button>
@@ -147,13 +147,11 @@
                         </div>
                         <div class="mb-4">
                           <label class="form-label">Tiền khách đưa</label>
-                          <input type="text" class="form-control" [(ngModel)]="tienKhachDua"
-                                 (input)="calculateTienTraLai()" />
+                          <input type="text" class="form-control" id="tienKhachDua" name="tienKhachDua" [(ngModel)]="tienKhachDua" (ngModelChange)="onTienKhachDua($event)" />
                         </div>
                         <div class="mb-4">
                           <label class="form-label me-3">Tiền giảm:</label>
-                          <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">{{ calculateGiamGia()
-                            }}</span>
+                          <span *ngIf="voucher != null" class="form-label" style="color: #49BEFF;">{{ discount }}</span>
                         </div>
                         <div class="mb-4">
                           <label class="form-label">Thành tiền</label>
@@ -287,7 +285,7 @@
                       <td>{{ sanPhamChiTiet.soLuong }}</td>
                       <!-- (click)="themSanPhamVaoGioHang()" -->
                       <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
-                                  (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                                  (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)" (click)="showModalAdd()">
                         <i class="ti ti-plus"></i>
                       </button></td>
                     </tr>
@@ -316,11 +314,11 @@
     </div>
 
 
-    <div class="modal fade" #voucherModal tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+    <div class="modal fade" #voucherModal tabindex="-1" aria-labelledby="accountModalLabel1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="accountModalLabel">Danh sách voucher</h5>
+            <h5 class="modal-title" id="accountModalLabel1">Danh sách voucher</h5>
 
             <button type="button" class="btn-close" (click)="closeVoucherModal()" aria-label="Close"></button>
 
@@ -429,13 +427,13 @@
   </div>
 </div>
 
-<!-- Thêm sản phẩm model -->
-<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true" [ngClass]="{'is-active': showAddModal}">
-  <div class="modal-dialog" (click)="cancelDelete()">
+<div class="modal fade" #addToCartModal tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel1">Nhập số lượng</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="accountModalLabel">Nhập số lượng</h5>
+
+        <button type="button" class="btn-close" (click)="closeAddToCartModal()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="product_count mt-2">

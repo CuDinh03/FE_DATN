@@ -1,8 +1,5 @@
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { HoaDonDto } from './../../model/hoa-don-dto.model';
 import { ThanhToanDto } from './../../model/thanh-toan-dto.model';
-
-import { error } from '@angular/compiler-cli/src/transformers/util';
 import { KhachHangService } from './../../service/KhachHangService';
 import { VoucherService } from './../../service/VoucherService';
 import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
@@ -12,18 +9,14 @@ import { HoaDonService } from './../../service/HoaDonService';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Validators } from '@angular/forms';
 import { AuthenticationService } from './../../service/AuthenticationService';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
-import { HoaDonChiTietService } from 'src/app/service/HoaDonChiTietService';
 import { GioHangService } from 'src/app/service/GioHangService';
-import { GioHangChiTietDto } from 'src/app/model/gio-hang-chi-tiet-dto.model';
 import { ThanhToanService } from 'src/app/service/ThanhToanService';
-import { count } from 'rxjs';
 
 @Component({
   selector: 'app-shopping-view',
@@ -70,6 +63,7 @@ export class ShoppingViewComponent {
   showAddModal: boolean = false;
   itemToDeleteId: string = '';
   quantity: number = 1;
+  discount: number = 0;
 
 
 
@@ -85,7 +79,7 @@ export class ShoppingViewComponent {
               private danhMucService : DanhMucService,
               private thanhToanService: ThanhToanService,
               private activatedRoute: ActivatedRoute,
-              private snackBar: MatSnackBar
+              private snackBar: MatSnackBar,
 
   ) {
     this.thanhToanDto = {
@@ -95,6 +89,7 @@ export class ShoppingViewComponent {
         khachHangId: '',
         nhanVienId: '',
         tongTien:'',
+        voucher: '',
         tongTienGiam: '',
         ngayTao: new Date(),
         ngaySua: new Date(),
@@ -116,42 +111,58 @@ export class ShoppingViewComponent {
   onSubmitPayment() {
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
-      if (storedHoaDon && storedGioHangChiTiet) {
-        const hoaDon = JSON.parse(storedHoaDon);
-        const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
 
-        const tongTien = this.calculateThanhTien();
-        hoaDon.tongTien = tongTien;
-        // @ts-ignore
-        hoaDon.voucher = JSON.parse(localStorage.getItem('voucher'));
+    if (storedHoaDon && storedGioHangChiTiet ) {
+      const hoaDon = JSON.parse(storedHoaDon);
+      const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
+      const tongTien = this.calculateThanhTien();
+      hoaDon.tongTien = tongTien;
+      hoaDon.khachHang = this.customer;
+      hoaDon.voucher = this.voucher;
+      hoaDon.tongTienGiam = this.discount;
 
+      const ThanhToanDto: ThanhToanDto = {
+        hoaDonDto: hoaDon,
+        gioHangChiTietDtoList: gioHangChiTiet,
+      };
 
-        const ThanhToanDto: ThanhToanDto = {
-          hoaDonDto: hoaDon,
-          gioHangChiTietDtoList: gioHangChiTiet,
-        };
-
-        this.thanhToanService.thanhToan(ThanhToanDto).subscribe(
-          (response: ApiResponse<ThanhToanDto>) => {
-            if (response.result) {
-              this.snackBar.open('Thanh toán thành công!', 'Đóng', {
-                duration: 3000,
-                panelClass: ['success-snackbar']
-              });
-              this.loadHoaDonGioHang();
-              this.loadGioHangChiTiet(this.hoaDon.id);
-            }
-          },
-          (error: HttpErrorResponse) => {
-            this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+      this.thanhToanService.thanhToan(ThanhToanDto).subscribe(
+        (response: ApiResponse<ThanhToanDto>) => {
+          if (response.result) {
+            this.snackBar.open('Thanh toán thành công!', 'Đóng', {
               duration: 3000,
-              panelClass: ['error-snackbar']
+              panelClass: ['success-snackbar']
             });
+            this.loadHoaDonGioHang();
+            this.loadGioHangChiTiet(this.hoaDon.id);
+            localStorage.removeItem('voucher');
+            localStorage.removeItem('kh');
+            localStorage.removeItem('dbhoadon');
+            localStorage.removeItem('gioHangChiTiet');
+            localStorage.removeItem('hoaDon');
+            localStorage.removeItem('gioHang');
           }
-        );
-      } else {
-        console.error('Không tìm thấy hóa đơn hoặc giỏ hàng chi tiết nào nào trong local storage');
-
+        },
+        (error: HttpErrorResponse) => {
+          this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      );
+      this.clearForm();
+      this.loadHoaDonGioHang();
+    } else if(storedHoaDon === null){
+      this.snackBar.open('Vui lòng tạo hóa đơn!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }
+    else if(storedHoaDon && storedGioHangChiTiet === null){
+      this.snackBar.open('Vui lòng chọn sản phẩm!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
     }
   }
 
@@ -212,30 +223,21 @@ export class ShoppingViewComponent {
     return total;
   }
 
-  calculateGiamGia(): number {
+  calculateGiamGia(): void {
     let total = this.calculateTotal();
     const storedVoucher = localStorage.getItem('voucher');
-    let discount = 0;
 
     if (storedVoucher) {
       const voucher = JSON.parse(storedVoucher);
       const discountPercentage = voucher.giaTriGiam; // Assuming giaTriGiam is the discount percentage
-      discount = total * (discountPercentage / 100);
-      console.log(discount);
+      this.discount = total * (discountPercentage / 100);
+      console.log(this.discount);
     }
-
-    return discount;
   }
 
   calculateThanhTien(): number {
     let total = this.calculateTotal();
-    let discount = this.calculateGiamGia();
-    return total - discount;
-  }
-
-  calculateTienTraLai(): void {
-    this.thanhTien = this.calculateThanhTien();
-    this.tienTraLai = this.tienKhachDua - this.thanhTien;
+    return total - this.discount;
   }
 
   deleteHoaDonFromLocalStorage(): void {
@@ -274,15 +276,15 @@ export class ShoppingViewComponent {
     }
   }
 
-clearForm(): void {
+  clearForm(): void {
 
-  this.sdtValue = '';
-  this.customer = null;
-  this.voucher = null;
-  this.tienKhachDua = 0;
-  this.thanhTien = 0;
-  this.tienTraLai = 0;
-}
+    this.sdtValue = '';
+    this.customer = null;
+    this.voucher = null;
+    this.tienKhachDua = 0;
+    this.thanhTien = 0;
+    this.tienTraLai = 0;
+  }
 
 
   loadHoaDonById(idHoaDon: string): void {
@@ -351,8 +353,14 @@ clearForm(): void {
       // Gọi phương thức addProductToCart với id giỏ hàng, id sản phẩm và số lượng
       this.addProductToCart(gioHang.id, chiTietSanPham.id, this.quantity);
     } else {
-      console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
+      this.snackBar.open('Không tìm thấy giỏ hàng nào. Vui lòng nhập lại!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
     }
+
+    this.quantity = 1;
+    this.closeAddToCartModal();
   }
   increaseQuantity() {
     this.quantity++;
@@ -701,15 +709,15 @@ clearForm(): void {
   onTienKhachDua(event: any): void {
     const numericValue = parseFloat(event); // Chuyển đổi giá trị từ chuỗi sang số
     if (!isNaN(numericValue)) {
-        this.tienKhachDua = numericValue; // Gán giá trị vào tienKhachDua
-        this.calculateTienTraLai(); // Tính toán lại tiền trả lại
+      this.tienKhachDua = numericValue; // Gán giá trị vào tienKhachDua
+      this.calculateTienTraLai(); // Tính toán lại tiền trả lại
     }
-}
+  }
 
-calculateTienTraLai(): void {
+  calculateTienTraLai(): void {
     this.thanhTien = this.calculateThanhTien();
     this.tienTraLai = this.tienKhachDua - this.thanhTien; // Tính toán tiền trả lại
-}
+  }
 
   // showAddCustomerModal() {
   //   const modalElement = document.getElementById('addCustomerModal');
