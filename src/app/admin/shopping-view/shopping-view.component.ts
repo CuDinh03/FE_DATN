@@ -33,6 +33,8 @@ import { count } from 'rxjs';
 })
 export class ShoppingViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
+  @ViewChild('addToCartModal') addToCartModal!: ElementRef;
+  @ViewChild('confirmPayment') confirmPayment!: ElementRef;
   vouchers: any[] = [];
   listHoaDon: any = {};
   gioHang: any = {};
@@ -70,6 +72,8 @@ export class ShoppingViewComponent {
   showAddModal: boolean = false;
   itemToDeleteId: string = '';
   quantity: number = 1;
+  discount: number = 0;
+  noOrder: boolean = false;
 
 
 
@@ -85,7 +89,7 @@ export class ShoppingViewComponent {
     private danhMucService : DanhMucService,
     private thanhToanService: ThanhToanService,
     private activatedRoute: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
 
     ) {
       this.thanhToanDto = {
@@ -95,6 +99,7 @@ export class ShoppingViewComponent {
           khachHangId: '',
           nhanVienId: '',
           tongTien:'',
+          voucher: '',
           tongTienGiam: '',
           ngayTao: new Date(),
           ngaySua: new Date(),
@@ -104,29 +109,28 @@ export class ShoppingViewComponent {
       };
 
   }
-  
+
   ngOnInit(): void {
     this.loadHoaDonGioHang();
     this.loadChiTietSP();
     this.loadMaHoaDonFromLocalStorage();
     this.loadDanhMuc();
-    this.calculateTienTraLai();
-    this.calculateTienTraLai();
+    this.getCustomer();
   }
+
   
   onSubmitPayment() {
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
-    const storedVoucher = localStorage.getItem('voucher');
 
-
-    if (storedHoaDon && storedGioHangChiTiet ) {
+    if (storedHoaDon && storedGioHangChiTiet) {
       const hoaDon = JSON.parse(storedHoaDon);
       const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
-  
       const tongTien = this.calculateThanhTien();
       hoaDon.tongTien = tongTien;
-      
+      hoaDon.khachHang = this.customer;
+      hoaDon.voucher = this.voucher;
+      hoaDon.tongTienGiam = this.discount;
 
       const ThanhToanDto: ThanhToanDto = {
         hoaDonDto: hoaDon,
@@ -142,7 +146,16 @@ export class ShoppingViewComponent {
             });
            this.loadHoaDonGioHang();
           this.loadGioHangChiTiet(this.hoaDon.id);
+          localStorage.removeItem('voucher');
+          localStorage.removeItem('kh');
+          localStorage.removeItem('dbhoadon');
+          localStorage.removeItem('gioHangChiTiet');
+          localStorage.removeItem('hoaDon');
+          localStorage.removeItem('gioHang');
           }
+          this.clearForm();
+          this.loadHoaDonGioHang();
+          this.closeConfirmPayment();
         },
         (error: HttpErrorResponse) => {
           this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
@@ -151,10 +164,22 @@ export class ShoppingViewComponent {
           });
         }
       );
-    } else {
-      console.error('Không tìm thấy hóa đơn hoặc giỏ hàng chi tiết nào nào trong local storage');
+      
+    } else if(storedHoaDon === null){
+      this.snackBar.open('Vui lòng tạo hóa đơn!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }
+    else if(storedHoaDon && storedGioHangChiTiet === null){
+      this.snackBar.open('Vui lòng chọn sản phẩm!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
     }
   }
+
+ 
 
   findHoaDonByMa(maHoaDon: string) {
     this.hoaDonService.getHoaDonByMa(maHoaDon).subscribe(
@@ -213,30 +238,21 @@ calculateTotal(): number {
   return total;
 }
 
-calculateGiamGia(): number {
+calculateGiamGia(): void {
   let total = this.calculateTotal();
   const storedVoucher = localStorage.getItem('voucher');
-  let discount = 0;
 
   if (storedVoucher) {
     const voucher = JSON.parse(storedVoucher);
     const discountPercentage = voucher.giaTriGiam; // Assuming giaTriGiam is the discount percentage
-    discount = total * (discountPercentage / 100);
-    console.log(discount);
+    this.discount = total * (discountPercentage / 100);
+    console.log(this.discount);
   }
-
-  return discount;
 }
 
 calculateThanhTien(): number {
   let total = this.calculateTotal();
-  let discount = this.calculateGiamGia();
-  return total - discount;
-}
-
-calculateTienTraLai(): void {
-  this.thanhTien = this.calculateThanhTien();
-  this.tienTraLai = this.tienKhachDua - this.thanhTien;
+  return total - this.discount;
 }
 
 deleteHoaDonFromLocalStorage(): void {
@@ -260,7 +276,7 @@ deleteHoaDonFromLocalStorage(): void {
           } else {
             this.snackBar.open('Có lỗi sảy ra khi xóa hóa đơn. Vui lòng thử lại sau!', 'Đóng', {
               duration: 3000,
-              panelClass: ['success-snackbar']
+              panelClass: ['error-snackbar']
             });
           }
         },
@@ -271,8 +287,21 @@ deleteHoaDonFromLocalStorage(): void {
       );
     }
   } else {
-    console.error('Không tìm thấy thông tin hóa đơn trong localStorage');
+    this.snackBar.open('Vui lòng chọn hóa đơn trước khi xóa!', 'Đóng', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
   }
+}
+
+clearForm(): void {
+
+  this.sdtValue = '';
+  this.customer = null;
+  this.voucher = null;
+  this.tienKhachDua = 0;
+  this.thanhTien = 0;
+  this.tienTraLai = 0;
 }
 
 
@@ -342,8 +371,14 @@ addToCart(): void {
     // Gọi phương thức addProductToCart với id giỏ hàng, id sản phẩm và số lượng
     this.addProductToCart(gioHang.id, chiTietSanPham.id, this.quantity);
   } else {
-    console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
+    this.snackBar.open('Vui lòng chọn hóa đơn!', 'Đóng', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
   }
+
+  this.quantity = 1;
+  this.closeAddToCartModal();
 }
 increaseQuantity() {
   this.quantity++;
@@ -407,18 +442,24 @@ loadChiTietSP(): void {
     this.hoaDonGioHangService.getAll().subscribe(
       (response: ApiResponse<any>) => {
         if (response.result && response.result.length > 0) {
-          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
           this.listHoaDonGioHang = response.result;
-
+          this.noOrder = false;
         } else {
-          console.log(response);
+          this.noOrder = true;
+          this.listHoaDonGioHang = [];
         }
       },
       (error: HttpErrorResponse) => {
-        this.handleErrorGetAllHoaDonCT(error);
+        if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+          this.noOrder = true;
+          this.listHoaDonGioHang = [];
+        } else {
+          console.error('Unexpected error:', error);
+        }
       }
     );
   }
+
 
   updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
     const originalSoLuong = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet).soLuong;
@@ -536,6 +577,41 @@ resetGioHang(): void {
       this.loadVoucher();
     }
   }
+  showModalPayment(): void {
+    const storedHoaDon = localStorage.getItem('dbhoadon');
+    const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
+    if (this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon && storedGioHangChiTiet) {
+      this.confirmPayment.nativeElement.classList.add('show');
+      this.confirmPayment.nativeElement.style.display = 'block';
+    }else if(this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon){
+      this.snackBar.open('Vui lòng chọn sản phẩm!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }else if(this.confirmPayment && this.confirmPayment.nativeElement){
+      this.snackBar.open('Vui lòng chọn hóa đơn trước khi thanh toán!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }else if( this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon && storedGioHangChiTiet ){
+      this.snackBar.open('Vui lòng nhập tiền!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }else if( this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon && storedGioHangChiTiet){
+      this.snackBar.open('Sai định dạng tiền: Tiền khách đưa không được âm!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }
+  }
+
+  showModalAdd(): void {
+    if (this.addToCartModal && this.addToCartModal.nativeElement) {
+      this.addToCartModal.nativeElement.classList.add('show');
+      this.addToCartModal.nativeElement.style.display = 'block';
+    }
+  }
 
   showModal(): void {
     if (this.voucherModal && this.voucherModal.nativeElement) {
@@ -577,10 +653,24 @@ resetGioHang(): void {
   //             })
   // }
 
+  closeConfirmPayment(): void {
+    if (this.confirmPayment && this.confirmPayment.nativeElement) {
+      this.confirmPayment.nativeElement.classList.remove('show');
+      this.confirmPayment.nativeElement.style.display = 'none';
+    }
+  }
+
   closeVoucherModal(): void {
     if (this.voucherModal && this.voucherModal.nativeElement) {
       this.voucherModal.nativeElement.classList.remove('show');
       this.voucherModal.nativeElement.style.display = 'none';
+    }
+  }
+
+  closeAddToCartModal(): void {
+    if (this.addToCartModal && this.addToCartModal.nativeElement) {
+      this.addToCartModal.nativeElement.classList.remove('show');
+      this.addToCartModal.nativeElement.style.display = 'none';
     }
   }
 
@@ -591,6 +681,8 @@ resetGioHang(): void {
           if (response.result) {
             this.voucher = response.result;
             localStorage.setItem('voucher', JSON.stringify(response.result));
+            this.calculateThanhTien();
+            this.calculateGiamGia();
             this.router.navigate(['/admin/shopping'])
           }
         })
@@ -671,6 +763,19 @@ resetGioHang(): void {
       localStorage.removeItem('kh') // xoá kh đi để ko lưu lại thông tin khách hàng vừa nhập hoặc đang nhập
     }
   }
+
+  onTienKhachDua(event: any): void {
+    const numericValue = parseFloat(event); // Chuyển đổi giá trị từ chuỗi sang số
+    if (!isNaN(numericValue)) {
+        this.tienKhachDua = numericValue; // Gán giá trị vào tienKhachDua
+        this.calculateTienTraLai(); // Tính toán lại tiền trả lại
+    }
+}
+
+calculateTienTraLai(): void {
+    this.thanhTien = this.calculateThanhTien();
+    this.tienTraLai = this.tienKhachDua - this.thanhTien; // Tính toán tiền trả lại
+}
 
   // showAddCustomerModal() {
   //   const modalElement = document.getElementById('addCustomerModal');

@@ -142,5 +142,14 @@
     height: 100%; /* Chiều cao tối đa cho phần tử input */
   }
 
-  
- 
+  .card-product__title {
+    text-align: center; /* Canh giữa tiêu đề */
+}
+
+.card-product__title a {
+    max-width: 100%; /* Giới hạn độ rộng của tiêu đề */
+    white-space: nowrap; /* Ngăn tiêu đề bị ngắt dòng */
+    overflow: hidden; /* Ẩn phần dư thừa nếu có */
+    text-overflow: ellipsis; /* Hiển thị dấu elipsis (...) nếu tiêu đề vượt quá kích thước */
+    color: black;
+}
