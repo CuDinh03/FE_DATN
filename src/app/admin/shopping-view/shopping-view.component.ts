@@ -34,6 +34,7 @@ import { count } from 'rxjs';
 export class ShoppingViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   @ViewChild('addToCartModal') addToCartModal!: ElementRef;
+  @ViewChild('confirmPayment') confirmPayment!: ElementRef;
   vouchers: any[] = [];
   listHoaDon: any = {};
   gioHang: any = {};
@@ -72,6 +73,7 @@ export class ShoppingViewComponent {
   itemToDeleteId: string = '';
   quantity: number = 1;
   discount: number = 0;
+  noOrder: boolean = false;
 
 
 
@@ -115,12 +117,13 @@ export class ShoppingViewComponent {
     this.loadDanhMuc();
     this.getCustomer();
   }
+
   
   onSubmitPayment() {
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
 
-    if (storedHoaDon && storedGioHangChiTiet ) {
+    if (storedHoaDon && storedGioHangChiTiet) {
       const hoaDon = JSON.parse(storedHoaDon);
       const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
       const tongTien = this.calculateThanhTien();
@@ -150,6 +153,9 @@ export class ShoppingViewComponent {
           localStorage.removeItem('hoaDon');
           localStorage.removeItem('gioHang');
           }
+          this.clearForm();
+          this.loadHoaDonGioHang();
+          this.closeConfirmPayment();
         },
         (error: HttpErrorResponse) => {
           this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
@@ -158,8 +164,7 @@ export class ShoppingViewComponent {
           });
         }
       );
-      this.clearForm();
-      this.loadHoaDonGioHang();
+      
     } else if(storedHoaDon === null){
       this.snackBar.open('Vui lòng tạo hóa đơn!', 'Đóng', {
         duration: 3000,
@@ -173,6 +178,8 @@ export class ShoppingViewComponent {
       });
     }
   }
+
+ 
 
   findHoaDonByMa(maHoaDon: string) {
     this.hoaDonService.getHoaDonByMa(maHoaDon).subscribe(
@@ -269,7 +276,7 @@ deleteHoaDonFromLocalStorage(): void {
           } else {
             this.snackBar.open('Có lỗi sảy ra khi xóa hóa đơn. Vui lòng thử lại sau!', 'Đóng', {
               duration: 3000,
-              panelClass: ['success-snackbar']
+              panelClass: ['error-snackbar']
             });
           }
         },
@@ -280,7 +287,10 @@ deleteHoaDonFromLocalStorage(): void {
       );
     }
   } else {
-    console.error('Không tìm thấy thông tin hóa đơn trong localStorage');
+    this.snackBar.open('Vui lòng chọn hóa đơn trước khi xóa!', 'Đóng', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
   }
 }
 
@@ -361,7 +371,7 @@ addToCart(): void {
     // Gọi phương thức addProductToCart với id giỏ hàng, id sản phẩm và số lượng
     this.addProductToCart(gioHang.id, chiTietSanPham.id, this.quantity);
   } else {
-    this.snackBar.open('Không tìm thấy giỏ hàng nào. Vui lòng nhập lại!', 'Đóng', {
+    this.snackBar.open('Vui lòng chọn hóa đơn!', 'Đóng', {
       duration: 3000,
       panelClass: ['error-snackbar']
     });
@@ -432,18 +442,24 @@ loadChiTietSP(): void {
     this.hoaDonGioHangService.getAll().subscribe(
       (response: ApiResponse<any>) => {
         if (response.result && response.result.length > 0) {
-          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
           this.listHoaDonGioHang = response.result;
-
+          this.noOrder = false;
         } else {
-          console.log(response);
+          this.noOrder = true;
+          this.listHoaDonGioHang = [];
         }
       },
       (error: HttpErrorResponse) => {
-        this.handleErrorGetAllHoaDonCT(error);
+        if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+          this.noOrder = true;
+          this.listHoaDonGioHang = [];
+        } else {
+          console.error('Unexpected error:', error);
+        }
       }
     );
   }
+
 
   updateGioHangChiTiet(idGioHangChiTiet: string, soLuong: number): void {
     const originalSoLuong = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet).soLuong;
@@ -561,12 +577,39 @@ resetGioHang(): void {
       this.loadVoucher();
     }
   }
+  showModalPayment(): void {
+    const storedHoaDon = localStorage.getItem('dbhoadon');
+    const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
+    if (this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon && storedGioHangChiTiet) {
+      this.confirmPayment.nativeElement.classList.add('show');
+      this.confirmPayment.nativeElement.style.display = 'block';
+    }else if(this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon){
+      this.snackBar.open('Vui lòng chọn sản phẩm!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }else if(this.confirmPayment && this.confirmPayment.nativeElement){
+      this.snackBar.open('Vui lòng chọn hóa đơn trước khi thanh toán!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }else if( this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon && storedGioHangChiTiet ){
+      this.snackBar.open('Vui lòng nhập tiền!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }else if( this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon && storedGioHangChiTiet){
+      this.snackBar.open('Sai định dạng tiền: Tiền khách đưa không được âm!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }
+  }
 
   showModalAdd(): void {
     if (this.addToCartModal && this.addToCartModal.nativeElement) {
       this.addToCartModal.nativeElement.classList.add('show');
       this.addToCartModal.nativeElement.style.display = 'block';
-      this.loadVoucher();
     }
   }
 
@@ -609,6 +652,13 @@ resetGioHang(): void {
   //                 }
   //             })
   // }
+
+  closeConfirmPayment(): void {
+    if (this.confirmPayment && this.confirmPayment.nativeElement) {
+      this.confirmPayment.nativeElement.classList.remove('show');
+      this.confirmPayment.nativeElement.style.display = 'none';
+    }
+  }
 
   closeVoucherModal(): void {
     if (this.voucherModal && this.voucherModal.nativeElement) {
