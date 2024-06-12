@@ -20,7 +20,7 @@
 
             <div class="col-6 product-info">
               <div class="product-header">
-                <h1 class="custom-heading">{{ findCiTietSanPham.sanPham.ten | uppercase }}</h1>
+                <h1 class="custom-heading">{{ findCiTietSanPham.sanPham.ten | uppercase }} MÀU {{ findCiTietSanPham.mauSac.ten | uppercase }}</h1>
                 <div class="rating">
                   <i class="ti ti-star filled"></i>
                   <i class="ti ti-star filled"></i>
@@ -32,7 +32,7 @@
               </div>
               <p class="mb-4"><strong class="price-label">Giá bán: </strong> <span class="price">{{
                   findCiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</span></p>
-              <p class="color-label">Màu khác*</p>
+              <p class="color-label">Màu khác*  <i>Số lượng trong kho: {{findCiTietSanPham.soLuong}}</i></p>
               <div>
                 <img src="/assets/shopping/img/r2.jpg" class="m-3">
                 <img src="/assets/shopping/img/r2.jpg" class="m-3">

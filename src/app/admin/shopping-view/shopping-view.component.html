@@ -14,7 +14,7 @@
             <div class="card-body">
               <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                 <div class="mb-3 mb-sm-0">
-                  <h5 class="card-title fw-semibold">Bán hàng tại quầy</h5>
+                  <h3 class="card-title fw-semibold">Bán hàng tại quầy</h3>
                 </div>
                 <div>
                   <span><a class="btn btn-primary" style="color: white;" (click)="createHoaDon()">Tạo
@@ -31,16 +31,29 @@
                             [attr.aria-controls]="'nav-home-' + i" [attr.aria-selected]="i === 0"
                             (click)="loadGioHangChiTiet(hoaDon.gioHang.id)" (click)="loadHoaDonById(hoaDon.hoaDon.id)"
                             (click)="loadGioHangById(hoaDon.gioHang.id)" (click)="findHoaDonByMa(hoaDon.hoaDon.ma)">
+                <div *ngIf="!noOrder">
+                  <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                      <button *ngFor="let hoaDon of listHoaDonGioHang.slice(0,5); let i = index" class="nav-link"
+                        [class.active]="i === 0" id="nav-home-tab-{{i}}" data-bs-toggle="tab"
+                        [attr.data-bs-target]="'#nav-home-' + i" type="button" role="tab"
+                        [attr.aria-controls]="'nav-home-' + i" [attr.aria-selected]="i === 0"
+                        (click)="loadGioHangChiTiet(hoaDon.gioHang.id)" (click)="loadHoaDonById(hoaDon.hoaDon.id)"
+                        (click)="loadGioHangById(hoaDon.gioHang.id)" (click)="findHoaDonByMa(hoaDon.hoaDon.ma)">
 
-                      {{hoaDon.hoaDon.ma}}
-                    </button>
-                  </div>
-                </nav>
+                        {{hoaDon.hoaDon.ma}}
+                      </button>
+                    </div>
+                  </nav>
 
                 <div class="tab-content" id="nav-tabContent">
                   <div *ngFor="let hoaDon of listHoaDonGioHang.slice(0,5); let i = index" class="tab-pane fade"
                        [class.show]="i === 0" [class.active]="i === 0" id="nav-home-{{i}}" role="tabpanel"
                        [attr.aria-labelledby]="'nav-home-tab-' + i" tabindex="0">
+                  <div class="tab-content" id="nav-tabContent">
+                    <div *ngFor="let hoaDon of listHoaDonGioHang.slice(0,5); let i = index" class="tab-pane fade"
+                      [class.show]="i === 0" [class.active]="i === 0" id="nav-home-{{i}}" role="tabpanel"
+                      [attr.aria-labelledby]="'nav-home-tab-' + i" tabindex="0">
 
                     <div class="container-fluid" *ngIf="!noProductsFound">
                       <div class="d-flex justify-content-end mt-3 mb-3">
@@ -92,8 +105,62 @@
                     </div>
                     <div *ngIf="noProductsFound" class="m-5 d-flex justify-content-center">
                       <p>Chưa có sản phẩm nào</p>
+                      <div class="container-fluid" *ngIf="!noProductsFound">
+                        <div class="d-flex justify-content-end mt-3 mb-3">
+                          <a class="btn btn-primary" style="color: white;" (click)="resetGioHang()">Làm mới</a>
+                        </div>
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Tên sản phẩm</th>
+                              <th>Màu sắc</th>
+                              <th>Kích thước</th>
+                              <th>Số lượng</th>
+                              <th>Đơn giá</th>
+                              <th>Thao tác</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let chiTiet of gioHangChiTiet">
+                              <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
+                              <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
+                              <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
+                              <td>
+                                <input type="number" style="width: 50px;" [(ngModel)]="chiTiet.soLuong" min="0">
+                              </td>
+                              <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
+                              <td class="d-flex justify-content-center text-center">
+                                <span>
+                                  <a class="btn" (click)="updateGioHangChiTiet(chiTiet.id, chiTiet.soLuong)"
+                                    style="color: #7A98FE; font-size: 16px; ">
+                                    <i class="ti ti-edit"></i>
+                                  </a>
+                                </span>
+                                <span>
+                                  <a class="btn" (click)="confirmDelete(chiTiet.id)" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" style="color: #ff3700; font-size: 16px; ">
+                                    <i class="ti ti-x"></i>
+                                  </a>
+                                </span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div class="mt-3 d-flex justify-content-end">
+                          <button class="btn btn-primary">
+                            < </button>
+                              <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                              <button class="btn btn-primary"> ></button>
+                        </div>
+                      </div>
+                      <div *ngIf="noProductsFound" class="m-5 d-flex justify-content-center">
+                        <p>Chưa có sản phẩm nào</p>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div *ngIf="noOrder" class="text-center d-flex align-items-center justify-content-center">
+                  <p class="text-danger mt-5" style="font-size: 16px;">Chưa có hóa đơn nào! Hãy tạo hóa đơn.</p>
                 </div>
               </div>
             </div>
@@ -107,7 +174,7 @@
               <div class="card">
                 <div class="card-body">
                   <div class="row align-items-start">
-                    <form (ngSubmit)="onSubmitPayment()">
+                    <form>
                       <div class="mb-4">
                         <label class="form-label me-2">Mã hóa đơn:</label>
                         {{ hoaDon.ma }}
@@ -119,6 +186,8 @@
                             <div class="col-8">
                               <input type="text" class="form-control" id="sdt" name="sdt"
                                      [(ngModel)]="sdtValue" (ngModelChange)="onSdtInputChange()" />
+                              <input type="text" class="form-control" id="sdt" name="sdt" [(ngModel)]="sdtValue"
+                                (ngModelChange)="onSdtInputChange()" />
                             </div>
                             <div class="col-4">
                               <button type="button" class="btn btn-info" (click)="getCustomer()">Chọn</button>
@@ -147,7 +216,8 @@
                         </div>
                         <div class="mb-4">
                           <label class="form-label">Tiền khách đưa</label>
-                          <input type="text" class="form-control" id="tienKhachDua" name="tienKhachDua" [(ngModel)]="tienKhachDua" (ngModelChange)="onTienKhachDua($event)" />
+                          <input type="text" class="form-control" id="tienKhachDua" name="tienKhachDua"
+                            [(ngModel)]="tienKhachDua" (ngModelChange)="onTienKhachDua($event)" required />
                         </div>
                         <div class="mb-4">
                           <label class="form-label me-3">Tiền giảm:</label>
@@ -163,7 +233,7 @@
                         </div>
                         <div class="d-flex" style="margin-bottom: 25px;">
                           <span>
-                            <button type="submit" class="btn btn-outline-info me-3">
+                            <button type="submit" class="btn btn-outline-info me-3" (click)="showModalPayment()">
                               <span>
                                 <i class="ti ti-wallet"></i>
                               </span>
@@ -273,22 +343,22 @@
                     <tbody>
                     <tr style="height: 30px;" *ngFor="let sanPhamChiTiet of listSanPhamChiTiet; let i = index">
 
-                      <td> {{ i + 1 }}</td>
-                      <td>{{ sanPhamChiTiet.sanPham.ma }}</td>
-                      <td>{{ sanPhamChiTiet.sanPham.ten }}</td>
-                      <td>{{ sanPhamChiTiet.danhMuc.ten }}</td>
-                      <td>{{ sanPhamChiTiet.mauSac.ten }}</td>
-                      <td>{{ sanPhamChiTiet.kichThuoc.ten }}</td>
-                      <td>{{ sanPhamChiTiet.chatLieu.ten }}</td>
-                      <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
-                      <td>{{ sanPhamChiTiet.giaBan }}</td>
-                      <td>{{ sanPhamChiTiet.soLuong }}</td>
-                      <!-- (click)="themSanPhamVaoGioHang()" -->
-                      <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
-                                  (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)" (click)="showModalAdd()">
-                        <i class="ti ti-plus"></i>
-                      </button></td>
-                    </tr>
+                        <td> {{ i + 1 }}</td>
+                        <td>{{ sanPhamChiTiet.sanPham.ma }}</td>
+                        <td>{{ sanPhamChiTiet.sanPham.ten }}</td>
+                        <td>{{ sanPhamChiTiet.danhMuc.ten }}</td>
+                        <td>{{ sanPhamChiTiet.mauSac.ten }}</td>
+                        <td>{{ sanPhamChiTiet.kichThuoc.ten }}</td>
+                        <td>{{ sanPhamChiTiet.chatLieu.ten }}</td>
+                        <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
+                        <td>{{ sanPhamChiTiet.giaBan }}</td>
+                        <td>{{ sanPhamChiTiet.soLuong }}</td>
+                        <!-- (click)="themSanPhamVaoGioHang()" -->
+                        <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
+                            (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)" (click)="showModalAdd()">
+                            <i class="ti ti-plus"></i>
+                          </button></td>
+                      </tr>
                     </tbody>
                   </table>
                   <div>
@@ -409,7 +479,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" [ngClass]="{'is-active': showConfirmationModal}">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  [ngClass]="{'is-active': showConfirmationModal}">
   <div class="modal-dialog" (click)="cancelDelete()">
     <div class="modal-content">
       <div class="modal-header">
@@ -438,8 +509,10 @@
       <div class="modal-body">
         <div class="product_count mt-2">
           <input type="text" name="qty" maxlength="12" title="Quantity:" [(ngModel)]="quantity" class="input-text qty">
-          <button class="increase items-count" type="button" (click)="increaseQuantity()"><i class="lnr lnr-chevron-up"></i></button>
-          <button class="reduced items-count" type="button" (click)="decreaseQuantity()"><i class="lnr lnr-chevron-down"></i></button>
+          <button class="increase items-count" type="button" (click)="increaseQuantity()"><i
+              class="lnr lnr-chevron-up"></i></button>
+          <button class="reduced items-count" type="button" (click)="decreaseQuantity()"><i
+              class="lnr lnr-chevron-down"></i></button>
         </div>
       </div>
       <div class="modal-footer">
@@ -448,3 +521,25 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" #confirmPayment tabindex="-1" aria-labelledby="paymentModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentModal">Xác nhận thanh toán</h5>
+
+        <button type="button" class="btn-close" (click)="closeConfirmPayment()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h2>Bạn có muốn thanh toán đơn hàng này không?</h2>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="onSubmitPayment()">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
