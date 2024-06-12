@@ -18,7 +18,7 @@ import { ErrorCode } from "../../model/ErrorCode";
 })
 export class CategoryViewComponent implements OnInit {
 
-  danhMuc: DanhMucDto[] = [];
+  danhMuc: any[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;

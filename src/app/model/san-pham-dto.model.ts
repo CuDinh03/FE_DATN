@@ -1,4 +1,4 @@
-export interface DanhMucDto{
+export interface SanPhamDto{
     id: string;
     ma: string;
     ten: string;
