@@ -1,16 +1,10 @@
-import { error } from '@angular/compiler-cli/src/transformers/util';
 import { ApiResponse } from './../../model/ApiResponse';
 import { HoaDonChiTietService } from './../../service/HoaDonChiTietService';
 import { HoaDonService } from './../../service/HoaDonService';
-import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Validators } from '@angular/forms';
 import { AuthenticationService } from './../../service/AuthenticationService';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
-import { DanhMucService } from 'src/app/service/DanhMucService';
 import { ErrorCode } from "../../model/ErrorCode";
 
 @Component({
