@@ -79,7 +79,7 @@ export class KhachHangService{
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get<ApiResponse<KhachHangDto>>(`${this.apiUrl}/${id}`, {headers});
+    return this.http.get<ApiResponse<KhachHangDto>>(`${this.apiUrl}/detail/${id}`, {headers});
   }
   
   updateKhachHang(id: string, khachHangData: KhachHangDto): Observable<ApiResponse<void>> {
