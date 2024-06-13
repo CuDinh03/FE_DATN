@@ -75,19 +75,23 @@
                       <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
                       <td>{{khachHang.ma }}</td>
                       <td>{{khachHang.ten}}</td>
-                      <td>{{khachHang.taiKhoan.tenDangNhap}}</td>
+                      <!-- <td>{{khachHang.taiKhoan.tenDangNhap}}</td> -->
+                       <td>
+                        <p *ngIf="khachHang.taiKhoan != null">{{khachHang.taiKhoan.tenDangNhap}}</p>
+                            <p *ngIf="khachHang.taiKhoan === null"> - </p>
+                       </td>
                       <td>{{khachHang.email}}</td>
                       <td>{{khachHang.sdt}}</td>
                       <td>{{khachHang.gioiTinh}}</td>
-                      <td>{{khachHang.ngaySinh}}</td>
+                      <td>{{khachHang.ngaySinh| date:'yyyy-MM-dd'}}</td>
                       <td>{{khachHang.diaChi}}</td>
                       <td>
-                        <div *ngIf="khachHang.trangThai === true">
+                        <div *ngIf="khachHang.trangThai === 1">
                           <div class="form-check form-switch" (click)="delete(khachHang.id)">
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
                           </div>
                         </div>
-                        <div *ngIf="khachHang.trangThai === false">
+                        <div *ngIf="khachHang.trangThai === 0">
                           <div class="form-check form-switch" (click)="openKhachHang(khachHang.id)">
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                           </div>
@@ -233,12 +237,12 @@
                         <br>
                         <div class="form-check form-check-inline">
                           <input class="form-check-input" type="radio" formControlName="trangThai" id="inlineRadio1"
-                            value="true">
+                            value="1">
                           <label class="form-check-label" for="inlineRadio1">Hoạt động</label>
                         </div>
                         <div class="form-check form-check-inline">
                           <input class="form-check-input" type="radio" formControlName="trangThai" id="inlineRadio1"
-                            value="false">
+                            value="0">
                           <label class="form-check-label" for="inlineRadio1">Không hoạt động</label>
                         </div>
                       </div>

@@ -10,6 +10,6 @@
   diaChi: string; // Địa chỉ của khách hàng
   ngaySua: Date; // Ngày cập nhật thông tin khách hàng
   ngayTao: Date; // Ngày tạo khách hàng
-  trangThai: boolean; // Trạng thái của khách hàng (hoạt động, không hoạt động, ...)
+  trangThai: number; // Trạng thái của khách hàng (hoạt động, không hoạt động, ...)
 }
 
