@@ -115,60 +115,69 @@ export class ShoppingViewComponent {
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
 
-    if (storedHoaDon && storedGioHangChiTiet) {
-      const hoaDon = JSON.parse(storedHoaDon);
-      const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
-      const tongTien = this.calculateThanhTien();
-      hoaDon.tongTien = tongTien;
-      hoaDon.khachHang = this.customer;
-      hoaDon.voucher = this.voucher;
-      hoaDon.tongTienGiam = this.discount;
+    if (this.tienKhachDua>=this.thanhTien){
+      if (storedHoaDon && storedGioHangChiTiet) {
+        const hoaDon = JSON.parse(storedHoaDon);
+        const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
+        const tongTien = this.calculateThanhTien();
+        hoaDon.tongTien = tongTien;
+        hoaDon.khachHang = this.customer;
+        hoaDon.voucher = this.voucher;
+        hoaDon.tongTienGiam = this.discount;
 
-      const ThanhToanDto: ThanhToanDto = {
-        hoaDonDto: hoaDon,
-        gioHangChiTietDtoList: gioHangChiTiet,
-      };
+        const ThanhToanDto: ThanhToanDto = {
+          hoaDonDto: hoaDon,
+          gioHangChiTietDtoList: gioHangChiTiet,
+        };
 
-      this.thanhToanService.thanhToan(ThanhToanDto).subscribe(
-        (response: ApiResponse<ThanhToanDto>) => {
-          if (response.result) {
-            this.snackBar.open('Thanh toán thành công!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
+        this.thanhToanService.thanhToan(ThanhToanDto).subscribe(
+          (response: ApiResponse<ThanhToanDto>) => {
+            if (response.result) {
+              this.snackBar.open('Thanh toán thành công!', 'Đóng', {
+                duration: 3000,
+                panelClass: ['success-snackbar']
+              });
+              this.loadHoaDonGioHang();
+              this.loadGioHangChiTiet(this.hoaDon.id);
+              localStorage.removeItem('voucher');
+              localStorage.removeItem('kh');
+              localStorage.removeItem('dbhoadon');
+              localStorage.removeItem('gioHangChiTiet');
+              localStorage.removeItem('hoaDon');
+              localStorage.removeItem('gioHang');
+            }
+            this.clearForm();
             this.loadHoaDonGioHang();
-            this.loadGioHangChiTiet(this.hoaDon.id);
-            localStorage.removeItem('voucher');
-            localStorage.removeItem('kh');
-            localStorage.removeItem('dbhoadon');
-            localStorage.removeItem('gioHangChiTiet');
-            localStorage.removeItem('hoaDon');
-            localStorage.removeItem('gioHang');
+            this.closeConfirmPayment();
+          },
+          (error: HttpErrorResponse) => {
+            this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['error-snackbar']
+            });
           }
-          this.clearForm();
-          this.loadHoaDonGioHang();
-          this.closeConfirmPayment();
-        },
-        (error: HttpErrorResponse) => {
-          this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
-            duration: 3000,
-            panelClass: ['error-snackbar']
-          });
-        }
-      );
+        );
 
-    } else if(storedHoaDon === null){
-      this.snackBar.open('Vui lòng tạo hóa đơn!', 'Đóng', {
+      } else if(storedHoaDon === null){
+        this.snackBar.open('Vui lòng tạo hóa đơn!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+      else if(storedHoaDon && storedGioHangChiTiet === null){
+        this.snackBar.open('Vui lòng chọn sản phẩm!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    }else {
+      this.snackBar.open(`Tiền khách đưa thiếu ${this.thanhTien - this.tienKhachDua}`, 'Đóng',{
         duration: 3000,
         panelClass: ['error-snackbar']
-      });
+      } )
     }
-    else if(storedHoaDon && storedGioHangChiTiet === null){
-      this.snackBar.open('Vui lòng chọn sản phẩm!', 'Đóng', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
-    }
+
+
   }
 
 
@@ -570,31 +579,9 @@ export class ShoppingViewComponent {
     }
   }
   showModalPayment(): void {
-    const storedHoaDon = localStorage.getItem('dbhoadon');
-    const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
-    if (this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon && storedGioHangChiTiet) {
+    if (this.confirmPayment && this.confirmPayment.nativeElement) {
       this.confirmPayment.nativeElement.classList.add('show');
       this.confirmPayment.nativeElement.style.display = 'block';
-    }else if(this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon){
-      this.snackBar.open('Vui lòng chọn sản phẩm!', 'Đóng', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
-    }else if(this.confirmPayment && this.confirmPayment.nativeElement){
-      this.snackBar.open('Vui lòng chọn hóa đơn trước khi thanh toán!', 'Đóng', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
-    }else if( this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon && storedGioHangChiTiet ){
-      this.snackBar.open('Vui lòng nhập tiền!', 'Đóng', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
-    }else if( this.confirmPayment && this.confirmPayment.nativeElement && storedHoaDon && storedGioHangChiTiet){
-      this.snackBar.open('Sai định dạng tiền: Tiền khách đưa không được âm!', 'Đóng', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
     }
   }
 
@@ -611,6 +598,14 @@ export class ShoppingViewComponent {
       this.voucherModal.nativeElement.style.display = 'block';
       this.loadVoucher();
     }
+  }
+
+  huyVoucher():void{
+    localStorage.removeItem('voucher');
+      this.voucher = null;
+      this.calculateThanhTien();
+      this.calculateGiamGia();
+      this.router.navigate(['/admin/shopping'])
   }
 
   loadVoucher(): void {
