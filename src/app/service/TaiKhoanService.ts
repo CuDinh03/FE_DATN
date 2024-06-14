@@ -96,15 +96,4 @@ export class TaiKhoanService {
 
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
   }
-
-
-
-
-
-  
-
-
-
-
-
 }

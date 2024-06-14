@@ -28,7 +28,7 @@ export class KhachHangService {
 
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
   }
-
+  
   getKhachHang(sdt: string): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({

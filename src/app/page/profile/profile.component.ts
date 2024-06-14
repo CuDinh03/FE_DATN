@@ -81,7 +81,6 @@ export class ProfileComponent {
   }
 
   // 3. fill value form 
-  
   fillValueToForm(khachHang: any) : void {
     this.formKhachHang.patchValue({
       ten: khachHang.ten, 

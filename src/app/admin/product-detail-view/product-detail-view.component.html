@@ -1,0 +1,218 @@
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+  data-sidebar-position="fixed" data-header-position="fixed">
+  <app-sidebar></app-sidebar>
+  <!--  Main wrapper -->
+  <div class="body-wrapper">
+    <!--  Header Start -->
+    <app-admin-header></app-admin-header>
+    <!--  Header End -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-7 d-flex align-items-strech">
+          <div class="">
+            <div class="card-body">
+              <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                <div class="mb-3 mb-sm-0">
+                  <h2 class="card-title fw-semibold">Danh sách sản phẩm chi tiết</h2>
+                </div>
+                <!-- <div *ngIf="errorMessage" class="alert alert-danger position-fixed top-50 start-50 translate-middle"
+                  role="alert">
+                  {{ errorMessage }}
+                </div> -->
+                <div>
+                  <select class="form-select">
+                    <option value="ALL">All</option>
+                    <option value="CUSTOMER">Customer</option>
+                    <option value="STAFF">Staff</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="3">May 2023</option>
+                    <option value="4">June 2023</option>
+                  </select>
+                  <button class="btn btn-primary" (click)="viewFormAddProduct()" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal" style="color: #ff3700; font-size: 16px; ">Thêm sản phẩm</button>
+                </div>
+              </div>
+              <div>
+                <table class="table text-nowrap mb-0 align-middle">
+                  <thead class="text-dark fs-4">
+                    <tr>
+                      <th class="border-bottom-0" scope="col">
+                        <h6 class="fw-semibold mb-0">#</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Mã</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Tên</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Thương hiệu</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Chất Liệu</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Danh mục</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Kích thước</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Màu sắc</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Số lượng</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Giá nhập</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Giá bán</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Ngày nhập</h6>
+                      </th>
+                      <!-- <th scope="col">
+                        <h6 class="fw-semibold mb-0">Hình ảnh</h6>
+                      </th> -->
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Thao tác</h6>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="height: 30px;" *ngFor=" let sanPhamChiTiet of listSanPhamChiTiet; let i = index">
+                      <th>{{ i + 1}}</th>
+                      <td>{{ sanPhamChiTiet.ma}}</td>
+                      <td>{{ sanPhamChiTiet.sanPham.ten}}</td>
+                      <td>{{ sanPhamChiTiet.thuongHieu.ten}}</td>
+                      <th>{{ sanPhamChiTiet.chatLieu.ten}}</th>
+                      <td>{{ sanPhamChiTiet.danhMuc.ten}}</td>
+                      <td>{{ sanPhamChiTiet.kichThuoc.ten}}</td>
+                      <th>{{ sanPhamChiTiet.mauSac.ten}}</th>
+                      <td>{{ sanPhamChiTiet.soLuong}}</td>
+                      <td>{{ sanPhamChiTiet.giaNhap}}</td>
+                      <th>{{ sanPhamChiTiet.giaBan}}</th>
+                      <td>{{ sanPhamChiTiet.ngayNhap | date: 'dd/MM/yyyy' }}</td>
+                      <td>{{ sanPhamChiTiet.trangThai == 1 ? "Hoạt động" : "Không HĐ" }}</td>
+                      <td>
+                        <!-- <button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
+                        (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)" (click)="showModalAdd()">
+                        <i class="ti ti-edit"></i>
+                      </button> -->
+                        <button style="color: #7A98FE; font-size: 20px; border: none; background-color: transparent;"
+                          (click)="updateTrangThai(sanPhamChiTiet.id)">
+                          <i class="ti ti-x"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div>
+                  <div class="d-flex justify-content-start">
+                    <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary" [disabled]="page === 0">
+                      < </button>
+                        <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                        <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"
+                          [disabled]="page === totalPages - 1"> >
+                        </button>
+                  </div>
+                </div>
+                <div *ngIf="listSanPhamChiTiet.length === 0">
+                  <p>Không có sản phẩm chi tiết nào được tìm thấy.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- MODAL -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    [ngClass]="{'is-active': showConfirmationModal}">
+    <div class="modal-dialog" (click)="cancelSave()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!--  -->
+          <form [formGroup]="chiTietSanPhamForm" class="container mt-5">
+            (ngSubmit)="onSubmit()"
+            <div class="mb-3">
+              <label for="inputOne" class="form-label">Mã sản phẩm:</label>
+              <input formControlName="ma" id="ma" type="text" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label for="inputOne" class="form-label">Giá nhập:</label>
+              <input formControlName="giaNhap" id="giaNhap" type="text" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label for="inputOne" class="form-label">Giá bán:</label>
+              <input formControlName="giaBan" id="giaBan" type="text" class="form-control">
+            </div>
+
+            <!-- Ngay nhap -->
+            <!-- Ngay sua -->
+            <!-- Ngay tao -->
+
+            <div class="mb-3">
+              <label for="inputOne" class="form-label">Số lượng:</label>
+              <input formControlName="soLuong" id="soLuong" type="text" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label for="loaiSanPham" class="form-label">Loại Sản Phẩm:</label>
+              <select formControlName="sanPham" id="sanPham" class="form-select">
+                <option *ngFor="let sanPham of listSanPham" [value]="sanPham.id">{{ sanPham.ten }}</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="thuongHieu" class="form-label">Thương hiệu:</label>
+              <select formControlName="thuongHieu" id="thuongHieu" class="form-select">
+                <option *ngFor="let thuongHieu of listThuongHieu" [value]="thuongHieu.id">{{ thuongHieu.ten }}</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="chatLieu" class="form-label">Chất liệu:</label>
+              <select formControlName="chatLieu" id="chatLieu" class="form-select">
+                <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu.id">{{ chatLieu.ten }}</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="danhMuc" class="form-label">Danh mục:</label>
+              <select formControlName="danhMuc" id="danhMuc" class="form-select">
+                <option *ngFor="let danhMuc of listDanhMuc" [value]="danhMuc.id">{{ danhMuc.ten }}</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="kichThuoc" class="form-label">Kích thước:</label>
+              <select formControlName="kichThuoc" id="kichThuoc" class="form-select">
+                <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc.id">{{ kichThuoc.ten }}</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="mauSac" class="form-label">Màu sắc:</label>
+              <select formControlName="mauSac" id="mauSac" class="form-select">
+                <option *ngFor="let mauSac of listMauSac" [value]="mauSac.id">{{ mauSac.ten }}</option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-success" (click)="saveProduct()" data-bs-dismiss="modal">Thêm</button>
+              <button class="btn btn-danger" (click)="cancelSave()" data-bs-dismiss="modal">Hủy</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
