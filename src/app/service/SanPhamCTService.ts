@@ -16,10 +16,9 @@ export class SanPhamCTService {
   constructor(private http: HttpClient) {
   }
 
+  // All sản phẩm chi tiết
   getSanPhamChiTiet(page: number, size: number): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
-
-    // Thêm token vào header của yêu cầu
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
@@ -31,15 +30,40 @@ export class SanPhamCTService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
   }
 
-  getChiTietSanPhamById(id: string): Observable<ApiResponse<any>> {
+  // All sản phẩm chi tiết sắp xếp theo ngày tạo
+  getSanPhamChiTietSapXepByNGayTao(page: number, size: number): Observable<ApiResponse<any>> {
 
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    let params = new HttpParams();
+    params = params.append('page', page.toString());
+    params = params.append('size', size.toString());
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/sap-xep-ngay-tao`, { params, headers });
   }
 
+  // All Không phân trang
   getAllSanPhamChiTiet(): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
 
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`,);
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, { headers });
   }
+
+  // Get chitietSanPham by id 
+  getChiTietSanPhamById(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
+  }
+
 
   // Update trạng thái hoạt động => dừng HĐ
   updateTrangThaiById(id: string): Observable<ApiResponse<any>> {
@@ -60,7 +84,7 @@ export class SanPhamCTService {
 
   // Thêm sản phẩm chi tiết 
   themSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto): Observable<any> {
-    
+
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -69,5 +93,4 @@ export class SanPhamCTService {
     return this.http.post(`${this.apiUrl}/add`, sanPhamChiTiet, { headers });
   }
 
-  
 }

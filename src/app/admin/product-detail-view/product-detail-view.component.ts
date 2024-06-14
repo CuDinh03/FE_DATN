@@ -30,9 +30,13 @@ export class ProductDetailViewComponent {
   listMauSac: any[] = [];
   listDanhMuc: any[] = [];
   listThuongHieu: any[] = [];
+  sanPhamChiTietID: any;
 
-  chiTietSanPhamForm!: FormGroup;
-  showConfirmationModal: boolean = false;
+  chiTietSanPhamFormAdd!: FormGroup;
+  chiTietSanPhamFormUpdate!: FormGroup;
+
+  showConfirmationModalAdd: boolean = false;
+  showConfirmationModalUpdate: boolean = false;
 
   constructor(
     private sanPhamCTService: SanPhamCTService,
@@ -48,8 +52,8 @@ export class ProductDetailViewComponent {
   ) { }
 
   ngOnInit(): void {
-    // Khởi tạo form
-    this.chiTietSanPhamForm = this.formBuilder.group({
+    // Khởi tạo form add
+    this.chiTietSanPhamFormAdd = this.formBuilder.group({
       ma: [''],
       giaNhap: [''],
       giaBan: [''],
@@ -62,7 +66,7 @@ export class ProductDetailViewComponent {
       mauSac: ['']
     });
 
-    this.loadSanPhamChiTiet();
+    this.loadSanPhamChiTietByNgayTao();
     this.loadSanPham();
     this.loadThuongHieu();
     this.loadChatLieu();
@@ -72,8 +76,8 @@ export class ProductDetailViewComponent {
 
   }
 
-  loadSanPhamChiTiet(): void {
-    this.sanPhamCTService.getSanPhamChiTiet(this.page, this.size)
+  loadSanPhamChiTietByNgayTao(): void {
+    this.sanPhamCTService.getSanPhamChiTietSapXepByNGayTao(this.page, this.size)
       .subscribe(response => {
         this.listSanPhamChiTiet = response.result.content;
         this.totalElements = response.result.totalElements;
@@ -83,16 +87,85 @@ export class ProductDetailViewComponent {
 
   onPageChangeSanPhamCT(page: number): void {
     this.page = page;
-    this.loadSanPhamChiTiet();
+    this.loadSanPhamChiTietByNgayTao();
   }
 
+  // UPDATE TRANG THAI SPCT
   updateTrangThai(id: string): void {
     this.sanPhamCTService.updateTrangThaiById(id).subscribe(
       res => {
-        this.loadSanPhamChiTiet();
+        this.loadSanPhamChiTietByNgayTao();
       }
     );
   }
+
+
+  saveProduct() {
+    // xử lý lấy data call api
+    if (this.chiTietSanPhamFormAdd.valid) {
+      // const: bien k the thay doi
+      // lay ra value form 
+      const formValues = this.chiTietSanPhamFormAdd.value;
+      const chiTietSanPhamDto: ChiTietSanPhamDto = {
+        ...formValues,
+        sanPham: { id: formValues.sanPham }, // Chuyển đổi ID thành đối tượng
+        thuongHieu: { id: formValues.thuongHieu },
+        chatLieu: { id: formValues.chatLieu },
+        danhMuc: { id: formValues.danhMuc },
+        kichThuoc: { id: formValues.kichThuoc },
+        mauSac: { id: formValues.mauSac },
+      };
+
+      this.sanPhamCTService.themSanPhamChiTiet(chiTietSanPhamDto).subscribe(
+        response => {
+          console.log('Thêm chi tiết sản phẩm thành công!', response);
+          this.loadSanPhamChiTietByNgayTao;
+          this.showConfirmationModalAdd = false;
+          alert("Thêm sản phẩm chi tiết thành công!");
+        }, error => {
+          console.error('Thêm chi tiết sản phẩm thất bại!', error);
+          alert('Thêm chi tiết sản phẩm thất bại!');
+        }
+      )
+    }
+  }
+
+  // Lấy sản phẩm chi tiết by ID
+  getChiTietSanPhamById(id: string) {
+    this.sanPhamCTService.getChiTietSanPhamById(id)
+      .subscribe(res => {
+        this.sanPhamChiTietID = res.result;
+      }, error => {
+        console.error('Lỗi khi lấy sản phẩm chi tiết:', error);
+      })
+  }
+
+  updateProduct() {
+  }
+
+  // ĐÓNG MỞ MODEL 
+  cancelSaveAdd() {
+    // Đóng modal 
+    this.showConfirmationModalAdd = false;
+  }
+
+  viewFormAddProduct() {
+    // Mở modal 
+    this.showConfirmationModalAdd = true;
+  }
+
+  cancelSaveUpdate() {
+    // Đóng modal 
+    this.showConfirmationModalUpdate = false;
+  }
+
+  viewFormUpdateProduct() {
+    // Mở modal 
+    this.showConfirmationModalUpdate = true;
+  }
+
+
+  
 
   // San pham
   loadSanPham(): void {
@@ -143,51 +216,7 @@ export class ProductDetailViewComponent {
     )
   }
 
-  saveProduct() {
-    // xử lý lấy data call api
-    if (this.chiTietSanPhamForm.valid) {
-      // lay ra value form 
-      // const: bien k the thay doi
-      const formValues = this.chiTietSanPhamForm.value;
-      const chiTietSanPhamDto: ChiTietSanPhamDto = {
-        ...formValues,
-        sanPham: { id: formValues.sanPham }, // Chuyển đổi ID thành đối tượng
-        thuongHieu: { id: formValues.thuongHieu },
-        chatLieu: { id: formValues.chatLieu },
-        danhMuc: { id: formValues.danhMuc },
-        kichThuoc: { id: formValues.kichThuoc },
-        mauSac: { id: formValues.mauSac },
-      };
 
-      this.sanPhamCTService.themSanPhamChiTiet(chiTietSanPhamDto).subscribe(
-        response => {
-          console.log('Thêm chi tiết sản phẩm thành công!', response);
-          this.loadSanPhamChiTiet;
-          this.showConfirmationModal = false;
-          alert("Thêm sản phẩm chi tiết thành công!");
-        }, error => {
-          console.error('Thêm chi tiết sản phẩm thất bại!', error);
-          alert('Thêm chi tiết sản phẩm thất bại!');
-        }
-      )
-      // nếu thành công thì get lại list
-
-      // loadSanPhamChiTiet();
-      // this.showConfirmationModal = false;
-
-      // nếu thất bại...
-    }
-  }
-
-  cancelSave() {
-    // Đóng modal 
-    this.showConfirmationModal = false;
-  }
-
-  viewFormAddProduct() {
-    // Mở modal 
-    this.showConfirmationModal = true;
-  }
 }
 
 

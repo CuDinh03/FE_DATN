@@ -29,7 +29,7 @@
                     <option value="4">June 2023</option>
                   </select>
                   <button class="btn btn-primary" (click)="viewFormAddProduct()" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal" style="color: #ff3700; font-size: 16px; ">Thêm sản phẩm</button>
+                    data-bs-target="#exampleModal">Thêm sản phẩm</button>
                 </div>
               </div>
               <div>
@@ -99,12 +99,13 @@
                       <td>{{ sanPhamChiTiet.ngayNhap | date: 'dd/MM/yyyy' }}</td>
                       <td>{{ sanPhamChiTiet.trangThai == 1 ? "Hoạt động" : "Không HĐ" }}</td>
                       <td>
-                        <!-- <button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
-                        (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)" (click)="showModalAdd()">
-                        <i class="ti ti-edit"></i>
-                      </button> -->
+                        <button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
+                          (click)="viewFormUpdateProduct()" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                          <i class="ti ti-edit"></i>
+                        </button>
                         <button style="color: #7A98FE; font-size: 20px; border: none; background-color: transparent;"
-                          (click)="updateTrangThai(sanPhamChiTiet.id)">
+                          (click)="updateTrangThai(sanPhamChiTiet.id)"
+                          (click)="getChiTietSanPhamById(sanPhamChiTiet.id)">
                           <i class="ti ti-x"></i>
                         </button>
                       </td>
@@ -132,14 +133,14 @@
     </div>
   </div>
 
-  <!-- MODAL -->
+  <!-- MODAL Add -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-    [ngClass]="{'is-active': showConfirmationModal}">
-    <div class="modal-dialog" (click)="cancelSave()">
+    [ngClass]="{'is-active': showConfirmationModalAdd}">
+    <div class="modal-dialog" (click)="cancelSaveAdd()">
       <div class="modal-content">
         <div class="modal-header">
-          <!--  -->
-          <form [formGroup]="chiTietSanPhamForm" class="container mt-5">
+          <!-- FORM  ADD -->
+          <form [formGroup]="chiTietSanPhamFormAdd" class="container mt-5">
             <div class="mb-3">
               <label for="inputOne" class="form-label">Mã sản phẩm:</label>
               <input formControlName="ma" id="ma" type="text" class="form-control">
@@ -154,7 +155,7 @@
               <label for="inputOne" class="form-label">Giá bán:</label>
               <input formControlName="giaBan" id="giaBan" type="text" class="form-control">
             </div>
-            
+
             <div class="mb-3">
               <label for="inputOne" class="form-label">Số lượng:</label>
               <input formControlName="soLuong" id="soLuong" type="text" class="form-control">
@@ -203,9 +204,114 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-success" (click)="saveProduct()" data-bs-dismiss="modal">Thêm</button>
-              <button class="btn btn-danger" (click)="cancelSave()" data-bs-dismiss="modal">Hủy</button>
+              <button class="btn btn-danger" (click)="cancelSaveAdd()" data-bs-dismiss="modal">Hủy</button>
             </div>
           </form>
         </div>
       </div>
     </div>
+  </div>
+
+ <!-- MODAL Update -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    [ngClass]="{'is-active': showConfirmationModalUpdate}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cập nhật sản phẩm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- FORM UPDATE -->
+          <form [formGroup]="chiTietSanPhamFormUpdate" class="container mt-3">
+            <div class="mb-3">
+              <label for="ma" class="form-label">Mã sản phẩm:</label>
+              <input formControlName="ma" id="ma" type="text" class="form-control" [value]="sanPhamChiTietID?.ma">
+            </div>
+
+            <div class="mb-3">
+              <label for="giaNhap" class="form-label">Giá nhập:</label>
+              <input formControlName="giaNhap" id="giaNhap" type="text" class="form-control"
+                [value]="sanPhamChiTietID?.giaNhap">
+            </div>
+
+            <div class="mb-3">
+              <label for="giaBan" class="form-label">Giá bán:</label>
+              <input formControlName="giaBan" id="giaBan" type="text" class="form-control"
+                [value]="sanPhamChiTietID?.giaBan">
+            </div>
+
+            <div class="mb-3">
+              <label for="soLuong" class="form-label">Số lượng:</label>
+              <input formControlName="soLuong" id="soLuong" type="text" class="form-control"
+                [value]="sanPhamChiTietID?.soLuong">
+            </div>
+
+            <div class="mb-3">
+              <label for="sanPham" class="form-label">Loại Sản Phẩm:</label>
+              <select formControlName="sanPham" id="sanPham" class="form-select">
+                <option *ngFor="let sanPham of listSanPham" [value]="sanPham.id"
+                  [selected]="sanPham.id === sanPhamChiTietID?.sanPham?.id">
+                  {{ sanPham.ten }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="thuongHieu" class="form-label">Thương hiệu:</label>
+              <select formControlName="thuongHieu" id="thuongHieu" class="form-select">
+                <option *ngFor="let thuongHieu of listThuongHieu" [value]="thuongHieu.id"
+                  [selected]="thuongHieu.id === sanPhamChiTietID?.thuongHieu?.id">
+                  {{ thuongHieu.ten }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="chatLieu" class="form-label">Chất liệu:</label>
+              <select formControlName="chatLieu" id="chatLieu" class="form-select">
+                <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu.id"
+                  [selected]="chatLieu.id === sanPhamChiTietID?.chatLieu?.id">
+                  {{ chatLieu.ten }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="danhMuc" class="form-label">Danh mục:</label>
+              <select formControlName="danhMuc" id="danhMuc" class="form-select">
+                <option *ngFor="let danhMuc of listDanhMuc" [value]="danhMuc.id"
+                  [selected]="danhMuc.id === sanPhamChiTietID?.danhMuc?.id">
+                  {{ danhMuc.ten }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="kichThuoc" class="form-label">Kích thước:</label>
+              <select formControlName="kichThuoc" id="kichThuoc" class="form-select">
+                <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc.id"
+                  [selected]="kichThuoc.id === sanPhamChiTietID?.kichThuoc?.id">
+                  {{ kichThuoc.ten }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="mauSac" class="form-label">Màu sắc:</label>
+              <select formControlName="mauSac" id="mauSac" class="form-select">
+                <option *ngFor="let mauSac of listMauSac" [value]="mauSac.id"
+                  [selected]="mauSac.id === sanPhamChiTietID?.mauSac?.id">
+                  {{ mauSac.ten }}
+                </option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-success" (click)="updateProduct()" data-bs-dismiss="modal">Sửa</button>
+              <button class="btn btn-danger" (click)="cancelSaveUpdate()" data-bs-dismiss="modal">Hủy</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
