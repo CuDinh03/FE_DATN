@@ -96,7 +96,7 @@ export class ProductDetailViewComponent {
 
   // San pham
   loadSanPham(): void {
-    this.sanPhamService.getAll().subscribe(
+    this.sanPhamService.getAllSanPhamDangHoatDong().subscribe(
       response => {
         this.listSanPham = response.result;
       }
@@ -104,7 +104,7 @@ export class ProductDetailViewComponent {
   }
   // thuong hieu
   loadThuongHieu(): void {
-    this.thuongHieuService.getAll().subscribe(
+    this.thuongHieuService.getAllThuongHieuDangHoatDong().subscribe(
       response => {
         this.listThuongHieu = response.result;
       }
@@ -112,7 +112,7 @@ export class ProductDetailViewComponent {
   }
   // Chat Lieu 
   loadChatLieu(): void {
-    this.chatLieuService.getAll().subscribe(
+    this.chatLieuService.getAllChatLieuDangHoatDong().subscribe(
       response => {
         this.listChatLieu = response.result;
       }
@@ -120,7 +120,7 @@ export class ProductDetailViewComponent {
   }
   // Danh muc
   loadDanhMuc(): void {
-    this.danhMucService.getAllDanhMuc().subscribe(
+    this.danhMucService.getAllDanhMucDangHoatDong().subscribe(
       response => {
         this.listDanhMuc = response.result;
       }
@@ -128,7 +128,7 @@ export class ProductDetailViewComponent {
   }
   // Kich thuoc
   loadKichThuoc(): void {
-    this.kichThuocService.getAll().subscribe(
+    this.kichThuocService.getAllKichThuocDangHoatDong().subscribe(
       response => {
         this.listKichThuoc = response.result;
       }
@@ -136,13 +136,12 @@ export class ProductDetailViewComponent {
   }
   // Mau sac
   loadMacSac(): void {
-    this.mauSacService.getAll().subscribe(
+    this.mauSacService.getAllMauSacDangHoatDong().subscribe(
       response => {
         this.listMauSac = response.result;
       }
     )
   }
-
 
   saveProduct() {
     // xử lý lấy data call api

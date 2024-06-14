@@ -132,8 +132,6 @@
     </div>
   </div>
 
-
-
   <!-- MODAL -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
     [ngClass]="{'is-active': showConfirmationModal}">
@@ -142,7 +140,6 @@
         <div class="modal-header">
           <!--  -->
           <form [formGroup]="chiTietSanPhamForm" class="container mt-5">
-            (ngSubmit)="onSubmit()"
             <div class="mb-3">
               <label for="inputOne" class="form-label">Mã sản phẩm:</label>
               <input formControlName="ma" id="ma" type="text" class="form-control">
@@ -157,11 +154,7 @@
               <label for="inputOne" class="form-label">Giá bán:</label>
               <input formControlName="giaBan" id="giaBan" type="text" class="form-control">
             </div>
-
-            <!-- Ngay nhap -->
-            <!-- Ngay sua -->
-            <!-- Ngay tao -->
-
+            
             <div class="mb-3">
               <label for="inputOne" class="form-label">Số lượng:</label>
               <input formControlName="soLuong" id="soLuong" type="text" class="form-control">

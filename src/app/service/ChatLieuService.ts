@@ -16,14 +16,16 @@ export class ChatLieuService {
     }
 
     // 1. get all 
-    getAll(): Observable<ApiResponse<any>> {
+    getAllChatLieuDangHoatDong(): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
         // Thêm token vào header của yêu cầu
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
         });
 
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { headers });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/dang-hoat-dong`, { headers });
     }
+
+    
 
 }
