@@ -17,6 +17,7 @@ import {ProductViewComponent} from "./admin/product-view/product-view.component"
 import {ProfileComponent} from "./page/profile/profile.component";
 import {VoucherViewComponent} from "./admin/voucher-view/voucher-view.component";
 import { CustomerViewComponent } from './admin/customer-view/customer-view.component';
+import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,7 @@ const routes: Routes = [
       {path: 'tai-khoan', component: AccountViewComponent},
       {path: 'san-pham', component: ProductViewComponent},
       {path: 'danh-muc', component: CategoryViewComponent},
+      {path: 'chat-lieu', component: ChatLieuViewComponent},
       {path: 'shopping', component: ShoppingViewComponent},
       {path: 'voucher', component: VoucherViewComponent},
       {path:'hoa-don',component:OrdersViewComponent},
