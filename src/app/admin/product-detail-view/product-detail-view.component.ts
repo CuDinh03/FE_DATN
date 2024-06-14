@@ -99,7 +99,6 @@ export class ProductDetailViewComponent {
     );
   }
 
-
   saveProduct() {
     // xử lý lấy data call api
     if (this.chiTietSanPhamFormAdd.valid) {
@@ -119,7 +118,7 @@ export class ProductDetailViewComponent {
       this.sanPhamCTService.themSanPhamChiTiet(chiTietSanPhamDto).subscribe(
         response => {
           console.log('Thêm chi tiết sản phẩm thành công!', response);
-          this.loadSanPhamChiTietByNgayTao;
+          this.loadSanPhamChiTietByNgayTao();
           this.showConfirmationModalAdd = false;
           alert("Thêm sản phẩm chi tiết thành công!");
         }, error => {
@@ -165,7 +164,35 @@ export class ProductDetailViewComponent {
   }
 
 
-  
+
+  // Phương thức này sẽ được gọi khi bạn thay đổi tùy chọn trong select
+  onSelectChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedValue = selectElement.value;
+
+    // Thực hiện hành động tương ứng với giá trị được chọn
+    this.handleSelection(selectedValue);
+  }
+
+  // Phương thức để xử lý giá trị được chọn
+  handleSelection(value: string): void {
+    if (value === '5') {
+      // Thực hiện hành động khi chọn "5"
+      this.size = 5;
+      this.loadSanPhamChiTietByNgayTao();
+    } else  if (value === '10') {
+      // Thực hiện hành động khi chọn "10"
+      this.size = 10;
+      this.loadSanPhamChiTietByNgayTao();
+    } else if (value === '15') {
+      // Thực hiện hành động khi chọn "15"
+      this.size = 15;
+      this.loadSanPhamChiTietByNgayTao();
+    }
+  }
+
+
+
 
   // San pham
   loadSanPham(): void {
