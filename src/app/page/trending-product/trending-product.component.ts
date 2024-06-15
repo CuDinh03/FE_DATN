@@ -21,7 +21,7 @@ export class TrendingProductComponent {
   chiTietSanPham: any[] = [];
   findSanPhamChiTiet: any = {};
   maSanPhamChiTiet: string = 'CTSP1'
-  kichThuoc: string = '46a2c8e2-8840-425d-bc24-8081ddc2494a';
+  kichThuoc: string = 'cd2a9226-8b04-498b-bee4-63eb3db29330';
 
 
 
