@@ -58,6 +58,7 @@ export class HeaderComponent {
       this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
         (response) => {
           const khachHang = response.result;
+          this.khachHang = response.result;
           if (khachHang && khachHang.id) {
             this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
               (response) => {
