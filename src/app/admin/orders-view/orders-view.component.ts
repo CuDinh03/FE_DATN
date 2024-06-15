@@ -26,6 +26,7 @@ export class OrdersViewComponent {
   successMessage = '';
   hoaDon = ''
   noProductsFound = false;
+  noCartDetail = false;
   hoaDons: any[] = [];
   trangThai: number = 0;
   page: number = 0;
@@ -109,15 +110,15 @@ export class OrdersViewComponent {
       (response: ApiResponse<any>) => {
         if (response.result && response.result.length > 0) {
           this.hoaDonChiTiet = response.result;
-          this.noProductsFound = false;
+          this.noCartDetail = false;
         } else {
-          this.noProductsFound = true;
+          this.noCartDetail = true;
           this.hoaDonChiTiet = [];
         }
       },
       (error: HttpErrorResponse) => {
         if (error.error.code === ErrorCode.NO_ORDER_DETAIL_FOUND) {
-          this.noProductsFound = true;
+          this.noCartDetail = true;
           this.hoaDonChiTiet = [];
         } else {
           console.error('Unexpected error:', error);
