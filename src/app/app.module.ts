@@ -33,6 +33,7 @@ import { CustomerViewComponent } from './admin/customer-view/customer-view.compo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
+import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.compo
     AdminHeaderComponent,
     OrdersViewComponent,
     CustomerViewComponent,
-    ChatLieuViewComponent
+    ChatLieuViewComponent,
+    MauSacViewComponent
     
 
     ],
