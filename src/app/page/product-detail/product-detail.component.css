@@ -169,17 +169,18 @@
     position: relative;
     display: inline-block;
     width: 60px; /* Kích thước của nút radio */
-    height: 35px; /* Kích thước của nút radio */
+    height: 30px; /* Kích thước của nút radio */
     border: 1px solid #787878; /* Màu viền mặc định là đỏ */
     border-radius: 30px; /* Hình dạng tròn */
     margin-right: 5px; /* Khoảng cách giữa nút radio và mẫu màu */
   }
   
-  /* Hiển thị nút radio được chọn */
   .custom-radio input[type="radio"]:checked + label {
-    border: 2px solid #5D87FF; /* Màu viền mặc định là đỏ */
-
+    background-color: #5D87FF;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #5D87FF;
   }
+  
   
   .color-swatch {
     display: inline-block;
@@ -219,17 +220,26 @@
     height: 38px; /* Kích thước của nút radio */
     border: 1px solid #9d9d9d; /* Màu viền mặc định */
     border-radius: 5px; /* Hình dạng tròn */
+    padding: 10px;
     margin-right: 5px; /* Khoảng cách giữa nút radio và mẫu màu */
   }
   
   /* Hiển thị nút radio được chọn */
   .custom-radio-size input[type="radio"]:checked + label {
-    border: 2px solid #5D87FF; /* Màu viền khi được chọn */
+    background-color: #000000;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000000;
   }
+
+  .custom-radio-size input[type="radio"]:checked + label .size-swatch{
+    color: #ffffff;
+  }
+  
   
   .size-swatch {
     text-align: center; /* Căn giữa nội dung của size-swatch */
     color: #000;
+
   }
   
   .custom-radio-size label:hover {

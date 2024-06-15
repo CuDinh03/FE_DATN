@@ -1,10 +1,11 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiResponse } from './../../model/ApiResponse';
 import { HoaDonChiTietService } from './../../service/HoaDonChiTietService';
 import { HoaDonService } from './../../service/HoaDonService';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ErrorCode } from "../../model/ErrorCode";
 
 @Component({
@@ -13,7 +14,7 @@ import { ErrorCode } from "../../model/ErrorCode";
   styleUrls: ['./orders-view.component.css']
 })
 export class OrdersViewComponent {
-
+  @ViewChild('confirmUpdate') confirmUpdate!: ElementRef;
   listHoaDon: any[] = [];
   hoaDonChiTiet: any[] = [];
   totalElements = 0;
@@ -39,6 +40,7 @@ export class OrdersViewComponent {
     private hoaDonChiTietService: HoaDonChiTietService,
     private router: Router,
     private auth: AuthenticationService,
+    private snackBar: MatSnackBar,
 
   ) {
 
@@ -127,6 +129,20 @@ export class OrdersViewComponent {
     );
   }
 
+  showModal(): void {
+    if (this.confirmUpdate && this.confirmUpdate.nativeElement) {
+      this.confirmUpdate.nativeElement.classList.add('show');
+      this.confirmUpdate.nativeElement.style.display = 'block';
+    }
+  }
+
+  closeconfirmUpdate(): void {
+    if (this.confirmUpdate && this.confirmUpdate.nativeElement) {
+      this.confirmUpdate.nativeElement.classList.remove('show');
+      this.confirmUpdate.nativeElement.style.display = 'none';
+    }
+  }
+
   onPageChange(page: number): void {
     this.page = page;
     this.getHoaDons();
@@ -136,6 +152,17 @@ export class OrdersViewComponent {
   onPageChangeAll(page: number): void {
     this.currentPage = page;
     this.loadHoaDon();
+  }
+
+  suaTrangThaiModal(): void{
+    const storedHoaDon = localStorage.getItem('hoaDon');
+    if (storedHoaDon){
+      const hoaDon = JSON.parse(storedHoaDon);
+      let trangThaiMoi = hoaDon.trangThai + 1
+      this.updateTrangThai(hoaDon.id, trangThaiMoi);
+    }else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
   }
 
 
@@ -161,6 +188,30 @@ export class OrdersViewComponent {
     }
   }
 
+  updateTrangThai(id: string, trangThai: number): void {
+    this.apiService.updateTrangThai(id, trangThai).subscribe(
+      (response) => {
+        if (response) {
+          this.snackBar.open('Cập nhật trạng thái thành công', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        } else {
+          this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      },
+      (error) => {
+        console.error('Error updating status:', error);
+        this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    );
+  }
 
 
   logout(): void {
