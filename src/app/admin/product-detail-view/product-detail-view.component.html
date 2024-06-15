@@ -20,14 +20,13 @@
                   {{ errorMessage }}
                 </div> -->
                 <div>
-                  <h5>....</h5>
                   <select class="form-select" (change)="onSelectChange($event)">
                     <option value="5">5 sản phẩm</option>
                     <option value="10">10 sản phẩm</option>
                     <option value="15">15 sản phẩm</option>
                   </select>
                   <button class="btn btn-primary" (click)="viewFormAddProduct()" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal">Thêm sản phẩm</button>
+                    data-bs-target="#addProductModal">Thêm sản phẩm</button>
                 </div>
               </div>
               <div>
@@ -95,15 +94,17 @@
                       <td>{{ sanPhamChiTiet.giaNhap}}</td>
                       <th>{{ sanPhamChiTiet.giaBan}}</th>
                       <td>{{ sanPhamChiTiet.ngayNhap | date: 'dd/MM/yyyy' }}</td>
-                      <td>{{ sanPhamChiTiet.trangThai == 1 ? "Hoạt động" : "Không HĐ" }}</td>
+                      <td>{{ sanPhamChiTiet.trangThai == 1 ? "Còn hàng" : "Hết hàng" }}</td>
                       <td>
+                        <!-- MỞ form update SPCT -->
                         <button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
-                          (click)="viewFormUpdateProduct()" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                          (click)="viewFormUpdateProduct(sanPhamChiTiet.id)" data-bs-toggle="modal"
+                          data-bs-target="#updateProductModal">
                           <i class="ti ti-edit"></i>
                         </button>
+                        <!-- XOA SPCT  -->
                         <button style="color: #7A98FE; font-size: 20px; border: none; background-color: transparent;"
-                          (click)="updateTrangThai(sanPhamChiTiet.id)"
-                          (click)="getChiTietSanPhamById(sanPhamChiTiet.id)">
+                          (click)="confirmAndUpdate(sanPhamChiTiet.id)">
                           <i class="ti ti-x"></i>
                         </button>
                       </td>
@@ -132,31 +133,63 @@
   </div>
 
   <!-- MODAL Add -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true"
     [ngClass]="{'is-active': showConfirmationModalAdd}">
     <div class="modal-dialog" (click)="cancelSaveAdd()">
       <div class="modal-content">
         <div class="modal-header">
+
           <!-- FORM  ADD -->
           <form [formGroup]="chiTietSanPhamFormAdd" class="container mt-5">
             <div class="mb-3">
               <label for="inputOne" class="form-label">Mã sản phẩm:</label>
               <input formControlName="ma" id="ma" type="text" class="form-control">
+
+              <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched) && f['ma'].errors">
+                <div class="error-msg" *ngIf="f['ma'].errors['required']"></div>
+                <div style="color: red">
+                  Không được để trống!
+                </div>
+              </div>
+
             </div>
 
             <div class="mb-3">
               <label for="inputOne" class="form-label">Giá nhập:</label>
               <input formControlName="giaNhap" id="giaNhap" type="text" class="form-control">
+
+              <div *ngIf="f['giaNhap'].invalid && (f['giaNhap'].dirty || f['giaNhap'].touched) && f['giaNhap'].errors">
+                <div style="color: red" *ngIf="f['giaNhap'].errors['required']">
+                  Không được để trống!
+                </div>
+              </div>
+
             </div>
 
             <div class="mb-3">
               <label for="inputOne" class="form-label">Giá bán:</label>
               <input formControlName="giaBan" id="giaBan" type="text" class="form-control">
+
+              <div *ngIf="f['giaBan'].invalid && (f['giaBan'].dirty || f['giaBan'].touched) && f['giaBan'].errors">
+                <div class="error-msg" *ngIf="f['giaBan'].errors['required']"></div>
+                <div style="color: red">
+                  Không được để trống!
+                </div>
+              </div>
+
             </div>
 
             <div class="mb-3">
               <label for="inputOne" class="form-label">Số lượng:</label>
               <input formControlName="soLuong" id="soLuong" type="text" class="form-control">
+
+              <div *ngIf="f['soLuong'].invalid && (f['soLuong'].dirty || f['soLuong'].touched) && f['soLuong'].errors">
+                <div class="error-msg" *ngIf="f['soLuong'].errors['required']"></div>
+                <div style="color: red">
+                  Không được để trống!
+                </div>
+              </div>
+
             </div>
 
             <div class="mb-3">
@@ -200,6 +233,7 @@
                 <option *ngFor="let mauSac of listMauSac" [value]="mauSac.id">{{ mauSac.ten }}</option>
               </select>
             </div>
+
             <div class="modal-footer">
               <button class="btn btn-success" (click)="saveProduct()" data-bs-dismiss="modal">Thêm</button>
               <button class="btn btn-danger" (click)="cancelSaveAdd()" data-bs-dismiss="modal">Hủy</button>
@@ -210,13 +244,14 @@
     </div>
   </div>
 
- <!-- MODAL Update -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-    [ngClass]="{'is-active': showConfirmationModalUpdate}">
+
+  <!-- MODAL Update -->
+  <div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel"
+    aria-hidden="true" [ngClass]="{'is-active': showConfirmationModalUpdate}">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Cập nhật sản phẩm</h5>
+          <h5 class="modal-title" id="updateProductModalLabel">Cập nhật sản phẩm</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -224,7 +259,8 @@
           <form [formGroup]="chiTietSanPhamFormUpdate" class="container mt-3">
             <div class="mb-3">
               <label for="ma" class="form-label">Mã sản phẩm:</label>
-              <input formControlName="ma" id="ma" type="text" class="form-control" [value]="sanPhamChiTietID?.ma">
+              <input formControlName="ma" id="ma" type="text" class="form-control" [value]="sanPhamChiTietID?.ma"
+                readonly>
             </div>
 
             <div class="mb-3">
@@ -239,11 +275,12 @@
                 [value]="sanPhamChiTietID?.giaBan">
             </div>
 
-            <div class="mb-3">
+            <!-- Không sửa số lượng -->
+            <!-- <div class="mb-3">
               <label for="soLuong" class="form-label">Số lượng:</label>
               <input formControlName="soLuong" id="soLuong" type="text" class="form-control"
                 [value]="sanPhamChiTietID?.soLuong">
-            </div>
+            </div> -->
 
             <div class="mb-3">
               <label for="sanPham" class="form-label">Loại Sản Phẩm:</label>

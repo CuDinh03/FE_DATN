@@ -93,4 +93,15 @@ export class SanPhamCTService {
     return this.http.post(`${this.apiUrl}/add`, sanPhamChiTiet, { headers });
   }
 
+  // Sửa sản phẩm chi tiết 
+  suaSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto, id : string): Observable<any> {
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put(`${this.apiUrl}/update/${id}`, sanPhamChiTiet, { headers });
+  }
+
 }

@@ -1,6 +1,6 @@
 import { EOF } from '@angular/compiler';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChiTietSanPhamDto } from 'src/app/model/chi-tiet-san-pham-dto.model';
 import { AuthenticationService } from 'src/app/service/AuthenticationService';
 import { ChatLieuService } from 'src/app/service/ChatLieuService';
@@ -54,10 +54,23 @@ export class ProductDetailViewComponent {
   ngOnInit(): void {
     // Khởi tạo form add
     this.chiTietSanPhamFormAdd = this.formBuilder.group({
+      ma: ['', Validators.required],  // 
+      giaNhap: ['', Validators.required],
+      giaBan: ['', Validators.required],
+      soLuong: ['', Validators.required],
+      sanPham: [''],
+      thuongHieu: [''],
+      chatLieu: [''],
+      danhMuc: [''],
+      kichThuoc: [''],
+      mauSac: ['']
+    });
+    // Khởi tạo form update 
+    this.chiTietSanPhamFormUpdate = this.formBuilder.group({
       ma: [''],
       giaNhap: [''],
       giaBan: [''],
-      soLuong: [''],
+      // soLuong: [''],
       sanPham: [''],
       thuongHieu: [''],
       chatLieu: [''],
@@ -90,14 +103,6 @@ export class ProductDetailViewComponent {
     this.loadSanPhamChiTietByNgayTao();
   }
 
-  // UPDATE TRANG THAI SPCT
-  updateTrangThai(id: string): void {
-    this.sanPhamCTService.updateTrangThaiById(id).subscribe(
-      res => {
-        this.loadSanPhamChiTietByNgayTao();
-      }
-    );
-  }
 
   saveProduct() {
     // xử lý lấy data call api
@@ -126,11 +131,25 @@ export class ProductDetailViewComponent {
           alert('Thêm chi tiết sản phẩm thất bại!');
         }
       )
-    }
+    } else {
+      this.markTheElement(this.chiTietSanPhamFormAdd);
   }
+}
+
+markTheElement(formGroup: FormGroup): void {
+  Object.keys(formGroup.controls).forEach(filed => {
+    const control = formGroup.get(filed);
+    if (control instanceof FormGroup) {
+      this.markTheElement(control);
+    } else if (control) {
+      control.markAsTouched({ onlySelf: true });
+    }
+  });
+}
+
 
   // Lấy sản phẩm chi tiết by ID
-  getChiTietSanPhamById(id: string) {
+ async getChiTietSanPhamById(id: string): Promise<void> {
     this.sanPhamCTService.getChiTietSanPhamById(id)
       .subscribe(res => {
         this.sanPhamChiTietID = res.result;
@@ -139,7 +158,50 @@ export class ProductDetailViewComponent {
       })
   }
 
+
   updateProduct() {
+
+    if (this.chiTietSanPhamFormAdd.valid) {
+      // const: bien k the thay doi
+      // lay ra value form 
+      const formValues = this.chiTietSanPhamFormUpdate.value;
+
+      const chiTietSanPhamDto: ChiTietSanPhamDto = {
+        id: this.sanPhamChiTietID?.id,
+        ma: formValues.ma,
+
+        sanPham: { id: formValues.sanPham }, // Chuyển đổi ID thành đối tượng
+        thuongHieu: { id: formValues.thuongHieu },
+        chatLieu: { id: formValues.chatLieu },
+        danhMuc: { id: formValues.danhMuc },
+        kichThuoc: { id: formValues.kichThuoc },
+        mauSac: { id: formValues.mauSac },
+
+        soLuong: this.sanPhamChiTietID?.soLuong,
+        giaNhap: formValues.giaNhap,
+        giaBan: formValues.giaBan,
+
+        ngayNhap: this.sanPhamChiTietID?.ngayNhap,
+        ngayTao: this.sanPhamChiTietID?.ngayTao,
+        ngaySua: new Date(),
+
+        trangThai: this.sanPhamChiTietID?.trangThai,
+        hinhAnh: this.sanPhamChiTietID?.hinhAnh,
+      };
+
+      this.sanPhamCTService.suaSanPhamChiTiet(chiTietSanPhamDto, this.sanPhamChiTietID?.id).subscribe(
+        response => {
+          console.log('Sửa chi tiết sản phẩm thành công!', response);
+          this.loadSanPhamChiTietByNgayTao();
+          this.showConfirmationModalUpdate = false;
+          alert("Sửa sản phẩm chi tiết thành công!");
+        }, error => {
+          console.error('Sửa chi tiết sản phẩm thất bại!', error);
+          alert('Sửa chi tiết sản phẩm thất bại!');
+        }
+      )
+
+    }
   }
 
   // ĐÓNG MỞ MODEL 
@@ -158,9 +220,31 @@ export class ProductDetailViewComponent {
     this.showConfirmationModalUpdate = false;
   }
 
-  viewFormUpdateProduct() {
+ async viewFormUpdateProduct(id: string): Promise<void>  {
+    await this.getChiTietSanPhamById(id);
     // Mở modal 
+    // lấy ra index của sản phẩm chi tiết theo id 
+    const index = this.listSanPhamChiTiet.findIndex(e => e.id == id);
+    // lấy ra giá trị theo index 
+    const value = this.listSanPhamChiTiet[index];
+    // fill value form 
+    this.fillValueToForm(value);
     this.showConfirmationModalUpdate = true;
+  }
+
+  fillValueToForm(spct: any) {
+    this.chiTietSanPhamFormUpdate.patchValue({
+      ma: spct.ma,
+      giaNhap: spct.giaNhap,
+      giaBan: spct.giaBan,
+      // soLuong: [''],
+      sanPham: spct.sanPham.id,
+      thuongHieu: spct.thuongHieu.id,
+      chatLieu: spct.chatLieu.id,
+      danhMuc: spct.danhMuc.id,
+      kichThuoc: spct.kichThuoc.id,
+      mauSac: spct.mauSac.id,
+    })
   }
 
 
@@ -180,7 +264,7 @@ export class ProductDetailViewComponent {
       // Thực hiện hành động khi chọn "5"
       this.size = 5;
       this.loadSanPhamChiTietByNgayTao();
-    } else  if (value === '10') {
+    } else if (value === '10') {
       // Thực hiện hành động khi chọn "10"
       this.size = 10;
       this.loadSanPhamChiTietByNgayTao();
@@ -192,6 +276,23 @@ export class ProductDetailViewComponent {
   }
 
 
+  // Phương thức hiển thị hộp thoại xác nhận và gọi updateTrangThai nếu người dùng xác nhận
+  confirmAndUpdate(id: string): void {
+    const confirmed = window.confirm('Bạn có chắc chắn muốn cập nhật trạng thái không?');
+    if (confirmed) {
+      this.updateTrangThai(id);
+    }
+  }
+
+  // UPDATE TRANG THAI SPCT
+  updateTrangThai(id: string): void {
+    this.sanPhamCTService.updateTrangThaiById(id).subscribe(
+      res => {
+        this.loadSanPhamChiTietByNgayTao();
+        alert('Xóa sản phẩm chi tiết thành công!')
+      }
+    );
+  }
 
 
   // San pham
@@ -243,7 +344,9 @@ export class ProductDetailViewComponent {
     )
   }
 
-
+  get f() {
+    return this.chiTietSanPhamFormAdd.controls;
+  }
 }
 
 
