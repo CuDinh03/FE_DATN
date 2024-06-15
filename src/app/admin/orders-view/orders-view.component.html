@@ -117,9 +117,9 @@
                             {{ getTrangThaiText(listHoaDon.trangThai) }}
                           </td>
                           <td>
-                            <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
-                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(listHoaDon.id)">
-                              <i class="ti ti-edit"></i>
+                            <button style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;" data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(listHoaDon.id)" (click)="loadHoaDonById(listHoaDon.id)">
+                              Xem
                             </button>
                           </td>
                         </tr>
@@ -205,9 +205,9 @@
                             {{ getTrangThaiText(hoaDons.trangThai) }}
                           </td>
                           <td>
-                            <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
-                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)">
-                              <i class="ti ti-edit"></i>
+                            <button style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;" data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)" (click)="loadHoaDonById(hoaDons.id)">
+                              Xem  
                             </button>
                           </td>
 
@@ -293,12 +293,16 @@
                             {{ getTrangThaiText(hoaDons.trangThai) }}
                           </td>
                           <td>
-                            <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
-                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)">
-                              <i class="ti ti-edit"></i>
+                            <button style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;" data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)" (click)="loadHoaDonById(hoaDons.id)">
+                              Xem  
+                            </button>
+                            <label class="ms-1 me-1"> | </label>
+                            <button style="color: #fc8f00;font-size: 16px; margin: 0px; border: none !important; background-color: transparent;" 
+                            (click)="loadHoaDonById(hoaDons.id)" (click)="showModal()">
+                              <i class="ti ti-check"></i>  
                             </button>
                           </td>
-
                         </tr>
                       </tbody>
                     </table>
@@ -381,9 +385,14 @@
                             {{ getTrangThaiText(hoaDons.trangThai) }}
                           </td>
                           <td>
-                            <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
-                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)">
-                              <i class="ti ti-edit"></i>
+                            <button style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;" data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)" (click)="loadHoaDonById(hoaDons.id)">
+                              Xem  
+                            </button>
+                            <label class="ms-1 me-1"> | </label>
+                            <button style="color: #fc8f00;font-size: 16px; margin: 0px; border: none !important; background-color: transparent;" 
+                            (click)="loadHoaDonById(hoaDons.id)" (click)="showModal()">
+                              <i class="ti ti-check"></i>  
                             </button>
                           </td>
 
@@ -468,9 +477,9 @@
                             {{ getTrangThaiText(hoaDons.trangThai) }}
                           </td>
                           <td>
-                            <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
-                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)">
-                              <i class="ti ti-edit"></i>
+                            <button style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;" data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)" (click)="loadHoaDonById(hoaDons.id)">
+                              Xem  
                             </button>
                           </td>
 
@@ -557,9 +566,9 @@
                             {{ getTrangThaiText(hoaDons.trangThai) }}
                           </td>
                           <td>
-                            <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
-                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)">
-                              <i class="ti ti-edit"></i>
+                            <button style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;" data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)" (click)="loadHoaDonById(hoaDons.id)">
+                              Xem  
                             </button>
                           </td>
 
@@ -645,12 +654,11 @@
                             {{ getTrangThaiText(hoaDons.trangThai) }}
                           </td>
                           <td>
-                            <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
-                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)">
-                              <i class="ti ti-edit"></i>
+                            <button style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;" data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)" (click)="loadHoaDonById(hoaDons.id)">
+                              Xem  
                             </button>
                           </td>
-
                         </tr>
                       </tbody>
                     </table>
@@ -703,11 +711,10 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="container-fluid" *ngIf="!noProductsFound">
+          <div class="container-fluid" *ngIf="!noCartDetail">
             <table class="table">
               <thead>
                 <tr>
-                  <th>Mã hóa đơn</th>
                   <th>Mã sản phẩm</th>
                   <th>Tên sản phẩm</th>
                   <th>Màu sắc</th>
@@ -718,7 +725,6 @@
               </thead>
               <tbody>
                 <tr *ngFor="let chiTiet of hoaDonChiTiet">
-                  <td>{{ chiTiet.hoaDon.ma }}</td>
                   <td>{{ chiTiet.chiTietSanPham.sanPham.ma }}</td>
                   <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
                   <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
@@ -729,13 +735,33 @@
               </tbody>
             </table>
           </div>
-          <div *ngIf="noProductsFound" class="m-5 d-flex justify-content-center">
-            <p>Chưa có sản phẩm nào</p>
-          </div>
+        </div>
+        <div *ngIf="noCartDetail" class="m-5 d-flex justify-content-center">
+          <p>Chưa có sản phẩm nào</p>
         </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-danger">Xác nhận</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" #confirmUpdate tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel1">Xác nhận xóa sản phẩm</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeconfirmUpdate()"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Xác nhận chuyển trạng thái</label>
+        <input type="text" class="form-control" placeholder="Ghi chú">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="suaTrangThaiModal()" data-bs-dismiss="modal">Xác nhận</button>
+        <button class="btn btn-danger" (click)="closeconfirmUpdate()" data-bs-dismiss="modal">Hủy</button>
       </div>
     </div>
   </div>

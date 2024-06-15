@@ -88,5 +88,17 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
   
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getHoaDonsByTranThai/${trangThai}`, { params, headers });
     }
+
+    updateTrangThai(id: string, trangThai: number): Observable<ApiResponse<void>> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+    
+        let params = new HttpParams();
+        params = params.append('trangThai', trangThai.toString());
+    
+        return this.http.put<ApiResponse<void>>(`${this.apiUrl}/updateTrangThai/${id}`, null, { params, headers });
+      }
 }
 
