@@ -134,7 +134,7 @@
     border: none; /* Bỏ viền nếu cần */
     background-color: #f0f0f0; /* Đặt màu nền */
     position: absolute; /* Đặt vị trí tuyệt đối */
-    right: 81px; /* Đặt các nút ở cuối bên phải */
+    right: 3rem; /* Đặt các nút ở cuối bên phải */
   }
   
   /* Định vị các nút tăng giảm */
@@ -149,6 +149,95 @@
   .product_count .items-count i {
     font-size: 11px; /* Điều chỉnh kích thước biểu tượng */
   }
-
   
- 
+  .custom-radio {
+    display: d-flex;
+    position: relative;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-right: 20px; /* Khoảng cách giữa các nút radio */
+  }
+  
+  .custom-radio input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .custom-radio label {
+    position: relative;
+    display: inline-block;
+    width: 60px; /* Kích thước của nút radio */
+    height: 35px; /* Kích thước của nút radio */
+    border: 1px solid #787878; /* Màu viền mặc định là đỏ */
+    border-radius: 30px; /* Hình dạng tròn */
+    margin-right: 5px; /* Khoảng cách giữa nút radio và mẫu màu */
+  }
+  
+  /* Hiển thị nút radio được chọn */
+  .custom-radio input[type="radio"]:checked + label {
+    border: 2px solid #5D87FF; /* Màu viền mặc định là đỏ */
+
+  }
+  
+  .color-swatch {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  .custom-radio label:hover {
+    /* Đổi kiểu con trỏ thành bàn tay khi hover vào */
+    cursor: pointer;
+  }
+  
+
+  .custom-radio-size {
+    display: flex; /* Sử dụng flexbox để căn giữa */
+    align-items: center; /* Căn các thành phần vào giữa theo chiều dọc */
+    position: relative;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-right: 10px; /* Khoảng cách giữa các nút radio */
+  }
+  
+  .custom-radio-size input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .custom-radio-size label {
+    position: relative;
+    display: inline-flex; /* Sử dụng inline-flex để căn giữa nội dung theo chiều ngang */
+    align-items: center; /* Căn các thành phần vào giữa theo chiều dọc */
+    justify-content: center; /* Căn các thành phần vào giữa theo chiều ngang */
+    width: 38px; /* Kích thước của nút radio */
+    height: 38px; /* Kích thước của nút radio */
+    border: 1px solid #9d9d9d; /* Màu viền mặc định */
+    border-radius: 5px; /* Hình dạng tròn */
+    margin-right: 5px; /* Khoảng cách giữa nút radio và mẫu màu */
+  }
+  
+  /* Hiển thị nút radio được chọn */
+  .custom-radio-size input[type="radio"]:checked + label {
+    border: 2px solid #5D87FF; /* Màu viền khi được chọn */
+  }
+  
+  .size-swatch {
+    text-align: center; /* Căn giữa nội dung của size-swatch */
+    color: #000;
+  }
+  
+  .custom-radio-size label:hover {
+    cursor: pointer; /* Đổi kiểu con trỏ thành bàn tay khi hover vào */
+  }
+  
+  
+  
+  
+  
+  

@@ -33,13 +33,35 @@ import { ApiResponse } from "../model/ApiResponse";
   getChiTietSanPhamById(id: string): Observable<ApiResponse<any>> {
     
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`);
-}
-
-getAllSanPhamChiTiet(): Observable<ApiResponse<any>> {
-
-  return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`,);
-}
-
-
-      
   }
+
+    getAllSanPhamChiTiet(): Observable<ApiResponse<any>> {
+
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`,);
+    }
+
+    getAllMauSacByMa(ma: string): Observable<ApiResponse<any>> {
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findAllMauSacByMaCTSP/${ma}`);
+    }
+
+    getAllKichThuocByMa(ma: string): Observable<ApiResponse<any>> {
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findAllKichThuocByMaCTSP/${ma}`);
+    }
+
+    findChiTietSanPhamByMauSacAndKichThuoc(ma: string, kichThuocId: string, mauSacId: string): Observable<ApiResponse<any>> {
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findChiTietSanPhamByMauSacAndKichThuoc/${ma}`, {
+        params: {
+          kichThuoc: kichThuocId,
+          mauSac: mauSacId
+        }
+      });
+    }
+
+    findChiTietSanPhamByKichThuoc(ma: string, kichThuocId: string): Observable<ApiResponse<any>> {
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findSanPhamByKichThuoc/${ma}`, {
+        params: {
+          kichThuoc: kichThuocId,
+        }
+      });
+    }
+}

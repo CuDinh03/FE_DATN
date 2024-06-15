@@ -32,17 +32,13 @@
                               [attr.aria-controls]="'nav-home-' + i" [attr.aria-selected]="i === 0"
                               (click)="loadGioHangChiTiet(hoaDon.gioHang.id)" (click)="loadHoaDonById(hoaDon.hoaDon.id)"
                               (click)="loadGioHangById(hoaDon.gioHang.id)" (click)="findHoaDonByMa(hoaDon.hoaDon.ma)">
-
                         {{hoaDon.hoaDon.ma}}
                       </button>
                     </div>
                   </nav>
 
                   <div class="tab-content" id="nav-tabContent">
-                    <div *ngFor="let hoaDon of listHoaDonGioHang.slice(0,5); let i = index" class="tab-pane fade"
-                         [class.show]="i === 0" [class.active]="i === 0" id="nav-home-{{i}}" role="tabpanel"
-                         [attr.aria-labelledby]="'nav-home-tab-' + i" tabindex="0">
-
+                    <div>
                       <div class="container-fluid" *ngIf="!noProductsFound">
                         <div class="d-flex justify-content-end mt-3 mb-3">
                           <a class="btn btn-primary" style="color: white;" (click)="resetGioHang()">Làm mới</a>
@@ -463,15 +459,16 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="paymentModal">Xác nhận thanh toán</h5>
-
+        <h3 class="modal-title" id="paymentModal">Xác nhận thanh toán</h3>
         <button type="button" class="btn-close" (click)="closeConfirmPayment()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <h2>Bạn có muốn thanh toán đơn hàng này không?</h2>
+        <label class="form-label">Xác nhận thanh toán với ghi chú</label>
+        <input type="text" class="form-control"  id="ghiChu" name="ghiChu"
+        [(ngModel)]="ghiChu" (ngModelChange)="ghiChuText($event)">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="onSubmitPayment()">Xác nhận</button>
+        <button type="button" class="btn btn-success" (click)="onSubmitPayment()">Thanh toán</button>
       </div>
     </div>
   </div>

@@ -64,6 +64,9 @@
                             <h6 class="fw-semibold mb-0">Ngày tạo</h6>
                           </th>
                           <th scope="col">
+                            <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                          </th>
+                          <th scope="col">
                             <h6 class="fw-semibold mb-0">Tổng tiền</h6>
                           </th>
                           <th scope="col">
@@ -88,6 +91,10 @@
                           <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
                           <td>{{listHoaDon.ma }}</td>
                           <td>{{ formatDate(listHoaDon.ngayTao) }}</td>
+                          <td>
+                            <p *ngIf="listHoaDon.ghiChu != null">{{listHoaDon.ghiChu}}%</p>
+                            <p *ngIf="listHoaDon.ghiChu === null"> - </p>
+                          </td>
                           <td>{{listHoaDon.tongTien}}</td>
                           <td>
                             <p *ngIf="listHoaDon.voucher != null">{{listHoaDon.voucher.giaTriGiam}}%</p>
@@ -95,9 +102,12 @@
                           </td>
                           <td>
                             <p *ngIf="listHoaDon.khachHang != null">{{listHoaDon.khachHang.ten}}</p>
-                            <p *ngIf="listHoaDon.khachHang === null"> - </p>
+                            <p *ngIf="listHoaDon.khachHang === null"> Khách lẻ </p>
                           </td>
-                          <td>{{listHoaDon.nhanVien.ten}}</td>
+                          <td>
+                            <p *ngIf="listHoaDon.nhanVien != null">{{listHoaDon.nhanVien.ten}}</p>
+                            <p *ngIf="listHoaDon.nhanVien === null"> - </p>
+                          </td>
                           <td [ngClass]="{
                             'text-danger': listHoaDon.trangThai === 0 || listHoaDon.trangThai === 4 || listHoaDon.trangThai === 5,
                             'text-warning': listHoaDon.trangThai === 1,
@@ -107,9 +117,9 @@
                             {{ getTrangThaiText(listHoaDon.trangThai) }}
                           </td>
                           <td>
-                            <button class="btn" style="color: #7A98FE;font-size: 20px;" data-bs-toggle="modal"
+                            <button style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;" data-bs-toggle="modal"
                               data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(listHoaDon.id)">
-                              <i class="ti ti-edit"></i>
+                              Xem
                             </button>
                           </td>
                         </tr>
@@ -145,6 +155,9 @@
                             <h6 class="fw-semibold mb-0">Ngày tạo</h6>
                           </th>
                           <th scope="col">
+                            <h6 class="fw-semibold mb-0">Ghi Chú</h6>
+                          </th>
+                          <th scope="col">
                             <h6 class="fw-semibold mb-0">Tổng tiền</h6>
                           </th>
                           <th scope="col">
@@ -169,6 +182,10 @@
                           <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
                           <td>{{hoaDons.ma }}</td>
                           <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                          <td>
+                            <p *ngIf="hoaDons.ghiChu != null">{{hoaDons.ghiChu}}%</p>
+                            <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                          </td>
                           <td>{{hoaDons.tongTien}}</td>
                           <td>
                             <p *ngIf="hoaDons.voucher != null">{{hoaDons.voucher.giaTriGiam}}%</p>
@@ -176,7 +193,7 @@
                           </td>
                           <td>
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
-                            <p *ngIf="hoaDons.khachHang === null"> - </p>
+                            <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
                           <td>{{hoaDons.nhanVien.ten}}</td>
                           <td [ngClass]="{
@@ -226,6 +243,9 @@
                             <h6 class="fw-semibold mb-0">Ngày tạo</h6>
                           </th>
                           <th scope="col">
+                            <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                          </th>
+                          <th scope="col">
                             <h6 class="fw-semibold mb-0">Tổng tiền</h6>
                           </th>
                           <th scope="col">
@@ -250,6 +270,10 @@
                           <th scope="row">{{page * pageSize + i + 1 }}</th>
                           <td>{{hoaDons.ma }}</td>
                           <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                          <td>
+                            <p *ngIf="hoaDons.ghiChu != null">{{hoaDons.ghiChu}}%</p>
+                            <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                          </td>
                           <td>{{hoaDons.tongTien}}</td>
                           <td>
                             <p *ngIf="hoaDons.voucher != null">{{hoaDons.voucher.giaTriGiam}}%</p>
@@ -257,7 +281,7 @@
                           </td>
                           <td>
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
-                            <p *ngIf="hoaDons.khachHang === null"> - </p>
+                            <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
                           <td>{{hoaDons.nhanVien.ten}}</td>
                           <td [ngClass]="{
@@ -307,6 +331,9 @@
                             <h6 class="fw-semibold mb-0">Ngày tạo</h6>
                           </th>
                           <th scope="col">
+                            <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                          </th>
+                          <th scope="col">
                             <h6 class="fw-semibold mb-0">Tổng tiền</h6>
                           </th>
                           <th scope="col">
@@ -331,6 +358,10 @@
                           <th scope="row">{{page * pageSize + i + 1 }}</th>
                           <td>{{hoaDons.ma }}</td>
                           <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                          <td>
+                            <p *ngIf="hoaDons.ghiChu != null">{{hoaDons.ghiChu}}%</p>
+                            <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                          </td>
                           <td>{{hoaDons.tongTien}}</td>
                           <td>
                             <p *ngIf="hoaDons.voucher != null">{{hoaDons.voucher.giaTriGiam}}%</p>
@@ -338,7 +369,7 @@
                           </td>
                           <td>
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
-                            <p *ngIf="hoaDons.khachHang === null"> - </p>
+                            <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
                           <td>{{hoaDons.nhanVien.ten}}</td>
                           <td [ngClass]="{
@@ -387,6 +418,9 @@
                             <h6 class="fw-semibold mb-0">Ngày tạo</h6>
                           </th>
                           <th scope="col">
+                            <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                          </th>
+                          <th scope="col">
                             <h6 class="fw-semibold mb-0">Tổng tiền</h6>
                           </th>
                           <th scope="col">
@@ -411,6 +445,10 @@
                           <th scope="row">{{page * pageSize + i + 1 }}</th>
                           <td>{{hoaDons.ma }}</td>
                           <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                          <td>
+                            <p *ngIf="hoaDons.ghiChu != null">{{hoaDons.ghiChu}}%</p>
+                            <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                          </td>
                           <td>{{hoaDons.tongTien}}</td>
                           <td>
                             <p *ngIf="hoaDons.voucher != null">{{hoaDons.voucher.giaTriGiam}}%</p>
@@ -418,7 +456,7 @@
                           </td>
                           <td>
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
-                            <p *ngIf="hoaDons.khachHang === null"> - </p>
+                            <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
                           <td>{{hoaDons.nhanVien.ten}}</td>
                           <td [ngClass]="{
@@ -469,6 +507,9 @@
                             <h6 class="fw-semibold mb-0">Ngày tạo</h6>
                           </th>
                           <th scope="col">
+                            <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                          </th>
+                          <th scope="col">
                             <h6 class="fw-semibold mb-0">Tổng tiền</h6>
                           </th>
                           <th scope="col">
@@ -493,6 +534,10 @@
                           <th scope="row">{{page * pageSize + i + 1 }}</th>
                           <td>{{hoaDons.ma }}</td>
                           <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                          <td>
+                            <p *ngIf="hoaDons.ghiChu != null">{{hoaDons.ghiChu}}%</p>
+                            <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                          </td>
                           <td>{{hoaDons.tongTien}}</td>
                           <td>
                             <p *ngIf="hoaDons.voucher != null">{{hoaDons.voucher.giaTriGiam}}%</p>
@@ -500,7 +545,7 @@
                           </td>
                           <td>
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
-                            <p *ngIf="hoaDons.khachHang === null"> - </p>
+                            <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
                           <td>{{hoaDons.nhanVien.ten}}</td>
                           <td [ngClass]="{
@@ -550,6 +595,9 @@
                             <h6 class="fw-semibold mb-0">Ngày tạo</h6>
                           </th>
                           <th scope="col">
+                            <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                          </th>
+                          <th scope="col">
                             <h6 class="fw-semibold mb-0">Tổng tiền</h6>
                           </th>
                           <th scope="col">
@@ -574,6 +622,10 @@
                           <th scope="row">{{page * pageSize + i + 1 }}</th>
                           <td>{{hoaDons.ma }}</td>
                           <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                          <td>
+                            <p *ngIf="hoaDons.ghiChu != null">{{hoaDons.ghiChu}}%</p>
+                            <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                          </td>
                           <td>{{hoaDons.tongTien}}</td>
                           <td>
                             <p *ngIf="hoaDons.voucher != null">{{hoaDons.voucher.giaTriGiam}}%</p>
@@ -581,7 +633,7 @@
                           </td>
                           <td>
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
-                            <p *ngIf="hoaDons.khachHang === null"> - </p>
+                            <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
                           <td>{{hoaDons.nhanVien.ten}}</td>
                           <td [ngClass]="{
@@ -651,14 +703,10 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="container-fluid" *ngIf="!noProductsFound">
-            <div class="d-flex justify-content-end mt-3 mb-3">
-              <a class="btn btn-primary" style="color: white;">Làm mới</a>
-            </div>
+          <div class="container-fluid" *ngIf="!noCartDetail">
             <table class="table">
               <thead>
                 <tr>
-                  <th>Mã hóa đơn</th>
                   <th>Mã sản phẩm</th>
                   <th>Tên sản phẩm</th>
                   <th>Màu sắc</th>
@@ -669,7 +717,6 @@
               </thead>
               <tbody>
                 <tr *ngFor="let chiTiet of hoaDonChiTiet">
-                  <td>{{ chiTiet.hoaDon.ma }}</td>
                   <td>{{ chiTiet.chiTietSanPham.sanPham.ma }}</td>
                   <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
                   <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
@@ -680,9 +727,9 @@
               </tbody>
             </table>
           </div>
-          <div *ngIf="noProductsFound" class="m-5 d-flex justify-content-center">
-            <p>Chưa có sản phẩm nào</p>
-          </div>
+        </div>
+        <div *ngIf="noCartDetail" class="m-5 d-flex justify-content-center">
+          <p>Chưa có sản phẩm nào</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

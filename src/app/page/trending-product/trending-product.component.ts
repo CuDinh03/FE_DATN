@@ -20,6 +20,8 @@ import { Router } from "@angular/router";
 export class TrendingProductComponent {
   chiTietSanPham: any[] = [];
   findSanPhamChiTiet: any = {};
+  maSanPhamChiTiet: string = 'CTSP1'
+  kichThuoc: string = '46a2c8e2-8840-425d-bc24-8081ddc2494a';
 
 
 
@@ -50,7 +52,7 @@ export class TrendingProductComponent {
   }
 
   loadDanhSachSanPham(): void {
-    this.sanPhamCTService.getAllSanPhamChiTiet().subscribe(
+    this.sanPhamCTService.findChiTietSanPhamByKichThuoc(this.maSanPhamChiTiet, this.kichThuoc).subscribe(
       (response: ApiResponse<any>) => {
         if (response.result && response.result.length > 0) {
           // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
