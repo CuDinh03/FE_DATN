@@ -43,15 +43,15 @@
                 class="product-image">
             </div>
             <div class="media-body">
-              <p style="color: black; font-size: 16;">{{ item.chiTietSanPham.sanPham.ten }}</p>
+              <p style="color: black; font-size: 16px;">{{ item.chiTietSanPham.sanPham.ten }}</p>
             </div>
           </div>
         </span>
         <span style="margin-left: 70px;">
           <span>Phân loại</span>
           <br>
-          <span style="color: black; font-size: 16;">{{item.chiTietSanPham.mauSac.ten}}, </span>
-          <span style="color: black; font-size: 16;">{{item.chiTietSanPham.kichThuoc.ten}}</span>
+          <span style="color: black; font-size: 16px;">{{item.chiTietSanPham.mauSac.ten}}, </span>
+          <span style="color: black; font-size: 16px;">{{item.chiTietSanPham.kichThuoc.ten}}</span>
         </span>
       </div>
       <div style="font-size: 16px; color: black;" class=" mt-2 col-md-2 d-flex justify-content-end align-items-center">
@@ -96,7 +96,7 @@
         <td ></td>
         <td style="width: 10%;">
           <span class="d-flex justify-content-start align-items-center" >
-            tổng tiền: <p style="color: black; font-size: 16; margin: 10px; " >{{ getSelectedTotal() | currency:'VND':'symbol':'1.0-0'}}
+            tổng tiền: <p style="color: black; font-size: 16px; margin: 10px; " >{{ getSelectedTotal() | currency:'VND':'symbol':'1.0-0'}}
             </p>
           </span>
         </td>
@@ -124,7 +124,7 @@
           <div class="d-flex justify-content-end mt-3">
             <a class="gray_btn me-3" href="#">Tiếp tục mua hàng</a>
             <a style="font-size: 14px; width: 200px; color: rgb(255, 255, 255); padding: 10px; border-radius: 20px !important;  background-color: #5D87FF;"
-              class="d-flex justify-content-center align-items-center">Thanh toán</a>
+              class="d-flex justify-content-center align-items-center" [routerLink]="['/thanh-toan']">Thanh toán</a>
           </div>
         </td>
       </tr>

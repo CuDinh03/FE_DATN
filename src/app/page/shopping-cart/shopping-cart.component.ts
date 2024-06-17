@@ -41,28 +41,10 @@ export class ShoppingCartComponent {
     
 
   }
-
   ngOnInit() {
     // Kiểm tra trạng thái đăng nhập của người dùng
     this.checkLoginStatus();
     this.findShoppingCart();
-  }
-
-  @HostListener('window:scroll', [])
-  onScroll() {
-    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-  const threshold = 200; // Ngưỡng để hiển thị footer
-
-  // Hiển thị footer trên khi vị trí cuộn vượt qua ngưỡng
-  if (scrollPosition > threshold) {
-    this.showUpperFooter = false;
-    console.log(this.showUpperFooter);
-    
-  } else {
-    this.showUpperFooter = true;
-    console.log(this.showUpperFooter);
-
-  }
   }
   
   confirmDelete(id: string) {

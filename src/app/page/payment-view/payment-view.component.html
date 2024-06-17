@@ -1,0 +1,114 @@
+<app-header></app-header>
+<div class="container">
+    <section>
+        <div class="container py-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row d-flex justify-content-center pb-5">
+                        <div class="col-md-7 col-xl-5 mb-4 mb-md-0">
+                            <div class="py-4 d-flex flex-row">
+                                <h5><span class="far fa-check-square pe-2"></span><b>THANH TOÁN</b> |</h5>
+                                <span class="ps-2">Pay</span>
+                            </div>
+                            <div class="d-flex pt-2">
+                                <div>
+                                    <h3>THÔNG TIN KHÁCH HÀNG</h3>
+                                </div>
+                                <div class="ms-auto">
+                                    <p class="text-primary">
+                                        <i class="fas fa-plus-circle text-primary pe-1"></i>Chọn thông tin có sẵn
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Địa chỉ</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Số điện thoai</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="pt-2">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <form class="pb-3">
+                                    <div class="d-flex flex-row pb-3">
+                                        <div class="d-flex align-items-center pe-2">
+                                            <input class="form-check-input" type="radio" name="radioNoLabel"
+                                                id="radioNoLabel1" value="" aria-label="..." checked />
+                                        </div>
+                                        <div class="rounded border d-flex w-100 p-3 align-items-center">
+                                            <p class="mb-0">
+                                                <i class="ti ti-shopping-cart fa-lg text-primary pe-2"></i>Thanh toán khi nhận hàng
+                                            </p>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row">
+                                        <div class="d-flex align-items-center pe-2">
+                                            <input class="form-check-input" type="radio" name="radioNoLabel"
+                                                id="radioNoLabel2" value="" aria-label="..." />
+                                        </div>
+                                        <div class="rounded border d-flex w-100 p-3 align-items-center">
+                                            <p class="mb-0">
+                                                <img  src="/assets/shopping/img/Logo-VNPAY-QR-1.webp" style="width: 32px; height: 11.36px; margin-right: 3px;" />  Chuyển khoán VNPAY
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+                                <input type="button" value="Proceed to payment" data-mdb-ripple-init
+                                    class="btn btn-primary btn-block btn-lg" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 col-xl-4 offset-xl-1">
+                            <div class="py-4 d-flex justify-content-end">
+                                <h6><a href="#!">Hủy thanh toán</a></h6>
+                            </div>
+                            <div class="rounded d-flex flex-column p-2 bg-body-tertiary">
+                                <div class="p-2 me-3">
+                                    <h4>Hóa đơn chi tiết</h4>
+                                </div>
+                                <div class="d-flex">
+                                    <h4 class="col-8">Sản phẩm</h4>
+                                    <h4 class="ms-auto">Tổng tiền</h4>
+                                </div>
+                                <div>
+                                    <div class="p-2 mb-2 d-flex" *ngFor="let item of gioHangChiTiet">
+                                        <div class="col-8">{{item.chiTietSanPham.sanPham.ten}}</div>
+                                        <div class="ms-auto">{{ calculateSubtotal(item) | currency:'VND':'symbol':'1.0-0' }}</div>
+                                    </div>
+                                </div>
+                                <div class="p-2 d-flex border-top px-2  align-items-center">
+                                    <div class="col-8">Tổng tiền giảm</div>
+                                    <div class="ms-auto"><b>-</b></div>
+                                </div>
+                                <div class="p-2 d-flex px-2  align-items-center">
+                                    <div class="col-8">Tiền ship</div>
+                                    <div class="ms-auto"><b>-</b></div>
+                                </div>
+                                <div class="border-top px-2 mx-2"></div>
+                                <div class="p-2 d-flex pt-3">
+                                    <div class="col-8"><b>Tổng tiền</b></div>
+
+                                    <div class="ms-auto"><b class="text-success">{{ getCartTotal() | currency:'VND':'symbol':'1.0-0' }}</b></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

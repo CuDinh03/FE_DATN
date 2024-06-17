@@ -1,3 +1,4 @@
+import { PaymentViewComponent } from './page/payment-view/payment-view.component';
 
 import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
 import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
@@ -50,6 +51,7 @@ const routes: Routes = [
   {path: 'sign-up', component: RegisterComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'san-pham', component: ProductDetailComponent},
+  {path: 'thanh-toan', component: PaymentViewComponent},
   // { path: '**', redirectTo: '/trang-chu' } // Đường dẫn cho các trang không tồn tại
 
 ];

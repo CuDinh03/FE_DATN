@@ -32,6 +32,7 @@ import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
 import { CustomerViewComponent } from './admin/customer-view/customer-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { PaymentViewComponent } from './page/payment-view/payment-view.component';
 import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
 import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
 
@@ -64,6 +65,7 @@ import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
     AdminHeaderComponent,
     OrdersViewComponent,
     CustomerViewComponent,
+    PaymentViewComponent,
     ChatLieuViewComponent,
     MauSacViewComponent
     
