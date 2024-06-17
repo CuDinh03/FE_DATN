@@ -35,6 +35,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { PaymentViewComponent } from './page/payment-view/payment-view.component';
 import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
 import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
+import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
     CustomerViewComponent,
     PaymentViewComponent,
     ChatLieuViewComponent,
-    MauSacViewComponent
+    MauSacViewComponent,
+    KichThuocViewComponent
     
 
     ],

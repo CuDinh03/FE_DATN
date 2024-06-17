@@ -20,6 +20,7 @@ import {VoucherViewComponent} from "./admin/voucher-view/voucher-view.component"
 import { CustomerViewComponent } from './admin/customer-view/customer-view.component';
 import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
 import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
+import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
       {path: 'danh-muc', component: CategoryViewComponent},
       {path: 'chat-lieu', component: ChatLieuViewComponent},
       {path: 'mau-sac', component: MauSacViewComponent},
+      {path: 'kich-thuoc', component: KichThuocViewComponent},
       {path: 'shopping', component: ShoppingViewComponent},
       {path: 'voucher', component: VoucherViewComponent},
       {path:'hoa-don',component:OrdersViewComponent},
