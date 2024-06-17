@@ -141,6 +141,7 @@
 
           <!-- FORM  ADD -->
           <form [formGroup]="chiTietSanPhamFormAdd" class="container mt-5">
+
             <div class="mb-3">
               <label for="inputOne" class="form-label">Mã sản phẩm:</label>
               <input formControlName="ma" id="ma" type="text" class="form-control">
@@ -151,7 +152,6 @@
                   Không được để trống!
                 </div>
               </div>
-
             </div>
 
             <div class="mb-3">
@@ -163,7 +163,6 @@
                   Không được để trống!
                 </div>
               </div>
-
             </div>
 
             <div class="mb-3">
@@ -176,7 +175,6 @@
                   Không được để trống!
                 </div>
               </div>
-
             </div>
 
             <div class="mb-3">
@@ -189,7 +187,6 @@
                   Không được để trống!
                 </div>
               </div>
-
             </div>
 
             <div class="mb-3">
@@ -197,20 +194,39 @@
               <select formControlName="sanPham" id="sanPham" class="form-select">
                 <option *ngFor="let sanPham of listSanPham" [value]="sanPham.id">{{ sanPham.ten }}</option>
               </select>
+              <div *ngIf="f['sanPham'].invalid && (f['sanPham'].dirty || f['sanPham'].touched) && f['sanPham'].errors">
+                <div class="error-msg" *ngIf="f['sanPham'].errors['required']" style="color: red">
+                  Không được để trống!
+                </div>
+              </div>
             </div>
 
             <div class="mb-3">
               <label for="thuongHieu" class="form-label">Thương hiệu:</label>
               <select formControlName="thuongHieu" id="thuongHieu" class="form-select">
-                <option *ngFor="let thuongHieu of listThuongHieu" [value]="thuongHieu.id">{{ thuongHieu.ten }}</option>
+                <option *ngFor="let thuongHieu of listThuongHieu" [value]="thuongHieu.id">{{ thuongHieu.ten }}
+                </option>
               </select>
+              <div
+                *ngIf="f['thuongHieu'].invalid && (f['thuongHieu'].dirty || f['thuongHieu'].touched) && f['thuongHieu'].errors">
+                <div class="error-msg" *ngIf="f['thuongHieu'].errors['required']" style="color: red">
+                  Không được để trống!
+                </div>
+              </div>
             </div>
 
             <div class="mb-3">
               <label for="chatLieu" class="form-label">Chất liệu:</label>
               <select formControlName="chatLieu" id="chatLieu" class="form-select">
-                <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu.id">{{ chatLieu.ten }}</option>
+                <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu.id">{{ chatLieu.ten }}
+                </option>
               </select>
+              <div
+                *ngIf="f['chatLieu'].invalid && (f['chatLieu'].dirty || f['chatLieu'].touched) && f['chatLieu'].errors">
+                <div class="error-msg" *ngIf="f['chatLieu'].errors['required']" style="color: red">
+                  Không được để trống!
+                </div>
+              </div>
             </div>
 
             <div class="mb-3">
@@ -218,13 +234,25 @@
               <select formControlName="danhMuc" id="danhMuc" class="form-select">
                 <option *ngFor="let danhMuc of listDanhMuc" [value]="danhMuc.id">{{ danhMuc.ten }}</option>
               </select>
+              <div *ngIf="f['danhMuc'].invalid && (f['danhMuc'].dirty || f['danhMuc'].touched) && f['danhMuc'].errors">
+                <div class="error-msg" *ngIf="f['danhMuc'].errors['required']" style="color: red">
+                  Không được để trống!
+                </div>
+              </div>
             </div>
 
             <div class="mb-3">
               <label for="kichThuoc" class="form-label">Kích thước:</label>
               <select formControlName="kichThuoc" id="kichThuoc" class="form-select">
-                <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc.id">{{ kichThuoc.ten }}</option>
+                <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc.id">{{ kichThuoc.ten }}
+                </option>
               </select>
+              <div
+                *ngIf="f['kichThuoc'].invalid && (f['kichThuoc'].dirty || f['kichThuoc'].touched) && f['kichThuoc'].errors">
+                <div class="error-msg" *ngIf="f['kichThuoc'].errors['required']" style="color: red">
+                  Không được để trống!
+                </div>
+              </div>
             </div>
 
             <div class="mb-3">
@@ -232,6 +260,11 @@
               <select formControlName="mauSac" id="mauSac" class="form-select">
                 <option *ngFor="let mauSac of listMauSac" [value]="mauSac.id">{{ mauSac.ten }}</option>
               </select>
+              <div *ngIf="f['mauSac'].invalid && (f['mauSac'].dirty || f['mauSac'].touched) && f['mauSac'].errors">
+                <div class="error-msg" *ngIf="f['mauSac'].errors['required']" style="color: red">
+                  Không được để trống!
+                </div>
+              </div>
             </div>
 
             <div class="modal-footer">
@@ -243,6 +276,7 @@
       </div>
     </div>
   </div>
+
 
 
   <!-- MODAL Update -->

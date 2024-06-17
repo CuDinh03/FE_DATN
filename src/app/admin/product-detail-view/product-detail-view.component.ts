@@ -58,12 +58,12 @@ export class ProductDetailViewComponent {
       giaNhap: ['', Validators.required],
       giaBan: ['', Validators.required],
       soLuong: ['', Validators.required],
-      sanPham: [''],
-      thuongHieu: [''],
-      chatLieu: [''],
-      danhMuc: [''],
-      kichThuoc: [''],
-      mauSac: ['']
+      sanPham: ['', Validators.required],
+      thuongHieu: ['', Validators.required],
+      chatLieu: ['', Validators.required],
+      danhMuc: ['', Validators.required],
+      kichThuoc: ['', Validators.required],
+      mauSac: ['', Validators.required]
     });
     // Khởi tạo form update 
     this.chiTietSanPhamFormUpdate = this.formBuilder.group({
