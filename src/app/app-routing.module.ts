@@ -1,5 +1,3 @@
-import { PaymentViewComponent } from './page/payment-view/payment-view.component';
-
 import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
 import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
 import { CategoryViewComponent } from './admin/category-view/category-view.component';
@@ -18,6 +16,7 @@ import {ProductViewComponent} from "./admin/product-view/product-view.component"
 import {ProfileComponent} from "./page/profile/profile.component";
 import {VoucherViewComponent} from "./admin/voucher-view/voucher-view.component";
 import {CustomerViewComponent} from "./admin/customer-view/customer-view.component";
+import {PaymentViewComponent} from "./page/payment-view/payment-view.component";
 
 const routes: Routes = [
   {
@@ -43,12 +42,11 @@ const routes: Routes = [
   {path: 'list-p', component: ShopCategoryComponent},
   {path: 'detail/:id', component: ProductDetailComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'shopping-cart', component: ShoppingCartComponent},
-  {path: 'shopping-cart', component: ShoppingCartComponent},
+  {path: 'shopping-cart', component: ShoppingCartComponent, canActivate:[AuthGuard]},
   {path: 'sign-up', component: RegisterComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'san-pham', component: ProductDetailComponent},
-  {path: 'thanh-toan', component: PaymentViewComponent},
+  {path: 'thanh-toan', component: PaymentViewComponent, canActivate:[AuthGuard]}
   // { path: '**', redirectTo: '/trang-chu' } // Đường dẫn cho các trang không tồn tại
 
 ];
