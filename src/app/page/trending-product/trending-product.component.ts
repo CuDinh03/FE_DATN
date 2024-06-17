@@ -1,6 +1,3 @@
-import { KhachHangService } from './../../service/KhachHangService';
-import { GioHangService } from './../../service/GioHangService';
-import { GioHangChiTietService } from './../../service/GioHangChiTietService';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApiResponse } from './../../model/ApiResponse';
 import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
@@ -57,7 +54,6 @@ export class TrendingProductComponent {
         if (response.result && response.result.length > 0) {
           // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
           this.chiTietSanPham = response.result;
-
         } else {
           console.log(response);
         }

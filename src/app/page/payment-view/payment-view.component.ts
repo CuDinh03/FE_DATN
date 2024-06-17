@@ -230,54 +230,71 @@ export class PaymentViewComponent {
     this.gioHangService.findGioHangByIdKhachHang(id).subscribe(
         (response : ApiResponse<GioHangDto>) =>{
           console.log('thanhcong')
+          console.log(response.result)
+          return response.result;
         }
+
     )
   }
 
-    saveInfoPayment(){
-    if (this.customerForm.invalid){
+  saveInfoPayment() {
+    if (this.customerForm.invalid) {
       return;
     }
 
-
     // @ts-ignore
-      this.tenDangNhap = localStorage.getItem('tenDangNhap');
-      this.khachHangService.findKhachHangByTenDangNhap(this.tenDangNhap).subscribe(
-          (response) => {
-
-
-            this.khachHang = response.result;
+    this.tenDangNhap = localStorage.getItem('tenDangNhap');
+    this.khachHangService.findKhachHangByTenDangNhap(this.tenDangNhap).subscribe(
+        (response) => {
+          this.khachHang = response.result;
+          if (!this.khachHang || !this.khachHang.id) {
+            console.error('Không tìm thấy thông tin khách hàng.');
+            return;
           }
-    );
 
-    const thanhToanOnl: ThanhToanOnl = {
-      gioHang: this.findGioHang(this.khachHang.id),
-      tongTien: this.getCartTotal(),
-        tongTienGiam: this.discount,
-        voucher: this.voucher,
-        ghiChu:'',
-        gioHangChiTiet:this.gioHangChiTiet
-    };
+          this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
+              (gioHangResponse: ApiResponse<GioHangDto>) => {
+                const gioHang = gioHangResponse.result;
+                if (!gioHang) {
+                  console.error('Không tìm thấy giỏ hàng.');
+                  return;
+                }
 
+                const thanhToanOnl: ThanhToanOnl = {
+                  gioHang: gioHang,
+                  tongTien: this.getCartTotal(),
+                  tongTienGiam: this.discount,
+                  voucher: this.voucher,
+                  ghiChu: '',
+                  gioHangChiTiet: this.gioHangChiTiet
+                };
 
-    this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
-        (response:ApiResponse<ThanhToanOnl>) =>{
-          if (response.result){
-            this.snackBar.open('Thanh toán thành công!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-
-            this.router.navigate(['/trang-chu'])
-            }
+                this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
+                    (response: ApiResponse<ThanhToanOnl>) => {
+                      if (response.result) {
+                        this.snackBar.open('Thanh toán thành công!', 'Đóng', {
+                          duration: 3000,
+                          panelClass: ['success-snackbar']
+                        });
+                        this.router.navigate(['/trang-chu']);
+                      }
+                    },
+                    (error: HttpErrorResponse) => {
+                      this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+                        duration: 3000,
+                        panelClass: ['error-snackbar']
+                      });
+                    }
+                );
+              },
+              (error) => {
+                console.error('Error fetching shopping cart:', error);
+              }
+          );
         },
-        (error: HttpErrorResponse) => {
-          this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
-            duration: 3000,
-            panelClass: ['error-snackbar']
-          });
+        (error) => {
+          console.error('Error fetching customer:', error);
         }
-    )
-
-    }
+    );
+  }
 }
