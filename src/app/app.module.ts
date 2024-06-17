@@ -36,6 +36,7 @@ import { PaymentViewComponent } from './page/payment-view/payment-view.component
 import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
 import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
 import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.component';
+import { ThuongHieuViewComponent } from './admin/thuonghieu-view/thuonghieu-view.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.co
     PaymentViewComponent,
     ChatLieuViewComponent,
     MauSacViewComponent,
-    KichThuocViewComponent
+    KichThuocViewComponent,
+    ThuongHieuViewComponent
     
 
     ],

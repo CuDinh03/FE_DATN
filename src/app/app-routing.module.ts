@@ -21,6 +21,7 @@ import { CustomerViewComponent } from './admin/customer-view/customer-view.compo
 import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
 import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
 import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.component';
+import { ThuongHieuViewComponent } from './admin/thuonghieu-view/thuonghieu-view.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,7 @@ const routes: Routes = [
       {path: 'chat-lieu', component: ChatLieuViewComponent},
       {path: 'mau-sac', component: MauSacViewComponent},
       {path: 'kich-thuoc', component: KichThuocViewComponent},
+      {path: 'thuong-hieu', component: ThuongHieuViewComponent},
       {path: 'shopping', component: ShoppingViewComponent},
       {path: 'voucher', component: VoucherViewComponent},
       {path:'hoa-don',component:OrdersViewComponent},
