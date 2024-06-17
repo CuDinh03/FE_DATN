@@ -23,9 +23,8 @@ export class ThuongHieuService {
             'Authorization': `Bearer ${token}`
         });
 
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { headers });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, { headers });
     }
-
 
     getAllThuongHieuDangHoatDong(): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
@@ -34,7 +33,7 @@ export class ThuongHieuService {
             'Authorization': `Bearer ${token}`
         });
 
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/dang-hoat-dong`, { headers });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll/dang-hoat-dong`, { headers });
     }
 
 }

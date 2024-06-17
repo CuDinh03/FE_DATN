@@ -46,7 +46,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
       const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
       });
-      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/dang-hoat-dong`, { headers });
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll/dang-hoat-dong`, { headers });
   }
 
       createDanhMuc(danhMuc: DanhMucDto): Observable<ApiResponse<DanhMucDto>> {

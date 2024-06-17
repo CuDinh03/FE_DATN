@@ -23,7 +23,7 @@ export class SanPhamService {
             'Authorization': `Bearer ${token}`
         });
 
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { headers });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, { headers });
     }
 
     getAllSanPhamDangHoatDong(): Observable<ApiResponse<any>> {
@@ -33,7 +33,7 @@ export class SanPhamService {
             'Authorization': `Bearer ${token}`
         });
 
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/dang-hoat-dong`, { headers });
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll/dang-hoat-dong`, { headers });
     }
 
 }
