@@ -252,7 +252,7 @@ export class PaymentViewComponent {
                                     tongTienGiam: this.discount,
                                     voucher: JSON.parse(storedVoucher),
                                     ghiChu: '',
-                                    gioHangChiTiet: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
+                                  gioHangChiTietList: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
                                 };
 
                                 this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
