@@ -17,20 +17,22 @@ import {ProfileComponent} from "./page/profile/profile.component";
 import {VoucherViewComponent} from "./admin/voucher-view/voucher-view.component";
 import {CustomerViewComponent} from "./admin/customer-view/customer-view.component";
 import {PaymentViewComponent} from "./page/payment-view/payment-view.component";
+import { ProductDetailViewComponent } from './admin/product-detail-view/product-detail-view.component';
 
 const routes: Routes = [
   {
     path: 'admin',
     canActivate: [AuthGuard], // Sử dụng canActivate với AuthGuard
     children: [
-      {path: '', component: AdminViewComponent},
-      {path: 'tai-khoan', component: AccountViewComponent},
-      {path: 'san-pham', component: ProductViewComponent},
-      {path: 'danh-muc', component: CategoryViewComponent},
-      {path: 'shopping', component: ShoppingViewComponent},
-      {path: 'voucher', component: VoucherViewComponent},
-      {path:'hoa-don',component:OrdersViewComponent},
-      {path:'khach-hang',component:CustomerViewComponent}
+      { path: '', component: AdminViewComponent },
+      { path: 'tai-khoan', component: AccountViewComponent },
+      { path: 'san-pham', component: ProductViewComponent },
+      { path: 'danh-muc', component: CategoryViewComponent },
+      { path: 'shopping', component: ShoppingViewComponent },
+      { path: 'voucher', component: VoucherViewComponent },
+      { path: 'hoa-don', component: OrdersViewComponent },
+      { path: 'khach-hang', component: CustomerViewComponent },
+      { path: 'san-pham-chi-tiet', component: ProductDetailViewComponent }
 
       // Các route con khác của trang admin
     ]
@@ -48,7 +50,6 @@ const routes: Routes = [
   {path: 'san-pham', component: ProductDetailComponent},
   {path: 'thanh-toan', component: PaymentViewComponent, canActivate:[AuthGuard]}
   // { path: '**', redirectTo: '/trang-chu' } // Đường dẫn cho các trang không tồn tại
-
 ];
 
 
