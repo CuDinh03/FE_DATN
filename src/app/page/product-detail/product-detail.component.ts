@@ -134,39 +134,39 @@ export class ProductDetailComponent implements OnInit {
   addToCart(): void {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
-        const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-        const productPrice = chiTietSanPham.giaBan; // Lấy giá bán của sản phẩm
-        const totalPrice = productPrice * this.quantity; // Tính tổng giá trị của sản phẩm
+      const chiTietSanPham = JSON.parse(storeChiTietSanPham);
+      const productPrice = chiTietSanPham.giaBan; // Lấy giá bán của sản phẩm
+      const totalPrice = productPrice * this.quantity; // Tính tổng giá trị của sản phẩm
 
-        if (this.quantity <= 0) {
-            this.snackBar.open('Số lượng nhập vào phải lớn hơn 0. Vui lòng nhập lại!', 'Đóng', {
-                duration: 3000,
-                panelClass: ['error-snackbar']
-            });
-            return;
-        }
+      if (this.quantity <= 0) {
+        this.snackBar.open('Số lượng nhập vào phải lớn hơn 0. Vui lòng nhập lại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
 
-        if (this.quantity > chiTietSanPham.soLuong) {
-            this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
-                duration: 3000,
-                panelClass: ['error-snackbar']
-            });
-            return;
-        }
+      if (this.quantity > chiTietSanPham.soLuong) {
+        this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
 
-        if (totalPrice > 5000000) { // Kiểm tra nếu tổng giá trị vượt quá 5.000.000 VNĐ
-            this.snackBar.open('Tổng giá trị đơn hàng vượt quá 5.000.000 VNĐ. Vui lòng liên hệ với chăm sóc khách hàng!', 'Đóng', {
-                duration: 5000,
-                panelClass: ['error-snackbar']
-            });
-            return;
-        }
+      if (totalPrice > 5000000) { // Kiểm tra nếu tổng giá trị vượt quá 5.000.000 VNĐ
+        this.snackBar.open('Tổng giá trị đơn hàng vượt quá 5.000.000 VNĐ. Vui lòng liên hệ với chăm sóc khách hàng!', 'Đóng', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
 
-        this.addProductToCart(this.gioHang.id, chiTietSanPham.id, this.quantity);
+      this.addProductToCart(this.gioHang.id, chiTietSanPham.id, this.quantity);
     } else {
-        console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
+      console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
     }
-}
+  }
 
 
   addProductToCart(idGioHang: string, idSanPhamChiTiet: string, soLuong: number): void {

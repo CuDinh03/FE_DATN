@@ -1,0 +1,45 @@
+table {
+    width: 70%;
+    border-collapse: collapse; /* Đảm bảo các đường viền không bị gộp lại */
+    table-layout: fixed;
+  }
+  
+  th, td {
+    padding: 0.5em;
+    text-align: left;
+    border: 1px solid #ddd;
+    word-wrap: break-word; /* Đảm bảo văn bản trong ô không bị tràn */
+    word-break: break-all; /* Thêm thuộc tính này */
+    overflow: hidden; /* Ẩn phần tràn */
+    text-overflow: ellipsis; /* Thêm dấu ba chấm khi văn bản bị cắt */
+    font-size: 14px; /* Điều chỉnh cỡ chữ tại đây */
+    line-height: 1.2; /* Điều chỉnh khoảng cách dòng tại đây */
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  .table-container {
+    width: 100%;
+    overflow-x: auto; /* Thêm thanh cuộn ngang nếu bảng vượt quá chiều rộng container */
+    
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 1em;
+    box-sizing: border-box; /* Đảm bảo padding và border không làm tràn container */
+    overflow-x: auto; /* Thêm thanh cuộn ngang nếu cần thiết */
+  }
+
+  @media (max-width: 768px) {
+    table, th, td {
+      font-size: 14px; /* Giảm kích cỡ chữ trên màn hình nhỏ */
+    }
+  
+    .table-container {
+      padding: 0.5em; /* Giảm padding trên màn hình nhỏ */
+    }
+  }
+  

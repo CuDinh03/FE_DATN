@@ -252,33 +252,49 @@ export class PaymentViewComponent {
             console.error('Không tìm thấy thông tin khách hàng.');
             return;
           }
+                this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
+                    (gioHangResponse: ApiResponse<GioHangDto>) => {
+                        const gioHang = gioHangResponse.result;
+                        if (!gioHang) {
+                            console.error('Không tìm thấy giỏ hàng.');
+                            return;
+                        }
 
-          this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
-              (gioHangResponse: ApiResponse<GioHangDto>) => {
-                const gioHang = gioHangResponse.result;
-                if (!gioHang) {
-                  console.error('Không tìm thấy giỏ hàng.');
-                  return;
-                }
+                        this.gioHangChiTietService.getAllBỵKhachHang(gioHang.id).subscribe(
+                            (gioHangChiTietResponse: ApiResponse<any>) => {
+                                const gioCt = gioHangChiTietResponse.result || [];
 
-                const thanhToanOnl: ThanhToanOnl = {
-                  gioHang: gioHang,
-                  tongTien: this.getCartTotal(),
-                  tongTienGiam: this.discount,
-                  voucher: this.voucher,
-                  ghiChu: '',
-                  gioHangChiTiet: this.gioHangChiTiet
-                };
+                                const thanhToanOnl: ThanhToanOnl = {
+                                    gioHang: gioHang,
+                                    tongTien: this.getCartTotal() - this.discount,
+                                    tongTienGiam: this.discount,
+                                    voucher: JSON.parse(storedVoucher),
+                                    ghiChu: '',
+                                  gioHangChiTietList: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
+                                };
 
-                this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
-                    (response: ApiResponse<ThanhToanOnl>) => {
-                      if (response.result) {
-                        this.snackBar.open('Thanh toán thành công!', 'Đóng', {
-                          duration: 3000,
-                          panelClass: ['success-snackbar']
-                        });
-                        this.router.navigate(['/trang-chu']);
-                      }
+                                this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
+                                    (response: ApiResponse<ThanhToanOnl>) => {
+                                        if (response.result) {
+                                            this.snackBar.open('Thanh toán thành công!', 'Đóng', {
+                                                duration: 3000,
+                                                panelClass: ['success-snackbar']
+                                            });
+                                            this.router.navigate(['/trang-chu']);
+                                        }
+                                    },
+                                    (error) => {
+                                        this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+                                            duration: 3000,
+                                            panelClass: ['error-snackbar']
+                                        });
+                                    }
+                                );
+                            },
+                            (error) => {
+                                console.error('Lỗi hiển giỏ hàng chi tiêt:', error);
+                            }
+                        );
                     },
                     (error: HttpErrorResponse) => {
                       this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {

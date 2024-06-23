@@ -13,7 +13,6 @@ export class TaiKhoanService {
 
   apiUrl = 'http://localhost:9091/api/users';
 
-
   constructor(private http: HttpClient) {
   }
 
@@ -56,8 +55,6 @@ export class TaiKhoanService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/${role}`, {params, headers});
   }
 
-
-
   createAccount(accountData: TaiKhoanDto): Observable<ApiResponse<TaiKhoanDto>> {
     return this.http.post<ApiResponse<TaiKhoanDto>>(this.apiUrl + '/create', accountData);
   }
@@ -71,7 +68,9 @@ export class TaiKhoanService {
     return this.http.get<ApiResponse<TaiKhoanDto>>(`${this.apiUrl}/${id}`, {headers});
   }
 
+  // => ID, Ten, chuc Vu ()
   getMyInfo(): Observable<ApiResponse<KhachHangDto>> {
+
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -97,6 +96,15 @@ export class TaiKhoanService {
 
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
   }
+
+  getAllTaiKhoan(): Observable<ApiResponse<TaiKhoanDto[]>> {
+    const token = localStorage.getItem('token');
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<TaiKhoanDto[]>>(`${this.apiUrl}/getAll`, { headers });
+}
 
 
 }

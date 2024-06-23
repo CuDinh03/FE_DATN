@@ -37,12 +37,14 @@
                 <div class="row ms-2">
                   <div class="col-2" *ngFor="let color of listMauSac">
                     <div class="custom-radio">
-                      <input type="radio" id="{{ color.id }}" name="mauSac" [value]="color.id" [checked]="selectedColor.id === color.id" 
+                      <input type="radio" id="{{ color.id }}" name="mauSac" [value]="color.id" [checked]="selectedColor.id === color.id"
                       (change)="onColorChange(color)"
                       />
                       <label for="{{ color.id }}" [style.backgroundColor]="color.ma">
+                        <!-- Hiển thị tên màu sắc -->
+                      <div class="color-name">{{ color.ten }}</div>
                         <span class="color-swatch"></span>
-                      </label>
+                      </label> 
                     </div>
                   </div>
                 </div>
