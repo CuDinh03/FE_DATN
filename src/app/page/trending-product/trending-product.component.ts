@@ -18,13 +18,13 @@ export class TrendingProductComponent {
   chiTietSanPham: any[] = [];
   findSanPhamChiTiet: any = {};
   maSanPhamChiTiet: string = 'CTSP1'
-  kichThuoc: string = '3ff297f8-bfb9-4bd6-92ff-44072b745ee9';
+  kichThuoc: string = '46a2c8e2-8840-425d-bc24-8081ddc2494a';
 
 
 
   constructor(private auth: AuthenticationService,
-    private router: Router,
-    private sanPhamCTService: SanPhamCTService,
+              private router: Router,
+              private sanPhamCTService: SanPhamCTService,
 
   ) {
   }
@@ -38,14 +38,14 @@ export class TrendingProductComponent {
 
   findSanPhamById(id: string): void {
     this.sanPhamCTService.getChiTietSanPhamById(id).
-      subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.result) {
-            this.findSanPhamChiTiet = response.result
-            localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result))
-            this.router.navigate(['/san-pham']);
-          }
-        })
+    subscribe(
+      (response: ApiResponse<any>) => {
+        if (response.result) {
+          this.findSanPhamChiTiet = response.result
+          localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result))
+          this.router.navigate(['/san-pham']);
+        }
+      })
   }
 
   loadDanhSachSanPham(): void {
@@ -65,6 +65,3 @@ export class TrendingProductComponent {
 
 
 }
-
-
-
