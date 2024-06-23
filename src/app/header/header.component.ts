@@ -50,7 +50,7 @@ export class HeaderComponent {
     this.findShoppingCart()
   }
 
-  
+
 
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
@@ -58,6 +58,7 @@ export class HeaderComponent {
       this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
         (response) => {
           const khachHang = response.result;
+          this.khachHang = response.result;
           if (khachHang && khachHang.id) {
             this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
               (response) => {
@@ -136,7 +137,6 @@ export class HeaderComponent {
   logout() {
     // Gọi phương thức logout từ AuthenticationService
     this.auth.logout();
-    window.location.reload();
     // Redirect đến trang đăng nhập sau khi đăng xuất
     this.router.navigate(['/trang-chu']).then(() => {
       console.log('Redirected to /trang-chu');
@@ -148,6 +148,7 @@ export class HeaderComponent {
     }).catch(err => {
       console.error('Error navigating to /trang-chu:', err);
     });
+    window.location.reload();
   }
 
   getTotalQuantity(): number {

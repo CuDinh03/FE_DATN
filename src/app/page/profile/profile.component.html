@@ -1,23 +1,13 @@
 
 <app-header></app-header>
-<section style="background-color: #eee;">
+<section style="background-color: #ffffff;">
     <div class="container py-5">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-body text-center">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                             class="rounded-circle img-fluid" style="width: 150px;">
-                        <h5 class="my-3">{{ khachHang?.ten }}</h5>
-                        <div class="d-flex justify-content-center mb-2">
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary"
-                            (click)="statusTransition()"
-                            >Cập nhật</button>
-                        </div>
-                    </div>
-                </div>
+        <div class="row d-flex justify-content-center">
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <app-sidebar-profile></app-sidebar-profile>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <div class="card mb-4">
                     <div class="card-body">
                         <!-- 2. Xay dung giao dien -->
@@ -114,3 +104,118 @@
     </div>
 </section>
 <app-footer></app-footer>
+<!-- <app-header></app-header>
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                             class="rounded-circle img-fluid" style="width: 150px;">
+                        <h5 class="my-3">{{ khachHang?.ten }}</h5>
+                        <div class="d-flex justify-content-center mb-2">
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary"
+                            (click)="statusTransition()"
+                            >Cập nhật</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        2. Xay dung giao dien
+                        <form [formGroup]="formKhachHang">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label for="ten" class="form-label">Tên khách hàng:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.ten}}
+                                    </label>
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="ten"
+                                    type="text" id="ten" class="form-control" name="ten">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label for="ngaySinh" class="form-label">Ngày sinh: </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.ngaySinh | date: 'dd/MM/yyyy'}}
+                                    </label>
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="ngaySinh"
+                                    type="date" id="ngaySinh" class="form-control"
+                                    name="ngaySinh">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label for="sdt" class="form-label">SĐT: </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.sdt}}
+                                    </label>
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="sdt"
+                                    type="text" id="sdt" class="form-control" 
+                                    name="sdt">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label for="email" class="form-label">Email: </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.email}}
+                                    </label>
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="email"
+                                    type="email" id="email" class="form-control" 
+                                     name="email">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label for="diaChi" class="form-label">Địa chỉ: </label>
+                                </div>
+                                <div class="col-sm-9">
+
+                                    <label *ngIf="!isEdit">
+                                        {{khachHang?.diaChi}}
+                                    </label>
+
+                                    <input
+                                    *ngIf="isEdit"
+                                    formControlName="diaChi"
+                                    type="text" id="diaChi" class="form-control" name="diaChi">
+                                </div>
+                            </div>
+                            <hr>
+                            <button type="submit" class="btn btn-primary"
+                            *ngIf="isEdit"
+                            (click)="update()"
+                            >Lưu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<app-footer></app-footer> -->
