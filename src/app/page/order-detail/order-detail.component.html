@@ -1,0 +1,36 @@
+<app-header></app-header>
+<section style="background-color: #ffffff;">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center">
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <app-sidebar-profile></app-sidebar-profile>
+            </div>
+            <div class="col-lg-9">
+                <div class="status-bar">
+                    <div class="status-circle" [ngClass]="{'active': currentStatus >= 1}">
+                        <i class="fa fa-check"></i>
+                        <span>Đã xử lý</span>
+                    </div>
+                    <div class="status-connector" [ngClass]="{'active': currentStatus >= 2}"></div>
+                    <div class="status-circle" [ngClass]="{'active': currentStatus >= 2}">
+                        <i class="fa fa-truck"></i>
+                        <span>Đang vận chuyển</span>
+                    </div>
+                    <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
+                    <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
+                        <i class="fa fa-check-circle"></i>
+                        <span>Đã giao hàng</span>
+                    </div>
+                    <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
+                    <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
+                        <i class="fa fa-check-circle"></i>
+                        <span>Hoàn thành</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<app-footer></app-footer>

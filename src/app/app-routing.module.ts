@@ -1,3 +1,5 @@
+import { OrderDetailComponent } from './page/order-detail/order-detail.component';
+import { HistoryViewComponent } from './page/history-view/history-view.component';
 import { OrdersViewComponent } from './admin/orders-view/orders-view.component';
 import { ShoppingViewComponent } from './admin/shopping-view/shopping-view.component';
 import { CategoryViewComponent } from './admin/category-view/category-view.component';
@@ -58,6 +60,8 @@ const routes: Routes = [
   {path: 'sign-up', component: RegisterComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'san-pham', component: ProductDetailComponent},
+  { path: 'don-mua', component: HistoryViewComponent },
+  { path: 'order-detail', component: OrderDetailComponent },
   {path: 'thanh-toan', component: PaymentViewComponent, canActivate:[AuthGuard]}
   // { path: '**', redirectTo: '/trang-chu' } // Đường dẫn cho các trang không tồn tại
 ];

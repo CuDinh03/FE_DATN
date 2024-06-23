@@ -32,6 +32,9 @@ import {OrdersViewComponent} from './admin/orders-view/orders-view.component';
 import {CustomerViewComponent} from './admin/customer-view/customer-view.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { SidebarProfileComponent } from './page/sidebar-profile/sidebar-profile.component';
+import { HistoryViewComponent } from './page/history-view/history-view.component';
+import { OrderDetailComponent } from './page/order-detail/order-detail.component';
 import {PaymentViewComponent} from './page/payment-view/payment-view.component';
 import {ProductDetailViewComponent} from './admin/product-detail-view/product-detail-view.component';
 import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
@@ -70,6 +73,9 @@ import { HinhAnhViewComponent } from './admin/hinhanh-view/hinhanh-view.componen
     OrdersViewComponent,
     CustomerViewComponent,
     PaymentViewComponent,
+    SidebarProfileComponent,
+    HistoryViewComponent,
+    OrderDetailComponent
     ChatLieuViewComponent,
     MauSacViewComponent,
     KichThuocViewComponent,
