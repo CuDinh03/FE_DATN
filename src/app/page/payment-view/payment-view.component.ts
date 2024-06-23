@@ -267,7 +267,7 @@ export class PaymentViewComponent {
                   tongTienGiam: this.discount,
                   voucher: this.voucher,
                   ghiChu: '',
-                  gioHangChiTiet: this.gioHangChiTiet
+                  gioHangChiTietList: this.gioHangChiTiet
                 };
 
                 this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
