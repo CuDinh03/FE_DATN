@@ -252,7 +252,6 @@ export class PaymentViewComponent {
             console.error('Không tìm thấy thông tin khách hàng.');
             return;
           }
-
           this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
               (gioHangResponse: ApiResponse<GioHangDto>) => {
                 const gioHang = gioHangResponse.result;

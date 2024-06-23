@@ -21,7 +21,7 @@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" [routerLink]="['/admin/shopping']" routerLinkActive="active"
-                       aria-expanded="false" style="margin-bottom: 25px;">
+                        aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-shopping-cart"></i>
                         </span>
@@ -30,9 +30,9 @@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" [routerLink]="['/admin/san-pham']" routerLinkActive="active"
-                       aria-expanded="false" aria-expanded="false" data-bs-toggle="collapse"
-                       data-bs-target="#productDropdown" role="button" aria-controls="productDropdown"
-                       style="margin-bottom: 25px;">
+                        aria-expanded="false" aria-expanded="false" data-bs-toggle="collapse"
+                        data-bs-target="#productDropdown" role="button" aria-controls="productDropdown"
+                        style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-shirt"></i>
                         </span>
@@ -41,33 +41,43 @@
                     <div class="collapse" id="productDropdown">
                         <ul class="list-unstyled ms-3">
                             <li>
-                                <a class="sidebar-link" href="#subProduct1">Sản phẩm</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/san-pham-chi-tiet']" routerLinkActive="active">
+                                    Sản phẩm chi tiết</a>
+                            </li>
+                            <li>
+                                <a class="sidebar-link" [routerLink]="['/admin/san-pham']"
+                                routerLinkActive="active">Sản phẩm</a>
                             </li>
                             <li>
                                 <a class="sidebar-link" [routerLink]="['/admin/danh-muc']"
-                                   routerLinkActive="active">Danh Mục</a>
+                                    routerLinkActive="active">Danh Mục</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct3">Màu Sắc</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/mau-sac']"
+                                routerLinkActive="active">Màu Sắc</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct4">Chất liệu</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/chat-lieu']"
+                                routerLinkActive="active">Chất liệu</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct5">Hình ảnh</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/hinh-anh']"
+                                routerLinkActive="active">Hình ảnh</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct5">Kích thước</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/kich-thuoc']"
+                                routerLinkActive="active">Kích thước</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct5">Thương hiệu</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/thuong-hieu']"
+                                routerLinkActive="active">Thương hiệu</a>
                             </li>
                         </ul>
                     </div>
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" [routerLink]="['/admin/tai-khoan']" routerLinkActive="active"
-                       aria-expanded="false" style="margin-bottom: 25px;">
+                        aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>
@@ -84,7 +94,7 @@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" [routerLink]="['/admin/hoa-don']" routerLinkActive="active"
-                       aria-expanded="false" style="margin-bottom: 25px;">
+                        aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-file-text"></i>
                         </span>
@@ -92,9 +102,10 @@
                     </a>
                 </li>
 
+
                 <li class="sidebar-item">
                     <a class="sidebar-link" [routerLink]="['/admin/voucher']" routerLinkActive="active"
-                       aria-expanded="false" style="margin-bottom: 25px;">
+                        aria-expanded="false" style="margin-bottom: 25px;">
 
                         <span>
                             <i class="ti ti-ticket"></i>
@@ -103,16 +114,13 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item">
-
-                    <a class="sidebar-link" [routerLink]="['/admin/khach-hang']" routerLinkActive="active"
-                       aria-expanded="false" style="margin-bottom: 25px;">
+                <li class="sidebar-item" >
+                    <a class="sidebar-link" [routerLink]="['/admin/khach-hang']" routerLinkActive="active"  aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
-                            <i class="ti ti-user-circle"></i>
+                            <i class="ti ti-user-check"></i>
                         </span>
-                        <span class="hide-menu">Khách hàng</span>
+                        <span class="hide-menu">Khách Hàng</span>
                     </a>
-
                 </li>
 
                 <li class="sidebar-item">

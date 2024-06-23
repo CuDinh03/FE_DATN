@@ -33,6 +33,7 @@ export class ShoppingViewComponent {
   chiTietSanPham: any = {};
   listHoaDonGioHang: any[] = [];
   hoaDon: any = {};
+  danhMuc: any[] = [];
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';

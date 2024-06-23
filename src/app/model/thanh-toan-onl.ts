@@ -8,5 +8,5 @@ export interface ThanhToanOnl{
     tongTienGiam: number;
     voucher: Voucher;
     ghiChu:string;
-    gioHangChiTietList: GioHangChiTietDto[];
+  gioHangChiTietList: GioHangChiTietDto[];
 }
