@@ -75,7 +75,7 @@ export class TaiKhoanService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    
+
     return this.http.get<ApiResponse<KhachHangDto>>(`${this.apiUrl}/myInfo`, {headers});
   }
 
@@ -96,4 +96,15 @@ export class TaiKhoanService {
 
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
   }
+
+  getAllTaiKhoan(): Observable<ApiResponse<TaiKhoanDto[]>> {
+    const token = localStorage.getItem('token');
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<TaiKhoanDto[]>>(`${this.apiUrl}/getAll`, { headers });
+}
+
+
 }

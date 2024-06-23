@@ -17,8 +17,6 @@ import { Router } from "@angular/router";
 export class TrendingProductComponent {
   chiTietSanPham: any[] = [];
   findSanPhamChiTiet: any = {};
-  maSanPhamChiTiet: string = 'CTSP1'
-  kichThuoc: string = '46a2c8e2-8840-425d-bc24-8081ddc2494a';
 
 
 
@@ -39,27 +37,28 @@ export class TrendingProductComponent {
   findSanPhamById(id: string): void {
     this.sanPhamCTService.getChiTietSanPhamById(id).
     subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result) {
-          this.findSanPhamChiTiet = response.result
-          localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result))
-          this.router.navigate(['/san-pham']);
-        }
-      })
+        (response: ApiResponse<any>) => {
+          if (response.result) {
+            this.findSanPhamChiTiet = response.result
+            localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result))
+            this.router.navigate(['/san-pham']);
+          }
+        })
   }
 
   loadDanhSachSanPham(): void {
-    this.sanPhamCTService.findChiTietSanPhamByKichThuoc(this.maSanPhamChiTiet, this.kichThuoc).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
-          this.chiTietSanPham = response.result;
-        } else {
-          console.log(response);
+    this.sanPhamCTService.getAllSanPhamChiTiet().subscribe(
+        (response: ApiResponse<any>) => {
+          if (response.result && response.result.length > 0) {
+            // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
+            this.chiTietSanPham = response.result;
+
+          } else {
+            console.log(response);
+          }
+        },
+        (error: HttpErrorResponse) => {
         }
-      },
-      (error: HttpErrorResponse) => {
-      }
     );
   }
 

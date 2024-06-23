@@ -5,21 +5,23 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { TaiKhoanService } from 'src/app/service/TaiKhoanService';
-import { SanPhamDto } from 'src/app/model/san-pham-dto.model';
-import { SanPhamService } from 'src/app/service/SanPhamService';
 import { AuthenticationService } from 'src/app/service/AuthenticationService';
 import { ApiResponse } from 'src/app/model/ApiResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorCode } from 'src/app/model/ErrorCode';
+import { HinhAnhDto } from 'src/app/model/hinh-anh-dto.model';
+import { HinhAnhService } from 'src/app/service/HinhAnhService';
+
+
 
 @Component({
-  selector: 'app-product-view',
-  templateUrl: './product-view.component.html',
-  styleUrls: ['./product-view.component.css']
+  selector: 'app-hinhanh-view',
+  templateUrl: './hinhanh-view.component.html',
+  styleUrls: ['./hinhAnh-view.component.css']
 })
-export class ProductViewComponent implements OnInit{
+export class HinhAnhViewComponent implements OnInit{
 
-  sanPham: any[] = [];
+  hinhAnh: any[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
@@ -28,21 +30,25 @@ export class ProductViewComponent implements OnInit{
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
-  sanPhamForm: FormGroup; 
+  hinhAnhForm: FormGroup; 
   id: string;
   successMessage = '';
-  selectedSanPham: SanPhamDto | null = null;
+  selectedHinhAnh: HinhAnhDto | null = null;
   isEditMode = false;
+//   chiTietSanPhamList: [] = [];
 
 
-  constructor(private apiService: SanPhamService, private formBuilder: FormBuilder,
+  constructor(private apiService: HinhAnhService, private formBuilder: FormBuilder,
 
     private router: Router,private auth: AuthenticationService, 
     private route: ActivatedRoute) {
-      this.sanPhamForm = this.formBuilder.group({
-        ten: ['', [Validators.required]],
+      this.hinhAnhForm = this.formBuilder.group({
+        
+        url: ['', [Validators.required]],
         ma: [''],
         id: [''],
+        // chiTietSanPham:[''],
+      chiTietSanPham: Object,
         trangThai: ['']
       });
   
@@ -50,32 +56,32 @@ export class ProductViewComponent implements OnInit{
      }
 
      ngOnInit(): void {
-      this.loadSanPham();
+      this.loadHinhAnh();
       if (this.id) {
         this.findById(this.id);
       }
     }
   
     get f() {
-      return this.sanPhamForm.controls;
+      return this.hinhAnhForm.controls;
     }
   
     onSubmit(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.hinhAnhForm.invalid) {
         return;
       }
       if (this.isEditMode) {
-        this.updateSanPham();
+        this.updateHinhAnh();
       } else {
-        this.createSanPham();
+        this.createHinhAnh();
       }
     }
   
-    loadSanPham(): void {
-      this.apiService.getSanPham(this.currentPage, this.pageSize)
+    loadHinhAnh(): void {
+      this.apiService.getHinhAnh(this.currentPage, this.pageSize)
         .subscribe(response => {
-          this.sanPham = response.result.content;
+          this.hinhAnh = response.result.content;
           this.totalElements = response.result.totalElements;
           this.totalPages = response.result.totalPages;
         });
@@ -83,23 +89,23 @@ export class ProductViewComponent implements OnInit{
   
     onPageChange(page: number): void {
       this.currentPage = page;
-      this.loadSanPham();
+      this.loadHinhAnh();
     }
   
-    createSanPham(): void {
+    createHinhAnh(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.hinhAnhForm.invalid) {
         return;
       }
-      const sanPhamData: SanPhamDto = this.sanPhamForm.value;
-      this.apiService.createSanPham(sanPhamData)
+      const hinhAnhData: HinhAnhDto = this.hinhAnhForm.value;
+      this.apiService.createHinhAnh(hinhAnhData)
         .subscribe(
-          (data: ApiResponse<SanPhamDto>) => {
+          (data: ApiResponse<HinhAnhDto>) => {
             this.showSuccessAlert = true;
             this.successMessage = 'Thêm thành công'
-            this.loadSanPham();
+            this.loadHinhAnh();
             setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
-            this.sanPhamForm.reset();
+            this.hinhAnhForm.reset();
             this.isEditMode = false;
           },
           (error: HttpErrorResponse) => {
@@ -108,19 +114,19 @@ export class ProductViewComponent implements OnInit{
         );
     }
   
-    updateSanPham(): void {
+    updateHinhAnh(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.hinhAnhForm.invalid) {
         return;
       }
-      const sanPhamData: SanPhamDto = this.sanPhamForm.value;
-      this.apiService.updateSanPham(sanPhamData.id, sanPhamData).subscribe(
+      const hinhAnhData: HinhAnhDto = this.hinhAnhForm.value;
+      this.apiService.updateHinhAnh(hinhAnhData.id, hinhAnhData).subscribe(
         () => {
           this.showSuccessAlert = true;
           this.successMessage = 'Sửa thành công'
-          this.loadSanPham();
+          this.loadHinhAnh();
           setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
-          this.sanPhamForm.reset();
+          this.hinhAnhForm.reset();
           this.isEditMode = false; // Đặt lại chế độ
         },
         (error: HttpErrorResponse) => {
@@ -134,11 +140,12 @@ export class ProductViewComponent implements OnInit{
     findById(id: string): void {
       this.apiService.findById(id)
         .subscribe(
-          (response: ApiResponse<SanPhamDto>) => {
-            this.sanPhamForm.patchValue({
+          (response: ApiResponse<HinhAnhDto>) => {
+            this.hinhAnhForm.patchValue({
               id: response.result.id,
               ma: response.result.ma,
-              ten: response.result.ten,
+              url: response.result.url,
+              chiTietSanPham: response.result.chiTietSanPham,
               trangThai: response.result.trangThai.toString() // Chuyển đổi boolean thành string
             });
             this.isEditMode = true;
@@ -152,7 +159,7 @@ export class ProductViewComponent implements OnInit{
     handleError(error: HttpErrorResponse): void {
       console.error(error);
       if (error.error.code === ErrorCode.PASSWORD_INVALID) {
-        this.errorMessage = 'Mã sản phẩm không được để trống';
+        this.errorMessage = 'Mã hình ảnh không được để trống';
       } else {
         this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
       }
@@ -168,16 +175,16 @@ export class ProductViewComponent implements OnInit{
     }
   
     delete(id: any): void {
-      this.apiService.deleteSanPham(id).subscribe(() => {
-        this.loadSanPham();
-        this.router.navigate(['/admin/san-pham']);
+      this.apiService.deleteHinhAnh(id).subscribe(() => {
+        this.loadHinhAnh();
+        this.router.navigate(['/admin/hinh-anh']);
       });
     }
   
-    openSanPham(id: any): void {
-      this.apiService.openSanPham(id).subscribe(() => {
-        this.loadSanPham();
-        this.router.navigate(['/admin/san-pham']);
+    openHinhAnh(id: any): void {
+      this.apiService.openHinhAnh(id).subscribe(() => {
+        this.loadHinhAnh();
+        this.router.navigate(['/admin/hinh-anh']);
       });
     }
   

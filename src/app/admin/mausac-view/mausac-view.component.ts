@@ -5,21 +5,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { TaiKhoanService } from 'src/app/service/TaiKhoanService';
-import { SanPhamDto } from 'src/app/model/san-pham-dto.model';
-import { SanPhamService } from 'src/app/service/SanPhamService';
 import { AuthenticationService } from 'src/app/service/AuthenticationService';
 import { ApiResponse } from 'src/app/model/ApiResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorCode } from 'src/app/model/ErrorCode';
+import { MauSacDto } from 'src/app/model/mau-sac-dto.model';
+import { MauSacService } from 'src/app/service/MauSacService';
+
 
 @Component({
-  selector: 'app-product-view',
-  templateUrl: './product-view.component.html',
-  styleUrls: ['./product-view.component.css']
+  selector: 'app-mausac-view',
+  templateUrl: './mausac-view.component.html',
+  styleUrls: ['./mauSac-view.component.css']
 })
-export class ProductViewComponent implements OnInit{
+export class MauSacViewComponent implements OnInit{
 
-  sanPham: any[] = [];
+  mauSac: any[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
@@ -28,18 +29,18 @@ export class ProductViewComponent implements OnInit{
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
-  sanPhamForm: FormGroup; 
+  mauSacForm: FormGroup; 
   id: string;
   successMessage = '';
-  selectedSanPham: SanPhamDto | null = null;
+  selectedMauSac: MauSacDto | null = null;
   isEditMode = false;
 
 
-  constructor(private apiService: SanPhamService, private formBuilder: FormBuilder,
+  constructor(private apiService: MauSacService, private formBuilder: FormBuilder,
 
     private router: Router,private auth: AuthenticationService, 
     private route: ActivatedRoute) {
-      this.sanPhamForm = this.formBuilder.group({
+      this.mauSacForm = this.formBuilder.group({
         ten: ['', [Validators.required]],
         ma: [''],
         id: [''],
@@ -50,32 +51,32 @@ export class ProductViewComponent implements OnInit{
      }
 
      ngOnInit(): void {
-      this.loadSanPham();
+      this.loadMauSac();
       if (this.id) {
         this.findById(this.id);
       }
     }
   
     get f() {
-      return this.sanPhamForm.controls;
+      return this.mauSacForm.controls;
     }
   
     onSubmit(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.mauSacForm.invalid) {
         return;
       }
       if (this.isEditMode) {
-        this.updateSanPham();
+        this.updateMauSac();
       } else {
-        this.createSanPham();
+        this.createMauSac();
       }
     }
   
-    loadSanPham(): void {
-      this.apiService.getSanPham(this.currentPage, this.pageSize)
+    loadMauSac(): void {
+      this.apiService.getMauSac(this.currentPage, this.pageSize)
         .subscribe(response => {
-          this.sanPham = response.result.content;
+          this.mauSac = response.result.content;
           this.totalElements = response.result.totalElements;
           this.totalPages = response.result.totalPages;
         });
@@ -83,23 +84,23 @@ export class ProductViewComponent implements OnInit{
   
     onPageChange(page: number): void {
       this.currentPage = page;
-      this.loadSanPham();
+      this.loadMauSac();
     }
   
-    createSanPham(): void {
+    createMauSac(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.mauSacForm.invalid) {
         return;
       }
-      const sanPhamData: SanPhamDto = this.sanPhamForm.value;
-      this.apiService.createSanPham(sanPhamData)
+      const mauSacData: MauSacDto = this.mauSacForm.value;
+      this.apiService.createMauSac(mauSacData)
         .subscribe(
-          (data: ApiResponse<SanPhamDto>) => {
+          (data: ApiResponse<MauSacDto>) => {
             this.showSuccessAlert = true;
             this.successMessage = 'Thêm thành công'
-            this.loadSanPham();
+            this.loadMauSac();
             setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
-            this.sanPhamForm.reset();
+            this.mauSacForm.reset();
             this.isEditMode = false;
           },
           (error: HttpErrorResponse) => {
@@ -108,19 +109,19 @@ export class ProductViewComponent implements OnInit{
         );
     }
   
-    updateSanPham(): void {
+    updateMauSac(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.mauSacForm.invalid) {
         return;
       }
-      const sanPhamData: SanPhamDto = this.sanPhamForm.value;
-      this.apiService.updateSanPham(sanPhamData.id, sanPhamData).subscribe(
+      const mauSacData: MauSacDto = this.mauSacForm.value;
+      this.apiService.updateMauSac(mauSacData.id, mauSacData).subscribe(
         () => {
           this.showSuccessAlert = true;
           this.successMessage = 'Sửa thành công'
-          this.loadSanPham();
+          this.loadMauSac();
           setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
-          this.sanPhamForm.reset();
+          this.mauSacForm.reset();
           this.isEditMode = false; // Đặt lại chế độ
         },
         (error: HttpErrorResponse) => {
@@ -134,8 +135,8 @@ export class ProductViewComponent implements OnInit{
     findById(id: string): void {
       this.apiService.findById(id)
         .subscribe(
-          (response: ApiResponse<SanPhamDto>) => {
-            this.sanPhamForm.patchValue({
+          (response: ApiResponse<MauSacDto>) => {
+            this.mauSacForm.patchValue({
               id: response.result.id,
               ma: response.result.ma,
               ten: response.result.ten,
@@ -152,7 +153,7 @@ export class ProductViewComponent implements OnInit{
     handleError(error: HttpErrorResponse): void {
       console.error(error);
       if (error.error.code === ErrorCode.PASSWORD_INVALID) {
-        this.errorMessage = 'Mã sản phẩm không được để trống';
+        this.errorMessage = 'Mã màu sắc không được để trống';
       } else {
         this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
       }
@@ -168,16 +169,16 @@ export class ProductViewComponent implements OnInit{
     }
   
     delete(id: any): void {
-      this.apiService.deleteSanPham(id).subscribe(() => {
-        this.loadSanPham();
-        this.router.navigate(['/admin/san-pham']);
+      this.apiService.deleteMauSac(id).subscribe(() => {
+        this.loadMauSac();
+        this.router.navigate(['/admin/mau-sac']);
       });
     }
   
-    openSanPham(id: any): void {
-      this.apiService.openSanPham(id).subscribe(() => {
-        this.loadSanPham();
-        this.router.navigate(['/admin/san-pham']);
+    openMauSac(id: any): void {
+      this.apiService.openMauSac(id).subscribe(() => {
+        this.loadMauSac();
+        this.router.navigate(['/admin/mau-sac']);
       });
     }
   

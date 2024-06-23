@@ -45,26 +45,32 @@
                                     Sản phẩm chi tiết</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct1">Sản phẩm</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/san-pham']"
+                                routerLinkActive="active">Sản phẩm</a>
                             </li>
                             <li>
                                 <a class="sidebar-link" [routerLink]="['/admin/danh-muc']"
                                     routerLinkActive="active">Danh Mục</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct3">Màu Sắc</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/mau-sac']"
+                                routerLinkActive="active">Màu Sắc</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct4">Chất liệu</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/chat-lieu']"
+                                routerLinkActive="active">Chất liệu</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct5">Hình ảnh</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/hinh-anh']"
+                                routerLinkActive="active">Hình ảnh</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct5">Kích thước</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/kich-thuoc']"
+                                routerLinkActive="active">Kích thước</a>
                             </li>
                             <li>
-                                <a class="sidebar-link" href="#subProduct5">Thương hiệu</a>
+                                <a class="sidebar-link" [routerLink]="['/admin/thuong-hieu']"
+                                routerLinkActive="active">Thương hiệu</a>
                             </li>
                         </ul>
                     </div>
@@ -96,6 +102,7 @@
                     </a>
                 </li>
 
+
                 <li class="sidebar-item">
                     <a class="sidebar-link" [routerLink]="['/admin/voucher']" routerLinkActive="active"
                         aria-expanded="false" style="margin-bottom: 25px;">
@@ -107,16 +114,13 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item">
-
-                    <a class="sidebar-link" [routerLink]="['/admin/khach-hang']" routerLinkActive="active"
-                        aria-expanded="false" style="margin-bottom: 25px;">
+                <li class="sidebar-item" >
+                    <a class="sidebar-link" [routerLink]="['/admin/khach-hang']" routerLinkActive="active"  aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
-                            <i class="ti ti-user-circle"></i>
+                            <i class="ti ti-user-check"></i>
                         </span>
-                        <span class="hide-menu">Khách hàng</span>
+                        <span class="hide-menu">Khách Hàng</span>
                     </a>
-
                 </li>
 
                 <li class="sidebar-item">

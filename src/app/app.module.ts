@@ -34,7 +34,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {PaymentViewComponent} from './page/payment-view/payment-view.component';
 import {ProductDetailViewComponent} from './admin/product-detail-view/product-detail-view.component';
-
+import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
+import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
+import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.component';
+import { ThuongHieuViewComponent } from './admin/thuonghieu-view/thuonghieu-view.component';
+import { HinhAnhViewComponent } from './admin/hinhanh-view/hinhanh-view.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +70,11 @@ import {ProductDetailViewComponent} from './admin/product-detail-view/product-de
     OrdersViewComponent,
     CustomerViewComponent,
     PaymentViewComponent,
+    ChatLieuViewComponent,
+    MauSacViewComponent,
+    KichThuocViewComponent,
+    ThuongHieuViewComponent,
+    HinhAnhViewComponent,
     ProductDetailViewComponent
 
   ],

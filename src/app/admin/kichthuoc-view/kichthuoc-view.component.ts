@@ -5,21 +5,23 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { TaiKhoanService } from 'src/app/service/TaiKhoanService';
-import { SanPhamDto } from 'src/app/model/san-pham-dto.model';
-import { SanPhamService } from 'src/app/service/SanPhamService';
 import { AuthenticationService } from 'src/app/service/AuthenticationService';
 import { ApiResponse } from 'src/app/model/ApiResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorCode } from 'src/app/model/ErrorCode';
+import { KichThuocDto } from 'src/app/model/kich-thuoc-dto.model';
+import { KichThuocService } from 'src/app/service/KichThuocService';
+
+
 
 @Component({
-  selector: 'app-product-view',
-  templateUrl: './product-view.component.html',
-  styleUrls: ['./product-view.component.css']
+  selector: 'app-kichthuoc-view',
+  templateUrl: './kichthuoc-view.component.html',
+  styleUrls: ['./kichThuoc-view.component.css']
 })
-export class ProductViewComponent implements OnInit{
+export class KichThuocViewComponent implements OnInit{
 
-  sanPham: any[] = [];
+  kichThuoc: any[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
@@ -28,18 +30,18 @@ export class ProductViewComponent implements OnInit{
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
-  sanPhamForm: FormGroup; 
+  kichThuocForm: FormGroup; 
   id: string;
   successMessage = '';
-  selectedSanPham: SanPhamDto | null = null;
+  selectedKichThuoc: KichThuocDto | null = null;
   isEditMode = false;
 
 
-  constructor(private apiService: SanPhamService, private formBuilder: FormBuilder,
+  constructor(private apiService: KichThuocService, private formBuilder: FormBuilder,
 
     private router: Router,private auth: AuthenticationService, 
     private route: ActivatedRoute) {
-      this.sanPhamForm = this.formBuilder.group({
+      this.kichThuocForm = this.formBuilder.group({
         ten: ['', [Validators.required]],
         ma: [''],
         id: [''],
@@ -50,32 +52,32 @@ export class ProductViewComponent implements OnInit{
      }
 
      ngOnInit(): void {
-      this.loadSanPham();
+      this.loadKichThuoc();
       if (this.id) {
         this.findById(this.id);
       }
     }
   
     get f() {
-      return this.sanPhamForm.controls;
+      return this.kichThuocForm.controls;
     }
   
     onSubmit(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.kichThuocForm.invalid) {
         return;
       }
       if (this.isEditMode) {
-        this.updateSanPham();
+        this.updateKichThuoc();
       } else {
-        this.createSanPham();
+        this.createKichThuoc();
       }
     }
   
-    loadSanPham(): void {
-      this.apiService.getSanPham(this.currentPage, this.pageSize)
+    loadKichThuoc(): void {
+      this.apiService.getKichThuoc(this.currentPage, this.pageSize)
         .subscribe(response => {
-          this.sanPham = response.result.content;
+          this.kichThuoc = response.result.content;
           this.totalElements = response.result.totalElements;
           this.totalPages = response.result.totalPages;
         });
@@ -83,23 +85,23 @@ export class ProductViewComponent implements OnInit{
   
     onPageChange(page: number): void {
       this.currentPage = page;
-      this.loadSanPham();
+      this.loadKichThuoc();
     }
   
-    createSanPham(): void {
+    createKichThuoc(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.kichThuocForm.invalid) {
         return;
       }
-      const sanPhamData: SanPhamDto = this.sanPhamForm.value;
-      this.apiService.createSanPham(sanPhamData)
+      const kichThuocData: KichThuocDto = this.kichThuocForm.value;
+      this.apiService.createKichThuoc(kichThuocData)
         .subscribe(
-          (data: ApiResponse<SanPhamDto>) => {
+          (data: ApiResponse<KichThuocDto>) => {
             this.showSuccessAlert = true;
             this.successMessage = 'Thêm thành công'
-            this.loadSanPham();
+            this.loadKichThuoc();
             setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
-            this.sanPhamForm.reset();
+            this.kichThuocForm.reset();
             this.isEditMode = false;
           },
           (error: HttpErrorResponse) => {
@@ -108,19 +110,19 @@ export class ProductViewComponent implements OnInit{
         );
     }
   
-    updateSanPham(): void {
+    updateKichThuoc(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.kichThuocForm.invalid) {
         return;
       }
-      const sanPhamData: SanPhamDto = this.sanPhamForm.value;
-      this.apiService.updateSanPham(sanPhamData.id, sanPhamData).subscribe(
+      const kichThuocData: KichThuocDto = this.kichThuocForm.value;
+      this.apiService.updateKichThuoc(kichThuocData.id, kichThuocData).subscribe(
         () => {
           this.showSuccessAlert = true;
           this.successMessage = 'Sửa thành công'
-          this.loadSanPham();
+          this.loadKichThuoc();
           setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
-          this.sanPhamForm.reset();
+          this.kichThuocForm.reset();
           this.isEditMode = false; // Đặt lại chế độ
         },
         (error: HttpErrorResponse) => {
@@ -134,8 +136,8 @@ export class ProductViewComponent implements OnInit{
     findById(id: string): void {
       this.apiService.findById(id)
         .subscribe(
-          (response: ApiResponse<SanPhamDto>) => {
-            this.sanPhamForm.patchValue({
+          (response: ApiResponse<KichThuocDto>) => {
+            this.kichThuocForm.patchValue({
               id: response.result.id,
               ma: response.result.ma,
               ten: response.result.ten,
@@ -152,7 +154,7 @@ export class ProductViewComponent implements OnInit{
     handleError(error: HttpErrorResponse): void {
       console.error(error);
       if (error.error.code === ErrorCode.PASSWORD_INVALID) {
-        this.errorMessage = 'Mã sản phẩm không được để trống';
+        this.errorMessage = 'Mã kích thước không được để trống';
       } else {
         this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
       }
@@ -168,16 +170,16 @@ export class ProductViewComponent implements OnInit{
     }
   
     delete(id: any): void {
-      this.apiService.deleteSanPham(id).subscribe(() => {
-        this.loadSanPham();
-        this.router.navigate(['/admin/san-pham']);
+      this.apiService.deleteKichThuoc(id).subscribe(() => {
+        this.loadKichThuoc();
+        this.router.navigate(['/admin/kich-thuoc']);
       });
     }
   
-    openSanPham(id: any): void {
-      this.apiService.openSanPham(id).subscribe(() => {
-        this.loadSanPham();
-        this.router.navigate(['/admin/san-pham']);
+    openKichThuoc(id: any): void {
+      this.apiService.openKichThuoc(id).subscribe(() => {
+        this.loadKichThuoc();
+        this.router.navigate(['/admin/kich-thuoc']);
       });
     }
   

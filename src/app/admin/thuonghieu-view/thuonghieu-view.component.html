@@ -14,7 +14,7 @@
             <div class="card-body">
               <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                 <div class="mb-3 mb-sm-0">
-                  <h5 class="card-title fw-semibold">Danh sách sản phẩm</h5>
+                  <h5 class="card-title fw-semibold">Danh sách thương hiệu</h5>
                 </div>
                 <!-- <div *ngIf="errorMessage" class="alert alert-danger position-fixed top-50 start-50 translate-middle"
                   role="alert">
@@ -32,7 +32,7 @@
                   </select>
                 </div>
               </div>
-              <div *ngIf="sanPham.length > 0">
+              <div *ngIf="thuongHieu.length > 0">
                 <table class="table text-nowrap mb-0 align-middle">
                   <thead class="text-dark fs-4">
                     <tr>
@@ -54,24 +54,24 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let sanPham of sanPham; let i = index" style="height: 30px;">
+                    <tr *ngFor="let thuongHieu of thuongHieu; let i = index" style="height: 30px;">
                       <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
-                      <td>{{sanPham.ma }}</td>
-                      <td>{{sanPham.ten}}</td>
+                      <td>{{thuongHieu.ma }}</td>
+                      <td>{{thuongHieu.ten}}</td>
                       <td>
-                        <div *ngIf="sanPham.trangThai === 1">
-                          <div class="form-check form-switch" (click)="delete(sanPham.id)">
+                        <div *ngIf="thuongHieu.trangThai === 1">
+                          <div class="form-check form-switch" (click)="delete(thuongHieu.id)">
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
                           </div>
                         </div>
-                        <div *ngIf="sanPham.trangThai === 0">
-                          <div class="form-check form-switch" (click)="openSanPham(sanPham.id)">
+                        <div *ngIf="thuongHieu.trangThai === 0">
+                          <div class="form-check form-switch" (click)="openThuongHieu(thuongHieu.id)">
                             <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                           </div>
                         </div>
                       </td>
                       <td>
-                        <a (click)="findById(sanPham.id)" style="color: #7A98FE;font-size: 20px;">
+                        <a (click)="findById(thuongHieu.id)" style="color: #7A98FE;font-size: 20px;">
                           <i class="ti ti-edit"></i>
                         </a>
                       </td>
@@ -87,7 +87,7 @@
                         [disabled]="currentPage === totalPages - 1">>
                       </button>
                 </div>
-                <div *ngIf="sanPham.length === 0">
+                <div *ngIf="thuongHieu.length === 0">
                   <p>Không có tài khoản nào được tìm thấy.</p>
                 </div>
               </div>
@@ -101,13 +101,13 @@
               <div class="card">
                 <div class="card-body">
                   <div class="row alig n-items-start">
-                    <form [formGroup]="sanPhamForm" (ngSubmit)="onSubmit()">
+                    <form [formGroup]="thuongHieuForm" (ngSubmit)="onSubmit()">
                       <input type="hidden" formControlName="id" id="id">
                       
                       <div class="mb-3">
                         <span><label for="ma" class="form-label">Mã: </label> </span>
 
-                        <span id="ma">{{ sanPhamForm.get('ma')?.value }}</span>
+                        <span id="ma">{{ thuongHieuForm.get('ma')?.value }}</span>
 
                         <!-- <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched)">
                                 <div *ngIf="f['ma'].errors">
@@ -143,7 +143,7 @@
                         </div>
                       </div>
                       <div>
-                        <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" [disabled]="!sanPhamForm.valid">
+                        <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" [disabled]="!thuongHieuForm.valid">
                           {{ isEditMode ? 'Cập nhật' : 'Thêm' }}
                         </button>
                       </div>

@@ -5,21 +5,23 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
 import { TaiKhoanService } from 'src/app/service/TaiKhoanService';
-import { SanPhamDto } from 'src/app/model/san-pham-dto.model';
-import { SanPhamService } from 'src/app/service/SanPhamService';
 import { AuthenticationService } from 'src/app/service/AuthenticationService';
 import { ApiResponse } from 'src/app/model/ApiResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorCode } from 'src/app/model/ErrorCode';
+import { ThuongHieuDto } from 'src/app/model/thuong-hieu-dto.model';
+import { ThuongHieuService } from 'src/app/service/ThuongHieuService';
+
+
 
 @Component({
-  selector: 'app-product-view',
-  templateUrl: './product-view.component.html',
-  styleUrls: ['./product-view.component.css']
+  selector: 'app-thuonghieu-view',
+  templateUrl: './thuonghieu-view.component.html',
+  styleUrls: ['./thuongHieu-view.component.css']
 })
-export class ProductViewComponent implements OnInit{
+export class ThuongHieuViewComponent implements OnInit{
 
-  sanPham: any[] = [];
+  thuongHieu: any[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
@@ -28,18 +30,18 @@ export class ProductViewComponent implements OnInit{
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
-  sanPhamForm: FormGroup; 
+  thuongHieuForm: FormGroup; 
   id: string;
   successMessage = '';
-  selectedSanPham: SanPhamDto | null = null;
+  selectedThuongHieu: ThuongHieuDto | null = null;
   isEditMode = false;
 
 
-  constructor(private apiService: SanPhamService, private formBuilder: FormBuilder,
+  constructor(private apiService: ThuongHieuService, private formBuilder: FormBuilder,
 
     private router: Router,private auth: AuthenticationService, 
     private route: ActivatedRoute) {
-      this.sanPhamForm = this.formBuilder.group({
+      this.thuongHieuForm = this.formBuilder.group({
         ten: ['', [Validators.required]],
         ma: [''],
         id: [''],
@@ -50,32 +52,32 @@ export class ProductViewComponent implements OnInit{
      }
 
      ngOnInit(): void {
-      this.loadSanPham();
+      this.loadThuongHieu();
       if (this.id) {
         this.findById(this.id);
       }
     }
   
     get f() {
-      return this.sanPhamForm.controls;
+      return this.thuongHieuForm.controls;
     }
   
     onSubmit(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.thuongHieuForm.invalid) {
         return;
       }
       if (this.isEditMode) {
-        this.updateSanPham();
+        this.updateThuongHieu();
       } else {
-        this.createSanPham();
+        this.createThuongHieu();
       }
     }
   
-    loadSanPham(): void {
-      this.apiService.getSanPham(this.currentPage, this.pageSize)
+    loadThuongHieu(): void {
+      this.apiService.getThuongHieu(this.currentPage, this.pageSize)
         .subscribe(response => {
-          this.sanPham = response.result.content;
+          this.thuongHieu = response.result.content;
           this.totalElements = response.result.totalElements;
           this.totalPages = response.result.totalPages;
         });
@@ -83,23 +85,23 @@ export class ProductViewComponent implements OnInit{
   
     onPageChange(page: number): void {
       this.currentPage = page;
-      this.loadSanPham();
+      this.loadThuongHieu();
     }
   
-    createSanPham(): void {
+    createThuongHieu(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.thuongHieuForm.invalid) {
         return;
       }
-      const sanPhamData: SanPhamDto = this.sanPhamForm.value;
-      this.apiService.createSanPham(sanPhamData)
+      const thuongHieuData: ThuongHieuDto = this.thuongHieuForm.value;
+      this.apiService.createThuongHieu(thuongHieuData)
         .subscribe(
-          (data: ApiResponse<SanPhamDto>) => {
+          (data: ApiResponse<ThuongHieuDto>) => {
             this.showSuccessAlert = true;
             this.successMessage = 'Thêm thành công'
-            this.loadSanPham();
+            this.loadThuongHieu();
             setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
-            this.sanPhamForm.reset();
+            this.thuongHieuForm.reset();
             this.isEditMode = false;
           },
           (error: HttpErrorResponse) => {
@@ -108,19 +110,19 @@ export class ProductViewComponent implements OnInit{
         );
     }
   
-    updateSanPham(): void {
+    updateThuongHieu(): void {
       this.submitted = true;
-      if (this.sanPhamForm.invalid) {
+      if (this.thuongHieuForm.invalid) {
         return;
       }
-      const sanPhamData: SanPhamDto = this.sanPhamForm.value;
-      this.apiService.updateSanPham(sanPhamData.id, sanPhamData).subscribe(
+      const thuongHieuData: ThuongHieuDto = this.thuongHieuForm.value;
+      this.apiService.updateThuongHieu(thuongHieuData.id, thuongHieuData).subscribe(
         () => {
           this.showSuccessAlert = true;
           this.successMessage = 'Sửa thành công'
-          this.loadSanPham();
+          this.loadThuongHieu();
           setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
-          this.sanPhamForm.reset();
+          this.thuongHieuForm.reset();
           this.isEditMode = false; // Đặt lại chế độ
         },
         (error: HttpErrorResponse) => {
@@ -134,8 +136,8 @@ export class ProductViewComponent implements OnInit{
     findById(id: string): void {
       this.apiService.findById(id)
         .subscribe(
-          (response: ApiResponse<SanPhamDto>) => {
-            this.sanPhamForm.patchValue({
+          (response: ApiResponse<ThuongHieuDto>) => {
+            this.thuongHieuForm.patchValue({
               id: response.result.id,
               ma: response.result.ma,
               ten: response.result.ten,
@@ -152,7 +154,7 @@ export class ProductViewComponent implements OnInit{
     handleError(error: HttpErrorResponse): void {
       console.error(error);
       if (error.error.code === ErrorCode.PASSWORD_INVALID) {
-        this.errorMessage = 'Mã sản phẩm không được để trống';
+        this.errorMessage = 'Mã thương hiệu không được để trống';
       } else {
         this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
       }
@@ -168,16 +170,16 @@ export class ProductViewComponent implements OnInit{
     }
   
     delete(id: any): void {
-      this.apiService.deleteSanPham(id).subscribe(() => {
-        this.loadSanPham();
-        this.router.navigate(['/admin/san-pham']);
+      this.apiService.deleteThuongHieu(id).subscribe(() => {
+        this.loadThuongHieu();
+        this.router.navigate(['/admin/thuong-hieu']);
       });
     }
   
-    openSanPham(id: any): void {
-      this.apiService.openSanPham(id).subscribe(() => {
-        this.loadSanPham();
-        this.router.navigate(['/admin/san-pham']);
+    openThuongHieu(id: any): void {
+      this.apiService.openThuongHieu(id).subscribe(() => {
+        this.loadThuongHieu();
+        this.router.navigate(['/admin/thuong-hieu']);
       });
     }
   

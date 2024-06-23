@@ -248,7 +248,7 @@ export class PaymentViewComponent {
 
                                 const thanhToanOnl: ThanhToanOnl = {
                                     gioHang: gioHang,
-                                    tongTien: this.getCartTotal(),
+                                    tongTien: this.getCartTotal() - this.discount,
                                     tongTienGiam: this.discount,
                                     voucher: JSON.parse(storedVoucher),
                                     ghiChu: '',
