@@ -29,6 +29,48 @@
                     data-bs-target="#addProductModal">Thêm sản phẩm</button>
                 </div>
               </div>
+              <!-- TIM KIEM -->
+              <form [formGroup]="sanPhamForm"> <!-- Bao bọc các select trong formGroup sanPhamForm -->
+                <div>
+                  <label for="loaiSanPham" class="form-label">Loại Sản Phẩm:</label>
+                  <select formControlName="sanPham" id="sanPham" class="form-select" (change)="onSanPhamChange()">
+                    <option *ngFor="let sanPham of listSanPham" [value]="sanPham.id">{{ sanPham.ten }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="thuongHieu" class="form-label">Thương hiệu:</label>
+                  <select formControlName="thuongHieu" id="thuongHieu" class="form-select"
+                    (change)="onThuongHieuChange()">
+                    <option *ngFor="let thuongHieu of listThuongHieu" [value]="thuongHieu.id">{{ thuongHieu.ten }}
+                    </option>
+                  </select>
+                </div>
+                <div>
+                  <label for="chatLieu" class="form-label">Chất liệu:</label>
+                  <select formControlName="chatLieu" id="chatLieu" class="form-select" (change)="onChatLieuChange()">
+                    <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu.id">{{ chatLieu.ten }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="danhMuc" class="form-label">Danh mục:</label>
+                  <select formControlName="danhMuc" id="danhMuc" class="form-select" (change)="onDanhMucChange()">
+                    <option *ngFor="let danhMuc of listDanhMuc" [value]="danhMuc.id">{{ danhMuc.ten }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="kichThuoc" class="form-label">Kích thước:</label>
+                  <select formControlName="kichThuoc" id="kichThuoc" class="form-select" (change)="onKichThuocChange()">
+                    <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc.id">{{ kichThuoc.ten }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="mauSac" class="form-label">Màu sắc:</label>
+                  <select formControlName="mauSac" id="mauSac" class="form-select" (change)="onMauSacChange()">
+                    <option *ngFor="let mauSac of listMauSac" [value]="mauSac.id">{{ mauSac.ten }}</option>
+                  </select>
+                </div>
+              </form>
+
               <div>
                 <table class="table text-nowrap mb-0 align-middle">
                   <thead class="text-dark fs-4">

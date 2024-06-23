@@ -94,7 +94,7 @@ export class SanPhamCTService {
   }
 
   // Sửa sản phẩm chi tiết 
-  suaSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto, id : string): Observable<any> {
+  suaSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto, id: string): Observable<any> {
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -103,5 +103,63 @@ export class SanPhamCTService {
 
     return this.http.put(`${this.apiUrl}/update/${id}`, sanPhamChiTiet, { headers });
   }
+
+
+  // TÌM KIẾM 
+  getSPCTBySanPhamId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getBySanPhamId/${id}`, { headers });
+  }
+
+  getSPCTByChatLieuId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByChatLieuId/${id}`, { headers });
+  }
+
+  getSPCTByDanhMucId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByDanhMucId/${id}`, { headers });
+  }
+
+  getSPCTByKichThuocId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByKichThuocId/${id}`, { headers });
+  }
+
+  getSPCTByMauSacId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByMauSacId/${id}`, { headers });
+  }
+
+  getSPCTByThuongHieuId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByThuongHieuId/${id}`, { headers });
+  }
+
+
 
 }

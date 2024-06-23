@@ -34,6 +34,7 @@ export class ProductDetailViewComponent {
 
   chiTietSanPhamFormAdd!: FormGroup;
   chiTietSanPhamFormUpdate!: FormGroup;
+  sanPhamForm!: FormGroup; // Khai báo sanPhamForm là một FormGroup
 
   showConfirmationModalAdd: boolean = false;
   showConfirmationModalUpdate: boolean = false;
@@ -77,6 +78,15 @@ export class ProductDetailViewComponent {
       danhMuc: [''],
       kichThuoc: [''],
       mauSac: ['']
+    });
+
+    this.sanPhamForm = this.formBuilder.group({
+      sanPham: [''],     // FormControl cho loại sản phẩm
+      thuongHieu: [''],  // FormControl cho thương hiệu
+      chatLieu: [''],    // FormControl cho chất liệu
+      danhMuc: [''],     // FormControl cho danh mục
+      kichThuoc: [''],   // FormControl cho kích thước
+      mauSac: ['']       // FormControl cho màu sắc
     });
 
     this.loadSanPhamChiTietByNgayTao();
@@ -347,7 +357,58 @@ markTheElement(formGroup: FormGroup): void {
   get f() {
     return this.chiTietSanPhamFormAdd.controls;
   }
+
+  // Các hàm xử lý khi select thay đổi
+  onSanPhamChange(): void {
+    const sanPhamId = this.sanPhamForm.value.sanPham;
+    this.sanPhamCTService.getChiTietSanPhamById(sanPhamId)
+      .subscribe(response => {
+        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi sản phẩm
+      });
+  }
+
+  onThuongHieuChange(): void {
+    const thuongHieuId = this.sanPhamForm.value.thuongHieu;
+    this.sanPhamCTService.getSPCTByThuongHieuId(thuongHieuId)
+      .subscribe(response => {
+        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi thương hiệu
+      });
+  }
+
+  onChatLieuChange(): void {
+    const chatLieuId = this.sanPhamForm.value.chatLieu;
+    this.sanPhamCTService.getSPCTByChatLieuId(chatLieuId)
+      .subscribe(response => {
+        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi chất liệu
+      });
+  }
+
+  onDanhMucChange(): void {
+    const danhMucId = this.sanPhamForm.value.danhMuc;
+    this.sanPhamCTService.getSPCTByDanhMucId(danhMucId)
+      .subscribe(response => {
+        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi danh mục
+      });
+  }
+
+  onKichThuocChange(): void {
+    const kichThuocId = this.sanPhamForm.value.kichThuoc;
+    this.sanPhamCTService.getSPCTByKichThuocId(kichThuocId)
+      .subscribe(response => {
+        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi kích thước
+      });
+  }
+
+  onMauSacChange(): void {
+    const mauSacId = this.sanPhamForm.value.mauSac;
+    this.sanPhamCTService.getSPCTByMauSacId(mauSacId)
+      .subscribe(response => {
+        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi màu sắc
+      });
+  }
 }
+
+
 
 
 
@@ -374,4 +435,6 @@ markTheElement(formGroup: FormGroup): void {
 //     this.router.navigate(['/admin/san-pham']);
 //   });
 // }
+
+
 
