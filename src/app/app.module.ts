@@ -33,6 +33,8 @@ import { CustomerViewComponent } from './admin/customer-view/customer-view.compo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { PaymentViewComponent } from './page/payment-view/payment-view.component';
+import { SidebarProfileComponent } from './page/sidebar-profile/sidebar-profile.component';
+import { HistoryViewComponent } from './page/history-view/history-view.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { PaymentViewComponent } from './page/payment-view/payment-view.component
     AdminHeaderComponent,
     OrdersViewComponent,
     CustomerViewComponent,
-    PaymentViewComponent
+    PaymentViewComponent,
+    SidebarProfileComponent,
+    HistoryViewComponent
 
     ],
   imports: [
