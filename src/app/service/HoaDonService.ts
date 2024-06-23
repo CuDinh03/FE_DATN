@@ -39,7 +39,9 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
         });
 
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
-    }    getHoaDonByMa(ma: string): Observable<ApiResponse<any>> {
+    }
+
+    getHoaDonByMa(ma: string): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
 
         // Thêm token vào header của yêu cầu
@@ -49,6 +51,8 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
 
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/find/${ma}`, { headers });
     }
+
+
 
     deleteHoaDon(id: string): Observable<ApiResponse<void>> {
         const token = localStorage.getItem('token');

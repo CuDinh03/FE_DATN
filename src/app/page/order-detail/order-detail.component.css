@@ -1,0 +1,55 @@
+.status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.status-circle {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 2px solid #ccc;
+    /* Màu xám khi chưa đến trạng thái */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-circle i {
+    font-size: 18px;
+    color: #ccc;
+    margin-top: 50px;
+    /* Dịch chuyển biểu tượng lên một chút để căn giữa hoàn hảo hơn */
+}
+
+.status-circle span {
+    font-size: 12px;
+    margin-top: 30px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.status-connector {
+    flex: 1;
+    height: 2px;
+    background-color: #ccc;
+    /* Màu xám khi chưa đến trạng thái */
+}
+
+.status-circle.active {
+    background-color: #ffffff;
+    border: 2px solid #4CAF50;
+    /* Màu xanh khi đã đến trạng thái */
+}
+
+.status-circle.active i {
+    color: #4CAF50;
+}
+
+.status-connector.active {
+    background-color: #4CAF50;
+    /* Màu xanh khi đã đến trạng thái */
+}

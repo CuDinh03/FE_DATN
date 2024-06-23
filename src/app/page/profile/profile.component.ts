@@ -25,4 +25,6 @@ export class ProfileComponent {
         console.error('Error while fetching my info:', error);
       });
   }
+
+
 }

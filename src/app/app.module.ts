@@ -35,6 +35,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { PaymentViewComponent } from './page/payment-view/payment-view.component';
 import { SidebarProfileComponent } from './page/sidebar-profile/sidebar-profile.component';
 import { HistoryViewComponent } from './page/history-view/history-view.component';
+import { OrderDetailComponent } from './page/order-detail/order-detail.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { HistoryViewComponent } from './page/history-view/history-view.component
     CustomerViewComponent,
     PaymentViewComponent,
     SidebarProfileComponent,
-    HistoryViewComponent
+    HistoryViewComponent,
+    OrderDetailComponent
 
     ],
   imports: [

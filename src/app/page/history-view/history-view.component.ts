@@ -97,7 +97,18 @@ export class HistoryViewComponent {
         }
       );
     }
+  }
 
+  findHoaDonById(id: string): void {
+    this.apiService.getHoaDonById(id)
+      .subscribe(
+        (response: ApiResponse<any>) => {
+          if (response.result) {
+            this.hoaDon = response.result;
+            localStorage.setItem('hoaDon', JSON.stringify(response.result));
+            this.router.navigate(['/admin/hoa-don'])
+          }
+        })
   }
 
   getTrangThaiText(trangThai: number): string {

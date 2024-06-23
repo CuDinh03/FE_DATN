@@ -42,7 +42,7 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
-                        <a class="card mb-4" *ngFor="let item of hoaDonChiTiet" href="#">
+                        <a class="card mb-4" *ngFor="let item of hoaDonChiTiet" type="button" (click)="findHoaDonById(item.hoaDon.id)">
                             <div class="d-flex align-items-center mt-3 ms-3">
                                 <span class="align-items-center" style="color: black;">
                                     <i class="ti ti-brand-shopee "></i>

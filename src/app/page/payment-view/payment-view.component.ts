@@ -82,6 +82,8 @@ export class PaymentViewComponent {
   }
 
 
+
+
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
     if (tenDangNhap) {
@@ -238,10 +240,9 @@ export class PaymentViewComponent {
   }
 
   saveInfoPayment() {
-    if (this.customerForm.invalid) {
-      return;
-    }
-
+    // if (this.customerForm.invalid) {
+    //   return;
+    // }
     // @ts-ignore
     this.tenDangNhap = localStorage.getItem('tenDangNhap');
     this.khachHangService.findKhachHangByTenDangNhap(this.tenDangNhap).subscribe(
