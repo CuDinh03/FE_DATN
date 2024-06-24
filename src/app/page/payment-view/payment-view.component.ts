@@ -240,78 +240,74 @@ export class PaymentViewComponent {
   }
 
   saveInfoPayment() {
-    // if (this.customerForm.invalid) {
-    //   return;
-    // }
-    // @ts-ignore
-    this.tenDangNhap = localStorage.getItem('tenDangNhap');
-    this.khachHangService.findKhachHangByTenDangNhap(this.tenDangNhap).subscribe(
-        (response) => {
-          this.khachHang = response.result;
-          if (!this.khachHang || !this.khachHang.id) {
-            console.error('Không tìm thấy thông tin khách hàng.');
-            return;
-          }
-                this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
-                    (gioHangResponse: ApiResponse<GioHangDto>) => {
-                        const gioHang = gioHangResponse.result;
-                        if (!gioHang) {
-                            console.error('Không tìm thấy giỏ hàng.');
-                            return;
-                        }
+    if (this.customerForm.invalid) {
+      return;
+    }
 
-                        this.gioHangChiTietService.getAllBỵKhachHang(gioHang.id).subscribe(
-                            (gioHangChiTietResponse: ApiResponse<any>) => {
-                                const gioCt = gioHangChiTietResponse.result || [];
+    const storedVoucher = localStorage.getItem('voucher') || '';
+    const tenDangNhap = localStorage.getItem('tenDangNhap') || '';
 
-                                const thanhToanOnl: ThanhToanOnl = {
-                                    gioHang: gioHang,
-                                    tongTien: this.getCartTotal() - this.discount,
-                                    tongTienGiam: this.discount,
-                                    voucher: JSON.parse(storedVoucher),
-                                    ghiChu: '',
-                                  gioHangChiTietList: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
-                                };
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+      (response) => {
+        this.khachHang = response.result;
+        if (!this.khachHang || !this.khachHang.id) {
+          console.error('Không tìm thấy thông tin khách hàng.');
+          return;
+        }
 
-                                this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
-                                    (response: ApiResponse<ThanhToanOnl>) => {
-                                        if (response.result) {
-                                            this.snackBar.open('Thanh toán thành công!', 'Đóng', {
-                                                duration: 3000,
-                                                panelClass: ['success-snackbar']
-                                            });
-                                            this.router.navigate(['/trang-chu']);
-                                        }
-                                    },
-                                    (error) => {
-                                        this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
-                                            duration: 3000,
-                                            panelClass: ['error-snackbar']
-                                        });
-                                    }
-                                );
-                            },
-                            (error) => {
-                                console.error('Lỗi hiển giỏ hàng chi tiêt:', error);
-                            }
-                        );
-                    },
-                    (error: HttpErrorResponse) => {
-                      this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+        this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
+          (gioHangResponse: ApiResponse<GioHangDto>) => {
+            const gioHang = gioHangResponse.result;
+            if (!gioHang) {
+              console.error('Không tìm thấy giỏ hàng.');
+              return;
+            }
+
+            this.gioHangChiTietService.getAllBỵKhachHang(gioHang.id).subscribe(
+              (gioHangChiTietResponse: ApiResponse<any>) => {
+                const gioCt = gioHangChiTietResponse.result || [];
+
+                const thanhToanOnl: ThanhToanOnl = {
+                  gioHang: gioHang,
+                  tongTien: this.getCartTotal() - this.discount,
+                  tongTienGiam: this.discount,
+                  voucher: JSON.parse(storedVoucher),
+                  diaChiGiaoHang: '',
+                  ghiChu: '',
+                  gioHangChiTietList: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
+                };
+
+                this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
+                  (response: ApiResponse<ThanhToanOnl>) => {
+                    if (response.result) {
+                      this.snackBar.open('Thanh toán thành công!', 'Đóng', {
                         duration: 3000,
-                        panelClass: ['error-snackbar']
+                        panelClass: ['success-snackbar']
                       });
+                      this.router.navigate(['/trang-chu']);
                     }
+                  },
+                  (error) => {
+                    this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+                      duration: 3000,
+                      panelClass: ['error-snackbar']
+                    });
+                  }
                 );
               },
               (error) => {
-                console.error('Error fetching shopping cart:', error);
+                console.error('Lỗi hiển giỏ hàng chi tiêt:', error);
               }
-          );
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
+            );
+          },
+          (error) => {
+            console.error('Lỗi tải giỏ hàng:', error);
+          }
+        );
+      },
+      (error) => {
+        console.error('Lỗi tải khách hàng:', error);
+      }
     );
   }
 }

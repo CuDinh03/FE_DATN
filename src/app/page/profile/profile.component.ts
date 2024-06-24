@@ -23,7 +23,7 @@ export class ProfileComponent {
 
   constructor(
     private taiKhoanService: TaiKhoanService,
-    private khachHangService: KhachHangService, 
+    private khachHangService: KhachHangService,
     private formBuilder: FormBuilder
   ) { }
 
@@ -59,7 +59,7 @@ export class ProfileComponent {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    
+
     this.khachHangService.getKhachHangByIdTaiKhoan(idTaiKhoan)
       .subscribe(response => {
         this.khachHang = response.result;
@@ -67,5 +67,71 @@ export class ProfileComponent {
       }, error => {
         console.error('Lỗi khi lấy thông tin khách hàng:', error);
       });
+  }
+
+  // 1. Khoi tao form
+  initFormKhachHang(): void{
+    this.formKhachHang = this.formBuilder.group({
+      ten: [],
+      ngaySinh: [],
+      sdt: [],
+      email: [],
+      diaChi: [],
+    })
+  }
+
+  // 3. fill value form
+  fillValueToForm(khachHang: any) : void {
+    this.formKhachHang.patchValue({
+      ten: khachHang.ten,
+      ngaySinh: khachHang.ngaySinh,
+      sdt: khachHang.sdt,
+      email: khachHang.email,
+      diaChi: khachHang.diaChi
+    })
+  }
+
+  statusTransition() {
+    this.isEdit = !this.isEdit;
+    // Bat nut edit => fill value form
+    if(this.isEdit) {
+      this.fillValueToForm(this.khachHang);
+    }
+  }
+
+  update(): void{
+    // nhập đúng validate
+    if(this.formKhachHang.valid) {
+      // lay ra value form
+      // const: bien k the thay doi
+      const formValue = this.formKhachHang.value;
+      let dataKhachHang = {
+        ten: formValue.ten,
+        ngaySinh: formValue.ngaySinh,
+        sdt: formValue.sdt,
+        email: formValue.email,
+        diaChi: formValue.diaChi,
+        idTaiKhoan: this.taiKhoanInfo
+      }
+      this.khachHangService.suaKhachHang(this.khachHang.id, dataKhachHang).subscribe(
+        res => {
+          this.khachHang = res.result;
+          this.khachHang.ngaySinh = this.formatDate(this.khachHang.ngaySinh);
+          this.isEdit = false;
+          alert("Cập nhật thành công");
+        }, error => {
+          console.log(error);
+          alert("Cập nhật thất bại");
+        }
+      )
+    }
+  }
+
+  formatDate(isoString: string): string {
+    const date = new Date(isoString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }
