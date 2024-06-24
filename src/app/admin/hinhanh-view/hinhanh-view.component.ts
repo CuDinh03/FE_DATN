@@ -49,7 +49,7 @@ export class HinhAnhViewComponent implements OnInit{
         id: [''],
         // chiTietSanPham:[''],
       chiTietSanPham: Object,
-        trangThai: ['']
+        trangThai: ['',Validators.required]
       });
   
       this.id = this.route.snapshot.params['id'];
