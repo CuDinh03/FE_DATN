@@ -14,7 +14,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
   
     constructor(private http: HttpClient) {}
   
-    
+    // phan trang
       getDanhMuc(page: number, size: number): Observable<ApiResponse<any>> {
           const token = localStorage.getItem('token');
   
@@ -39,6 +39,15 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
         });
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, { headers });
     }
+
+    getAllDanhMucDangHoatDong(): Observable<ApiResponse<any>> {
+      const token = localStorage.getItem('token');
+      // Thêm token vào header của yêu cầu
+      const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+      });
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll/dang-hoat-dong`, { headers });
+  }
 
       createDanhMuc(danhMuc: DanhMucDto): Observable<ApiResponse<DanhMucDto>> {
         const token = localStorage.getItem('token');

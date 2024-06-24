@@ -1,5 +1,5 @@
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-     data-sidebar-position="fixed" data-header-position="fixed">
+  data-sidebar-position="fixed" data-header-position="fixed">
   <app-sidebar></app-sidebar>
   <!--  Main wrapper -->
   <div class="body-wrapper">
@@ -55,15 +55,15 @@
                           </tr>
                           </thead>
                           <tbody>
-                          <tr *ngFor="let chiTiet of gioHangChiTiet">
-                            <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
-                            <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
-                            <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
-                            <td>
-                              <input type="number" style="width: 50px;" [(ngModel)]="chiTiet.soLuong" min="0">
-                            </td>
-                            <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
-                            <td class="d-flex justify-content-center text-center">
+                            <tr *ngFor="let chiTiet of gioHangChiTiet">
+                              <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
+                              <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
+                              <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
+                              <td>
+                                <input type="number" style="width: 50px;" [(ngModel)]="chiTiet.soLuong" min="0">
+                              </td>
+                              <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
+                              <td class="d-flex justify-content-center text-center">
                                 <span>
                                   <a class="btn" (click)="updateGioHangChiTiet(chiTiet.id, chiTiet.soLuong)"
                                      style="color: #7A98FE; font-size: 16px; ">
@@ -119,7 +119,7 @@
                             <label class="form-label">Khách hàng</label>
                             <div class="col-8">
                               <input type="text" class="form-control" id="sdt" name="sdt" [(ngModel)]="sdtValue"
-                                     (ngModelChange)="onSdtInputChange()" />
+                                (ngModelChange)="onSdtInputChange()" />
                             </div>
                             <div class="col-4">
                               <button type="button" class="btn btn-info" (click)="getCustomer()">Chọn</button>
@@ -149,7 +149,7 @@
                         <div class="mb-4">
                           <label class="form-label">Tiền khách đưa</label>
                           <input type="text" class="form-control" id="tienKhachDua" name="tienKhachDua"
-                                 [(ngModel)]="tienKhachDua" (ngModelChange)="onTienKhachDua($event)" required />
+                            [(ngModel)]="tienKhachDua" (ngModelChange)="onTienKhachDua($event)" required />
                         </div>
                         <div class="mb-4">
                           <label class="form-label me-3">Tiền giảm:</label>
@@ -174,7 +174,7 @@
                           </span>
                           <span>
                             <button type="button" class="btn btn-outline-danger" style="color: #F87777;"
-                                    (click)="deleteHoaDonFromLocalStorage()">
+                              (click)="deleteHoaDonFromLocalStorage()">
                               <span>
                                 <i class="ti ti-x"></i>
                               </span>
@@ -236,72 +236,72 @@
                 <div class="container-fluid">
                   <table class="table text-nowrap mb-0 col-12 mb-3">
                     <thead class="text-dark fs-4">
-                    <tr>
-                      <th class="border-bottom-0" scope="col">
-                        <h6 class="fw-semibold mb-0">#</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Mã sản phẩm</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Tên sản phẩm</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Danh mục</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Màu sắc</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Kích thước</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Chất liệu</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Thương hiệu</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Giá bán</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Số lượng</h6>
-                      </th>
-                      <th scope="col">
-                        <h6 class="fw-semibold mb-0">Thao tác</h6>
-                      </th>
-                    </tr>
+                      <tr>
+                        <th class="border-bottom-0" scope="col">
+                          <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Mã sản phẩm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tên sản phẩm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Danh mục</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Màu sắc</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Kích thước</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Chất liệu</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thương hiệu</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Giá bán</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Số lượng</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thao tác</h6>
+                        </th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr style="height: 30px;" *ngFor="let sanPhamChiTiet of listSanPhamChiTiet; let i = index">
+                      <tr style="height: 30px;" *ngFor="let sanPhamChiTiet of listSanPhamChiTiet; let i = index">
 
-                      <td> {{ i + 1 }}</td>
-                      <td>{{ sanPhamChiTiet.sanPham.ma }}</td>
-                      <td>{{ sanPhamChiTiet.sanPham.ten }}</td>
-                      <td>{{ sanPhamChiTiet.danhMuc.ten }}</td>
-                      <td>{{ sanPhamChiTiet.mauSac.ten }}</td>
-                      <td>{{ sanPhamChiTiet.kichThuoc.ten }}</td>
-                      <td>{{ sanPhamChiTiet.chatLieu.ten }}</td>
-                      <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
-                      <td>{{ sanPhamChiTiet.giaBan }}</td>
-                      <td>{{ sanPhamChiTiet.soLuong }}</td>
-                      <!-- (click)="themSanPhamVaoGioHang()" -->
-                      <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
-                                  (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)" (click)="showModalAdd()">
-                        <i class="ti ti-plus"></i>
-                      </button></td>
-                    </tr>
+                        <td> {{ i + 1 }}</td>
+                        <td>{{ sanPhamChiTiet.sanPham.ma }}</td>
+                        <td>{{ sanPhamChiTiet.sanPham.ten }}</td>
+                        <td>{{ sanPhamChiTiet.danhMuc.ten }}</td>
+                        <td>{{ sanPhamChiTiet.mauSac.ten }}</td>
+                        <td>{{ sanPhamChiTiet.kichThuoc.ten }}</td>
+                        <td>{{ sanPhamChiTiet.chatLieu.ten }}</td>
+                        <td>{{ sanPhamChiTiet.thuongHieu.ten }}</td>
+                        <td>{{ sanPhamChiTiet.giaBan }}</td>
+                        <td>{{ sanPhamChiTiet.soLuong }}</td>
+                        <!-- (click)="themSanPhamVaoGioHang()" -->
+                        <td><button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
+                            (click)="loadChiTietSanPhamById(sanPhamChiTiet.id)" (click)="showModalAdd()">
+                            <i class="ti ti-plus"></i>
+                          </button></td>
+                      </tr>
                     </tbody>
                   </table>
                   <div>
                     <div class="d-flex justify-content-end">
                       <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary"
-                              [disabled]="page === 0">
+                        [disabled]="page === 0">
                         < </button>
-                      <span style="margin: 5px">Trang {{ page + 1 }}</span>
-                      <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"
-                              [disabled]="page === totalPages - 1"> >
-                      </button>
+                          <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                          <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"
+                            [disabled]="page === totalPages - 1"> >
+                          </button>
                     </div>
                   </div>
                 </div>
@@ -342,7 +342,7 @@
                   <div class="">
                     <div class=" container-fluid row rounded shadow" style="border-left: 12px solid #49BEFF;">
                       <div class="col-4 d-flex justify-content-center align-items-center text-center p-2"
-                           style="border-right: 1px dashed #ccc;">
+                        style="border-right: 1px dashed #ccc;">
                         <h5>{{voucher.ma}}</h5>
                       </div>
                       <div class="col-8">
@@ -360,7 +360,7 @@
                           <span style="display: inline; margin-right: 4px;">{{formatDate(voucher.ngayKetThuc)}}</span>
                         </i>
                         <button type="button" (click)="getVoucherById(voucher.id)"
-                                style="border: none; background: #49BEFF; color: #fff; padding: 2px 12px; border-radius: 20px;font-size: 12px; margin-top: 15px; margin-bottom: 20px;">Sử
+                          style="border: none; background: #49BEFF; color: #fff; padding: 2px 12px; border-radius: 20px;font-size: 12px; margin-top: 15px; margin-bottom: 20px;">Sử
                           dụng</button>
                       </div>
                     </div>
@@ -373,7 +373,7 @@
                 Previous
               </button>
               <button (click)="onPageChange(currentPage + 1)" class="btn btn-secondary"
-                      [disabled]="currentPage === totalPages - 1">Next
+                [disabled]="currentPage === totalPages - 1">Next
               </button>
             </div>
           </div>

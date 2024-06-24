@@ -21,7 +21,7 @@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" [routerLink]="['/admin/shopping']" routerLinkActive="active"
-                       aria-expanded="false" style="margin-bottom: 25px;">
+                        aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-shopping-cart"></i>
                         </span>
@@ -30,9 +30,9 @@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" [routerLink]="['/admin/san-pham']" routerLinkActive="active"
-                       aria-expanded="false" aria-expanded="false" data-bs-toggle="collapse"
-                       data-bs-target="#productDropdown" role="button" aria-controls="productDropdown"
-                       style="margin-bottom: 25px;">
+                        aria-expanded="false" aria-expanded="false" data-bs-toggle="collapse"
+                        data-bs-target="#productDropdown" role="button" aria-controls="productDropdown"
+                        style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-shirt"></i>
                         </span>
@@ -41,12 +41,16 @@
                     <div class="collapse" id="productDropdown">
                         <ul class="list-unstyled ms-3">
                             <li>
+                                <a class="sidebar-link" [routerLink]="['/admin/san-pham-chi-tiet']" routerLinkActive="active">
+                                    Sản phẩm chi tiết</a>
+                            </li>
+                            <li>
                                 <a class="sidebar-link" [routerLink]="['/admin/san-pham']"
                                 routerLinkActive="active">Sản phẩm</a>
                             </li>
                             <li>
                                 <a class="sidebar-link" [routerLink]="['/admin/danh-muc']"
-                                   routerLinkActive="active">Danh Mục</a>
+                                    routerLinkActive="active">Danh Mục</a>
                             </li>
                             <li>
                                 <a class="sidebar-link" [routerLink]="['/admin/mau-sac']"
@@ -73,7 +77,7 @@
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" [routerLink]="['/admin/tai-khoan']" routerLinkActive="active"
-                       aria-expanded="false" style="margin-bottom: 25px;">
+                        aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>
@@ -88,6 +92,27 @@
                         <span class="hide-menu">Nhân viên</span>
                     </a>
                 </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" [routerLink]="['/admin/hoa-don']" routerLinkActive="active"
+                        aria-expanded="false" style="margin-bottom: 25px;">
+                        <span>
+                            <i class="ti ti-file-text"></i>
+                        </span>
+                        <span class="hide-menu">Hóa đơn</span>
+                    </a>
+                </li>
+
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" [routerLink]="['/admin/voucher']" routerLinkActive="active"
+                        aria-expanded="false" style="margin-bottom: 25px;">
+
+                        <span>
+                            <i class="ti ti-ticket"></i>
+                        </span>
+                        <span class="hide-menu">Voucher</span>
+                    </a>
+                </li>
 
                 <li class="sidebar-item" >
                     <a class="sidebar-link" [routerLink]="['/admin/khach-hang']" routerLinkActive="active"  aria-expanded="false" style="margin-bottom: 25px;">
@@ -97,27 +122,6 @@
                         <span class="hide-menu">Khách Hàng</span>
                     </a>
                 </li>
-
-                <li class="sidebar-item" >
-                  <a class="sidebar-link" [routerLink]="['/admin/hoa-don']" routerLinkActive="active" aria-expanded="false" style="margin-bottom: 25px;">
-                        <span>
-                            <i class="ti ti-file-text"></i>
-                        </span>
-                        <span class="hide-menu">Hóa đơn</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a class="sidebar-link" [routerLink]="['/admin/voucher']" routerLinkActive="active"
-                       aria-expanded="false" style="margin-bottom: 25px;">
-
-                        <span>
-                            <i class="ti ti-ticket"></i>
-                        </span>
-                        <span class="hide-menu">Voucher</span>
-                    </a>
-                </li>
-
 
                 <li class="sidebar-item">
 

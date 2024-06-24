@@ -10,28 +10,50 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
     providedIn: 'root'
   })
   export class KichThuocService {
-  
+
     apiUrl = 'http://localhost:9091/api/kich-thuoc';
-  
+
     constructor(private http: HttpClient) {}
-  
-    
+
+  // 1. get all
+  getAll(): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, { headers });
+  }
+
+
+  getAllKichThuocDangHoatDong(): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll/dang-hoat-dong`, { headers });
+  }
+
+
       getKichThuoc(page: number, size: number): Observable<ApiResponse<any>> {
           const token = localStorage.getItem('token');
-  
+
           // Thêm token vào header của yêu cầu
           const headers = new HttpHeaders({
               'Authorization': `Bearer ${token}`
           });
-  
+
           let params = new HttpParams();
           params = params.append('page', page.toString());
           params = params.append('size', size.toString());
-  
+
           return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
       }
 
-      
+
       getAllKichThuoc(): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
         // Thêm token vào header của yêu cầu
@@ -43,12 +65,12 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
 
       createKichThuoc(kichThuoc: KichThuocDto): Observable<ApiResponse<KichThuocDto>> {
         const token = localStorage.getItem('token');
-    
+
         // Thêm token vào header của yêu cầu
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-    
+
         return this.http.post<ApiResponse<KichThuocDto>>(`${this.apiUrl}` +'/create', kichThuoc, { headers });
       }
 
@@ -59,7 +81,7 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-    
+
         return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
       }
 
@@ -68,7 +90,7 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-    
+
         return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/open/${id}`, {headers});
       }
 
@@ -78,10 +100,10 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-    
+
         return this.http.get<ApiResponse<KichThuocDto>>(`${this.apiUrl}/${id}`, {headers});
       }
-      
+
       updateKichThuoc(id: string, kichThuocData: KichThuocDto): Observable<ApiResponse<void>> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
@@ -89,6 +111,6 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
         });
         return this.http.put<ApiResponse<void>>(`${this.apiUrl}/${id}`, kichThuocData, { headers });
       }
-  
-  
+
+
   }

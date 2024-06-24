@@ -24,6 +24,17 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
         });
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/${id}`, {headers});
       }
-  
+
+  getAllBỵKhachHang(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/allKh/${id}`, { headers });
+  }
+
+
+
   
   }
