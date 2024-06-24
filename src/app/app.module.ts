@@ -75,7 +75,7 @@ import { HinhAnhViewComponent } from './admin/hinhanh-view/hinhanh-view.componen
     PaymentViewComponent,
     SidebarProfileComponent,
     HistoryViewComponent,
-    OrderDetailComponent
+    OrderDetailComponent,
     ChatLieuViewComponent,
     MauSacViewComponent,
     KichThuocViewComponent,

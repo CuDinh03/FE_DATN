@@ -7,28 +7,29 @@
                 <app-sidebar-profile></app-sidebar-profile>
             </div>
             <div class="col-lg-9">
-                <div class="status-bar">
-                    <div class="status-circle" [ngClass]="{'active': currentStatus >= 1}">
-                        <i class="fa fa-check"></i>
-                        <span>Đã xử lý</span>
-                    </div>
-                    <div class="status-connector" [ngClass]="{'active': currentStatus >= 2}"></div>
-                    <div class="status-circle" [ngClass]="{'active': currentStatus >= 2}">
-                        <i class="fa fa-truck"></i>
-                        <span>Đang vận chuyển</span>
-                    </div>
-                    <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
-                    <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
-                        <i class="fa fa-check-circle"></i>
-                        <span>Đã giao hàng</span>
-                    </div>
-                    <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
-                    <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
-                        <i class="fa fa-check-circle"></i>
-                        <span>Hoàn thành</span>
-                    </div>
+                <div class="Card">
+                    <div class="status-bar">
+                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 1}">
+                            <i class="fa fa-file"></i>
+                            <span>Đã xử lý</span>
+                            </div>
+                            <div class="status-connector" [ngClass]="{'active': currentStatus >= 2}"></div>
+                            <div class="status-circle" [ngClass]="{'active': currentStatus >= 2}">
+                                <i class="fa fa-truck"></i>
+                                <span>Đang vận chuyển</span>
+                            </div>
+                            <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
+                            <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
+                                <i class="fa fa-check-circle"></i>
+                                <span>Đã giao hàng</span>
+                            </div>
+                            <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
+                            <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
+                            <i class="fa fa-star"></i>
+                            <span>Hoàn thành</span>
+                            </div>
+                        </div>
                 </div>
-
             </div>
         </div>
     </div>
