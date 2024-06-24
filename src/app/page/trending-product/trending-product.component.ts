@@ -57,7 +57,7 @@ export class TrendingProductComponent {
         if (response.result && response.result.length > 0) {
           // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
           this.chiTietSanPham = response.result;
-
+          
         } else {
           console.log(response);
         }
