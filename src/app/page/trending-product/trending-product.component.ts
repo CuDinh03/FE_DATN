@@ -32,7 +32,7 @@ export class TrendingProductComponent {
 
 
   ngOnInit(): void {
-    this.loadDanhSachSanPham();
+    // this.loadDanhSachSanPham();
   }
 
 

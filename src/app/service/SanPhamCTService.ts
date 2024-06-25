@@ -160,6 +160,29 @@ export class SanPhamCTService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByThuongHieuId/${id}`, { headers });
   }
 
+  getAllMauSacByMa(ma: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findAllMauSacByMaCTSP/${ma}`);
+  }
 
+  getAllKichThuocByMa(ma: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findAllKichThuocByMaCTSP/${ma}`);
+  }
+
+  findChiTietSanPhamByMauSacAndKichThuoc(ma: string, kichThuocId: string, mauSacId: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findChiTietSanPhamByMauSacAndKichThuoc/${ma}`, {
+      params: {
+        kichThuoc: kichThuocId,
+        mauSac: mauSacId
+      }
+    });
+  }
+
+  findChiTietSanPhamByKichThuoc(ma: string, kichThuocId: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findSanPhamByKichThuoc/${ma}`, {
+      params: {
+        kichThuoc: kichThuocId,
+      }
+    });
+  }
 
 }

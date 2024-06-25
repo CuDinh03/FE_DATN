@@ -36,6 +36,7 @@ import { ProductDetailViewComponent } from './admin/product-detail-view/product-
 import { PaymentViewComponent } from './page/payment-view/payment-view.component';
 import { SidebarProfileComponent } from './page/sidebar-profile/sidebar-profile.component';
 import { HistoryViewComponent } from './page/history-view/history-view.component';
+import { MaskValuePipe } from './page/profile/mask-value-pipe';
 
 @NgModule({
   declarations: [
@@ -69,8 +70,8 @@ import { HistoryViewComponent } from './page/history-view/history-view.component
     PaymentViewComponent,
     SidebarProfileComponent,
     HistoryViewComponent,
-    ProductDetailViewComponent
-
+    ProductDetailViewComponent,
+    MaskValuePipe
     ],
   imports: [
     BrowserModule,
