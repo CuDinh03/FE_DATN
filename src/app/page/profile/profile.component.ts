@@ -24,9 +24,8 @@ export class ProfileComponent{
 
   constructor(
     private taiKhoanService: TaiKhoanService,
-    private khachHangService: KhachHangService, 
-    private formBuilder: FormBuilder,
-
+    private khachHangService: KhachHangService,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -53,6 +52,7 @@ export class ProfileComponent{
         console.error('Lỗi khi lấy thông tin tài khoản:', error);
       });
   }
+
   // Lấy Thông tin khách hàng từ id tài khoản đang đăng nhập
   getKhachHangByIdTaiKhoan(idTaiKhoan: any): void {
 
@@ -60,7 +60,7 @@ export class ProfileComponent{
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    
+
     this.khachHangService.getKhachHangByIdTaiKhoan(idTaiKhoan)
       .subscribe(response => {
         this.khachHang = response.result;
@@ -70,48 +70,48 @@ export class ProfileComponent{
       });
   }
 
-  // 1. Khoi tao form 
-  initFormKhachHang(): void{
+  // 1. Khoi tao form
+  initFormKhachHang(): void {
     this.formKhachHang = this.formBuilder.group({
-    ten: [], 
-    ngaySinh: [],
-    sdt: [],
-    email: [],
-    diaChi: [],
+      ten: [],
+      ngaySinh: [],
+      sdt: [],
+      email: [],
+      diaChi: [],
     })
   }
 
-  // 3. fill value form 
-  fillValueToForm(khachHang: any) : void {
+  // 3. fill value form
+  fillValueToForm(khachHang: any): void {
     this.formKhachHang.patchValue({
-      ten: khachHang.ten, 
-      ngaySinh: khachHang.ngaySinh, 
-      sdt: khachHang.sdt, 
-      email: khachHang.email, 
+      ten: khachHang.ten,
+      ngaySinh: khachHang.ngaySinh,
+      sdt: khachHang.sdt,
+      email: khachHang.email,
       diaChi: khachHang.diaChi
     })
   }
 
   statusTransition() {
     this.isEdit = !this.isEdit;
-    // Bat nut edit => fill value form 
-    if(this.isEdit) {
+    // Bat nut edit => fill value form
+    if (this.isEdit) {
       this.fillValueToForm(this.khachHang);
     }
   }
 
-  update(): void{
+  update(): void {
     // nhập đúng validate
-    if(this.formKhachHang.valid) {
-      // lay ra value form 
+    if (this.formKhachHang.valid) {
+      // lay ra value form
       // const: bien k the thay doi
       const formValue = this.formKhachHang.value;
       let dataKhachHang = {
-        ten: formValue.ten, 
-        ngaySinh: formValue.ngaySinh, 
+        ten: formValue.ten,
+        ngaySinh: formValue.ngaySinh,
         sdt: formValue.sdt,
-        email: formValue.email, 
-        diaChi: formValue.diaChi, 
+        email: formValue.email,
+        diaChi: formValue.diaChi,
         idTaiKhoan: this.taiKhoanInfo
       }
       this.khachHangService.suaKhachHang(this.khachHang.id, dataKhachHang).subscribe(
@@ -135,5 +135,4 @@ export class ProfileComponent{
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-
 }

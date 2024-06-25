@@ -98,8 +98,6 @@ export class HeaderComponent {
     );
   }
 
-
-
   toggleSearch() {
     this.showSearch = !this.showSearch;
   }

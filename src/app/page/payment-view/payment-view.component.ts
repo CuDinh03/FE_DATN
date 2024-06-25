@@ -21,6 +21,7 @@ import {GioHangDto} from "../../model/gio-hang-dto";
 })
 export class PaymentViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
+  @ViewChild('userInfor') userInfor!: ElementRef;
   totalElements = 0;
   totalPages: number = 0;
   currentPage = 0;
@@ -42,10 +43,12 @@ export class PaymentViewComponent {
   voucher: any;
   discount: number = 0;
   customerForm: FormGroup;
+  selectedCustomerId: string | null = null;
+
     // submitted = false;
 
   showUpperFooter: boolean = true;
-
+  selectedCustomer: any = null;
 
   constructor(private auth: AuthenticationService, private router: Router,
               private gioHangChiTietService: GioHangChiTietService,
@@ -58,16 +61,17 @@ export class PaymentViewComponent {
               private thanhToanService: ThanhToanService
   ) {
     this.customerForm = this.formBuilder.group({
-        name:[''],
-        address:[''],
-        phone:[''],
-        ten:[''],
-        email:[''],
-        note:[''],
+      ten: [''],
+      diaChi: [''],
+      sdt: [''],
+      email: [''],
+      note: [''],
     })
 
 
   }
+
+
 
   get f(){
     return this.customerForm.controls;
@@ -75,14 +79,41 @@ export class PaymentViewComponent {
 
   ngOnInit() {
     this.findShoppingCart();
+    this.loadUserInfor();
   }
 
   calculateSubtotal(item: any): number {
     return item.chiTietSanPham.giaBan * item.soLuong;
   }
 
+  selectCustomer(customerId: string): void {
+    this.selectedCustomerId = customerId;
+  }
+
+  // Hiển thị thông tin khách hàng vào form
+  selectCustomerForUpdate(customer: any): void {
+    this.selectedCustomer = customer;
+    this.customerForm.patchValue({
+      ten: customer.ten,
+      diaChi: customer.diaChi,
+      sdt: customer.sdt,
+      email: customer.email,
+      note: customer.note
+    });
+  }
 
 
+  updateCustomerInfo(): void {
+    if (this.customerForm.invalid) {
+      return;
+    }
+    const updatedCustomer = {
+      ...this.selectedCustomer,
+      ...this.customerForm.value
+    };
+    this.selectCustomerForUpdate(this.khachHang);
+    this.closeInforModal();
+  }
 
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
@@ -104,6 +135,25 @@ export class PaymentViewComponent {
               }
             );
           } else {
+            console.error('Không tìm thấy thông tin khách hàng.');
+          }
+        },
+        (error) => {
+          console.error('Error fetching customer:', error);
+        }
+      );
+    }
+  }
+
+  loadUserInfor() {
+    const tenDangNhap = this.auth.getTenDangNhap();
+    if (tenDangNhap) {
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+        (response) => {
+          if (response.result) {
+            this.khachHang = response.result;
+          }
+          else {
             console.error('Không tìm thấy thông tin khách hàng.');
           }
         },
@@ -145,6 +195,14 @@ export class PaymentViewComponent {
     }
   }
 
+  showModalInfor(): void {
+    if (this.userInfor && this.userInfor.nativeElement) {
+      this.userInfor.nativeElement.classList.add('show');
+      this.userInfor.nativeElement.style.display = 'block';
+      this.loadUserInfor()
+    }
+  }
+
   loadVoucher(): void {
     if (this.pageSize > 0) {
 
@@ -178,6 +236,13 @@ export class PaymentViewComponent {
     if (this.voucherModal && this.voucherModal.nativeElement) {
       this.voucherModal.nativeElement.classList.remove('show');
       this.voucherModal.nativeElement.style.display = 'none';
+    }
+  }
+
+  closeInforModal(): void {
+    if (this.userInfor && this.userInfor.nativeElement) {
+      this.userInfor.nativeElement.classList.remove('show');
+      this.userInfor.nativeElement.style.display = 'none';
     }
   }
   getVoucherById(id: string) {
