@@ -139,6 +139,12 @@ export class ProfileComponent {
     }
   }
 
+  confirmUpdate() {
+    if (window.confirm('Bạn có chắc chắn muốn cập nhật thông tin không?')) {
+      this.update();
+    }
+  }
+
   get f() {
     return this.formKhachHang.controls;
   }
