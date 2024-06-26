@@ -251,6 +251,7 @@ export class PaymentViewComponent {
                                     tongTien: this.getCartTotal() - this.discount,
                                     tongTienGiam: this.discount,
                                     voucher: JSON.parse(storedVoucher),
+                                  diaChiGiaoHang: "",
                                     ghiChu: '',
                                   gioHangChiTietList: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
                                 };

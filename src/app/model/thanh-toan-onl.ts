@@ -7,6 +7,7 @@ export interface ThanhToanOnl{
     tongTien: number;
     tongTienGiam: number;
     voucher: Voucher;
+  diaChiGiaoHang: string;
     ghiChu:string;
   gioHangChiTietList: GioHangChiTietDto[];
 }
