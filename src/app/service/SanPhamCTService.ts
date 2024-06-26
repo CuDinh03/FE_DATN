@@ -28,16 +28,18 @@ export class SanPhamCTService {
 
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/sap-xep-ngay-tao`, { params, headers });
   }
-  themSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto): Observable<any> {
 
+  // Get chitietSanPham by id
+  getChiTietSanPhamById(id: string): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-
-    return this.http.post(`${this.apiUrl}/add`, sanPhamChiTiet, { headers });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
   }
 
+
+  // Update trạng thái hoạt động => dừng HĐ
   updateTrangThaiById(id: string): Observable<ApiResponse<any>> {
 
     const token = localStorage.getItem('token');
@@ -53,7 +55,24 @@ export class SanPhamCTService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/updateTrangThai/${id}`, options);
   }
 
-  suaSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto, id : string): Observable<any> {
+// <<<<<<< HEAD
+//   suaSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto, id : string): Observable<any> {
+// =======
+
+  // Thêm sản phẩm chi tiết
+  themSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto): Observable<any> {
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post(`${this.apiUrl}/add`, sanPhamChiTiet, { headers });
+  }
+
+  // Sửa sản phẩm chi tiết
+  suaSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto, id: string): Observable<any> {
+
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -79,10 +98,6 @@ export class SanPhamCTService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all`, { params, headers });
   }
 
-  getChiTietSanPhamById(id: string): Observable<ApiResponse<any>> {
-
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`);
-  }
 
   getAllSanPhamChiTiet(): Observable<ApiResponse<any>> {
 
@@ -113,4 +128,67 @@ export class SanPhamCTService {
       }
     });
   }
+
+  // TÌM KIẾM
+  getSPCTBySanPhamId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getBySanPhamId/${id}`, { headers });
+  }
+
+  getSPCTByChatLieuId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByChatLieuId/${id}`, { headers });
+  }
+
+  getSPCTByDanhMucId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByDanhMucId/${id}`, { headers });
+  }
+
+  getSPCTByKichThuocId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByKichThuocId/${id}`, { headers });
+  }
+
+  getSPCTByMauSacId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByMauSacId/${id}`, { headers });
+  }
+
+  getSPCTByThuongHieuId(id: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getByThuongHieuId/${id}`, { headers });
+  }
+
+
+
+
+
+
+
+
 }
