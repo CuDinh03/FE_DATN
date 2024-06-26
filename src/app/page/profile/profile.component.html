@@ -14,7 +14,7 @@
                             <div class="container mt-4">
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <label for="tenDangNhap" class="form-label">Tên đăng nhập</label>
+                                        <label for="tenDangNhap" class="form-label">Tên đăng nhập:</label>
                                     </div>
                                     <div class="col-sm-9">
                                         <label>{{myInfo.username}}</label>
@@ -23,41 +23,64 @@
 
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <label for="ten" class="form-label">Tên</label>
+                                        <label for="ten" class="form-label">Tên:</label>
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" id="ten" class="form-control" formControlName="ten"
                                             name="ten">
+                                        <div
+                                            *ngIf="f['ten'].invalid && (f['ten'].dirty || f['ten'].touched) && f['ten'].errors">
+                                            <div class="error-msg" *ngIf="f['ten'].errors['required']"></div>
+                                            <div style="color: red">
+                                                Không được để trống!
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <label for="email" class="form-label">Email</label>
+                                        <label for="email" class="form-label">Email:</label>
                                     </div>
                                     <div class="col-sm-9">
                                         <label *ngIf="!isEditEmail">{{ khachHang.email | maskValue:3:10 }}</label>
                                         <input *ngIf="isEditEmail" type="email" id="email" class="form-control"
                                             formControlName="email" name="email">
                                         <a href="#" (click)="changeEditEmail()">Thay Đổi</a>
+                                        <div
+                                            *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched) && f['email'].errors">
+                                            <div class="error-msg" *ngIf="f['email'].errors['required']"></div>
+                                            <div style="color: red">
+                                                Không được để trống!
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <label for="sdt" class="form-label">Số điện thoại</label>
+                                        <label for="sdt" class="form-label">Số điện thoại:</label>
                                     </div>
                                     <div class="col-sm-9">
                                         <label *ngIf="!isEditSDT">{{khachHang.sdt | maskValue:1:2}}</label>
                                         <input *ngIf="isEditSDT" type="tel" id="sdt" class="form-control"
                                             formControlName="sdt" name="sdt">
                                         <a href="#" (click)="changeEditSDT()">Thay Đổi</a>
+                                        <div
+                                            *ngIf="f['sdt'].invalid && (f['sdt'].dirty || f['sdt'].touched) && f['sdt'].errors">
+                                            <div class="error-msg" *ngIf="f['sdt'].errors['required']"></div>
+                                            <div style="color: red">
+                                                Không được để trống!
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <label class="form-label">Giới tính</label>
+                                        <label class="form-label">Giới tính:</label>
                                     </div>
                                     <div class="col-sm-9">
                                         <div class="form-check form-check-inline">
@@ -90,6 +113,13 @@
                                     <div class="col-sm-9">
                                         <input formControlName="diaChi" type="text" id="diaChi" class="form-control"
                                             name="diaChi">
+                                        <div
+                                            *ngIf="f['diaChi'].invalid && (f['diaChi'].dirty || f['diaChi'].touched) && f['diaChi'].errors">
+                                            <div class="error-msg" *ngIf="f['diaChi'].errors['required']"></div>
+                                            <div style="color: red">
+                                                Không được để trống!
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 

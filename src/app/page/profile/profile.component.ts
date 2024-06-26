@@ -4,7 +4,7 @@ import { TaiKhoanDto } from "../../model/tai-khoan-dto.model";
 import { TaiKhoanService } from "../../service/TaiKhoanService";
 import { KhachHangDto } from "../../model/khachHangDto";
 import { KhachHangService } from 'src/app/service/KhachHangService';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { error } from '@angular/compiler-cli/src/transformers/util';
 
 @Component({
@@ -20,7 +20,7 @@ export class ProfileComponent {
   thongTinKhachHang: any;
   khachHang: any;
   formKhachHang!: FormGroup;
-  isEdit : boolean = false;
+  isEdit: boolean = false;
   isEditEmail: boolean = false;
   isEditSDT: boolean = false;
   showUpdateEmailModal: boolean = false;
@@ -81,12 +81,12 @@ export class ProfileComponent {
   // 1. Khoi tao form 
   initFormKhachHang(): void {
     this.formKhachHang = this.formBuilder.group({
-      ten: [''],
-      email: [''],
-      sdt: [''],
-      gioiTinh: [''],
-      ngaySinh: [''],
-      diaChi: ['']
+      ten: ['', Validators.required],
+      email: ['', Validators.required],
+      sdt: ['', Validators.required],
+      gioiTinh: ['', Validators.required],
+      ngaySinh: ['', Validators.required],
+      diaChi: ['', Validators.required]
     });
   }
 
@@ -139,11 +139,15 @@ export class ProfileComponent {
     }
   }
 
-  changeEditEmail(){
+  get f() {
+    return this.formKhachHang.controls;
+  }
+
+  changeEditEmail() {
     this.isEditEmail = true;
   }
 
-  changeEditSDT(){
+  changeEditSDT() {
     this.isEditSDT = true;
   }
 
@@ -156,9 +160,9 @@ export class ProfileComponent {
     return `${year}-${month}-${day}`;
   }
 
-  
 
-  
+
+
 
 
 }
