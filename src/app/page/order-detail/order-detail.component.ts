@@ -1,3 +1,6 @@
+import { AuthenticationService } from './../../service/AuthenticationService';
+import { Router } from '@angular/router';
+import { HoaDonChiTietService } from './../../service/HoaDonChiTietService';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,4 +10,9 @@ import { Component } from '@angular/core';
 })
 export class OrderDetailComponent {
   currentStatus: number = 4;
+  hoaDonChiTiet: any = {};
+  constructor(private auth: AuthenticationService, private router: Router,
+    private hoaDonChiTietService: HoaDonChiTietService
+  ) { }
+
 }

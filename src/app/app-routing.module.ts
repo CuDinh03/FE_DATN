@@ -15,7 +15,7 @@ import {RegisterComponent} from "./auth/register/register.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {ShoppingCartComponent} from "./page/shopping-cart/shopping-cart.component";
 import {ProductViewComponent} from "./admin/product-view/product-view.component";
-import {ProfileComponent} from "./page/profile/profile.component";
+
 import {VoucherViewComponent} from "./admin/voucher-view/voucher-view.component";
 import {CustomerViewComponent} from "./admin/customer-view/customer-view.component";
 import {PaymentViewComponent} from "./page/payment-view/payment-view.component";
@@ -25,6 +25,8 @@ import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
 import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.component';
 import { ThuongHieuViewComponent } from './admin/thuonghieu-view/thuonghieu-view.component';
 import { HinhAnhViewComponent } from './admin/hinhanh-view/hinhanh-view.component';
+import { SidebarProfileComponent } from './page/sidebar-profile/sidebar-profile.component';
+import { ProfileComponent } from './page/profile/profile.component';
 
 const routes: Routes = [
   {

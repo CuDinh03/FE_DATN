@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TaiKhoanDto } from "../../model/tai-khoan-dto.model";
 import { TaiKhoanService } from "../../service/TaiKhoanService";
@@ -7,12 +7,13 @@ import { KhachHangService } from 'src/app/service/KhachHangService';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { error } from '@angular/compiler-cli/src/transformers/util';
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
+export class ProfileComponent{
 
   taiKhoanInfo: KhachHangDto | undefined;
   idTaiKhoan: any;
@@ -69,8 +70,8 @@ export class ProfileComponent {
       });
   }
 
-  // 1. Khoi tao form
-  initFormKhachHang(): void{
+
+  initFormKhachHang(): void {
     this.formKhachHang = this.formBuilder.group({
       ten: [],
       ngaySinh: [],
@@ -81,7 +82,8 @@ export class ProfileComponent {
   }
 
   // 3. fill value form
-  fillValueToForm(khachHang: any) : void {
+
+  fillValueToForm(khachHang: any): void {
     this.formKhachHang.patchValue({
       ten: khachHang.ten,
       ngaySinh: khachHang.ngaySinh,
@@ -94,14 +96,15 @@ export class ProfileComponent {
   statusTransition() {
     this.isEdit = !this.isEdit;
     // Bat nut edit => fill value form
-    if(this.isEdit) {
+
+    if (this.isEdit) {
       this.fillValueToForm(this.khachHang);
     }
   }
 
-  update(): void{
+  update(): void {
     // nhập đúng validate
-    if(this.formKhachHang.valid) {
+    if (this.formKhachHang.valid) {
       // lay ra value form
       // const: bien k the thay doi
       const formValue = this.formKhachHang.value;
@@ -134,4 +137,5 @@ export class ProfileComponent {
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+
 }

@@ -195,7 +195,10 @@
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
                             <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
-                          <td>{{hoaDons.nhanVien.ten}}</td>
+                          <td>
+                            <p *ngIf="hoaDons.nhanVien != null">{{hoaDons.nhanVien.ten}}</p>
+                            <p *ngIf="hoaDons.nhanVien === null"> Khách lẻ </p>
+                          </td>
                           <td [ngClass]="{
                             'text-danger': hoaDons.trangThai === 0 || hoaDons.trangThai === 4 || hoaDons.trangThai === 5,
                             'text-warning': hoaDons.trangThai === 1,
@@ -283,7 +286,10 @@
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
                             <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
-                          <td>{{hoaDons.nhanVien.ten}}</td>
+                          <td>
+                            <p *ngIf="hoaDons.nhanVien != null">{{hoaDons.nhanVien.ten}}</p>
+                            <p *ngIf="hoaDons.nhanVien === null"> Khách lẻ </p>
+                          </td>
                           <td [ngClass]="{
                             'text-danger': hoaDons.trangThai === 0 || hoaDons.trangThai === 4 || hoaDons.trangThai === 5,
                             'text-warning': hoaDons.trangThai === 1,
@@ -375,7 +381,10 @@
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
                             <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
-                          <td>{{hoaDons.nhanVien.ten}}</td>
+                          <td>
+                            <p *ngIf="hoaDons.nhanVien != null">{{hoaDons.nhanVien.ten}}</p>
+                            <p *ngIf="hoaDons.nhanVien === null"> Khách lẻ </p>
+                          </td>
                           <td [ngClass]="{
                             'text-danger': hoaDons.trangThai === 0 || hoaDons.trangThai === 4 || hoaDons.trangThai === 5,
                             'text-warning': hoaDons.trangThai === 1,
@@ -467,7 +476,10 @@
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
                             <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
-                          <td>{{hoaDons.nhanVien.ten}}</td>
+                          <td>
+                            <p *ngIf="hoaDons.nhanVien != null">{{hoaDons.nhanVien.ten}}</p>
+                            <p *ngIf="hoaDons.nhanVien === null"> Khách lẻ </p>
+                          </td>
                           <td [ngClass]="{
                             'text-danger': hoaDons.trangThai === 0 || hoaDons.trangThai === 4 || hoaDons.trangThai === 5,
                             'text-warning': hoaDons.trangThai === 1,
@@ -556,7 +568,10 @@
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
                             <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
-                          <td>{{hoaDons.nhanVien.ten}}</td>
+                          <td>
+                            <p *ngIf="hoaDons.nhanVien != null">{{hoaDons.nhanVien.ten}}</p>
+                            <p *ngIf="hoaDons.nhanVien === null"> Khách lẻ </p>
+                          </td>
                           <td [ngClass]="{
                             'text-danger': hoaDons.trangThai === 0 || hoaDons.trangThai === 4 || hoaDons.trangThai === 5,
                             'text-warning': hoaDons.trangThai === 1,
@@ -644,7 +659,10 @@
                             <p *ngIf="hoaDons.khachHang != null">{{hoaDons.khachHang.ten}}</p>
                             <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
                           </td>
-                          <td>{{hoaDons.nhanVien.ten}}</td>
+                          <td>
+                            <p *ngIf="hoaDons.nhanVien != null">{{hoaDons.nhanVien.ten}}</p>
+                            <p *ngIf="hoaDons.nhanVien === null"> Khách lẻ </p>
+                          </td>
                           <td [ngClass]="{
                             'text-danger': hoaDons.trangThai === 0 || hoaDons.trangThai === 4 || hoaDons.trangThai === 5,
                             'text-warning': hoaDons.trangThai === 1,
@@ -752,7 +770,7 @@
   <div class="modal-dialog" >
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel1">Xác nhận xóa sản phẩm</h4>
+        <h4 class="modal-title" id="exampleModalLabel1">Xác nhận chuyển trạng tháu</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeconfirmUpdate()"></button>
       </div>
       <div class="modal-body">

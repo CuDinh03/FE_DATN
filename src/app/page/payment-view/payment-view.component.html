@@ -14,25 +14,23 @@
                                 <h3>THÔNG TIN KHÁCH HÀNG</h3>
                             </div>
                             <div class="ms-auto">
-                                <p class="text-primary">
-                                  <a type="button">
+                                <a class="text-primary" (click)="showModalInfor()" type="button">
                                     <i class="fas fa-plus-circle text-primary pe-1"></i>Chọn thông tin có sẵn
-                                  </a>
-                                </p>
+                                </a>
                             </div>
                         </div>
                         <form [formGroup]="customerForm" (ngSubmit)="saveInfoPayment()" class="pb-3">
                             <div class="mb-2">
                                 <label class="form-label">Họ và tên</label>
-                                <input type="text" class="form-control" formControlName="name" id="name">
+                                <input type="text" class="form-control" formControlName="ten" id="ten">
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Địa chỉ</label>
-                                <input type="text" class="form-control" formControlName="address" id="address">
+                                <input type="text" class="form-control" formControlName="diaChi" id="diaChi">
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Số điện thoai</label>
-                                <input type="text" class="form-control" formControlName="phone" id="phone">
+                                <input type="text" class="form-control" formControlName="sdt" id="sdt">
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Email</label>
@@ -176,3 +174,40 @@
 </div>
 
 <app-footer></app-footer>
+
+<div class="modal fade" #userInfor tabindex="-1" aria-labelledby="userInForModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="accountModalLabel2">Chọn thông tin có sẵn</h3>
+                <button type="button" class="btn-close" (click)="closeInforModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="d-flex justify-content-start align-items-stretch customer-info">
+                        <span class="me-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" [value]="khachHang.id"
+                                    (change)="selectCustomer(khachHang.id)">
+                            </div>
+                        </span>
+                        <span class="customer-details">
+                            <span class="customer-name">{{khachHang.ten}}</span> |
+                            <span class="customer-sdt">{{khachHang.sdt}}</span>
+                            <p class="customer-address mt-2">{{khachHang.diaChi}}</p>
+                        </span>
+                        <span class="ms-auto update-link">
+                            <a href="">Cập nhật</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+                    data-bs-dismiss="modal" (click)="updateCustomerInfo()">Sử dụng</button>
+                <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+                    (click)="closeInforModal()">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
