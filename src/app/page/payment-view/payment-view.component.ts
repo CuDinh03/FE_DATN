@@ -32,7 +32,7 @@ export class PaymentViewComponent {
   results: string[] = [];
   khachHang: any;
   vouchers: any[] = [];
-  gioHang: any ={};
+  gioHang: any = {};
   gioHangChiTiet: any[] = [];
   showConfirmationModal: boolean = false;
   itemToDeleteId: string = '';
@@ -42,7 +42,7 @@ export class PaymentViewComponent {
   voucher: any;
   discount: number = 0;
   customerForm: FormGroup;
-    // submitted = false;
+  // submitted = false;
 
   showUpperFooter: boolean = true;
 
@@ -58,18 +58,18 @@ export class PaymentViewComponent {
               private thanhToanService: ThanhToanService
   ) {
     this.customerForm = this.formBuilder.group({
-        name:[''],
-        address:[''],
-        phone:[''],
-        ten:[''],
-        email:[''],
-        note:[''],
+      name: [''],
+      address: [''],
+      phone: [''],
+      ten: [''],
+      email: [''],
+      note: [''],
     })
 
 
   }
 
-  get f(){
+  get f() {
     return this.customerForm.controls;
   }
 
@@ -80,8 +80,6 @@ export class PaymentViewComponent {
   calculateSubtotal(item: any): number {
     return item.chiTietSanPham.giaBan * item.soLuong;
   }
-
-
 
 
   findShoppingCart() {
@@ -180,6 +178,7 @@ export class PaymentViewComponent {
       this.voucherModal.nativeElement.style.display = 'none';
     }
   }
+
   getVoucherById(id: string) {
     this.voucherService.getVoucherByid(id)
       .subscribe(
@@ -198,6 +197,7 @@ export class PaymentViewComponent {
     let total = this.calculateTotal();
     return total - this.discount;
   }
+
   calculateTotal(): number {
     let total = 0;
     this.gioHangChiTiet.forEach((item: any) => {
@@ -227,15 +227,15 @@ export class PaymentViewComponent {
 
     return `${day}/${month}/${year}`; // Return in the desired format (dd/MM/yyyy)
   }
-  // @ts-ignore
-  findGioHang(id: string): GioHangDto{
-    this.gioHangService.findGioHangByIdKhachHang(id).subscribe(
-        (response : ApiResponse<GioHangDto>) =>{
-          console.log('thanhcong')
-          console.log(response.result)
-          return response.result;
-        }
 
+  // @ts-ignore
+  findGioHang(id: string): GioHangDto {
+    this.gioHangService.findGioHangByIdKhachHang(id).subscribe(
+      (response: ApiResponse<GioHangDto>) => {
+        console.log('thanhcong')
+        console.log(response.result)
+        return response.result;
+      }
     )
   }
 
@@ -262,6 +262,17 @@ export class PaymentViewComponent {
               console.error('Không tìm thấy giỏ hàng.');
               return;
             }
+
+            const thanhToanOnl: ThanhToanOnl = {
+              gioHang: gioHang,
+              tongTien: this.getCartTotal() - this.discount,
+              tongTienGiam: this.discount,
+              voucher: JSON.parse(storedVoucher),
+              diaChiGiaoHang: "",
+              ghiChu: '',
+              gioHangChiTietList: this.gioHangChiTiet // lỗi ở đây, bên phía BE bị null chỗ này
+            };
+
 
             this.gioHangChiTietService.getAllBỵKhachHang(gioHang.id).subscribe(
               (gioHangChiTietResponse: ApiResponse<any>) => {
