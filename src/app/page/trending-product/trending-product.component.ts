@@ -18,16 +18,12 @@ export class TrendingProductComponent {
   chiTietSanPham: any[] = [];
   findSanPhamChiTiet: any = {};
 
-
-
   constructor(private auth: AuthenticationService,
               private router: Router,
               private sanPhamCTService: SanPhamCTService,
 
   ) {
   }
-
-
 
   ngOnInit(): void {
     this.loadDanhSachSanPham();
