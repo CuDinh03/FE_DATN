@@ -99,6 +99,18 @@ export class HistoryViewComponent {
     }
   }
 
+  findHoaDonChiTietById(id: string): void {
+    this.hoaDonChiTietService.findById(id)
+      .subscribe(
+        (response: ApiResponse<any>) => {
+          if (response.result) {
+            this.hoaDonChiTiet = response.result;
+            localStorage.setItem('hoaDonChiTiet', JSON.stringify(response.result));
+            this.router.navigate(['/order-detail'])
+          }
+        })
+  }
+
   findHoaDonById(id: string): void {
     this.apiService.getHoaDonById(id)
       .subscribe(
@@ -106,7 +118,7 @@ export class HistoryViewComponent {
           if (response.result) {
             this.hoaDon = response.result;
             localStorage.setItem('hoaDon', JSON.stringify(response.result));
-            this.router.navigate(['/admin/hoa-don'])
+            this.router.navigate(['/order-detail'])
           }
         })
   }
