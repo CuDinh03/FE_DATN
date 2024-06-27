@@ -328,18 +328,6 @@ export class PaymentViewComponent {
               console.error('Không tìm thấy giỏ hàng.');
               return;
             }
-
-            const thanhToanOnl: ThanhToanOnl = {
-              gioHang: gioHang,
-              tongTien: this.getCartTotal() - this.discount,
-              tongTienGiam: this.discount,
-              voucher: JSON.parse(storedVoucher),
-              diaChiGiaoHang: "",
-              ghiChu: '',
-              gioHangChiTietList: this.gioHangChiTiet // lỗi ở đây, bên phía BE bị null chỗ này
-            };
-
-
             this.gioHangChiTietService.getAllBỵKhachHang(gioHang.id).subscribe(
               (gioHangChiTietResponse: ApiResponse<any>) => {
                 const gioCt = gioHangChiTietResponse.result || [];
@@ -348,9 +336,9 @@ export class PaymentViewComponent {
                   gioHang: gioHang,
                   tongTien: this.getCartTotal() - this.discount,
                   tongTienGiam: this.discount,
-                  voucher: JSON.parse(storedVoucher),
-                  diaChiGiaoHang: '',
-                  ghiChu: '',
+                  voucher: storedVoucher ? JSON.parse(storedVoucher) : null,
+                  diaChiGiaoHang: this.customerForm.value.diaChi,
+                  ghiChu: this.customerForm.value.note,
                   gioHangChiTietList: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
                 };
 
