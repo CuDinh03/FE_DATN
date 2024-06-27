@@ -44,7 +44,7 @@ const routes: Routes = [
       {path: 'voucher', component: VoucherViewComponent},
       {path:'hoa-don',component:OrdersViewComponent},
       {path:'khach-hang',component:CustomerViewComponent},
-        { path: 'san-pham-chi-tiet', component: ProductDetailViewComponent }
+      { path: 'san-pham-chi-tiet', component: ProductDetailViewComponent }
 
         // Các route con khác của trang admin
     ]
