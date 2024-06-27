@@ -7,28 +7,60 @@
                 <app-sidebar-profile></app-sidebar-profile>
             </div>
             <div class="col-lg-9">
-                <div class="Card">
-                    <div class="status-bar">
+                <div class="card p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="#" style="color: black;">
+                            Trở lại
+                        </a>
+                        <span class="me-3">
+                            Mã đơn hàng: DH123123123 |
+                            <span style="color: #4CAF50;">
+                                Đơn hàng đã hoàn thành
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="card p-4">
+                    <div class="status-bar mb-5">
                         <div class="status-circle" [ngClass]="{'active': currentStatus >= 1}">
                             <i class="fa fa-file"></i>
-                            <span>Đã xử lý</span>
-                            </div>
-                            <div class="status-connector" [ngClass]="{'active': currentStatus >= 2}"></div>
-                            <div class="status-circle" [ngClass]="{'active': currentStatus >= 2}">
-                                <i class="fa fa-truck"></i>
-                                <span>Đang vận chuyển</span>
-                            </div>
-                            <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
-                            <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
-                                <i class="fa fa-check-circle"></i>
-                                <span>Đã giao hàng</span>
-                            </div>
-                            <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
-                            <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
-                            <i class="fa fa-star"></i>
-                            <span>Hoàn thành</span>
-                            </div>
+                            <span style="color: black; font-size: 16px;">Đã xử lý</span>
+                            <p style="color: black; font-size: 10px;">19/11/2023</p>
                         </div>
+                        <div class="status-connector" [ngClass]="{'active': currentStatus >= 2}"></div>
+                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 2}">
+                            <i class="fa fa-truck"></i>
+                            <span style="color: black; font-size: 16px;">Đang vận chuyển</span>
+                            <p style="color: black; font-size: 10px;">20/11/2023</p>
+                        </div>
+                        <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
+                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
+                            <i class="fa fa-check-circle"></i>
+                            <span style="color: black; font-size: 16px;">Đã giao hàng</span>
+                            <p style="color: black; font-size: 10px;">29/11/2023</p>
+                        </div>
+                        <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
+                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
+                            <i class="fa fa-star"></i>
+                            <span style="color: black; font-size: 16px;">Hoàn thành</span>
+                            <p style="color: black; font-size: 10px;">29/11/2023</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p>
+                            Cảm ơn quý khách đã mua hàng
+                        </p>
+                        <button class="btn_muaLai">Mua lại</button>
+                    </div>
+                    <hr>
+                    <div class="container">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3>ĐỊA CHỈ NHẬN HÀNG</h3>
+                            <p>SPX Express</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
