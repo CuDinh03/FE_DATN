@@ -9,14 +9,19 @@
             <div class="col-lg-9">
                 <div class="card p-3">
                     <div class="d-flex justify-content-between align-items-center">
-                        <a href="#" style="color: black;">
+                        <a [routerLink]="['/don-mua']" style="color: black;">
                             Trở lại
                         </a>
                         <span class="me-3">
                             Mã đơn hàng: DH123123123 |
-                            <span style="color: #4CAF50;">
-                                Đơn hàng đã hoàn thành
-                            </span>
+                            <span [ngClass]="{
+                                'text-danger': hoaDon.trangThai === 0 || hoaDon.trangThai === 4 || hoaDon.trangThai === 5,
+                                'text-warning': hoaDon.trangThai === 1,
+                                'text-primary': hoaDon.trangThai === 2,
+                                'text-success': hoaDon.trangThai === 3
+                              }" class="ms-auto me-3">
+                            {{ getTrangThaiText(hoaDon.trangThai) }}
+                        </span>
                         </span>
                     </div>
                 </div>
@@ -39,8 +44,8 @@
                             <span style="color: black; font-size: 16px;">Đã giao hàng</span>
                             <p style="color: black; font-size: 10px;">29/11/2023</p>
                         </div>
-                        <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
-                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
+                        <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
+                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
                             <i class="fa fa-star"></i>
                             <span style="color: black; font-size: 16px;">Hoàn thành</span>
                             <p style="color: black; font-size: 10px;">29/11/2023</p>
@@ -60,6 +65,79 @@
                             <h3>ĐỊA CHỈ NHẬN HÀNG</h3>
                             <p>SPX Express</p>
                         </div>
+                    </div>
+
+                    <div class="d-flex p-3">
+                        <div class="infor">
+                            <p style="color: black; font-size: 14px;">Lê Anh Tuấn</p>
+                            <p>(+84) 789153345</p>
+                            <p style="width: 300px;">Toà Nhà Euro Window, Số 27, Đường Trần Duy Hưng, Phường Trung Hòa,
+                                Quận Cầu Giấy, Hà Nội</p>
+                        </div>
+                        <div class="status-order-detail">
+                            <div class="progress-container">
+                                <div class="progress-step completed">
+                                    <p class="timestamp">10:22 09-11-2023: </p>
+                                    <p>Đơn hàng đã đặt</p>
+                                </div>
+                                <div class="progress-step completed">
+                                    <p class="timestamp">10:22 09-11-2023: </p>
+                                    <p>Đang chuẩn bị hàng</p>
+                                </div>
+                                <div class="progress-step completed">
+                                    <p class="timestamp">10:22 09-11-2023: </p>
+                                    <p>Đang giao hàng</p>
+                                </div>
+                                <div class="progress-step current">
+                                    <p class="timestamp">10:22 09-11-2023: </p>
+                                    <p>Đã giao hàng</p>
+                                </div>
+                                <div class="progress-step">
+                                    <p class="timestamp">10:22 09-11-2023: </p>
+                                    <p>Hoàn thành</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center ps-3 pe-3">
+                        <div>
+                            <p>MT-Shirt</p>
+                        </div>
+                        <div>!</div>
+                    </div>
+                    <hr>
+                    <div *ngFor="let item of listHoaDonChiTiet">
+                        <div class="d-flex align-items-center">
+                            <span class="ms-2">
+                                <div class="media">
+                                    <div class="d-flex">
+                                        <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0"
+                                            [src]="item.hinhAnhUrls[1]" alt="" class="product-image">
+                                    </div>
+                                    <div class="media-body">
+                                        <p style="color: black; font-size: 16px;">
+                                            {{ item.chiTietSanPham.sanPham.ten }}
+                                            <br>
+                                            <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản
+                                                phẩm: </span>
+                                            <br>
+                                            <span
+                                                style="color: rgb(150, 150, 150); font-size: 12px;">{{item.chiTietSanPham.mauSac.ten}},
+                                            </span>
+                                            <span
+                                                style="color: rgb(150, 150, 150); font-size: 12px; margin-right: 40px;">{{item.chiTietSanPham.kichThuoc.ten}}</span>
+                                                <span
+                                                style="color: rgb(150, 150, 150); font-size: 12px;">x{{item.soLuong}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </span>
+                            <span class="ms-auto me-3" style="color: #5D87FF;">
+                                {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0'}}
+                            </span>
+                        </div>
+                        <hr>
                     </div>
                 </div>
             </div>

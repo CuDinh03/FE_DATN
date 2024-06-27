@@ -64,3 +64,94 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+.infor{
+    border-right: 1px solid #ccc;
+    margin-right: 20px;
+    padding-right: 20px;
+}
+
+
+.status-order-detail {
+    flex: 1;
+    position: relative;
+}
+
+.progress-container {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse; /* Thay đổi thành column-reverse để xếp từ dưới lên trên */
+    align-items: flex-start;
+    padding: 1rem;
+    height: 300px;
+}
+
+.progress-step {
+    position: relative;
+    padding: 10px 20px;
+    /* margin-bottom: 20px; */
+    color: #ccc;
+    display: flex;
+    align-items: center;
+}
+
+.progress-step.completed,
+.progress-step.current {
+    color: gray;
+}
+
+.progress-step.current {
+    color: green;
+}
+
+.progress-step:before {
+    content: '';
+    position: absolute;
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #ccc;
+    z-index: 1;
+}
+
+.progress-step.completed:before {
+    background-color: gray;
+}
+
+.progress-step.current:before {
+    background-color: green;
+}
+
+.progress-step:after {
+    content: '';
+    position: absolute;
+    left: -23px;
+    top: -33px;
+    width: 2px;
+    height: 110px;
+    background-color: #ccc;
+    z-index: 0;
+}
+
+.progress-step.completed + .progress-step:after {
+    background-color: gray;
+}
+
+.progress-step.current + .progress-step:after {
+    background-color: green;
+}
+
+.progress-step:first-child:after,
+.progress-step:last-child:after {
+    display: none; /* Ẩn thanh nối cho bước đầu tiên và bước cuối cùng */
+}
+
+.product-image {
+    max-width: 80px;
+    /* Thay đổi giá trị này theo kích thước mong muốn */
+    height: auto;
+    margin-right: 5px;
+}

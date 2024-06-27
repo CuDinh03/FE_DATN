@@ -49,12 +49,12 @@
                                     MT-Shirt
                                 </span>
                                 <span [ngClass]="{
-                                        'text-danger': item.trangThai === 0 || item.trangThai === 4 || item.trangThai === 5,
-                                        'text-warning': item.trangThai === 1,
-                                        'text-primary': item.trangThai === 2,
-                                        'text-success': item.trangThai === 3
+                                        'text-danger': item.hoaDon.trangThai === 0 || item.hoaDon.trangThai === 4 || item.hoaDon.trangThai === 5,
+                                        'text-warning': item.hoaDon.trangThai === 1,
+                                        'text-primary': item.hoaDon.trangThai === 2,
+                                        'text-success': item.hoaDon.trangThai === 3
                                       }" class="ms-auto me-3">
-                                    {{ getTrangThaiText(item.trangThai) }}
+                                    {{ getTrangThaiText(item.hoaDon.trangThai) }}
                                 </span>
                             </div>
                             <hr>

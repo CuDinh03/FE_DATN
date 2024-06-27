@@ -160,6 +160,10 @@ export class OrdersViewComponent {
       const hoaDon = JSON.parse(storedHoaDon);
       let trangThaiMoi = hoaDon.trangThai + 1
       this.updateTrangThai(hoaDon.id, trangThaiMoi);
+      this.getHoaDons();
+      this.loadHoaDon();
+      
+      this.closeconfirmUpdate();
     }else {
       this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
     }
