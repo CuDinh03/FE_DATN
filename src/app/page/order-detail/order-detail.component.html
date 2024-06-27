@@ -69,32 +69,14 @@
 
                     <div class="d-flex p-3">
                         <div class="infor">
-                            <p style="color: black; font-size: 14px;">Lê Anh Tuấn</p>
-                            <p>(+84) 789153345</p>
-                            <p style="width: 300px;">Toà Nhà Euro Window, Số 27, Đường Trần Duy Hưng, Phường Trung Hòa,
-                                Quận Cầu Giấy, Hà Nội</p>
+                            <p style="color: black; font-size: 14px;">{{hoaDon.khachHang.ten}}</p>
+                            <p>{{hoaDon.khachHang.sdt}}</p>
+                            <p style="width: 300px;">{{hoaDon.khachHang.diaChi}}</p>
                         </div>
                         <div class="status-order-detail">
                             <div class="progress-container">
-                                <div class="progress-step completed">
-                                    <p class="timestamp">10:22 09-11-2023: </p>
-                                    <p>Đơn hàng đã đặt</p>
-                                </div>
-                                <div class="progress-step completed">
-                                    <p class="timestamp">10:22 09-11-2023: </p>
-                                    <p>Đang chuẩn bị hàng</p>
-                                </div>
-                                <div class="progress-step completed">
-                                    <p class="timestamp">10:22 09-11-2023: </p>
-                                    <p>Đang giao hàng</p>
-                                </div>
-                                <div class="progress-step current">
-                                    <p class="timestamp">10:22 09-11-2023: </p>
-                                    <p>Đã giao hàng</p>
-                                </div>
-                                <div class="progress-step">
-                                    <p class="timestamp">10:22 09-11-2023: </p>
-                                    <p>Hoàn thành</p>
+                                <div *ngFor="let status of trangThaiList; let i = index" [ngClass]="{'completed': i < currentStatus, 'current': i === currentStatus, 'upcoming': i > currentStatus}" class="progress-step">
+                                    <p>{{ getTrangThaiText(status) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -102,12 +84,15 @@
                     <hr>
                     <div class="d-flex justify-content-between align-items-center ps-3 pe-3">
                         <div>
-                            <p>MT-Shirt</p>
+                            <span class="align-items-center" style="color: black;">
+                                <i class="ti ti-brand-shopee "></i>
+                                MT-Shirt
+                            </span>
                         </div>
                         <div>!</div>
                     </div>
-                    <hr>
                     <div *ngFor="let item of listHoaDonChiTiet">
+                        <hr>
                         <div class="d-flex align-items-center">
                             <span class="ms-2">
                                 <div class="media">
@@ -137,8 +122,35 @@
                                 {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0'}}
                             </span>
                         </div>
-                        <hr>
                     </div>
+                    <table class="order-summary mt-3">
+                        <tbody>
+                            <tr>
+                                <td class="text-right">Tổng tiền hàng</td>
+                                <td class="text-right">{{hoaDon.tongTien | currency:'VND':'symbol':'1.0-0'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Phí vận chuyển</td>
+                                <td class="text-right">{{hoaDon.tongTien | currency:'VND':'symbol':'1.0-0'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Giảm giá phí vận chuyển</td>
+                                <td class="text-right">{{hoaDon.tongTien | currency:'VND':'symbol':'1.0-0'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Khuyến mãi</td>
+                                <td class="text-right">{{hoaDon.tongTienGiam | currency:'VND':'symbol':'1.0-0'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Thành tiền</td>
+                                <td class="text-right">{{hoaDon.tongTien | currency:'VND':'symbol':'1.0-0'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">Phương thức thanh toán</td>
+                                <td class="text-right">Tiền mặt</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -17,6 +17,7 @@ export class OrderDetailComponent {
   hoaDon: any = {};
   listHoaDonChiTiet: any[] = [];
   noCartDetail = false;
+  trangThaiList: number[] = [0, 1, 2, 3, 4, 5];
 
   constructor(private auth: AuthenticationService, private router: Router,
     private hoaDonChiTietService: HoaDonChiTietService
@@ -61,7 +62,7 @@ export class OrderDetailComponent {
       case 0:
         return 'Chưa thanh toán';
       case 1:
-        return 'Chờ xác nhận';
+        return 'Chờ xử lý';
       case 2:
         return 'Chờ giao';
       case 3:
@@ -74,4 +75,12 @@ export class OrderDetailComponent {
         return '';
     }
   }
+
+  // shouldDisplayStatus(trangThai: number): boolean {
+  //   // Chỉ hiển thị trạng thái nếu không phải là "Đã hủy" hoặc nếu là "Đã hủy" nhưng trạng thái hiện tại là "Đã hủy"
+  //   if (trangThai === 4 || trangThai === 5) {
+  //     return this.currentStatus === 4 || this.currentStatus === 5;
+  //   }
+  //   return true;
+  // }
 }

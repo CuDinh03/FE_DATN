@@ -155,3 +155,26 @@
     height: auto;
     margin-right: 5px;
 }
+
+.order-summary {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.order-summary td {
+    padding: 8px;
+    border-top: 0.5px dashed #e0e0e0; /* Đường nét đứt ở trên */
+    border-bottom: 0.5px dashed #e0e0e0; /* Đường nét đứt ở dưới */
+}
+
+.order-summary tr td:not(:last-child) {
+    border-right: 0.5px dashed #e0e0e0; /* Đường nét đứt ngăn cách các ô */
+}
+
+.text-right {
+    text-align: right; /* Căn chỉnh sang phải */
+    color: black;
+}
+
+
