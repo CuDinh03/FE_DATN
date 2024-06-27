@@ -44,7 +44,7 @@ export class MauSacViewComponent implements OnInit{
         ten: ['', [Validators.required]],
         ma: [''],
         id: [''],
-        trangThai: ['']
+        trangThai: ['',Validators.required]
       });
   
       this.id = this.route.snapshot.params['id'];

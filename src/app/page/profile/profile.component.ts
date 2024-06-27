@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TaiKhoanDto } from "../../model/tai-khoan-dto.model";
 import { TaiKhoanService } from "../../service/TaiKhoanService";
@@ -7,12 +7,13 @@ import { KhachHangService } from 'src/app/service/KhachHangService';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { error } from '@angular/compiler-cli/src/transformers/util';
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
+export class ProfileComponent{
 
   taiKhoanInfo: KhachHangDto | undefined;
   idTaiKhoan: any;
