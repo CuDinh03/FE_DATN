@@ -1,5 +1,5 @@
 import { EOF } from '@angular/compiler';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChiTietSanPhamDto } from 'src/app/model/chi-tiet-san-pham-dto.model';
 import { AuthenticationService } from 'src/app/service/AuthenticationService';
@@ -10,13 +10,21 @@ import { MauSacService } from 'src/app/service/MauSacService';
 import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
 import { SanPhamService } from 'src/app/service/SanPhamService';
 import { ThuongHieuService } from 'src/app/service/ThuongHieuService';
-
+// @ts-ignore
+import * as $ from 'jquery';
+import 'select2';
+// @ts-ignore
+import JQuery from "$GLOBAL$";
 @Component({
   selector: 'app-product-detail-view',
   templateUrl: './product-detail-view.component.html',
   styleUrls: ['./product-detail-view.component.css']
 })
-export class ProductDetailViewComponent {
+export class ProductDetailViewComponent implements OnInit, AfterViewInit {
+
+  availableColors: string[] = ['Trắng', 'Đen', 'Xanh', 'Vàng', 'Đỏ'];
+  selectedColors: string[] = [];
+  @ViewChild('colorsSelect') colorsSelect: ElementRef | undefined;
 
   page = 0;
   size = 5;
@@ -55,7 +63,7 @@ export class ProductDetailViewComponent {
   ngOnInit(): void {
     // Khởi tạo form add
     this.chiTietSanPhamFormAdd = this.formBuilder.group({
-      ma: ['', Validators.required],  // 
+      ma: ['', Validators.required],  //
       giaNhap: ['', Validators.required],
       giaBan: ['', Validators.required],
       soLuong: ['', Validators.required],
@@ -66,7 +74,7 @@ export class ProductDetailViewComponent {
       kichThuoc: ['', Validators.required],
       mauSac: ['', Validators.required]
     });
-    // Khởi tạo form update 
+    // Khởi tạo form update
     this.chiTietSanPhamFormUpdate = this.formBuilder.group({
       ma: [''],
       giaNhap: [''],
@@ -99,6 +107,40 @@ export class ProductDetailViewComponent {
 
   }
 
+  ngAfterViewInit(): void {
+    // @ts-ignore
+    const $colors = $(this.colorsSelect.nativeElement);
+
+    $colors.select2({
+      placeholder: 'Chọn màu sắc'
+    });
+
+    $colors.on('change', (event: JQuery.TriggeredEvent) => {
+      const selectedColor = $colors.val() as string;
+      if (selectedColor && !this.selectedColors.includes(selectedColor)) {
+        this.selectedColors.push(selectedColor);
+        this.updateSelectedColors();
+      }
+      // Reset select2 để có thể chọn tiếp mục khác
+      $colors.val(null).trigger('change');
+    });
+  }
+
+  updateSelectedColors(): void {
+    const $colorList = $('#colorList');
+    $colorList.empty();
+    this.selectedColors.forEach(color => {
+      $colorList.append('<li>' + color + '</li>');
+    });
+  }
+  removeColor(color: string): void {
+    const index = this.selectedColors.indexOf(color);
+    if (index !== -1) {
+      this.selectedColors.splice(index, 1);
+      this.updateSelectedColors();
+    }
+  }
+
   loadSanPhamChiTietByNgayTao(): void {
     this.sanPhamCTService.getSanPhamChiTietSapXepByNGayTao(this.page, this.size)
       .subscribe(response => {
@@ -118,7 +160,7 @@ export class ProductDetailViewComponent {
     // xử lý lấy data call api
     if (this.chiTietSanPhamFormAdd.valid) {
       // const: bien k the thay doi
-      // lay ra value form 
+      // lay ra value form
       const formValues = this.chiTietSanPhamFormAdd.value;
       const chiTietSanPhamDto: ChiTietSanPhamDto = {
         ...formValues,
@@ -173,7 +215,7 @@ markTheElement(formGroup: FormGroup): void {
 
     if (this.chiTietSanPhamFormAdd.valid) {
       // const: bien k the thay doi
-      // lay ra value form 
+      // lay ra value form
       const formValues = this.chiTietSanPhamFormUpdate.value;
 
       const chiTietSanPhamDto: ChiTietSanPhamDto = {
@@ -214,30 +256,30 @@ markTheElement(formGroup: FormGroup): void {
     }
   }
 
-  // ĐÓNG MỞ MODEL 
+  // ĐÓNG MỞ MODEL
   cancelSaveAdd() {
-    // Đóng modal 
+    // Đóng modal
     this.showConfirmationModalAdd = false;
   }
 
   viewFormAddProduct() {
-    // Mở modal 
+    // Mở modal
     this.showConfirmationModalAdd = true;
   }
 
   cancelSaveUpdate() {
-    // Đóng modal 
+    // Đóng modal
     this.showConfirmationModalUpdate = false;
   }
 
  async viewFormUpdateProduct(id: string): Promise<void>  {
     await this.getChiTietSanPhamById(id);
-    // Mở modal 
-    // lấy ra index của sản phẩm chi tiết theo id 
+    // Mở modal
+    // lấy ra index của sản phẩm chi tiết theo id
     const index = this.listSanPhamChiTiet.findIndex(e => e.id == id);
-    // lấy ra giá trị theo index 
+    // lấy ra giá trị theo index
     const value = this.listSanPhamChiTiet[index];
-    // fill value form 
+    // fill value form
     this.fillValueToForm(value);
     this.showConfirmationModalUpdate = true;
   }
@@ -321,7 +363,7 @@ markTheElement(formGroup: FormGroup): void {
       }
     )
   }
-  // Chat Lieu 
+  // Chat Lieu
   loadChatLieu(): void {
     this.chatLieuService.getAllChatLieuDangHoatDong().subscribe(
       response => {

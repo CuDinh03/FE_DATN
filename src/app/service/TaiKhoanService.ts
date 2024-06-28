@@ -19,7 +19,6 @@ export class TaiKhoanService {
 
   getAccounts(page: number, size: number): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
-
     // Thêm token vào header của yêu cầu
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -69,8 +68,8 @@ export class TaiKhoanService {
     return this.http.get<ApiResponse<TaiKhoanDto>>(`${this.apiUrl}/${id}`, {headers});
   }
 
-  
-  
+
+
   // =>  ID, Ten, chuc Vu ()
   getMyInfo(): Observable<ApiResponse<KhachHangDto>> {
 
@@ -98,7 +97,7 @@ export class TaiKhoanService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    
+
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
   }
 
@@ -110,6 +109,15 @@ export class TaiKhoanService {
     });
     return this.http.get<ApiResponse<TaiKhoanDto[]>>(`${this.apiUrl}/getAll`, { headers });
 }
+
+  openAccount(id: string): Observable<ApiResponse<void>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/open/${id}`, {headers});
+  }
 
 
 }

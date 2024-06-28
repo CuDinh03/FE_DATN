@@ -42,7 +42,7 @@ export class ProductDetailComponent implements OnInit {
     this.reloadPage();
     this.findShoppingCart();
     this.loadColors();
-    // this.loadSize();
+    this.loadSize();
     this.loadSelectedOptions();
   }
 
@@ -100,20 +100,20 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  // loadSize(): void {
-  //   const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
-  //   if (storeChiTietSanPham) {
-  //     const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-  //     this.sanPhamCTService.getAllKichThuocByMa(chiTietSanPham.ma).subscribe(
-  //       (response: ApiResponse<any>) => {
-  //         this.listKichThuoc = response.result;
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching sizes', error);
-  //       }
-  //     );
-  //   }
-  // }
+  loadSize(): void {
+    const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
+    if (storeChiTietSanPham) {
+      const chiTietSanPham = JSON.parse(storeChiTietSanPham);
+      this.sanPhamCTService.getAllKichThuocByMa(chiTietSanPham.ma).subscribe(
+        (response: ApiResponse<any>) => {
+          this.listKichThuoc = response.result;
+        },
+        (error) => {
+          console.error('Error fetching sizes', error);
+        }
+      );
+    }
+  }
 
   loadSanPhamChiTiet(): void {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');

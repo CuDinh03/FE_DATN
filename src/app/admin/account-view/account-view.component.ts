@@ -112,5 +112,19 @@ export class AccountViewComponent {
     }
   }
 
+  delete(id: any): void {
+    this.apiService.deleteAccount(id).subscribe(() => {
+      this.loadAccounts();
+      this.router.navigate(['/admin/tai-khoan']);
+    });
+  }
+  openAccount(id: any): void {
+    this.apiService.openAccount(id).subscribe(() => {
+      this.loadAccounts();
+      this.router.navigate(['/admin/tai-khoan']);
+    });
+  }
+
+
 
 }
