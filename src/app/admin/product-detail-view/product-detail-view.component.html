@@ -187,38 +187,50 @@
               <div class="text-nowrap mb-0 col-12 mb-3">
                 <div class="row">
                   <div class="col-5">
-                    <select class="form-select" aria-label="Default select example">
-                      <option selected value="0" >Chọn tên sản phẩm</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                    <select  id="sp" class="form-select" aria-label="Default select example" style="width: 100%" [(ngModel)]="selectedSanPham">
+                      <option *ngFor="let sp of listSanPham" [ngValue]="sp">{{sp?.ten}}</option>
                     </select>
                   </div>
                   <div class="col-1">
-                    <button class="btn btn-info">+</button>
+                    <button class="btn btn-info" (click)="addChiTietSanPham()">+</button>
                   </div>
                 </div>
                 <br>
                 <h5>Thuộc tính</h5>
                 <hr>
                 <div class="row mt-5">
-                  <div class="col-5">
+                  <div class="col-5 mt-2">
                     <label>Chat lieu</label>
-                    <select class="form-select" aria-label="Default select example">
-                      <option selected value="0" ></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                    <select  id="cl" class="form-select" aria-label="Default select example" style="width: 100%" [(ngModel)]="selectedChatLieu">
+                      <option *ngFor="let cl of listChatLieu" [ngValue]="cl">{{cl?.ten}}</option>
                     </select>
                   </div>
                   <div class="col-5 mt-2">
                     <label>Thuong hieu</label>
-                    <select class="form-select" aria-label="Default select example">
-                      <option selected value="0" ></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                    <select  id="thuongHieu" class="form-select" aria-label="Default select example" style="width: 100%" [(ngModel)]="selectedThuongHieu">
+                      <option *ngFor="let th of listThuongHieu" [ngValue]="th">{{th?.ten}}</option>
                     </select>
+                  </div>
+                  <div class="col-5 mt-2">
+                    <label>Danh muc</label>
+                    <select  id="dm" class="form-select" aria-label="Default select example" style="width: 100%" [(ngModel)]="selectedDanhMuc">
+                      <option *ngFor="let dm of listDanhMuc" [ngValue]="dm">{{dm?.ten}}</option>
+                    </select>
+                  </div>
+                  <div class="col-5 mt-2">
+                    <label for="sizes" >Kích cỡ</label>
+                    <select #sizeSelect id="sizes" class="form-select" aria-label="Default select example" style="width: 100%">
+                      <option *ngFor="let size of availableSizes" [value]="size">{{size}}</option>
+                    </select>
+                    <div id="selectedSizes">
+                      <h3>Kích cỡ đã chọn:</h3>
+                      <ul id="sizeList">
+                        <li *ngFor="let size of selectedSizes">
+                          {{size}}
+<!--                          <button class="btn btn-sm btn-danger ms-2" (click)="removeSize(size)">Xoá</button>-->
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                   <div class="col-5 mt-2">
                     <label for="colors">Màu sắc</label>
@@ -236,27 +248,52 @@
                     </div>
                   </div>
 
-                  <div class="col-5 mt-2">
-                    <label>Kich co</label>
-                    <select class="form-select" aria-label="Default select example">
-                      <option selected value="0" ></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
+                  <div class="row mt-2">
+                    <ng-container *ngIf="selectedSizes && selectedSizes.length > 0 && selectedColors && selectedColors.length >0">
+                    <ng-container *ngFor="let ms of selectedColors">
+                      <p class="col-12 align-middle">Sản phẩm có màu {{ ms }}</p>
+                      <hr class="mt-5">
+                      <table class="table">
+                        <thead>
+                        <tr>
+                          <th>Mã</th>
+                          <th>Sản phẩm</th>
+                          <th>Thương hiệu</th>
+                          <th>Chất liệu</th>
+                          <th>Danh mục</th>
+                          <th>Kích thước</th>
+                          <th>Màu sắc</th>
+                          <th>Số lượng</th>
+                          <th>Giá nhập</th>
+                          <th>Giá bán</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ng-container *ngFor="let ctsp of listChiTietSP">
+                          <tr *ngIf="ctsp.mauSac.ten === ms ">
+                            <td>{{ ctsp.ma }}</td>
+                            <td>{{ ctsp.sanPham.ten }}</td>
+                            <td>{{ ctsp.thuongHieu.ten }}</td>
+                            <td>{{ ctsp.chatLieu.ten }}</td>
+                            <td>{{ ctsp.danhMuc.ten }}</td>
+                            <td>{{ ctsp.kichThuoc.ten }}</td>
+                            <td>{{ ctsp.mauSac.ten }}</td>
+                            <td><input class="form-control" type="number" [(ngModel)]="ctsp.soLuong"></td>
+                            <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaNhap"></td>
+                            <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaBan"></td>
+                          </tr>
+                        </ng-container>
+                        </tbody>
+                      </table>
+                    </ng-container>
+                      <button class="btn btn-info" (click)="saveListCt(listChiTietSP)">Luu spct</button>
+                    </ng-container>
                   </div>
-                  <div class="col-5 mt-2">
-                    <label>Danh muc</label>
-                    <select class="form-select" aria-label="Default select example">
-                      <option selected value="0" ></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
-                  </div>
+
                 </div>
 
-              <div>
+
+                  <div>
                 <div class="d-flex justify-content-end">
 <!--                  <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary"-->
 <!--                          [disabled]="page === 0">-->

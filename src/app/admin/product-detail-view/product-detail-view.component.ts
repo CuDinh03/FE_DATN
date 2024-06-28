@@ -15,6 +15,15 @@ import * as $ from 'jquery';
 import 'select2';
 // @ts-ignore
 import JQuery from "$GLOBAL$";
+import {ApiResponse} from "../../model/ApiResponse";
+import {MauSacDto} from "../../model/mau-sac-dto.model";
+import {KichThuocDto} from "../../model/kich-thuoc-dto.model";
+import {SanPhamDto} from "../../model/san-pham-dto.model";
+import {ChatLieuDto} from "../../model/chat-lieu-dto.model";
+import {ThuongHieuDto} from "../../model/thuong-hieu-dto.model";
+import {DanhMucDto} from "../../model/danh-muc-dto.model";
+import {Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 @Component({
   selector: 'app-product-detail-view',
   templateUrl: './product-detail-view.component.html',
@@ -22,28 +31,32 @@ import JQuery from "$GLOBAL$";
 })
 export class ProductDetailViewComponent implements OnInit, AfterViewInit {
 
-  availableColors: string[] = ['Trắng', 'Đen', 'Xanh', 'Vàng', 'Đỏ'];
+  selectedSanPham: SanPhamDto | undefined;
+  selectedChatLieu: ChatLieuDto | undefined;
+  selectedThuongHieu: ThuongHieuDto | undefined;
+  selectedDanhMuc: DanhMucDto | undefined;
   selectedColors: string[] = [];
+  selectedSizes: string[] = [];
+  availableColors: string[] = [];
+  availableSizes: string[] = [];
+  listChiTietSP: any [] = [];
   @ViewChild('colorsSelect') colorsSelect: ElementRef | undefined;
-
+  @ViewChild('sizeSelect') sizeSelect: ElementRef | undefined;
   page = 0;
   size = 5;
   listSanPhamChiTiet: any[] = [];
   totalElements = 0;
   totalPages: number = 0;
-
-  listSanPham: any[] = [];
-  listChatLieu: any[] = [];
-  listKichThuoc: any[] = [];
-  listMauSac: any[] = [];
-  listDanhMuc: any[] = [];
-  listThuongHieu: any[] = [];
+  listSanPham: SanPhamDto[] = [];
+  listChatLieu: ChatLieuDto[] = [];
+  listKichThuoc: KichThuocDto[] = [];
+  listMauSac: MauSacDto[] = [];
+  listDanhMuc: DanhMucDto[] = [];
+  listThuongHieu: ThuongHieuDto[] = [];
   sanPhamChiTietID: any;
-
   chiTietSanPhamFormAdd!: FormGroup;
   chiTietSanPhamFormUpdate!: FormGroup;
   sanPhamForm!: FormGroup; // Khai báo sanPhamForm là một FormGroup
-
   showConfirmationModalAdd: boolean = false;
   showConfirmationModalUpdate: boolean = false;
 
@@ -57,8 +70,10 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     private kichThuocService: KichThuocService,
     private mauSacService: MauSacService,
     private formBuilder: FormBuilder,
-
-  ) { }
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {
+  }
 
   ngOnInit(): void {
     // Khởi tạo form add
@@ -96,7 +111,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       kichThuoc: [''],   // FormControl cho kích thước
       mauSac: ['']       // FormControl cho màu sắc
     });
-
     this.loadSanPhamChiTietByNgayTao();
     this.loadSanPham();
     this.loadThuongHieu();
@@ -104,15 +118,33 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     this.loadDanhMuc();
     this.loadKichThuoc();
     this.loadMacSac();
+  }
 
+
+  getCtsp() {
+    this.sanPhamCTService.getCtsp().subscribe(
+      (response: ApiResponse<any>) => {
+        this.listChiTietSP = response.result;
+        console.log('Show chi tiết sản phẩm thành công', response);
+      },
+      (error) => {
+        console.error('Có lỗi xảy ra khi lấy chi tiết sản phẩm', error);
+      }
+    );
   }
 
   ngAfterViewInit(): void {
     // @ts-ignore
     const $colors = $(this.colorsSelect.nativeElement);
+    // @ts-ignore
+    const $sizes = $(this.sizeSelect.nativeElement);
 
     $colors.select2({
       placeholder: 'Chọn màu sắc'
+    });
+
+    $sizes.select2({
+      placeholder: 'Chọn Size'
     });
 
     $colors.on('change', (event: JQuery.TriggeredEvent) => {
@@ -124,6 +156,24 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       // Reset select2 để có thể chọn tiếp mục khác
       $colors.val(null).trigger('change');
     });
+
+    $sizes.on('change', (event: JQuery.TriggeredEvent) => {
+      const selectedSize = $sizes.val() as string;
+      if (selectedSize && !this.selectedSizes.includes(selectedSize)) {
+        this.selectedSizes.push(selectedSize);
+        this.updateSelectedSizes();
+      }
+      // Reset select2 để có thể chọn tiếp mục khác
+      $sizes.val(null).trigger('change');
+    });
+  }
+
+  updateSelectedSizes(): void {
+    const $sizeList = $('#sizeList');
+    $sizeList.empty();
+    this.selectedSizes.forEach(size => {
+      $sizeList.append('<li>' + size + '</li>');
+    });
   }
 
   updateSelectedColors(): void {
@@ -133,6 +183,7 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       $colorList.append('<li>' + color + '</li>');
     });
   }
+
   removeColor(color: string): void {
     const index = this.selectedColors.indexOf(color);
     if (index !== -1) {
@@ -164,12 +215,12 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       const formValues = this.chiTietSanPhamFormAdd.value;
       const chiTietSanPhamDto: ChiTietSanPhamDto = {
         ...formValues,
-        sanPham: { id: formValues.sanPham }, // Chuyển đổi ID thành đối tượng
-        thuongHieu: { id: formValues.thuongHieu },
-        chatLieu: { id: formValues.chatLieu },
-        danhMuc: { id: formValues.danhMuc },
-        kichThuoc: { id: formValues.kichThuoc },
-        mauSac: { id: formValues.mauSac },
+        sanPham: {id: formValues.sanPham}, // Chuyển đổi ID thành đối tượng
+        thuongHieu: {id: formValues.thuongHieu},
+        chatLieu: {id: formValues.chatLieu},
+        danhMuc: {id: formValues.danhMuc},
+        kichThuoc: {id: formValues.kichThuoc},
+        mauSac: {id: formValues.mauSac},
       };
 
       this.sanPhamCTService.themSanPhamChiTiet(chiTietSanPhamDto).subscribe(
@@ -185,23 +236,23 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       )
     } else {
       this.markTheElement(this.chiTietSanPhamFormAdd);
-  }
-}
-
-markTheElement(formGroup: FormGroup): void {
-  Object.keys(formGroup.controls).forEach(filed => {
-    const control = formGroup.get(filed);
-    if (control instanceof FormGroup) {
-      this.markTheElement(control);
-    } else if (control) {
-      control.markAsTouched({ onlySelf: true });
     }
-  });
-}
+  }
+
+  markTheElement(formGroup: FormGroup): void {
+    Object.keys(formGroup.controls).forEach(filed => {
+      const control = formGroup.get(filed);
+      if (control instanceof FormGroup) {
+        this.markTheElement(control);
+      } else if (control) {
+        control.markAsTouched({onlySelf: true});
+      }
+    });
+  }
 
 
   // Lấy sản phẩm chi tiết by ID
- async getChiTietSanPhamById(id: string): Promise<void> {
+  async getChiTietSanPhamById(id: string): Promise<void> {
     this.sanPhamCTService.getChiTietSanPhamById(id)
       .subscribe(res => {
         this.sanPhamChiTietID = res.result;
@@ -222,12 +273,12 @@ markTheElement(formGroup: FormGroup): void {
         id: this.sanPhamChiTietID?.id,
         ma: formValues.ma,
 
-        sanPham: { id: formValues.sanPham }, // Chuyển đổi ID thành đối tượng
-        thuongHieu: { id: formValues.thuongHieu },
-        chatLieu: { id: formValues.chatLieu },
-        danhMuc: { id: formValues.danhMuc },
-        kichThuoc: { id: formValues.kichThuoc },
-        mauSac: { id: formValues.mauSac },
+        sanPham: {id: formValues.sanPham}, // Chuyển đổi ID thành đối tượng
+        thuongHieu: {id: formValues.thuongHieu},
+        chatLieu: {id: formValues.chatLieu},
+        danhMuc: {id: formValues.danhMuc},
+        kichThuoc: {id: formValues.kichThuoc},
+        mauSac: {id: formValues.mauSac},
 
         soLuong: this.sanPhamChiTietID?.soLuong,
         giaNhap: formValues.giaNhap,
@@ -272,7 +323,7 @@ markTheElement(formGroup: FormGroup): void {
     this.showConfirmationModalUpdate = false;
   }
 
- async viewFormUpdateProduct(id: string): Promise<void>  {
+  async viewFormUpdateProduct(id: string): Promise<void> {
     await this.getChiTietSanPhamById(id);
     // Mở modal
     // lấy ra index của sản phẩm chi tiết theo id
@@ -298,7 +349,6 @@ markTheElement(formGroup: FormGroup): void {
       mauSac: spct.mauSac.id,
     })
   }
-
 
 
   // Phương thức này sẽ được gọi khi bạn thay đổi tùy chọn trong select
@@ -349,49 +399,61 @@ markTheElement(formGroup: FormGroup): void {
 
   // San pham
   loadSanPham(): void {
-    this.sanPhamService.getAllSanPhamDangHoatDong().subscribe(
+    this.sanPhamService.getAll().subscribe(
       response => {
         this.listSanPham = response.result;
       }
     )
   }
+
   // thuong hieu
   loadThuongHieu(): void {
-    this.thuongHieuService.getAllThuongHieuDangHoatDong().subscribe(
+    this.thuongHieuService.getAll().subscribe(
       response => {
         this.listThuongHieu = response.result;
       }
     )
   }
+
   // Chat Lieu
   loadChatLieu(): void {
-    this.chatLieuService.getAllChatLieuDangHoatDong().subscribe(
+    this.chatLieuService.getAllChatLieu().subscribe(
       response => {
         this.listChatLieu = response.result;
       }
     )
   }
+
   // Danh muc
   loadDanhMuc(): void {
-    this.danhMucService.getAllDanhMucDangHoatDong().subscribe(
+    this.danhMucService.getAllDanhMuc().subscribe(
       response => {
         this.listDanhMuc = response.result;
       }
     )
   }
+
   // Kich thuoc
   loadKichThuoc(): void {
-    this.kichThuocService.getAllKichThuocDangHoatDong().subscribe(
+    this.kichThuocService.getAll().subscribe(
       response => {
         this.listKichThuoc = response.result;
+        for (const kt of this.listKichThuoc) {
+          this.availableSizes.push(kt.ten)
+        }
+
       }
     )
   }
+
   // Mau sac
   loadMacSac(): void {
-    this.mauSacService.getAllMauSacDangHoatDong().subscribe(
+    this.mauSacService.getAll().subscribe(
       response => {
         this.listMauSac = response.result;
+        for (const responseElement of this.listMauSac) {
+          this.availableColors.push(responseElement.ten)
+        }
       }
     )
   }
@@ -448,8 +510,119 @@ markTheElement(formGroup: FormGroup): void {
         this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi màu sắc
       });
   }
-}
 
+  selectedMauSacArray: MauSacDto[] = [];
+  selectedKichThuocArray: KichThuocDto[] = [];
+  sanPham: SanPhamDto | undefined;
+  chatLieu: ChatLieuDto | undefined;
+  thuongHieu: ThuongHieuDto | undefined;
+  danhMuc: DanhMucDto | undefined;
+
+  // @ts-ignore
+  selectedSp(): SanPhamDto {
+    for (const sp of this.listSanPham) {
+      if (this.selectedSanPham?.id === sp.id) {
+        return sp;
+      }
+    }
+  }  // @ts-ignore
+  selectedCl(): ChatLieuDto {
+    for (const cl of this.listChatLieu) {
+      if (this.selectedChatLieu?.id === cl.id) {
+        return cl;
+      }
+    }
+  }  // @ts-ignore
+  selectedTh(): ThuongHieuDto {
+    for (const th of this.listThuongHieu) {
+      if (this.selectedThuongHieu?.id === th.id) {
+        return th;
+      }
+    }
+  }  // @ts-ignore
+  selectedDm(): DanhMucDto {
+    for (const dm of this.listDanhMuc) {
+      if (this.selectedDanhMuc?.id === dm.id) {
+        return dm;
+      }
+    }
+  }
+
+  selectedMauSac(): MauSacDto[] {
+    for (const ms of this.listMauSac) {
+      for (const slms of this.selectedColors) {
+        if (ms.ten === slms) {
+          this.selectedMauSacArray.push(ms)
+        }
+      }
+    }
+    return this.selectedMauSacArray;
+  }
+
+  selectedSize(): KichThuocDto[] {
+    for (const kt of this.listKichThuoc) {
+      for (const slkt of this.selectedSizes) {
+        if (kt.ten === slkt) {
+          this.selectedKichThuocArray.push(kt)
+        }
+      }
+    }
+    return this.selectedKichThuocArray;
+  }
+
+  addChiTietSanPham() {
+    const saveCtspRequest = {
+      sanPham: this.selectedSp(),
+      mauSacList: this.selectedMauSac(),
+      chatLieu: this.selectedCl(),
+      danhMuc: this.selectedDm(),
+      thuongHieu: this.selectedTh(),
+      kichThuocList: this.selectedSize()
+    }
+    console.log(saveCtspRequest)
+    this.sanPhamCTService.saveChiTietSanPham(saveCtspRequest).subscribe(
+      (response: ApiResponse<any>) => {
+
+        console.log('Lưu chi tiết sản phẩm thành công', response);
+        this.router.navigate(['/admin/san-pham-chi-tiet']);
+        this.getCtsp();
+      },
+      (error) => {
+        console.error('Có lỗi xảy ra khi lưu chi tiết sản phẩm', error);
+      }
+    );
+  }
+
+  saveListCt(list: any[]): void {
+    this.sanPhamCTService.saveListCt(list).subscribe(
+      (response: ApiResponse<any>) => {
+
+        this.listChiTietSP = [];
+        this.selectedSizes = [];
+        this.selectedColors = [];
+        this.getCtsp();
+        this.loadSanPhamChiTietByNgayTao();
+
+        this.router.navigate(['/admin/san-pham-chi-tiet']).then(() => {
+          this.snackBar.open('Lưu danh sách thành công!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        }).catch(err => {
+          console.error('Lỗi chuyển hướng đến /admin/san-pham-chi-tiet:', err);
+        });
+      },
+      (error) => {
+        console.error('Có lỗi xảy ra khi lưu danh sách', error);
+        // Handle error scenario
+        this.snackBar.open('Có lỗi xảy ra khi lưu danh sách!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    );
+  }
+}
 
 
 

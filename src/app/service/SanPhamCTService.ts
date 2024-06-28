@@ -3,6 +3,13 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ApiResponse } from "../model/ApiResponse";
 import {ChiTietSanPhamDto} from "../model/chi-tiet-san-pham-dto.model";
+import {SaveCtspRequest} from "../model/SaveCtspRequest";
+import {KichThuocDto} from "../model/kich-thuoc-dto.model";
+import {SanPhamDto} from "../model/san-pham-dto.model";
+import {DanhMucDto} from "../model/danh-muc-dto.model";
+import {ChatLieuDto} from "../model/chat-lieu-dto.model";
+import {ThuongHieuDto} from "../model/thuong-hieu-dto.model";
+import {MauSacDto} from "../model/mau-sac-dto.model";
 
 
 @Injectable({
@@ -185,9 +192,42 @@ export class SanPhamCTService {
   }
 
 
+  saveChiTietSanPham(saveCtspRequest: {
+    kichThuocList: KichThuocDto[];
+    sanPham: SanPhamDto ;
+    danhMuc: DanhMucDto ;
+    chatLieu: ChatLieuDto ;
+    thuongHieu: ThuongHieuDto;
+    mauSacList: MauSacDto[]
+  }): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/saveAllSp`, saveCtspRequest, { headers });
+  }
+
+  getCtsp(): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getCtsp`, { headers });
+  }
 
 
+  saveListCt(list: any[]): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
 
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/saveListCt`, list, { headers });
+  }
 
 
 

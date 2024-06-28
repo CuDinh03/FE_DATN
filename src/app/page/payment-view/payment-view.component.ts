@@ -320,7 +320,6 @@ export class PaymentViewComponent {
           console.error('Không tìm thấy thông tin khách hàng.');
           return;
         }
-
         this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
           (gioHangResponse: ApiResponse<GioHangDto>) => {
             const gioHang = gioHangResponse.result;
@@ -345,7 +344,7 @@ export class PaymentViewComponent {
                 this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
                   (response: ApiResponse<ThanhToanOnl>) => {
                     if (response.result) {
-                      this.snackBar.open('Thanh toán thành công!', 'Đóng', {
+                      this.snackBar.open('Đặt hàng thành công!', 'Đóng', {
                         duration: 3000,
                         panelClass: ['success-snackbar']
                       });
@@ -353,7 +352,7 @@ export class PaymentViewComponent {
                     }
                   },
                   (error) => {
-                    this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+                    this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {
                       duration: 3000,
                       panelClass: ['error-snackbar']
                     });
