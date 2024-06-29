@@ -100,8 +100,10 @@
                 </p>
               </div>
               <div class="d-flex align-items-center justify-content-end mb-2 me-3">
-                <button class="btn btn-primary me-2">Mua lại</button>
-                <button *ngIf="item.hoaDon.trangThai === 3" class="btn btn-warning" (click)="findOrderDetailByid(item.id)">Đánh giá</button>
+                <button class="btn btn-primary">Mua lại</button>
+                <button *ngIf="item.hoaDon.trangThai === 3 && item.trangThai === 1" class="btn btn-warning m-2"
+                        (click)="findOrderDetailByid(item.id)">Đánh giá
+                </button>
                 <button *ngIf="item.hoaDon.trangThai === 1" class="btn btn-danger ms-2"
                         (click)="suaTrangThaiModal(item.id)">Hủy hàng
                 </button>

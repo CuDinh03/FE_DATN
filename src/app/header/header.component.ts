@@ -1,13 +1,13 @@
-import { SanPhamCTService } from './../service/SanPhamCTService';
-import { ErrorCode } from './../model/ErrorCode';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ApiResponse } from './../model/ApiResponse';
-import { KhachHangService } from './../service/KhachHangService';
-import { AuthenticationService } from './../service/AuthenticationService';
-import { GioHangService } from 'src/app/service/GioHangService';
-import { GioHangChiTietService } from './../service/GioHangChiTietService';
-import { Component } from '@angular/core';
-import { Router } from "@angular/router";
+import {SanPhamCTService} from './../service/SanPhamCTService';
+import {ErrorCode} from './../model/ErrorCode';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ApiResponse} from './../model/ApiResponse';
+import {KhachHangService} from './../service/KhachHangService';
+import {AuthenticationService} from './../service/AuthenticationService';
+import {GioHangService} from 'src/app/service/GioHangService';
+import {GioHangChiTietService} from './../service/GioHangChiTietService';
+import {Component} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -18,29 +18,27 @@ export class HeaderComponent {
   showSearch: boolean = false;
   isLoggedInCart: boolean = false;
   isCartHovered = false;
-  khachHang: any;
+  khachHang: any = {};
   gioHang: any
   gioHangChiTiet: any[] = [];
 
   constructor(private auth: AuthenticationService, private router: Router,
-    private gioHangChiTietService: GioHangChiTietService,
-    private gioHangService: GioHangService,
-    private khachHangService: KhachHangService,
-    private sanPhamCTService: SanPhamCTService
+              private gioHangChiTietService: GioHangChiTietService,
+              private gioHangService: GioHangService,
+              private khachHangService: KhachHangService,
+              private sanPhamCTService: SanPhamCTService
   ) {
-    //   const tenDangNhap = localStorage.getItem('tenDangNhap');
-    // if (tenDangNhap) {
-    //   this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-    //     (response) => {
-    //       this.customer = response.result;
-    //       // Xử lý dữ liệu khách hàng ở đây
-    //       console.log(this.customer);
-    //     },
-    //     (error) => {
-    //       console.error('Error fetching customer:', error);
-    //     }
-    //   );
-    // }
+    const tenDangNhap = localStorage.getItem('tenDangNhap');
+    if (tenDangNhap) {
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+        (response) => {
+          this.khachHang = response.result;
+        },
+        (error) => {
+          console.error('Error fetching customer:', error);
+        }
+      );
+    }
 
   }
 
@@ -49,7 +47,6 @@ export class HeaderComponent {
     this.checkLoginStatus();
     this.findShoppingCart()
   }
-
 
 
   findShoppingCart() {
@@ -63,7 +60,7 @@ export class HeaderComponent {
             this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
               (response) => {
                 const gioHang = response.result;
-                if (gioHang && gioHang.id){
+                if (gioHang && gioHang.id) {
                   this.loadGioHangChiTiet(gioHang.id);
                 }
               },
@@ -93,7 +90,7 @@ export class HeaderComponent {
         }
       },
       (error: HttpErrorResponse) => {
-          console.error('Unexpected error:', error);
+        console.error('Unexpected error:', error);
       }
     );
   }
@@ -101,6 +98,7 @@ export class HeaderComponent {
   toggleSearch() {
     this.showSearch = !this.showSearch;
   }
+
   checkLoginStatus() {
     const token = localStorage.getItem('token');
     this.isLoggedInCart = !!token;
