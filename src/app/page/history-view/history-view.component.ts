@@ -27,15 +27,12 @@ export class HistoryViewComponent {
   errorMessage: string = '';
   successMessage = '';
   hoaDon = ''
-  noProductsFound = false;
-  noCartDetail = false;
-  hoaDons: any[] = [];
   trangThai: number = 0;
   page: number = 0;
   size: number = 5;
-  selectedTab: number = 0;
   khachHang: any = {};
   listHoaDon: any[] = [];
+  hoaDonSingle: any = {};
 
 
   constructor(
@@ -47,15 +44,75 @@ export class HistoryViewComponent {
     private snackBar: MatSnackBar,
     private khachHangService: KhachHangService
 
-  ) {
+) {
 
   }
 
   ngOnInit(): void {
-    this.findShoppingCart();
+    this.findOrder();
   }
 
-  findShoppingCart() {
+  findOrderDetailByid(id: string): void{
+    this.hoaDonChiTietService.findById(id).subscribe((response) =>{
+      if (response.result){
+        localStorage.setItem('hoaDonChiTiet', JSON.stringify(response.result))
+        this.router.navigate(['/danh-gia']);
+      }
+    })
+  }
+
+  suaTrangThaiModal(id:string): void{
+    this.hoaDonChiTietService.findById(id).subscribe(response => {
+      if (response.result){
+        this.hoaDonSingle = response.result.hoaDon
+        this.showModalUpdate();
+      }
+    })
+  }
+
+  updateTrangThai(id: string, trangThai: number): void {
+    this.hoaDonService.updateTrangThai(id, trangThai).subscribe(
+      (response) => {
+        if (response) {
+          this.snackBar.open('Cập nhật trạng thái thành công', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        } else {
+          this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      },
+      (error) => {
+        console.error('Error updating status:', error);
+        this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    );
+
+    this.findOrder();
+    this.closeconfirmUpdate();
+  }
+
+  showModalUpdate(): void {
+    if (this.confirmUpdate && this.confirmUpdate.nativeElement) {
+      this.confirmUpdate.nativeElement.classList.add('show');
+      this.confirmUpdate.nativeElement.style.display = 'block';
+    }
+  }
+
+  closeconfirmUpdate(): void {
+    if (this.confirmUpdate && this.confirmUpdate.nativeElement) {
+      this.confirmUpdate.nativeElement.classList.remove('show');
+      this.confirmUpdate.nativeElement.style.display = 'none';
+    }
+  }
+
+  findOrder() {
     const tenDangNhap = this.auth.getTenDangNhap();
     if (tenDangNhap) {
       this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
@@ -99,17 +156,6 @@ export class HistoryViewComponent {
     }
   }
 
-  findHoaDonChiTietById(id: string): void {
-    this.hoaDonChiTietService.findById(id)
-      .subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.result) {
-            this.hoaDonChiTiet = response.result;
-            localStorage.setItem('hoaDonChiTiet', JSON.stringify(response.result));
-            this.router.navigate(['/order-detail'])
-          }
-        })
-  }
 
   findHoaDonById(id: string): void {
     this.apiService.getHoaDonById(id)

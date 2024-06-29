@@ -51,6 +51,8 @@ export class OrdersViewComponent {
 
   }
 
+
+
   getHoaDons(): void {
     this.apiService.getHoaDonsByTranThai(this.trangThai, this.page, this.size).subscribe((response: ApiResponse<any>) => {
       if (response.result && response.result.content.length > 0) {
@@ -162,7 +164,7 @@ export class OrdersViewComponent {
       this.updateTrangThai(hoaDon.id, trangThaiMoi);
       this.getHoaDons();
       this.loadHoaDon();
-      
+
       this.closeconfirmUpdate();
     }else {
       this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';

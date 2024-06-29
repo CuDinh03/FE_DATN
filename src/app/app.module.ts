@@ -42,6 +42,7 @@ import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
 import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.component';
 import { ThuongHieuViewComponent } from './admin/thuonghieu-view/thuonghieu-view.component';
 import { HinhAnhViewComponent } from './admin/hinhanh-view/hinhanh-view.component';
+import { RatingViewComponent } from './page/rating-view/rating-view.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { HinhAnhViewComponent } from './admin/hinhanh-view/hinhanh-view.componen
     KichThuocViewComponent,
     ThuongHieuViewComponent,
     HinhAnhViewComponent,
-    ProductDetailViewComponent
+    ProductDetailViewComponent,
+    RatingViewComponent
 
   ],
   imports: [

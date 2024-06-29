@@ -27,6 +27,7 @@ import { ThuongHieuViewComponent } from './admin/thuonghieu-view/thuonghieu-view
 import { HinhAnhViewComponent } from './admin/hinhanh-view/hinhanh-view.component';
 import { SidebarProfileComponent } from './page/sidebar-profile/sidebar-profile.component';
 import { ProfileComponent } from './page/profile/profile.component';
+import {RatingViewComponent} from "./page/rating-view/rating-view.component";
 
 const routes: Routes = [
   {
@@ -64,7 +65,8 @@ const routes: Routes = [
   {path: 'san-pham', component: ProductDetailComponent},
   { path: 'don-mua', component: HistoryViewComponent },
   { path: 'order-detail', component: OrderDetailComponent },
-  {path: 'thanh-toan', component: PaymentViewComponent, canActivate:[AuthGuard]}
+  {path: 'thanh-toan', component: PaymentViewComponent, canActivate:[AuthGuard]},
+  {path: 'danh-gia', component: RatingViewComponent,},
   // { path: '**', redirectTo: '/trang-chu' } // Đường dẫn cho các trang không tồn tại
 ];
 

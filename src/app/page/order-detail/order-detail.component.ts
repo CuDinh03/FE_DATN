@@ -4,7 +4,9 @@ import { ApiResponse } from 'src/app/model/ApiResponse';
 import { AuthenticationService } from './../../service/AuthenticationService';
 import { Router } from '@angular/router';
 import { HoaDonChiTietService } from './../../service/HoaDonChiTietService';
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {HoaDonService} from "../../service/HoaDonService";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-order-detail',
@@ -13,19 +15,22 @@ import { Component } from '@angular/core';
 })
 export class OrderDetailComponent {
   currentStatus: number = 0;
-  hoaDonChiTiet: any = {};
+  @ViewChild('confirmUpdate') confirmUpdate!: ElementRef;
   hoaDon: any = {};
   listHoaDonChiTiet: any[] = [];
   noCartDetail = false;
   trangThaiList: number[] = [0, 1, 2, 3, 4, 5];
 
   constructor(private auth: AuthenticationService, private router: Router,
-    private hoaDonChiTietService: HoaDonChiTietService
+    private hoaDonChiTietService: HoaDonChiTietService,
+
   ) { }
 
   ngOnInit() {
     this.loadHoaDonChiTiet();
   }
+
+
 
   loadHoaDonChiTiet(): void {
     const storeHoaDon = localStorage.getItem('hoaDon');

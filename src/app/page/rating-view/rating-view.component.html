@@ -1,0 +1,47 @@
+<app-header></app-header>
+<section style="background-color: #ffffff;">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center">
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <app-sidebar-profile></app-sidebar-profile>
+      </div>
+      <div class="col-lg-9">
+        <div class="d-flex align-items-center">
+                                <span class="ms-2">
+                                    <div class="media">
+                                        <div class="d-flex">
+                                            <img
+                                              *ngIf="hoaDonChiTiet.hinhAnhUrls && hoaDonChiTiet.hinhAnhUrls.length > 0"
+                                              [src]="hoaDonChiTiet.hinhAnhUrls[1]" alt="" class="product-image">
+                                        </div>
+                                        <div class="media-body">
+                                            <p style="color: black; font-size: 16px;">
+                                                {{ hoaDonChiTiet.chiTietSanPham.sanPham.ten }}
+                                              <br>
+                                                <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản
+                                                    phẩm: </span>
+                                                <br>
+                                                <span
+                                                  style="color: rgb(150, 150, 150); font-size: 12px;">{{ hoaDonChiTiet.chiTietSanPham.mauSac.ten }}
+                                                  ,
+                                                </span>
+                                                <span
+                                                  style="color: rgb(150, 150, 150); font-size: 12px;">{{ hoaDonChiTiet.chiTietSanPham.kichThuoc.ten }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </span>
+          <span class="ms-auto me-3" style="color: #5D87FF;">
+                                    {{ hoaDonChiTiet.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+                                </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>
+
+
+
+
