@@ -32,18 +32,18 @@ import {OrdersViewComponent} from './admin/orders-view/orders-view.component';
 import {CustomerViewComponent} from './admin/customer-view/customer-view.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import { SidebarProfileComponent } from './page/sidebar-profile/sidebar-profile.component';
-import { HistoryViewComponent } from './page/history-view/history-view.component';
-import { OrderDetailComponent } from './page/order-detail/order-detail.component';
+import {SidebarProfileComponent} from './page/sidebar-profile/sidebar-profile.component';
+import {HistoryViewComponent} from './page/history-view/history-view.component';
+import {OrderDetailComponent} from './page/order-detail/order-detail.component';
 import {PaymentViewComponent} from './page/payment-view/payment-view.component';
 import {ProductDetailViewComponent} from './admin/product-detail-view/product-detail-view.component';
-import { ChatLieuViewComponent } from './admin/chatlieu-view/chatlieu-view.component';
-import { MauSacViewComponent } from './admin/mausac-view/mausac-view.component';
-import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.component';
-import { ThuongHieuViewComponent } from './admin/thuonghieu-view/thuonghieu-view.component';
-import { HinhAnhViewComponent } from './admin/hinhanh-view/hinhanh-view.component';
-import { RatingViewComponent } from './page/rating-view/rating-view.component';
-import { MaskValuePipe } from './page/profile/mask-value-pipe';
+import {ChatLieuViewComponent} from './admin/chatlieu-view/chatlieu-view.component';
+import {MauSacViewComponent} from './admin/mausac-view/mausac-view.component';
+import {KichThuocViewComponent} from './admin/kichthuoc-view/kichthuoc-view.component';
+import {ThuongHieuViewComponent} from './admin/thuonghieu-view/thuonghieu-view.component';
+import {HinhAnhViewComponent} from './admin/hinhanh-view/hinhanh-view.component';
+import {RatingViewComponent} from './page/rating-view/rating-view.component';
+import {MaskValuePipe} from './page/profile/mask-value-pipe';
 
 @NgModule({
   declarations: [
@@ -84,8 +84,8 @@ import { MaskValuePipe } from './page/profile/mask-value-pipe';
     ThuongHieuViewComponent,
     HinhAnhViewComponent,
     ProductDetailViewComponent,
-    RatingViewComponent
-
+    RatingViewComponent,
+    MaskValuePipe
   ],
   imports: [
     BrowserModule,
