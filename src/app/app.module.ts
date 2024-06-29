@@ -43,6 +43,7 @@ import { KichThuocViewComponent } from './admin/kichthuoc-view/kichthuoc-view.co
 import { ThuongHieuViewComponent } from './admin/thuonghieu-view/thuonghieu-view.component';
 import { HinhAnhViewComponent } from './admin/hinhanh-view/hinhanh-view.component';
 import { RatingViewComponent } from './page/rating-view/rating-view.component';
+import { MaskValuePipe } from './page/profile/mask-value-pipe';
 
 @NgModule({
   declarations: [

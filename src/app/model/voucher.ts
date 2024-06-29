@@ -8,5 +8,5 @@ export interface Voucher{
     giaTriGiam: number;
     giaTriToiThieu: number;
     soLuong: number;
-    trangThai: boolean;
+    trangThai: number;
 }

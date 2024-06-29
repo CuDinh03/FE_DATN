@@ -63,7 +63,7 @@ export class KhachHangService {
     }
 
   // ==> Call api Lấy ra khách hàng từ Id Tài khoản
-  getKhachHangByIdTaiKhoan(idTaiKhoan: string): Observable<ApiResponse<KhachHangDto>> {
+  getKhachHangByIdTaiKhoan(idTaiKhoan: string): Observable<ApiResponse<any>> {
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -72,7 +72,6 @@ export class KhachHangService {
 
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getKHByIdTaiKhoan/${idTaiKhoan}`, { headers });
   }
-
 
   // ==> Lấy khách hàng theo id
   getKhachHangByID(id: string): Observable<ApiResponse<any>> {

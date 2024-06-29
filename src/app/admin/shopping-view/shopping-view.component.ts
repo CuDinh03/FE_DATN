@@ -1,15 +1,15 @@
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ThanhToanDto } from './../../model/thanh-toan-dto.model';
-import { KhachHangService } from './../../service/KhachHangService';
-import { VoucherService } from './../../service/VoucherService';
+import { ThanhToanDto } from '../../model/thanh-toan-dto.model';
+import { KhachHangService } from '../../service/KhachHangService';
+import { VoucherService } from '../../service/VoucherService';
 import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
-import { GioHangChiTietService } from './../../service/GioHangChiTietService';
-import { HoaDonGioHangService } from './../../service/HoaDonGioHangService';
-import { HoaDonService } from './../../service/HoaDonService';
+import { GioHangChiTietService } from '../../service/GioHangChiTietService';
+import { HoaDonGioHangService } from '../../service/HoaDonGioHangService';
+import { HoaDonService } from '../../service/HoaDonService';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthenticationService } from './../../service/AuthenticationService';
+import { AuthenticationService } from '../../service/AuthenticationService';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DanhMucDto } from 'src/app/model/danh-muc-dto.model';
 import { DanhMucService } from 'src/app/service/DanhMucService';
@@ -95,7 +95,7 @@ export class ShoppingViewComponent {
         tongTien:'',
         voucher: '',
         ghiChu: '',
-        tongTienGiam: '',
+        tongTienGiam: 0,
         ngayTao: new Date(),
         ngaySua: new Date(),
         trangThai: true,
@@ -115,10 +115,11 @@ export class ShoppingViewComponent {
 
   ghiChuText(event: any): void {// Chuyển đổi giá trị từ chuỗi sang số
     event = this.ghiChu
-    
+
   }
 
   onSubmitPayment() {
+    const storedVoucher= localStorage.getItem('voucher');
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
 
@@ -129,8 +130,9 @@ export class ShoppingViewComponent {
         const tongTien = this.calculateThanhTien();
         hoaDon.tongTien = tongTien;
         hoaDon.khachHang = this.customer;
-        hoaDon.voucher = this.voucher;
+        hoaDon.voucher = storedVoucher ? JSON.parse(storedVoucher) : null;
         hoaDon.tongTienGiam = this.discount;
+        console.log(hoaDon.tongTienGiam)
         hoaDon.ghiChu = this.ghiChu;
 
         const ThanhToanDto: ThanhToanDto = {
@@ -762,7 +764,7 @@ export class ShoppingViewComponent {
     }
   }
 
-  
+
 
   calculateTienTraLai(): void {
     this.thanhTien = this.calculateThanhTien();
