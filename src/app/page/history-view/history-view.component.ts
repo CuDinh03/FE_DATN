@@ -1,14 +1,15 @@
-import { KhachHangService } from './../../service/KhachHangService';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ApiResponse } from './../../model/ApiResponse';
-import { HoaDonChiTietService } from './../../service/HoaDonChiTietService';
-import { HoaDonService } from './../../service/HoaDonService';
-import { Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { ErrorCode } from "../../model/ErrorCode";
-import { forkJoin } from 'rxjs';
+import {KhachHangService} from './../../service/KhachHangService';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ApiResponse} from './../../model/ApiResponse';
+import {HoaDonChiTietService} from './../../service/HoaDonChiTietService';
+import {HoaDonService} from './../../service/HoaDonService';
+import {Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
+import {AuthenticationService} from './../../service/AuthenticationService';
+import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
+import {ErrorCode} from "../../model/ErrorCode";
+import {forkJoin} from 'rxjs';
+import {SanPhamCTService} from "../../service/SanPhamCTService";
 
 @Component({
   selector: 'app-history-view',
@@ -33,6 +34,7 @@ export class HistoryViewComponent {
   khachHang: any = {};
   listHoaDon: any[] = [];
   hoaDonSingle: any = {};
+  findSanPhamChiTiet: any = {};
 
 
   constructor(
@@ -42,9 +44,9 @@ export class HistoryViewComponent {
     private router: Router,
     private auth: AuthenticationService,
     private snackBar: MatSnackBar,
-    private khachHangService: KhachHangService
-
-) {
+    private khachHangService: KhachHangService,
+    private sanPhamCTService: SanPhamCTService
+  ) {
 
   }
 
@@ -52,18 +54,29 @@ export class HistoryViewComponent {
     this.findOrder();
   }
 
-  findOrderDetailByid(id: string): void{
-    this.hoaDonChiTietService.findById(id).subscribe((response) =>{
-      if (response.result){
+  findSanPhamById(id: string): void {
+    this.sanPhamCTService.getChiTietSanPhamById(id).subscribe(
+      (response: ApiResponse<any>) => {
+        if (response.result) {
+          this.findSanPhamChiTiet = response.result
+          localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result))
+          this.router.navigate(['/san-pham']);
+        }
+      })
+  }
+
+  findOrderDetailByid(id: string): void {
+    this.hoaDonChiTietService.findById(id).subscribe((response) => {
+      if (response.result) {
         localStorage.setItem('hoaDonChiTiet', JSON.stringify(response.result))
         this.router.navigate(['/danh-gia']);
       }
     })
   }
 
-  suaTrangThaiModal(id:string): void{
+  suaTrangThaiModal(id: string): void {
     this.hoaDonChiTietService.findById(id).subscribe(response => {
-      if (response.result){
+      if (response.result) {
         this.hoaDonSingle = response.result.hoaDon
         this.showModalUpdate();
       }
