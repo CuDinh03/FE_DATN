@@ -5,6 +5,12 @@ import {AuthenticationService} from "../../service/AuthenticationService";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {ApiResponse} from "../../model/ApiResponse";
+import {FormBuilder, FormGroup} from "@angular/forms";
+
+interface DropdownItem {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: 'app-admin-view',
@@ -21,23 +27,22 @@ export class AdminViewComponent implements OnInit {
   pageSize = 5;
   account: any;
   role: string = 'ALL';
-  successMessage: string='';
-  errorMessage: string='';
+  successMessage: string = '';
+  errorMessage: string = '';
   selectedAccount: any;
 
   startFrom = 1;
   private token = this.auth.getToken();
+  formGroup: FormGroup;
 
+  constructor(private fb: FormBuilder, private apiService: TaiKhoanService, private http: HttpClient, private auth: AuthenticationService, private router: Router, private route: ActivatedRoute) {
+    this.formGroup = this.fb.group({});
 
-  constructor(private apiService: TaiKhoanService, private http: HttpClient, private auth: AuthenticationService, private router: Router, private route: ActivatedRoute) {
   }
+
 
   ngOnInit(): void {
     this.loadAccounts();
-  }
-
-  resetPageNumber(): void {
-    this.currentPage = 0;
   }
 
   loadAccounts(): void {
