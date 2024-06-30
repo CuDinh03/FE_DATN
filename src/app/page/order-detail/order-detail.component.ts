@@ -1,9 +1,9 @@
-import { ErrorCode } from 'src/app/model/ErrorCode';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ApiResponse } from 'src/app/model/ApiResponse';
-import { AuthenticationService } from './../../service/AuthenticationService';
-import { Router } from '@angular/router';
-import { HoaDonChiTietService } from './../../service/HoaDonChiTietService';
+import {ErrorCode} from 'src/app/model/ErrorCode';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ApiResponse} from 'src/app/model/ApiResponse';
+import {AuthenticationService} from './../../service/AuthenticationService';
+import {Router} from '@angular/router';
+import {HoaDonChiTietService} from './../../service/HoaDonChiTietService';
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {HoaDonService} from "../../service/HoaDonService";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -22,14 +22,13 @@ export class OrderDetailComponent {
   trangThaiList: number[] = [0, 1, 2, 3, 4, 5];
 
   constructor(private auth: AuthenticationService, private router: Router,
-    private hoaDonChiTietService: HoaDonChiTietService,
-
-  ) { }
+              private hoaDonChiTietService: HoaDonChiTietService,
+  ) {
+  }
 
   ngOnInit() {
     this.loadHoaDonChiTiet();
   }
-
 
 
   loadHoaDonChiTiet(): void {
@@ -57,7 +56,7 @@ export class OrderDetailComponent {
           }
         }
       );
-    }else{
+    } else {
       console.log('khong tim thay hoa don');
     }
   }
@@ -67,15 +66,39 @@ export class OrderDetailComponent {
       case 0:
         return 'Chưa thanh toán';
       case 1:
-        return 'Chờ xử lý';
+        return 'Chờ xác nhận';
       case 2:
-        return 'Chờ giao';
+        return 'Đã xử lý';
       case 3:
-        return 'Hoàn thành';
+        return 'Đang giao';
       case 4:
-        return 'Đã hủy';
+        return 'Đã nhận hàng';
       case 5:
-        return 'Đã hủy 1 phần';
+        return 'Hoàn thành';
+      case 6:
+        return 'Hủy đơn';
+      default:
+        return '';
+    }
+  }
+
+  getTrangThaiColor(trangThai: number): string {
+    switch (trangThai) {
+      case 0:
+        return '#FFD700';
+      case 1:
+        return '#FF6347';
+      case 2:
+        return '#228B22';
+      case 3:
+        return '#ADD8E6';
+      case 4:
+        return '#228B22';
+      case 5:
+        return '#228B22';
+      case 6:
+        return '#FF0000';
+
       default:
         return '';
     }

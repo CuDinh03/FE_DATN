@@ -35,6 +35,9 @@ export class HistoryViewComponent {
   listHoaDon: any[] = [];
   hoaDonSingle: any = {};
   findSanPhamChiTiet: any = {};
+  noProductsFound = false;
+  noCartDetail = false;
+  hoaDons: any[] = [];
 
 
   constructor(
@@ -54,6 +57,73 @@ export class HistoryViewComponent {
     this.findOrder();
   }
 
+  getHoaDons(): void {
+    const tenDangNhap = this.auth.getTenDangNhap();
+    if (tenDangNhap) {
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+        (response) => {
+          const khachHang = response.result;
+          this.khachHang = response.result;
+          if (khachHang && khachHang.id) {
+            this.apiService.getHoaDonsByTrangThaiAndKhachHang(this.trangThai, khachHang.id).subscribe(
+              (response: any) => {
+                if (response.result) {
+                  this.hoaDons = response.result;
+                  this.noProductsFound = false;
+                  // Clear existing hoaDonChiTiet array
+                  this.hoaDonChiTiet = [];
+                  const hoaDonObservables = this.hoaDons.map(hoaDon => {
+                    return this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id);
+                  });
+
+                  // Use forkJoin to execute all observables concurrently
+                  forkJoin(hoaDonObservables).subscribe(
+                    (results: any[]) => {
+                      // Flatten the results into hoaDonChiTiet array
+                      results.forEach(result => {
+                        this.hoaDonChiTiet.push(...result.result);
+                      });
+                    },
+                    (error) => {
+                      console.error('Error fetching order details:', error);
+                    }
+                  );
+                } else {
+                  this.noProductsFound = true;
+                  this.hoaDons = [];
+                  this.hoaDonChiTiet = []; // Ensure hoaDonChiTiet is also cleared if no products found
+                }
+              }, (error: HttpErrorResponse) => {
+                if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
+                  this.noProductsFound = true;
+                  this.hoaDons = [];
+                  this.hoaDonChiTiet = [];
+                } else {
+                  console.error('Unexpected error:', error);
+                }
+              });
+          }
+        })
+    }
+  }
+
+  onTabChange(trangThai: number): void {
+    this.trangThai = trangThai;
+    this.getHoaDons();
+  }
+
+  findOrderDetailByidkh(id: string): void {
+    // Call service to get chi tiết hóa đơn for the given id
+    this.hoaDonChiTietService.getAllBỵKhachHang(id).subscribe(
+      (response: any) => {
+        this.hoaDonChiTiet.push(...response.result);
+      },
+      (error) => {
+        console.error('Error fetching order details:', error);
+      }
+    );
+  }
+
   findSanPhamById(id: string): void {
     this.sanPhamCTService.getChiTietSanPhamById(id).subscribe(
       (response: ApiResponse<any>) => {
@@ -64,6 +134,7 @@ export class HistoryViewComponent {
         }
       })
   }
+
 
   findOrderDetailByid(id: string): void {
     this.hoaDonChiTietService.findById(id).subscribe((response) => {
@@ -106,8 +177,6 @@ export class HistoryViewComponent {
         });
       }
     );
-
-    this.findOrder();
     this.closeconfirmUpdate();
   }
 
@@ -189,13 +258,37 @@ export class HistoryViewComponent {
       case 1:
         return 'Chờ xác nhận';
       case 2:
-        return 'Chờ giao';
+        return 'Đã xử lý';
       case 3:
-        return 'Hoàn thành';
+        return 'Đang giao';
       case 4:
-        return 'Đã hủy';
+        return 'Đã nhận hàng';
       case 5:
-        return 'Đã hủy 1 phần';
+        return 'Hoàn thành';
+      case 6:
+        return 'Hủy đơn';
+      default:
+        return '';
+    }
+  }
+
+  getTrangThaiColor(trangThai: number): string {
+    switch (trangThai) {
+      case 0:
+        return '#FFD700';
+      case 1:
+        return '#FF6347';
+      case 2:
+        return '#228B22';
+      case 3:
+        return '#ADD8E6';
+      case 4:
+        return '#228B22';
+      case 5:
+        return '#228B22';
+      case 6:
+        return '#FF0000';
+
       default:
         return '';
     }

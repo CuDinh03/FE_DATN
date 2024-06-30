@@ -1,160 +1,161 @@
 <app-header></app-header>
 <section style="background-color: #ffffff;">
-    <div class="container py-5">
-        <div class="row d-flex justify-content-center">
-            <!-- Sidebar -->
-            <div class="col-lg-3">
-                <app-sidebar-profile></app-sidebar-profile>
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center">
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <app-sidebar-profile></app-sidebar-profile>
+      </div>
+      <div class="col-lg-9">
+        <div class="card p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <a [routerLink]="['/don-mua']" style="color: black;">
+              Trở lại
+            </a>
+            <span class="me-3"> Mã đơn hàng: DH123123123 |
+              <span [style.color]="getTrangThaiColor(hoaDon.trangThai)" class="ms-auto">
+                  {{ getTrangThaiText(hoaDon.trangThai) }}
+                </span>
+            </span>
+          </div>
+        </div>
+        <div class="card p-4">
+          <div class="status-bar mb-5">
+            <div class="status-circle" [ngClass]="{'active': currentStatus >= 2}">
+              <i class="fa fa-file"></i>
+              <span style="color: black; font-size: 16px;">Đã xử lý</span>
+              <p style="color: black; font-size: 10px;">19/11/2023</p>
             </div>
-            <div class="col-lg-9">
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <a [routerLink]="['/don-mua']" style="color: black;">
-                            Trở lại
-                        </a>
-                        <span class="me-3">
-                            Mã đơn hàng: DH123123123 |
-                            <span [ngClass]="{
-                                'text-danger': hoaDon.trangThai === 0 || hoaDon.trangThai === 4 || hoaDon.trangThai === 5,
-                                'text-warning': hoaDon.trangThai === 1,
-                                'text-primary': hoaDon.trangThai === 2,
-                                'text-success': hoaDon.trangThai === 3
-                              }" class="ms-auto me-3">
-                            {{ getTrangThaiText(hoaDon.trangThai) }}
-                        </span>
-                        </span>
-                    </div>
-                </div>
-                <div class="card p-4">
-                    <div class="status-bar mb-5">
-                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 1}">
-                            <i class="fa fa-file"></i>
-                            <span style="color: black; font-size: 16px;">Đã xử lý</span>
-                            <p style="color: black; font-size: 10px;">19/11/2023</p>
-                        </div>
-                        <div class="status-connector" [ngClass]="{'active': currentStatus >= 2}"></div>
-                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 2}">
-                            <i class="fa fa-truck"></i>
-                            <span style="color: black; font-size: 16px;">Đang vận chuyển</span>
-                            <p style="color: black; font-size: 10px;">20/11/2023</p>
-                        </div>
-                        <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
-                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
-                            <i class="fa fa-check-circle"></i>
-                            <span style="color: black; font-size: 16px;">Đã giao hàng</span>
-                            <p style="color: black; font-size: 10px;">29/11/2023</p>
-                        </div>
-                        <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
-                        <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
-                            <i class="fa fa-star"></i>
-                            <span style="color: black; font-size: 16px;">Hoàn thành</span>
-                            <p style="color: black; font-size: 10px;">29/11/2023</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p>
-                            Cảm ơn quý khách đã mua hàng
-                        </p>
-                        <button class="btn_muaLai">Mua lại</button>
-                    </div>
-                    <hr>
-                    <div class="container">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h3>ĐỊA CHỈ NHẬN HÀNG</h3>
-                            <p>SPX Express</p>
-                        </div>
-                    </div>
 
-                    <div class="d-flex p-3">
-                        <div class="infor">
-                            <p style="color: black; font-size: 14px;">{{hoaDon.khachHang.ten}}</p>
-                            <p>{{hoaDon.khachHang.sdt}}</p>
-                            <p style="width: 300px;">{{hoaDon.khachHang.diaChi}}</p>
-                        </div>
-                        <div class="status-order-detail">
-                            <div class="progress-container">
-                                <div *ngFor="let status of trangThaiList; let i = index" [ngClass]="{'completed': i < currentStatus, 'current': i === currentStatus, 'upcoming': i > currentStatus}" class="progress-step">
-                                    <p>{{ getTrangThaiText(status) }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between align-items-center ps-3 pe-3">
-                        <div>
+            <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
+            <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
+              <i class="fa fa-truck"></i>
+              <span style="color: black; font-size: 16px;">Đang giao</span>
+              <p style="color: black; font-size: 10px;">20/11/2023</p>
+            </div>
+
+            <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
+            <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
+              <i class="fa fa-check-circle"></i>
+              <span style="color: black; font-size: 16px;">Đã nhận hàng</span>
+              <p style="color: black; font-size: 10px;">20/11/2023</p>
+            </div>
+
+            <div class="status-connector" [ngClass]="{'active': currentStatus >= 5}"></div>
+            <div class="status-circle" [ngClass]="{'active': currentStatus >= 5}">
+              <i class="fa fa-star"></i>
+              <span style="color: black; font-size: 16px;">Hoàn thành</span>
+              <p style="color: black; font-size: 10px;">20/11/2023</p>
+            </div>
+
+          </div>
+        </div>
+        <div class="card p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <p>
+              Cảm ơn quý khách đã mua hàng
+            </p>
+            <button class="btn_muaLai">Mua lại</button>
+          </div>
+          <hr>
+          <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3>ĐỊA CHỈ NHẬN HÀNG</h3>
+              <p>SPX Express</p>
+            </div>
+          </div>
+
+          <div class="d-flex p-3">
+            <div class="infor">
+              <p style="color: black; font-size: 14px;">{{ hoaDon.khachHang.ten }}</p>
+              <p>{{ hoaDon.khachHang.sdt }}</p>
+              <p style="width: 300px;">{{ hoaDon.khachHang.diaChi }}</p>
+            </div>
+            <div class="status-order-detail">
+              <div class="progress-container">
+                <div *ngFor="let status of trangThaiList; let i = index"
+                     [ngClass]="{'completed': i < currentStatus, 'current': i === currentStatus, 'upcoming': i > currentStatus}"
+                     class="progress-step">
+                  <p>{{ getTrangThaiText(status) }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between align-items-center ps-3 pe-3">
+            <div>
                             <span class="align-items-center" style="color: black;">
                                 <i class="ti ti-brand-shopee "></i>
                                 MT-Shirt
                             </span>
-                        </div>
-                        <div>!</div>
-                    </div>
-                    <div *ngFor="let item of listHoaDonChiTiet">
-                        <hr>
-                        <div class="d-flex align-items-center">
+            </div>
+            <div>!</div>
+          </div>
+          <div *ngFor="let item of listHoaDonChiTiet">
+            <hr>
+            <div class="d-flex align-items-center">
                             <span class="ms-2">
                                 <div class="media">
                                     <div class="d-flex">
                                         <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0"
-                                            [src]="item.hinhAnhUrls[1]" alt="" class="product-image">
+                                             [src]="item.hinhAnhUrls[1]" alt="" class="product-image">
                                     </div>
                                     <div class="media-body">
                                         <p style="color: black; font-size: 16px;">
                                             {{ item.chiTietSanPham.sanPham.ten }}
-                                            <br>
+                                          <br>
                                             <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản
                                                 phẩm: </span>
                                             <br>
                                             <span
-                                                style="color: rgb(150, 150, 150); font-size: 12px;">{{item.chiTietSanPham.mauSac.ten}},
+                                              style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.mauSac.ten }}
+                                              ,
                                             </span>
                                             <span
-                                                style="color: rgb(150, 150, 150); font-size: 12px; margin-right: 40px;">{{item.chiTietSanPham.kichThuoc.ten}}</span>
+                                              style="color: rgb(150, 150, 150); font-size: 12px; margin-right: 40px;">{{ item.chiTietSanPham.kichThuoc.ten }}</span>
                                                 <span
-                                                style="color: rgb(150, 150, 150); font-size: 12px;">x{{item.soLuong}}</span>
+                                                  style="color: rgb(150, 150, 150); font-size: 12px;">x{{ item.soLuong }}</span>
                                         </p>
                                     </div>
                                 </div>
                             </span>
-                            <span class="ms-auto me-3" style="color: #5D87FF;">
-                                {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0'}}
+              <span class="ms-auto me-3" style="color: #5D87FF;">
+                                {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
                             </span>
-                        </div>
-                    </div>
-                    <table class="order-summary mt-3">
-                        <tbody>
-                            <tr>
-                                <td class="text-right">Tổng tiền hàng</td>
-                                <td class="text-right">{{hoaDon.tongTien | currency:'VND':'symbol':'1.0-0'}}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">Phí vận chuyển</td>
-                                <td class="text-right">{{hoaDon.tongTien | currency:'VND':'symbol':'1.0-0'}}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">Giảm giá phí vận chuyển</td>
-                                <td class="text-right">{{hoaDon.tongTien | currency:'VND':'symbol':'1.0-0'}}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">Khuyến mãi</td>
-                                <td class="text-right">{{hoaDon.tongTienGiam | currency:'VND':'symbol':'1.0-0'}}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">Thành tiền</td>
-                                <td class="text-right">{{hoaDon.tongTien | currency:'VND':'symbol':'1.0-0'}}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">Phương thức thanh toán</td>
-                                <td class="text-right">Tiền mặt</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
+          </div>
+          <table class="order-summary mt-3">
+            <tbody>
+            <tr>
+              <td class="text-right">Tổng tiền hàng</td>
+              <td class="text-right">{{ hoaDon.tongTien | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Phí vận chuyển</td>
+              <td class="text-right">{{ hoaDon.tongTien | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Giảm giá phí vận chuyển</td>
+              <td class="text-right">{{ hoaDon.tongTien | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Khuyến mãi</td>
+              <td class="text-right">{{ hoaDon.tongTienGiam | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Thành tiền</td>
+              <td class="text-right">{{ hoaDon.tongTien | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Phương thức thanh toán</td>
+              <td class="text-right">Tiền mặt</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 <app-footer></app-footer>
 
