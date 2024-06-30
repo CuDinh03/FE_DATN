@@ -44,6 +44,8 @@ import {ThuongHieuViewComponent} from './admin/thuonghieu-view/thuonghieu-view.c
 import {HinhAnhViewComponent} from './admin/hinhanh-view/hinhanh-view.component';
 import {RatingViewComponent} from './page/rating-view/rating-view.component';
 import {MaskValuePipe} from './page/profile/mask-value-pipe';
+import {TestDropdownComponent} from './admin/test-dropdown/test-dropdown.component';
+import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
 
 @NgModule({
   declarations: [
@@ -85,7 +87,8 @@ import {MaskValuePipe} from './page/profile/mask-value-pipe';
     HinhAnhViewComponent,
     ProductDetailViewComponent,
     RatingViewComponent,
-    MaskValuePipe
+    MaskValuePipe,
+    TestDropdownComponent,
   ],
   imports: [
     BrowserModule,
@@ -94,8 +97,8 @@ import {MaskValuePipe} from './page/profile/mask-value-pipe';
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatSnackBarModule
-
+    MatSnackBarModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [TaiKhoanService],
   bootstrap: [HomeComponent]
