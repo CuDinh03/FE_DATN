@@ -262,40 +262,50 @@ export class HistoryViewComponent {
 
   onSearch(ma: string) {
     if (ma) {
-      const hoaDonObservable = this.hoaDonService.getHoaDonByMaKH(ma);
-      hoaDonObservable.subscribe(
-        (response) => {
-          if (response.result) {
-            this.hoaDons = [response.result];
-            this.noProductsFound = false;
+      const tenDangNhap = this.auth.getTenDangNhap();
+      if (tenDangNhap) {
+        this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+          (response) => {
+            const khachHang = response.result;
+            if (khachHang && khachHang.id) {
+              const hoaDonObservable = this.hoaDonService.getHoaDonByMaKH(ma, khachHang.id);
+              hoaDonObservable.subscribe(
+                (response) => {
+                  if (response.result) {
+                    // Reset hoaDonChiTiet array before adding new items
+                    this.hoaDonChiTiet = [];
+                    this.noProductsFound = false;
 
-            const hoaDonObservables = this.hoaDons.map(hoaDon => {
-              return this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id);
-            });
+                    const hoaDonObservables = [response.result].map(hoaDon => {
+                      return this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id);
+                    });
 
-            // Use forkJoin to execute all observables concurrently
-            forkJoin(hoaDonObservables).subscribe(
-              (results: any[]) => {
-                // Flatten the results into hoaDonChiTiet array
-                results.forEach(result => {
-                  this.hoaDonChiTiet.push(...result.result);
-                });
-              },
-              (error) => {
-                console.error('Error fetching order details:', error);
-              }
-            );
-          } else {
-            this.hoaDonChiTiet = [];
-            this.noProductsFound = true;
-          }
-        },
-        (error) => {
-          console.error('Error fetching invoice:', error);
-          this.hoaDonChiTiet = [];
-          this.noProductsFound = true;
-        }
-      );
+                    // Use forkJoin to execute all observables concurrently
+                    forkJoin(hoaDonObservables).subscribe(
+                      (results: any[]) => {
+                        // Flatten the results into hoaDonChiTiet array
+                        results.forEach(result => {
+                          this.hoaDonChiTiet.push(...result.result);
+                        });
+                      },
+                      (error) => {
+                        console.error('Error fetching order details:', error);
+                      }
+                    );
+                  } else {
+                    this.hoaDonChiTiet = [];
+                    this.noProductsFound = true;
+                  }
+                },
+                (error: HttpErrorResponse) => {
+                  console.error('Error fetching invoice:', error);
+                  this.hoaDonChiTiet = [];
+                  this.noProductsFound = true;
+                }
+              );
+            }
+          });
+      }
     } else {
       // Tạo một mảng các observable để lấy chi tiết hóa đơn
       const hoaDonChiTietObservables = this.listHoaDon.map(hoaDon =>

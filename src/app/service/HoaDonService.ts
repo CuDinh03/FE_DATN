@@ -49,18 +49,21 @@ export class HoaDonService {
       'Authorization': `Bearer ${token}`
     });
 
+
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/find/${ma}`, {headers});
   }
 
-  getHoaDonByMaKH(ma: string): Observable<ApiResponse<any>> {
+  getHoaDonByMaKH(ma: string, khachHangId: string): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
 
     // Thêm token vào header của yêu cầu
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
+    let params = new HttpParams();
+    params = params.append('khachHangId', khachHangId.toString());
 
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findHd/${ma}`, {headers});
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findHDMaAndKhachHang/${ma}`, {headers, params});
   }
 
 
