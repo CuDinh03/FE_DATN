@@ -52,7 +52,7 @@ export class ProductDetailComponent implements OnInit {
       const chiTietSanPham = JSON.parse(storedProductDetail);
       this.selectedColor = chiTietSanPham.mauSac;
       this.selectedSize = chiTietSanPham.kichThuoc;
-      this.updateProductDetails();
+      // this.updateProductDetails();
     }
   }
 

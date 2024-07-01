@@ -33,7 +33,7 @@ export class PaymentViewComponent {
   results: string[] = [];
   khachHang: any;
   vouchers: any[] = [];
-  gioHang: any ={};
+  gioHang: any = {};
   gioHangChiTiet: any[] = [];
   showConfirmationModal: boolean = false;
   itemToDeleteId: string = '';
@@ -101,7 +101,6 @@ export class PaymentViewComponent {
       note: customer.note
     });
   }
-
 
   updateCustomerInfo(): void {
     if (this.customerForm.invalid) {
@@ -239,6 +238,7 @@ export class PaymentViewComponent {
     }
   }
 
+
   closeInforModal(): void {
     if (this.userInfor && this.userInfor.nativeElement) {
       this.userInfor.nativeElement.classList.remove('show');
@@ -263,6 +263,7 @@ export class PaymentViewComponent {
     let total = this.calculateTotal();
     return total - this.discount;
   }
+
   calculateTotal(): number {
     let total = 0;
     this.gioHangChiTiet.forEach((item: any) => {
@@ -292,74 +293,85 @@ export class PaymentViewComponent {
 
     return `${day}/${month}/${year}`; // Return in the desired format (dd/MM/yyyy)
   }
-  // @ts-ignore
-  findGioHang(id: string): GioHangDto{
-    this.gioHangService.findGioHangByIdKhachHang(id).subscribe(
-        (response : ApiResponse<GioHangDto>) =>{
-          console.log('thanhcong')
-          console.log(response.result)
-          return response.result;
-        }
 
+  // @ts-ignore
+  findGioHang(id: string): GioHangDto {
+    this.gioHangService.findGioHangByIdKhachHang(id).subscribe(
+      (response: ApiResponse<GioHangDto>) => {
+        console.log('thanhcong')
+        console.log(response.result)
+        return response.result;
+      }
     )
   }
 
   saveInfoPayment() {
-    // if (this.customerForm.invalid) {
-    //   return;
-    // }
-    // @ts-ignore
-    this.tenDangNhap = localStorage.getItem('tenDangNhap');
-    this.khachHangService.findKhachHangByTenDangNhap(this.tenDangNhap).subscribe(
-        (response) => {
-          this.khachHang = response.result;
-          if (!this.khachHang || !this.khachHang.id) {
-            console.error('Không tìm thấy thông tin khách hàng.');
-            return;
-          }
-          this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
-              (gioHangResponse: ApiResponse<GioHangDto>) => {
-                const gioHang = gioHangResponse.result;
-                if (!gioHang) {
-                  console.error('Không tìm thấy giỏ hàng.');
-                  return;
-                }
+    if (this.customerForm.invalid) {
+      return;
+    }
+
+    const storedVoucher = localStorage.getItem('voucher') || '';
+    const tenDangNhap = localStorage.getItem('tenDangNhap') || '';
+
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+      (response) => {
+        this.khachHang = response.result;
+        if (!this.khachHang || !this.khachHang.id) {
+          console.error('Không tìm thấy thông tin khách hàng.');
+          return;
+        }
+        this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
+          (gioHangResponse: ApiResponse<GioHangDto>) => {
+            const gioHang = gioHangResponse.result;
+            if (!gioHang) {
+              console.error('Không tìm thấy giỏ hàng.');
+              return;
+            }
+            this.gioHangChiTietService.getAllBỵKhachHang(gioHang.id).subscribe(
+              (gioHangChiTietResponse: ApiResponse<any>) => {
+                const gioCt = gioHangChiTietResponse.result || [];
 
                 const thanhToanOnl: ThanhToanOnl = {
                   gioHang: gioHang,
-                  tongTien: this.getCartTotal(),
+                  tongTien: this.getCartTotal() - this.discount,
                   tongTienGiam: this.discount,
-                  voucher: this.voucher,
-                  ghiChu: '',
-                  gioHangChiTietList: this.gioHangChiTiet
+                  voucher: storedVoucher ? JSON.parse(storedVoucher) : null,
+                  diaChiGiaoHang: this.customerForm.value.diaChi,
+                  ghiChu: this.customerForm.value.note,
+                  gioHangChiTietList: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
                 };
 
                 this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
-                    (response: ApiResponse<ThanhToanOnl>) => {
-                      if (response.result) {
-                        this.snackBar.open('Thanh toán thành công!', 'Đóng', {
-                          duration: 3000,
-                          panelClass: ['success-snackbar']
-                        });
-                        this.router.navigate(['/trang-chu']);
-                      }
-                    },
-                    (error: HttpErrorResponse) => {
-                      this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+                  (response: ApiResponse<ThanhToanOnl>) => {
+                    if (response.result) {
+                      this.snackBar.open('Đặt hàng thành công!', 'Đóng', {
                         duration: 3000,
-                        panelClass: ['error-snackbar']
+                        panelClass: ['success-snackbar']
                       });
+                      this.router.navigate(['/trang-chu']);
                     }
+                  },
+                  (error) => {
+                    this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {
+                      duration: 3000,
+                      panelClass: ['error-snackbar']
+                    });
+                  }
                 );
               },
               (error) => {
-                console.error('Error fetching shopping cart:', error);
+                console.error('Lỗi hiển giỏ hàng chi tiêt:', error);
               }
-          );
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
+            );
+          },
+          (error) => {
+            console.error('Lỗi tải giỏ hàng:', error);
+          }
+        );
+      },
+      (error) => {
+        console.error('Lỗi tải khách hàng:', error);
+      }
     );
   }
 }

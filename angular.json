@@ -95,10 +95,13 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/select2/dist/css/select2.min.css",
               "src/assets/shopping/css/style.css",
               "src/assets/admin/assets/css/styles.min.css"
             ],
             "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/select2/dist/js/select2.min.js",
               "src/assets/shopping/js/main.js",
               "src/assets/admin/assets/js/app.min.js",
               "src/assets/admin/assets/js/dashboard.js",

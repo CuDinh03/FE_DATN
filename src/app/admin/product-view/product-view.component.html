@@ -103,7 +103,7 @@
                   <div class="row alig n-items-start">
                     <form [formGroup]="sanPhamForm" (ngSubmit)="onSubmit()">
                       <input type="hidden" formControlName="id" id="id">
-                      
+
                       <div class="mb-3">
                         <span><label for="ma" class="form-label">Mã: </label> </span>
 
@@ -132,10 +132,10 @@
                         </div>
                       </div>
                       <div class="mb-4">
-                        <label for="trangThai" class="form-label">Trạng thái: </label>
+                        <label class="form-label">Trạng thái: </label>
                         <br>
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" formControlName="trangThai" id="inlineRadio1"
+                          <input class="form-check-input" type="radio" formControlName="trangThai" id="inlineRadio"
                             value="1">
                           <label class="form-check-label" for="inlineRadio1">Còn</label>
                         </div>
@@ -154,7 +154,7 @@
                         {{successMessage}}
                         <button type="button" class="btn-close" aria-label="Close" (click)="closeSuccessAlert()"></button>
                       </div>
-                      
+
                       <!-- Thông báo lỗi -->
                       <div *ngIf="errorMessage" class="alert alert-danger">
                         {{ errorMessage }}

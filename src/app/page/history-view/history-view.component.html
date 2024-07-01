@@ -15,8 +15,7 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
-                                type="button" role="tab" aria-controls="profile" aria-selected="false">Chờ thanh
-                                toán</button>
+                                type="button" role="tab" aria-controls="profile" aria-selected="false">Chờ xử lý</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
@@ -41,7 +40,6 @@
 
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
                         <a class="card mb-4" *ngFor="let item of hoaDonChiTiet" type="button" (click)="findHoaDonById(item.hoaDon.id)">
                             <div class="d-flex align-items-center mt-3 ms-3">
                                 <span class="align-items-center" style="color: black;">
@@ -49,12 +47,12 @@
                                     MT-Shirt
                                 </span>
                                 <span [ngClass]="{
-                                        'text-danger': item.trangThai === 0 || item.trangThai === 4 || item.trangThai === 5,
-                                        'text-warning': item.trangThai === 1,
-                                        'text-primary': item.trangThai === 2,
-                                        'text-success': item.trangThai === 3
+                                        'text-danger': item.hoaDon.trangThai === 0 || item.hoaDon.trangThai === 4 || item.hoaDon.trangThai === 5,
+                                        'text-warning': item.hoaDon.trangThai === 1,
+                                        'text-primary': item.hoaDon.trangThai === 2,
+                                        'text-success': item.hoaDon.trangThai === 3
                                       }" class="ms-auto me-3">
-                                    {{ getTrangThaiText(item.trangThai) }}
+                                    {{ getTrangThaiText(item.hoaDon.trangThai) }}
                                 </span>
                             </div>
                             <hr>
@@ -87,7 +85,7 @@
                             </div>
                             <hr>
                             <div class="d-flex justify-content-end align-items-center me-3 mb-1">
-                                <p style="color: black; font-size: 14;">Thành tiền:
+                                <p style="color: black; font-size: 14px;">Thành tiền:
                                     <span style="color: #5D87FF;">{{item.hoaDon.tongTien |
                                         currency:'VND':'symbol':'1.0-0'}}</span>
                                 </p>
@@ -95,13 +93,9 @@
                             <div class="d-flex align-items-center justify-content-end mb-2 me-3">
                                 <button class="btn btn-primary me-2">Mua lại</button>
                                 <button class="btn btn-warning">Phản hồi</button>
+                                <button *ngIf="item.hoaDon.trangThai === 1" class="btn btn-danger ms-2">Hủy hàng</button>
                             </div>
                         </a>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                Hello
-                            </div>
-                        </div>
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>

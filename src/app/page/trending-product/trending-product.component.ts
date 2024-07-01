@@ -4,6 +4,7 @@ import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
 import { Component, Pipe } from '@angular/core';
 import { AuthenticationService } from "../../service/AuthenticationService";
 import { Router } from "@angular/router";
+import {SanPhamService} from "../../service/SanPhamService";
 
 
 
@@ -17,17 +18,18 @@ import { Router } from "@angular/router";
 export class TrendingProductComponent {
   chiTietSanPham: any[] = [];
   findSanPhamChiTiet: any = {};
-
-
+  totalElements = 0;
+  totalPages = 0;
+  currentPage = 0;
+  listSanPham: any[] =[];
 
   constructor(private auth: AuthenticationService,
               private router: Router,
               private sanPhamCTService: SanPhamCTService,
+              private sanPhamService: SanPhamService
 
   ) {
   }
-
-
 
   ngOnInit(): void {
     this.loadDanhSachSanPham();
@@ -60,6 +62,13 @@ export class TrendingProductComponent {
         (error: HttpErrorResponse) => {
         }
     );
+    // this.sanPhamService.getSanPham()
+
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.loadDanhSachSanPham();
   }
 
 
