@@ -117,11 +117,14 @@
                                 </div>
                               </div> -->
                       </div>
+
+                    
                       <div class="mb-4">
                         <label for="ten" class="form-label">Tên: </label>
                         <input type="text" class="form-control" formControlName="ten" id="ten">
                         <div *ngIf="f['ten'].invalid &&  (f['ten'].dirty || f['ten'].touched)">
-                          <div *ngIf="f['ten'].errors">
+                          <div *ngIf="f['ten'].errors" >
+                            
                             <div id="validationServer03Feedback">
                               <small style="color: red;">Không được để trống</small>
                             </div>

@@ -17,6 +17,7 @@ import { ErrorCode } from 'src/app/model/ErrorCode';
   templateUrl: './product-view.component.html',
   styleUrls: ['./product-view.component.css']
 })
+
 export class ProductViewComponent implements OnInit{
 
   sanPham: any[] = [];
@@ -35,6 +36,9 @@ export class ProductViewComponent implements OnInit{
   isEditMode = false;
 
 
+
+
+
   constructor(private apiService: SanPhamService, private formBuilder: FormBuilder,
 
     private router: Router,private auth: AuthenticationService, 
@@ -44,10 +48,13 @@ export class ProductViewComponent implements OnInit{
         ma: [''],
         id: [''],
         trangThai: ['',Validators.required]
+        
       });
   
       this.id = this.route.snapshot.params['id'];
+      
      }
+     
 
      ngOnInit(): void {
       this.loadSanPham();
@@ -70,6 +77,7 @@ export class ProductViewComponent implements OnInit{
       } else {
         this.createSanPham();
       }
+
     }
   
     loadSanPham(): void {
@@ -184,4 +192,5 @@ export class ProductViewComponent implements OnInit{
     closeSuccessAlert(): void {
       this.showSuccessAlert = false;
     }
+
 }

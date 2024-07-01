@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
 import { SanPhamDto } from '../model/san-pham-dto.model';
@@ -109,6 +109,6 @@ import { SanPhamDto } from '../model/san-pham-dto.model';
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll/dang-hoat-dong`, { headers });
   }
 
-
+  
 
 }
