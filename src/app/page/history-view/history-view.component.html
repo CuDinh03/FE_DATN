@@ -57,7 +57,24 @@
             </li>
           </ul>
         </div>
+        <div class="mb-3">
+          <div class="row">
+            <div class="col-8">
+              <input class="form-control" type="text" placeholder="Tìm kiếm" #searchInput
+                     (input)="onSearch(searchInput.value)">
+            </div>
+            <div class="col-4 d-flex align-content-center justify-content-between">
+              <input class="date-filter" type="date" placeholder="Tìm kiếm"
+                     aria-label="default input example"
+                     (change)="onDateChange()" [(ngModel)]="startDate">
+              <label class="ti ti-arrow-right"></label>
+              <input class="date-filter" type="date" placeholder="Tìm kiếm"
+                     aria-label="default input example"
+                     (change)="onDateChange()" [(ngModel)]="endDate">
+            </div>
 
+          </div>
+        </div>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <div *ngIf="!noProductsFound">
@@ -116,7 +133,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="noProductsFound">
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
               <p>Không có hóa đơn nào được tìm thấy.</p>
             </div>
           </div>
@@ -176,7 +193,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="noProductsFound">
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
               <p>Không có hóa đơn nào được tìm thấy.</p>
             </div>
           </div>
@@ -231,7 +248,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="noProductsFound">
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
               <p>Không có hóa đơn nào được tìm thấy.</p>
             </div>
           </div>
@@ -286,7 +303,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="noProductsFound">
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
               <p>Không có hóa đơn nào được tìm thấy.</p>
             </div>
           </div>
@@ -344,7 +361,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="noProductsFound">
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
               <p>Không có hóa đơn nào được tìm thấy.</p>
             </div>
           </div>
@@ -399,7 +416,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="noProductsFound">
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
               <p>Không có hóa đơn nào được tìm thấy.</p>
             </div>
           </div>
@@ -454,7 +471,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="noProductsFound">
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
               <p>Không có hóa đơn nào được tìm thấy.</p>
             </div>
           </div>

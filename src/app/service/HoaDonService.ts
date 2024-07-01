@@ -52,6 +52,17 @@ export class HoaDonService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/find/${ma}`, {headers});
   }
 
+  getHoaDonByMaKH(ma: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findHd/${ma}`, {headers});
+  }
+
 
   deleteHoaDon(id: string): Observable<ApiResponse<void>> {
     const token = localStorage.getItem('token');
@@ -125,6 +136,20 @@ export class HoaDonService {
     params = params.append('khachHangId', khachHangId);
 
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/byTrangThaiAndKhachHang`, {params, headers});
+  }
+
+  getHoaDonBetweenDates(startDate: string, endDate: string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    let params = new HttpParams();
+    params = params.append('startDate', startDate.toString());
+    params = params.append('endDate', endDate.toString());
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/find-time`, {params, headers});
   }
 
 }

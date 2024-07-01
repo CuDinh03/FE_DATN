@@ -38,7 +38,9 @@ export class HistoryViewComponent {
   noProductsFound = false;
   noCartDetail = false;
   hoaDons: any[] = [];
-
+  startDate: string = '';
+  endDate: string = '';
+  @ViewChild('searchInput') searchInputRef!: ElementRef;
 
   constructor(
     private apiService: HoaDonService,
@@ -57,6 +59,37 @@ export class HistoryViewComponent {
     this.findOrder();
   }
 
+  onDateChange(): void {
+    if (this.startDate && this.endDate) {
+      this.hoaDonService.getHoaDonBetweenDates(this.startDate, this.endDate).subscribe(
+        response => {
+          this.hoaDons = response.result;
+          console.log(this.hoaDons)
+
+          const hoaDonObservables = this.hoaDons.map(hoaDon => {
+            return this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id);
+          });
+          // Use forkJoin to execute all observables concurrently
+          forkJoin(hoaDonObservables).subscribe(
+            (results: any[]) => {
+              // Flatten the results into hoaDonChiTiet array
+              results.forEach(result => {
+                this.hoaDonChiTiet.push(...result.result);
+                console.log(this.hoaDonChiTiet)
+              });
+            },
+            (error) => {
+              console.error('Error fetching order details:', error);
+            }
+          );
+        },
+        error => {
+          console.error('Error fetching data', error);
+        }
+      );
+    }
+  }
+
   getHoaDons(): void {
     const tenDangNhap = this.auth.getTenDangNhap();
     if (tenDangNhap) {
@@ -70,8 +103,7 @@ export class HistoryViewComponent {
                 if (response.result) {
                   this.hoaDons = response.result;
                   this.noProductsFound = false;
-                  // Clear existing hoaDonChiTiet array
-                  this.hoaDonChiTiet = [];
+
                   const hoaDonObservables = this.hoaDons.map(hoaDon => {
                     return this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id);
                   });
@@ -88,6 +120,7 @@ export class HistoryViewComponent {
                       console.error('Error fetching order details:', error);
                     }
                   );
+                  this.hoaDonChiTiet = [];
                 } else {
                   this.noProductsFound = true;
                   this.hoaDons = [];
@@ -110,18 +143,6 @@ export class HistoryViewComponent {
   onTabChange(trangThai: number): void {
     this.trangThai = trangThai;
     this.getHoaDons();
-  }
-
-  findOrderDetailByidkh(id: string): void {
-    // Call service to get chi tiết hóa đơn for the given id
-    this.hoaDonChiTietService.getAllBỵKhachHang(id).subscribe(
-      (response: any) => {
-        this.hoaDonChiTiet.push(...response.result);
-      },
-      (error) => {
-        console.error('Error fetching order details:', error);
-      }
-    );
   }
 
   findSanPhamById(id: string): void {
@@ -222,6 +243,7 @@ export class HistoryViewComponent {
                     console.error('Error fetching order details:', error);
                   }
                 );
+                this.onSearch('')
               },
               (error) => {
                 console.error('Error fetching shopping cart:', error);
@@ -233,6 +255,61 @@ export class HistoryViewComponent {
         },
         (error) => {
           console.error('Error fetching customer:', error);
+        }
+      );
+    }
+  }
+
+  onSearch(ma: string) {
+    if (ma) {
+      const hoaDonObservable = this.hoaDonService.getHoaDonByMaKH(ma);
+      hoaDonObservable.subscribe(
+        (response) => {
+          if (response.result) {
+            this.hoaDons = [response.result];
+            this.noProductsFound = false;
+
+            const hoaDonObservables = this.hoaDons.map(hoaDon => {
+              return this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id);
+            });
+
+            // Use forkJoin to execute all observables concurrently
+            forkJoin(hoaDonObservables).subscribe(
+              (results: any[]) => {
+                // Flatten the results into hoaDonChiTiet array
+                results.forEach(result => {
+                  this.hoaDonChiTiet.push(...result.result);
+                });
+              },
+              (error) => {
+                console.error('Error fetching order details:', error);
+              }
+            );
+          } else {
+            this.hoaDonChiTiet = [];
+            this.noProductsFound = true;
+          }
+        },
+        (error) => {
+          console.error('Error fetching invoice:', error);
+          this.hoaDonChiTiet = [];
+          this.noProductsFound = true;
+        }
+      );
+    } else {
+      // Tạo một mảng các observable để lấy chi tiết hóa đơn
+      const hoaDonChiTietObservables = this.listHoaDon.map(hoaDon =>
+        this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id)
+      );
+
+      // Sử dụng forkJoin để thực hiện tất cả các yêu cầu đồng thời
+      forkJoin(hoaDonChiTietObservables).subscribe(
+        (hoaDonChiTietResponses) => {
+          this.hoaDonChiTiet = hoaDonChiTietResponses.flatMap(response => response.result);
+          this.noProductsFound = this.hoaDonChiTiet.length === 0;
+        },
+        (error) => {
+          console.error('Error fetching order details:', error);
         }
       );
     }
