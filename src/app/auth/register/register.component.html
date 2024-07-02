@@ -13,7 +13,7 @@
                                 <input type="email" class="form-control" formControlName="email" id="email" aria-describedby="textHelp">
                                 <div *ngIf="submitted && f['email'].errors" class="invalid-feedback d-block">
                                   <div *ngIf="f['email'].errors?.['required']">Email là bắt buộc.</div>
-                                  <div *ngIf="f['email'].errors?.['required']">Email đúng định dạng @gmail.com</div>
+                                  <div *ngIf="f['email'].errors?.['required']">Email đúng định dạng &#64;gmail.com</div>
                                   <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
                                 </div>
                               </div>
