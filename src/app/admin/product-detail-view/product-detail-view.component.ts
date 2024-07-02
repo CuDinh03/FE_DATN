@@ -622,6 +622,9 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       }
     );
   }
+  onFileChange(event:any){
+    const  file = event.target.file[0];
+  }
 }
 
 

@@ -280,6 +280,7 @@
                               <th>Số lượng</th>
                               <th>Giá nhập</th>
                               <th>Giá bán</th>
+                              <th>IMG</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -295,6 +296,7 @@
                                 <td><input class="form-control" type="number" [(ngModel)]="ctsp.soLuong"></td>
                                 <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaNhap"></td>
                                 <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaBan"></td>
+                                <td><input type="file" (change)="onFileChange($event)"></td>
                               </tr>
                             </ng-container>
                             </tbody>
