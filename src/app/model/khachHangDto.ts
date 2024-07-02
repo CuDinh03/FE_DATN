@@ -1,4 +1,4 @@
-  export interface KhachHangDto {
+export interface KhachHangDto {
   id: string; // UUID của khách hàng
   ma: string; // Mã của khách hàng
   ten: string; // Tên của khách hàng
@@ -12,4 +12,3 @@
   ngayTao: Date; // Ngày tạo khách hàng
   trangThai: number; // Trạng thái của khách hàng (hoạt động, không hoạt động, ...)
 }
-

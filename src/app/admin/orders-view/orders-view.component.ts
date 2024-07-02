@@ -1,12 +1,12 @@
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ApiResponse } from './../../model/ApiResponse';
-import { HoaDonChiTietService } from './../../service/HoaDonChiTietService';
-import { HoaDonService } from './../../service/HoaDonService';
-import { Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { ErrorCode } from "../../model/ErrorCode";
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ApiResponse} from './../../model/ApiResponse';
+import {HoaDonChiTietService} from './../../service/HoaDonChiTietService';
+import {HoaDonService} from './../../service/HoaDonService';
+import {Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
+import {AuthenticationService} from './../../service/AuthenticationService';
+import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
+import {ErrorCode} from "../../model/ErrorCode";
 
 @Component({
   selector: 'app-orders-view',
@@ -41,7 +41,6 @@ export class OrdersViewComponent {
     private router: Router,
     private auth: AuthenticationService,
     private snackBar: MatSnackBar,
-
   ) {
 
   }
@@ -50,6 +49,7 @@ export class OrdersViewComponent {
     this.loadHoaDon();
 
   }
+
 
   getHoaDons(): void {
     this.apiService.getHoaDonsByTranThai(this.trangThai, this.page, this.size).subscribe((response: ApiResponse<any>) => {
@@ -95,13 +95,37 @@ export class OrdersViewComponent {
       case 1:
         return 'Chờ xác nhận';
       case 2:
-        return 'Chờ giao';
+        return 'Đã xử lý';
       case 3:
-        return 'Hoàn thành';
+        return 'Đang giao';
       case 4:
-        return 'Đã hủy';
+        return 'Đã nhận hàng';
       case 5:
-        return 'Đã hủy 1 phần';
+        return 'Hoàn thành';
+      case 6:
+        return 'Hủy đơn';
+      default:
+        return '';
+    }
+  }
+
+  getTrangThaiColor(trangThai: number): string {
+    switch (trangThai) {
+      case 0:
+        return '#FFD700';
+      case 1:
+        return '#FF6347';
+      case 2:
+        return '#228B22';
+      case 3:
+        return '#ADD8E6';
+      case 4:
+        return '#228B22';
+      case 5:
+        return '#228B22';
+      case 6:
+        return '#FF0000';
+
       default:
         return '';
     }
@@ -154,17 +178,17 @@ export class OrdersViewComponent {
     this.loadHoaDon();
   }
 
-  suaTrangThaiModal(): void{
+  suaTrangThaiModal(): void {
     const storedHoaDon = localStorage.getItem('hoaDon');
-    if (storedHoaDon){
+    if (storedHoaDon) {
       const hoaDon = JSON.parse(storedHoaDon);
       let trangThaiMoi = hoaDon.trangThai + 1
       this.updateTrangThai(hoaDon.id, trangThaiMoi);
       this.getHoaDons();
       this.loadHoaDon();
-      
+
       this.closeconfirmUpdate();
-    }else {
+    } else {
       this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
     }
   }
@@ -226,6 +250,7 @@ export class OrdersViewComponent {
       console.error('Error navigating to /log-in:', err);
     });
   }
+
   closeSuccessAlert(): void {
     this.showSuccessAlert = false;
   }

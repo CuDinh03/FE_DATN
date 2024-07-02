@@ -45,7 +45,7 @@ export class PaymentViewComponent {
   customerForm: FormGroup;
   selectedCustomerId: string | null = null;
 
-    // submitted = false;
+  // submitted = false;
 
   showUpperFooter: boolean = true;
   selectedCustomer: any = null;
@@ -72,8 +72,7 @@ export class PaymentViewComponent {
   }
 
 
-
-  get f(){
+  get f() {
     return this.customerForm.controls;
   }
 
@@ -151,8 +150,7 @@ export class PaymentViewComponent {
         (response) => {
           if (response.result) {
             this.khachHang = response.result;
-          }
-          else {
+          } else {
             console.error('Không tìm thấy thông tin khách hàng.');
           }
         },
@@ -245,6 +243,7 @@ export class PaymentViewComponent {
       this.userInfor.nativeElement.style.display = 'none';
     }
   }
+
   getVoucherById(id: string) {
     this.voucherService.getVoucherByid(id)
       .subscribe(

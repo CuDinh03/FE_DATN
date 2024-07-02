@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { TaiKhoanDto } from "../../model/tai-khoan-dto.model";
-import { TaiKhoanService } from "../../service/TaiKhoanService";
-import { KhachHangDto } from "../../model/khachHangDto";
-import { KhachHangService } from 'src/app/service/KhachHangService';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { error } from '@angular/compiler-cli/src/transformers/util';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {TaiKhoanDto} from "../../model/tai-khoan-dto.model";
+import {TaiKhoanService} from "../../service/TaiKhoanService";
+import {KhachHangDto} from "../../model/khachHangDto";
+import {KhachHangService} from 'src/app/service/KhachHangService';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {error} from '@angular/compiler-cli/src/transformers/util';
 
 
 @Component({
@@ -13,7 +13,7 @@ import { error } from '@angular/compiler-cli/src/transformers/util';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent{
+export class ProfileComponent {
 
   taiKhoanInfo: KhachHangDto | undefined;
   idTaiKhoan: any;
@@ -31,7 +31,8 @@ export class ProfileComponent{
     private taiKhoanService: TaiKhoanService,
     private khachHangService: KhachHangService,
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+  }
 
   // Ẩn email
   // obfuscateEmail(email: string): string {
@@ -81,7 +82,6 @@ export class ProfileComponent{
   }
 
 
-
   statusTransition() {
     this.isEdit = !this.isEdit;
     // Bat nut edit => fill value form
@@ -90,6 +90,7 @@ export class ProfileComponent{
       this.fillValueToForm(this.khachHang);
     }
   }
+
   // 1. Khoi tao form
   initFormKhachHang(): void {
     this.formKhachHang = this.formBuilder.group({
@@ -178,9 +179,6 @@ export class ProfileComponent{
     return `${year}-${month}-${day}`;
   }
 }
-
-
-
 
 
 // Lấy id tài khoản đang đăng nhập + Lấy ra thông tin khách hàng

@@ -1,38 +1,38 @@
 .nav-tabs {
-    border-bottom: none !important;
+  border-bottom: none !important;
 }
 
 .nav-link {
-    padding: 13px;
-    padding-left: 30px;
-    padding-right: 30px;
-    color: black !important;
-    border-bottom: none !important;
-    border-radius: 0 !important;
-    transition: color 0.2s ease-out;
+  padding: 13px;
+  padding-left: 30px;
+  padding-right: 30px;
+  color: black !important;
+  border-bottom: none !important;
+  border-radius: 0 !important;
+  transition: color 0.2s ease-out;
 }
 
 .nav-link:hover {
-    color: rgb(102, 176, 255) !important;
-    border: none !important;
+  color: rgb(102, 176, 255) !important;
+  border: none !important;
 }
 
 .nav-link.active {
-    color: #7A98FF !important;
-    border: none !important;
-    border-bottom: 2px solid #7A98FF !important;
+  color: #7A98FF !important;
+  border: none !important;
+  border-bottom: 2px solid #7A98FF !important;
 }
 
 .product-image {
-    max-width: 80px;
-    /* Thay đổi giá trị này theo kích thước mong muốn */
-    height: auto;
-    margin-right: 5px;
+  max-width: 80px;
+  /* Thay đổi giá trị này theo kích thước mong muốn */
+  height: auto;
+  margin-right: 5px;
 }
 .card {
-    transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
 }
 
 .card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

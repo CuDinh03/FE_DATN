@@ -1,0 +1,78 @@
+<app-header></app-header>
+<section style="background-color: #ffffff;">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center">
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <app-sidebar-profile></app-sidebar-profile>
+      </div>
+      <div class="col-lg-9">
+        <div class="card p-2">
+          <h1 style="color: black" class="p-3">Đánh giá sản phẩm</h1>
+          <div class="d-flex align-items-center" style="border-bottom: 1px solid #ccc; border-top: 1px solid #ccc">
+            <span class="ms-2 p-3">
+              <div class="media">
+                <div class="d-flex">
+                  <img *ngIf="hoaDonChiTiet.hinhAnhUrls && hoaDonChiTiet.hinhAnhUrls.length > 0"
+                       [src]="hoaDonChiTiet.hinhAnhUrls[1]" alt="" class="product-image">
+                </div>
+                <div class="media-body">
+                  <p style="color: black; font-size: 16px;">
+                    {{ hoaDonChiTiet.chiTietSanPham.sanPham.ten }}
+                    <br>
+                    <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản phẩm: </span>
+                    <br>
+                    <span
+                      style="color: rgb(150, 150, 150); font-size: 12px;">{{ hoaDonChiTiet.chiTietSanPham.mauSac.ten }}
+                      ,</span>
+                    <span
+                      style="color: rgb(150, 150, 150); font-size: 12px;">{{ hoaDonChiTiet.chiTietSanPham.kichThuoc.ten }}</span>
+                  </p>
+                </div>
+              </div>
+            </span>
+            <span class="ms-auto me-3" style="color: #5D87FF;">
+            {{ hoaDonChiTiet.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+          </span>
+          </div>
+          <form [formGroup]="danhGiaForm" (ngSubmit)="createRating()">
+            <div class="mt-2 d-flex align-content-center p-2">
+              <p style="color:#000; font-size: 14px; margin-right: 40px">Chất lượng sản phẩm</p>
+              <ng-container *ngFor="let star of stars; let i = index">
+                <i class="fas fa-star" style="font-size: 22px"
+                   [ngClass]="i < selectedRating ? 'text-warning' : 'text-muted'"
+                   (click)="selectRating(i + 1)">
+                </i>
+              </ng-container>
+              <span class="ms-2" style="color: #FFAE1F">{{ getRatingText(selectedRating) }}</span>
+            </div>
+
+            <div style="background-color: #eceaea; padding: 20px; margin: 15px; border-radius: 5px">
+              <div style="background-color: white; padding: 20px; border-radius: 5px">
+                <div class="mb-3">
+                  <label style="color: black" class="form-label">Tiêu đề</label>
+                  <input type="text" formControlName="tieuDe" class="form-control">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" style="color: black">Đánh giá chất lượng sản phẩm</label>
+                  <textarea formControlName="noiDung" class="form-control" rows="5"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end align-content-center p-3">
+              <button class="btn btn-danger me-3" [routerLink]="['/don-mua']">Trở lại</button>
+              <button type="submit" class="btn btn-info">Đánh giá</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>
+
+
+
+

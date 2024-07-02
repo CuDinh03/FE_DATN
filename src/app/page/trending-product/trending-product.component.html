@@ -5,21 +5,30 @@
       <h2>Hàng <span class="section-intro__style">Mới về</span></h2>
     </div>
     <div class="row">
-      <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let sanPham of chiTietSanPham">
+      <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let sanPham of chiTietSanPham"
+           (click)="findSanPhamById(sanPham.id)">
         <div class="card text-center card-product">
           <div class="card-product__img">
-            <img class="card-img" *ngIf="sanPham.hinhAnh && sanPham.hinhAnh.length > 0" [src]="sanPham.hinhAnh[1].url" alt="Ảnh sản phẩm">
+            <img class="card-img" *ngIf="sanPham.hinhAnh && sanPham.hinhAnh.length > 0" [src]="sanPham.hinhAnh[1].url"
+                 alt="Ảnh sản phẩm">
             <ul class="card-product__imgOverlay">
-              <li><button><i class="ti ti-search"></i></button></li>
-              <li><button (click)="findSanPhamById(sanPham.id)"><i class="ti ti-shopping-cart"></i></button></li>
-              <li><button><i class="ti ti-heart"></i></button></li>
+              <li>
+                <button><i class="ti ti-search"></i></button>
+              </li>
+              <li>
+                <button (click)="findSanPhamById(sanPham.id)"><i class="ti ti-shopping-cart"></i></button>
+              </li>
+              <li>
+                <button><i class="ti ti-heart"></i></button>
+              </li>
             </ul>
           </div>
           <div class="card-body text-center">
             <p>{{ sanPham.danhMuc.ten }}</p>
-            <h4 class="card-product__title"><a class="btn" (click)="findSanPhamById(sanPham.id)" >{{ sanPham.sanPham.ten }} màu {{sanPham.mauSac.ten}}</a></h4>
+            <h4 class="card-product__title"><a class="btn">{{ sanPham.sanPham.ten }} màu {{ sanPham.mauSac.ten }}</a>
+            </h4>
             <p class="card-product__price">{{ sanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</p>
-            <p>Còn {{sanPham.soLuong}} sản phẩm</p>
+            <p>Còn {{ sanPham.soLuong }} sản phẩm</p>
             <div class="rating">
               <i class="ti ti-star filled"></i>
               <i class="ti ti-star filled"></i>
