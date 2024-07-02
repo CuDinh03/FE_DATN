@@ -5,6 +5,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
 import {TaiKhoanDto} from "../model/tai-khoan-dto.model";
 import {KhachHangDto} from "../model/khachHangDto";
+import {DangNhapDto} from "../model/dangNhapDto";
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,11 @@ export class TaiKhoanService {
     return this.http.post<ApiResponse<TaiKhoanDto>>(`${this.apiUrl}/check-username`, { tenDangNhap: username });
   }
 
+  checkEmailExists(email: string): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/check-email`, { email: email });
+  }
+
+
   getAccountsByRoles(page: number, size: number, role: any): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -55,8 +61,8 @@ export class TaiKhoanService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/${role}`, {params, headers});
   }
 
-  createAccount(accountData: TaiKhoanDto): Observable<ApiResponse<TaiKhoanDto>> {
-    return this.http.post<ApiResponse<TaiKhoanDto>>(this.apiUrl + '/create', accountData);
+  createAccount(accountData: DangNhapDto): Observable<ApiResponse<DangNhapDto>> {
+    return this.http.post<ApiResponse<DangNhapDto>>(this.apiUrl + '/create', accountData);
   }
 
   getAccountById(id: string): Observable<ApiResponse<TaiKhoanDto>> {
