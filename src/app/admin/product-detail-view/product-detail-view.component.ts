@@ -10,11 +10,7 @@ import { MauSacService } from 'src/app/service/MauSacService';
 import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
 import { SanPhamService } from 'src/app/service/SanPhamService';
 import { ThuongHieuService } from 'src/app/service/ThuongHieuService';
-// @ts-ignore
-import * as $ from 'jquery';
-import 'select2';
-// @ts-ignore
-import JQuery from "$GLOBAL$";
+import {AngularFireStorage} from "@angular/fire/compat/storage";
 import {ApiResponse} from "../../model/ApiResponse";
 import {MauSacDto} from "../../model/mau-sac-dto.model";
 import {KichThuocDto} from "../../model/kich-thuoc-dto.model";
@@ -29,19 +25,16 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   templateUrl: './product-detail-view.component.html',
   styleUrls: ['./product-detail-view.component.css']
 })
-export class ProductDetailViewComponent implements OnInit, AfterViewInit {
+export class ProductDetailViewComponent implements OnInit {
 
-  selectedSanPham: SanPhamDto | undefined;
-  selectedChatLieu: ChatLieuDto | undefined;
-  selectedThuongHieu: ThuongHieuDto | undefined;
-  selectedDanhMuc: DanhMucDto | undefined;
-  selectedColors: string[] = [];
-  selectedSizes: string[] = [];
-  availableColors: string[] = [];
-  availableSizes: string[] = [];
+
+    selectedSanPham: SanPhamDto[] = [];
+    selectedChatLieu: ChatLieuDto[] = [];
+    selectedThuongHieu: ThuongHieuDto[] = [];
+    selectedDanhMuc: DanhMucDto[] = [];
+  selectedColors: MauSacDto[] = [];
+  selectedSizes: KichThuocDto[] = [];
   listChiTietSP: any [] = [];
-  @ViewChild('colorsSelect') colorsSelect: ElementRef | undefined;
-  @ViewChild('sizeSelect') sizeSelect: ElementRef | undefined;
   page = 0;
   size = 5;
   listSanPhamChiTiet: any[] = [];
@@ -71,7 +64,8 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     private mauSacService: MauSacService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private fireStorage :AngularFireStorage
   ) {
   }
 
@@ -133,64 +127,7 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngAfterViewInit(): void {
-    // @ts-ignore
-    const $colors = $(this.colorsSelect.nativeElement);
-    // @ts-ignore
-    const $sizes = $(this.sizeSelect.nativeElement);
 
-    $colors.select2({
-      placeholder: 'Chọn màu sắc'
-    });
-
-    $sizes.select2({
-      placeholder: 'Chọn Size'
-    });
-
-    $colors.on('change', (event: JQuery.TriggeredEvent) => {
-      const selectedColor = $colors.val() as string;
-      if (selectedColor && !this.selectedColors.includes(selectedColor)) {
-        this.selectedColors.push(selectedColor);
-        this.updateSelectedColors();
-      }
-      // Reset select2 để có thể chọn tiếp mục khác
-      $colors.val(null).trigger('change');
-    });
-
-    $sizes.on('change', (event: JQuery.TriggeredEvent) => {
-      const selectedSize = $sizes.val() as string;
-      if (selectedSize && !this.selectedSizes.includes(selectedSize)) {
-        this.selectedSizes.push(selectedSize);
-        this.updateSelectedSizes();
-      }
-      // Reset select2 để có thể chọn tiếp mục khác
-      $sizes.val(null).trigger('change');
-    });
-  }
-
-  updateSelectedSizes(): void {
-    const $sizeList = $('#sizeList');
-    $sizeList.empty();
-    this.selectedSizes.forEach(size => {
-      $sizeList.append('<li>' + size + '</li>');
-    });
-  }
-
-  updateSelectedColors(): void {
-    const $colorList = $('#colorList');
-    $colorList.empty();
-    this.selectedColors.forEach(color => {
-      $colorList.append('<li>' + color + '</li>');
-    });
-  }
-
-  removeColor(color: string): void {
-    const index = this.selectedColors.indexOf(color);
-    if (index !== -1) {
-      this.selectedColors.splice(index, 1);
-      this.updateSelectedColors();
-    }
-  }
 
   loadSanPhamChiTietByNgayTao(): void {
     this.sanPhamCTService.getSanPhamChiTietSapXepByNGayTao(this.page, this.size)
@@ -438,9 +375,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     this.kichThuocService.getAll().subscribe(
       response => {
         this.listKichThuoc = response.result;
-        for (const kt of this.listKichThuoc) {
-          this.availableSizes.push(kt.ten)
-        }
 
       }
     )
@@ -451,152 +385,87 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     this.mauSacService.getAll().subscribe(
       response => {
         this.listMauSac = response.result;
-        for (const responseElement of this.listMauSac) {
-          this.availableColors.push(responseElement.ten)
-        }
       }
     )
   }
+
+    logSelectedColors(): void {
+        console.log('Selected Colors:', this.selectedColors);
+    }
+
+    // Log selected sizes
+    logSelectedSizes(): void {
+        console.log('Selected Sizes:', this.selectedSizes);
+    }
 
   get f() {
     return this.chiTietSanPhamFormAdd.controls;
   }
 
-  // Các hàm xử lý khi select thay đổi
-  onSanPhamChange(): void {
-    const sanPhamId = this.sanPhamForm.value.sanPham;
-    this.sanPhamCTService.getChiTietSanPhamById(sanPhamId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi sản phẩm
-      });
-  }
-
-  onThuongHieuChange(): void {
-    const thuongHieuId = this.sanPhamForm.value.thuongHieu;
-    this.sanPhamCTService.getSPCTByThuongHieuId(thuongHieuId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi thương hiệu
-      });
-  }
-
-  onChatLieuChange(): void {
-    const chatLieuId = this.sanPhamForm.value.chatLieu;
-    this.sanPhamCTService.getSPCTByChatLieuId(chatLieuId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi chất liệu
-      });
-  }
-
-  onDanhMucChange(): void {
-    const danhMucId = this.sanPhamForm.value.danhMuc;
-    this.sanPhamCTService.getSPCTByDanhMucId(danhMucId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi danh mục
-      });
-  }
-
-  onKichThuocChange(): void {
-    const kichThuocId = this.sanPhamForm.value.kichThuoc;
-    this.sanPhamCTService.getSPCTByKichThuocId(kichThuocId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi kích thước
-      });
-  }
-
-  onMauSacChange(): void {
-    const mauSacId = this.sanPhamForm.value.mauSac;
-    this.sanPhamCTService.getSPCTByMauSacId(mauSacId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi màu sắc
-      });
-  }
-
-  selectedMauSacArray: MauSacDto[] = [];
-  selectedKichThuocArray: KichThuocDto[] = [];
-  sanPham: SanPhamDto | undefined;
-  chatLieu: ChatLieuDto | undefined;
-  thuongHieu: ThuongHieuDto | undefined;
-  danhMuc: DanhMucDto | undefined;
-
   // @ts-ignore
-  selectedSp(): SanPhamDto {
-    for (const sp of this.listSanPham) {
-      if (this.selectedSanPham?.id === sp.id) {
-        return sp;
-      }
+    selectedSp(): SanPhamDto | undefined {
+        return this.selectedSanPham.length > 0 ? this.selectedSanPham[0] : undefined;
     }
-  }  // @ts-ignore
-  selectedCl(): ChatLieuDto {
-    for (const cl of this.listChatLieu) {
-      if (this.selectedChatLieu?.id === cl.id) {
-        return cl;
-      }
-    }
-  }  // @ts-ignore
-  selectedTh(): ThuongHieuDto {
-    for (const th of this.listThuongHieu) {
-      if (this.selectedThuongHieu?.id === th.id) {
-        return th;
-      }
-    }
-  }  // @ts-ignore
-  selectedDm(): DanhMucDto {
-    for (const dm of this.listDanhMuc) {
-      if (this.selectedDanhMuc?.id === dm.id) {
-        return dm;
-      }
-    }
-  }
 
-  selectedMauSac(): MauSacDto[] {
-    for (const ms of this.listMauSac) {
-      for (const slms of this.selectedColors) {
-        if (ms.ten === slms) {
-          this.selectedMauSacArray.push(ms)
-        }
-      }
+    selectedCl(): ChatLieuDto | undefined {
+        return this.selectedChatLieu.length > 0 ? this.selectedChatLieu[0] : undefined;
     }
-    return this.selectedMauSacArray;
-  }
 
-  selectedSize(): KichThuocDto[] {
-    for (const kt of this.listKichThuoc) {
-      for (const slkt of this.selectedSizes) {
-        if (kt.ten === slkt) {
-          this.selectedKichThuocArray.push(kt)
-        }
-      }
+    selectedTh(): ThuongHieuDto | undefined {
+        return this.selectedThuongHieu.length > 0 ? this.selectedThuongHieu[0] : undefined;
     }
-    return this.selectedKichThuocArray;
-  }
 
-  addChiTietSanPham() {
-    const saveCtspRequest = {
-      sanPham: this.selectedSp(),
-      mauSacList: this.selectedMauSac(),
-      chatLieu: this.selectedCl(),
-      danhMuc: this.selectedDm(),
-      thuongHieu: this.selectedTh(),
-      kichThuocList: this.selectedSize()
+    selectedDm(): DanhMucDto | undefined {
+        return this.selectedDanhMuc.length > 0 ? this.selectedDanhMuc[0] : undefined;
     }
-    console.log(saveCtspRequest)
-    this.sanPhamCTService.saveChiTietSanPham(saveCtspRequest).subscribe(
-      (response: ApiResponse<any>) => {
 
-        console.log('Lưu chi tiết sản phẩm thành công', response);
-        this.router.navigate(['/admin/san-pham-chi-tiet']);
-        this.getCtsp();
-      },
-      (error) => {
-        console.error('Có lỗi xảy ra khi lưu chi tiết sản phẩm', error);
-      }
-    );
-  }
+    selectedMauSac(): MauSacDto[] {
+        return this.listMauSac.filter(ms => this.selectedColors.some(selMs => selMs.id === ms.id));
+    }
 
-  saveListCt(list: any[]): void {
+    selectedSize(): KichThuocDto[] {
+        return this.listKichThuoc.filter(kt => this.selectedSizes.some(selSize => selSize.id === kt.id));
+    }
+
+    addChiTietSanPham() {
+        const saveCtspRequest = {
+            sanPham: this.selectedSp(),
+            mauSacList: this.selectedMauSac(),
+            chatLieu: this.selectedCl(),
+            danhMuc: this.selectedDm(),
+            thuongHieu: this.selectedTh(),
+            kichThuocList: this.selectedSize()
+        };
+
+        this.sanPhamCTService.saveChiTietSanPham(saveCtspRequest).subscribe(
+            (response: ApiResponse<any>) => {
+                console.log('Lưu chi tiết sản phẩm thành công', response);
+                this.snackBar.open('Lưu chi tiết sản phẩm thành công', 'Đóng', {
+                    duration: 3000,
+                    panelClass: ['success-snackbar']
+                });
+                this.router.navigate(['/admin/san-pham-chi-tiet']);
+                this.getCtsp();
+            },
+            (error) => {
+                console.error('Có lỗi xảy ra khi lưu chi tiết sản phẩm', error);
+                this.snackBar.open('Có lỗi xảy ra khi lưu danh sách!', 'Đóng', {
+                    duration: 3000,
+                    panelClass: ['error-snackbar']
+                });
+            }
+        );
+    }
+
+
+    saveListCt(list: any[]): void {
     this.sanPhamCTService.saveListCt(list).subscribe(
       (response: ApiResponse<any>) => {
 
+        this.selectedDanhMuc =[];
+        this.selectedSanPham =[];
+        this.selectedThuongHieu =[];
+        this.selectedChatLieu =[];
         this.listChiTietSP = [];
         this.selectedSizes = [];
         this.selectedColors = [];
@@ -622,37 +491,46 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       }
     );
   }
-  onFileChange(event:any){
-    const  file = event.target.file[0];
-  }
+    async onFileChange(event: any, ctsp: any) {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const path = `yt/${file.name}`;
+                const uploadTask = await this.fireStorage.upload(path, file);
+                const url = await uploadTask.ref.getDownloadURL();
+                console.log(`File ${i + 1} uploaded. Download URL: ${url}`);
+
+                // Thêm URL ảnh vào danh sách hình ảnh của sản phẩm chi tiết hiện tại
+                if (!ctsp.hinhAnhUrls) {
+                    ctsp.hinhAnhUrls = [];
+                }
+                ctsp.hinhAnhUrls.push(url);
+            }
+        }
+    }
+
+    // submit(): void {
+    //     if (this.selectedImage != null) {
+    //         const filePath = this.selectedImage.name;
+    //         const fileRef = this.storage.ref(filePath);
+    //         this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(finalize
+    //         (() => (fileRef.getDownloadURL().subscribe(url => {
+    //             let image: img = {id: 0, name: "", status: 1};
+    //             image.name = url;
+    //             this.listPicture.push(image);
+    //             console.log(this.listPicture);
+    //         })))).subscribe((data) => {
+    //         });
+    //     }
+    // }
+
+
 }
 
 
 
 
-
-// deleteSanPham(id: string): Observable<ApiResponse<void>> {
-//   const token = localStorage.getItem('token');
-//   const headers = new HttpHeaders({
-//     'Authorization': `Bearer ${token}`
-//   });
-
-//   return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
-// }
-
-// delete(id: any): void {
-//   this.sanPhamCTService.deleteSanPham(id).subscribe(() => {
-//     this.loadSanPhamChiTiet();
-//     this.router.navigate(['/admin/san-pham']);
-//   });
-// }
-
-// openSanPham(id: any): void {
-//   this.sanPhamCTService.openSanPham(id).subscribe(() => {
-//     this.loadSanPhamChiTiet();
-//     this.router.navigate(['/admin/san-pham']);
-//   });
-// }
 
 
 

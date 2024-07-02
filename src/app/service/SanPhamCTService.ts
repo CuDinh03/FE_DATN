@@ -192,14 +192,7 @@ export class SanPhamCTService {
   }
 
 
-  saveChiTietSanPham(saveCtspRequest: {
-    kichThuocList: KichThuocDto[];
-    sanPham: SanPhamDto ;
-    danhMuc: DanhMucDto ;
-    chatLieu: ChatLieuDto ;
-    thuongHieu: ThuongHieuDto;
-    mauSacList: MauSacDto[]
-  }): Observable<ApiResponse<any>> {
+    saveChiTietSanPham(saveCtspRequest: { kichThuocList: KichThuocDto[]; sanPham: SanPhamDto | undefined; danhMuc: DanhMucDto | undefined; chatLieu: ChatLieuDto | undefined; thuongHieu: ThuongHieuDto | undefined; mauSacList: MauSacDto[] }): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,

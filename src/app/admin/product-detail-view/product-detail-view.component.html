@@ -193,10 +193,9 @@
                 <div class="text-nowrap mb-0 col-12 mb-3">
                   <div class="row">
                     <div class="col-5">
-                      <select id="sp" class="form-select" aria-label="Default select example" style="width: 100%"
-                              [(ngModel)]="selectedSanPham">
-                        <option *ngFor="let sp of listSanPham" [ngValue]="sp">{{ sp?.ten }}</option>
-                      </select>
+                      <ng-select id="sp" class="form-select" aria-label="Default select example" style="width: 100%" [multiple]="true" [(ngModel)]="selectedSanPham">
+                        <ng-option *ngFor="let sp of listSanPham" [value]="sp">{{ sp.ten }}</ng-option>
+                      </ng-select>
                     </div>
                     <div class="col-1">
                       <button class="btn btn-info" (click)="addChiTietSanPham()">+</button>
@@ -208,64 +207,47 @@
                   <div class="row mt-5">
                     <div class="col-5 mt-2">
                       <label>Chat lieu</label>
-                      <select id="cl" class="form-select" aria-label="Default select example" style="width: 100%"
-                              [(ngModel)]="selectedChatLieu">
-                        <option *ngFor="let cl of listChatLieu" [ngValue]="cl">{{ cl?.ten }}</option>
-                      </select>
+                      <ng-select id="cl" class="form-select" aria-label="Default select example" style="width: 100%" [multiple]="true" [(ngModel)]="selectedChatLieu">
+                        <ng-option *ngFor="let cl of listChatLieu" [value]="cl">{{ cl.ten }}</ng-option>
+                      </ng-select>
                     </div>
                     <div class="col-5 mt-2">
                       <label>Thuong hieu</label>
-                      <select id="thuongHieu" class="form-select" aria-label="Default select example"
-                              style="width: 100%"
-                              [(ngModel)]="selectedThuongHieu">
-                        <option *ngFor="let th of listThuongHieu" [ngValue]="th">{{ th?.ten }}</option>
-                      </select>
+                      <ng-select id="thuongHieu" class="form-select" aria-label="Default select example" style="width: 100%" [multiple]="true" [(ngModel)]="selectedThuongHieu">
+                        <ng-option *ngFor="let th of listThuongHieu" [value]="th">{{ th.ten }}</ng-option>
+                      </ng-select>
+
                     </div>
                     <div class="col-5 mt-2">
                       <label>Danh muc</label>
-                      <select id="dm" class="form-select" aria-label="Default select example" style="width: 100%"
-                              [(ngModel)]="selectedDanhMuc">
-                        <option *ngFor="let dm of listDanhMuc" [ngValue]="dm">{{ dm?.ten }}</option>
-                      </select>
+
+                      <ng-select id="dm" class="form-select" aria-label="Default select example" style="width: 100%" [multiple]="true" [(ngModel)]="selectedDanhMuc">
+                        <ng-option *ngFor="let dm of listDanhMuc" [value]="dm">{{ dm.ten }}</ng-option>
+                      </ng-select>
+
                     </div>
                     <div class="col-5 mt-2">
                       <label for="sizes">Kích cỡ</label>
-                      <select #sizeSelect id="sizes" class="form-select" aria-label="Default select example"
-                              style="width: 100%">
-                        <option *ngFor="let size of availableSizes" [value]="size">{{ size }}</option>
-                      </select>
-                      <div id="selectedSizes">
-                        <h3>Kích cỡ đã chọn:</h3>
-                        <ul id="sizeList">
-                          <li *ngFor="let size of selectedSizes">
-                            {{ size }}
-                            <!--                          <button class="btn btn-sm btn-danger ms-2" (click)="removeSize(size)">Xoá</button>-->
-                          </li>
-                        </ul>
-                      </div>
+
+                      <ng-select id="sizes" class="form-select" aria-label="Default select example"
+                                 style="width: 100%" [multiple]="true" [(ngModel)]="selectedSizes"
+                                 (ngModelChange)="logSelectedSizes()">
+                        <ng-option class="form-select" *ngFor="let kt of listKichThuoc" [value]="kt">{{ kt.ten }}</ng-option>
+                      </ng-select>
+
                     </div>
                     <div class="col-5 mt-2">
                       <label for="colors">Màu sắc</label>
-                      <select #colorsSelect id="colors" class="form-select" aria-label="Default select example"
-                              style="width: 100%">
-                        <option *ngFor="let color of availableColors" [value]="color">{{ color }}</option>
-                      </select>
-                      <div id="selectedColors">
-                        <h3>Màu sắc đã chọn:</h3>
-                        <ul id="colorList">
-                          <li *ngFor="let color of selectedColors">
-                            {{ color }}
-                            <button class="btn btn-sm btn-danger ms-2" (click)="removeColor(color)">Xoá</button>
-                          </li>
-                        </ul>
-                      </div>
+                      <ng-select id="colors" class="form-select" aria-label="Default select example" style="width: 100%" [multiple]="true" [(ngModel)]="selectedColors"  (ngModelChange)="logSelectedColors()">
+                        <ng-option class="form-select" *ngFor="let ms of listMauSac" [value]="ms">{{ ms.ten }}</ng-option>
+                      </ng-select>
                     </div>
 
                     <div class="row mt-2">
                       <ng-container
                         *ngIf="selectedSizes && selectedSizes.length > 0 && selectedColors && selectedColors.length >0">
                         <ng-container *ngFor="let ms of selectedColors">
-                          <p class="col-12 align-middle">Sản phẩm có màu {{ ms }}</p>
+                          <p class="col-12 align-middle">Sản phẩm có màu {{ ms.ten }}</p>
                           <hr class="mt-5">
                           <table class="table">
                             <thead>
@@ -285,7 +267,7 @@
                             </thead>
                             <tbody>
                             <ng-container *ngFor="let ctsp of listChiTietSP">
-                              <tr *ngIf="ctsp.mauSac.ten === ms ">
+                              <tr *ngIf="ctsp.mauSac.ten === ms.ten ">
                                 <td>{{ ctsp.ma }}</td>
                                 <td>{{ ctsp.sanPham.ten }}</td>
                                 <td>{{ ctsp.thuongHieu.ten }}</td>
@@ -296,7 +278,15 @@
                                 <td><input class="form-control" type="number" [(ngModel)]="ctsp.soLuong"></td>
                                 <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaNhap"></td>
                                 <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaBan"></td>
-                                <td><input type="file" (change)="onFileChange($event)"></td>
+                                  <!-- Hiển thị ảnh -->
+                                <td>
+                                  <!-- Hiển thị danh sách ảnh hiện tại của sản phẩm chi tiết nếu có -->
+                                  <div *ngFor="let url of ctsp.hinhAnhUrls">
+                                    <img [src]="url" alt="Ảnh sản phẩm" style="max-width: 100px; max-height: 100px;">
+                                  </div>
+                                  <!-- Input để chọn nhiều file ảnh mới -->
+                                  <input type="file" multiple (change)="onFileChange($event, ctsp)">
+                                </td>
                               </tr>
                             </ng-container>
                             </tbody>

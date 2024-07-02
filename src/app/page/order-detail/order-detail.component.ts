@@ -1,5 +1,5 @@
 import {ErrorCode} from 'src/app/model/ErrorCode';
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import {ApiResponse} from 'src/app/model/ApiResponse';
 import {AuthenticationService} from './../../service/AuthenticationService';
 import {Router} from '@angular/router';
