@@ -11,7 +11,8 @@ export class KhachHangService {
 
   apiUrl = 'http://localhost:9091/api/khs';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient
+  ) {
   }
 
   getKhs(page: number, size: number): Observable<ApiResponse<any>> {
@@ -127,7 +128,7 @@ export class KhachHangService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/${id}`, khachHangData, { headers });
+    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/update/${id}`, khachHangData, { headers });
   }
 
 
@@ -138,4 +139,14 @@ export class KhachHangService {
     });
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/findUsername/${tenDangNhap}`, {headers});
   }
+
+  searchKhachHang(ten:string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/search?ten=${ten}`, { headers });
+}
+
 }

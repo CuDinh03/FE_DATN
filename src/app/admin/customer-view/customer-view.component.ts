@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { ApiResponse } from 'src/app/model/ApiResponse';
 import { ErrorCode } from 'src/app/model/ErrorCode';
 import { KhachHangDto } from 'src/app/model/khachHangDto';
@@ -13,10 +14,12 @@ import { TaiKhoanService } from 'src/app/service/TaiKhoanService';
 @Component({
   selector: 'app-customer-view',
   templateUrl: './customer-view.component.html',
+  template:`<input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search khachHang"/>`,
+  
   styleUrls: ['./customer-view.component.css']
 })
 export class CustomerViewComponent implements OnInit{
-  khachHang: any[] = [];
+  // khachHang: any[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
@@ -32,8 +35,12 @@ export class CustomerViewComponent implements OnInit{
   isEditMode = false;
   taiKhoanList: TaiKhoanDto[] = [];
 
-  
-  
+  // searchTerm: string = '';
+  // search: any;
+  // keyword: any;
+
+  ten: string = '';
+  khachHangs: any = [];
 
   constructor(
     private apiService: KhachHangService, 
@@ -67,6 +74,7 @@ export class CustomerViewComponent implements OnInit{
     }
     this.loadTaiKhoan();
     this.loadVoucher();
+    
   }
 
   get f() {
@@ -89,7 +97,7 @@ export class CustomerViewComponent implements OnInit{
     this.apiService.getKhs(this.currentPage, this.pageSize)
       .subscribe(response => {
         
-        this.khachHang = response.result.content;
+        this.khachHangs = response.result.content;
     
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
@@ -224,7 +232,7 @@ export class CustomerViewComponent implements OnInit{
   loadVoucher():void{
     this.apiService.getKhs(this.currentPage, this.pageSize)
       .subscribe(response => {
-        this.khachHang = response.result.content;
+        this.khachHangs = response.result.content;
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
         console.log("view khs");
@@ -234,4 +242,12 @@ export class CustomerViewComponent implements OnInit{
   createVoucher(){
 
   }
+
+  search() {
+    this.apiService.searchKhachHang(this.ten).subscribe(data => {
+      this.khachHangs = data;
+    });
+  }
+
+
 }
