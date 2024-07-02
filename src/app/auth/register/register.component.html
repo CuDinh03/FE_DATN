@@ -8,6 +8,15 @@
                         <div class="card-body">
                             <p class="text-center">Chào mừng bạn đến với MT-Shirt</p>
                             <form [formGroup]="accountForm" (ngSubmit)="createAccount()">
+                              <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" formControlName="email" id="email" aria-describedby="textHelp">
+                                <div *ngIf="submitted && f['email'].errors" class="invalid-feedback d-block">
+                                  <div *ngIf="f['email'].errors?.['required']">Email là bắt buộc.</div>
+                                  <div *ngIf="f['email'].errors?.['required']">Email đúng định dạng @gmail.com</div>
+                                  <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+                                </div>
+                              </div>
                                 <div class="mb-3">
                                     <label for="tenDangNhap" class="form-label">Tên đăng nhập</label>
                                     <input type="text" class="form-control" formControlName="tenDangNhap" id="tenDangNhap" aria-describedby="textHelp">
