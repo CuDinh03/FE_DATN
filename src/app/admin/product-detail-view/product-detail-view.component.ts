@@ -27,7 +27,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class ProductDetailViewComponent implements OnInit {
 
-
+    selectedListSp: ChiTietSanPhamDto[] =[];
     selectedSanPham: SanPhamDto[] = [];
     selectedChatLieu: ChatLieuDto[] = [];
     selectedThuongHieu: ThuongHieuDto[] = [];
@@ -112,19 +112,13 @@ export class ProductDetailViewComponent implements OnInit {
     this.loadDanhMuc();
     this.loadKichThuoc();
     this.loadMacSac();
+    this.getCtsp();
   }
 
 
   getCtsp() {
-    this.sanPhamCTService.getCtsp().subscribe(
-      (response: ApiResponse<any>) => {
-        this.listChiTietSP = response.result;
-        console.log('Show chi tiết sản phẩm thành công', response);
-      },
-      (error) => {
-        console.error('Có lỗi xảy ra khi lấy chi tiết sản phẩm', error);
-      }
-    );
+        this.listChiTietSP = this.selectedListSp;
+        console.log('listChiTietSP:' + this.listChiTietSP)
   }
 
 
@@ -437,24 +431,53 @@ export class ProductDetailViewComponent implements OnInit {
             kichThuocList: this.selectedSize()
         };
 
-        this.sanPhamCTService.saveChiTietSanPham(saveCtspRequest).subscribe(
-            (response: ApiResponse<any>) => {
-                console.log('Lưu chi tiết sản phẩm thành công', response);
-                this.snackBar.open('Lưu chi tiết sản phẩm thành công', 'Đóng', {
-                    duration: 3000,
-                    panelClass: ['success-snackbar']
-                });
-                this.router.navigate(['/admin/san-pham-chi-tiet']);
-                this.getCtsp();
-            },
-            (error) => {
-                console.error('Có lỗi xảy ra khi lưu chi tiết sản phẩm', error);
-                this.snackBar.open('Có lỗi xảy ra khi lưu danh sách!', 'Đóng', {
-                    duration: 3000,
-                    panelClass: ['error-snackbar']
-                });
-            }
-        );
+        const listSPCT: ChiTietSanPhamDto[] =[];
+
+      for (const ms of saveCtspRequest.mauSacList) {
+        for (const size of saveCtspRequest.kichThuocList){
+          const ctsp: ChiTietSanPhamDto = {
+            ma: "",
+            sanPham: saveCtspRequest.sanPham ,
+            thuongHieu: saveCtspRequest.thuongHieu ,
+            chatLieu: saveCtspRequest.chatLieu,
+            danhMuc: saveCtspRequest.danhMuc ,
+            kichThuoc: size ,
+            mauSac: ms,
+            soLuong: 0,
+            giaNhap: 0,
+            giaBan: 0,
+            ngayNhap: new Date,
+            ngayTao: new Date,
+            ngaySua: new Date,
+            trangThai: 1,
+            hinhAnh: [],
+          }
+          listSPCT.push(ctsp);
+        }
+      }
+
+      this.selectedListSp = listSPCT;
+      this.getCtsp();
+      console.log(saveCtspRequest);
+
+        // this.sanPhamCTService.saveChiTietSanPham(saveCtspRequest).subscribe(
+        //     (response: ApiResponse<any>) => {
+        //         console.log('Lưu chi tiết sản phẩm thành công', response);
+        //         this.snackBar.open('Lưu chi tiết sản phẩm thành công', 'Đóng', {
+        //             duration: 3000,
+        //             panelClass: ['success-snackbar']
+        //         });
+        //         this.router.navigate(['/admin/san-pham-chi-tiet']);
+        //         this.getCtsp();
+        //     },
+        //     (error) => {
+        //         console.error('Có lỗi xảy ra khi lưu chi tiết sản phẩm', error);
+        //         this.snackBar.open('Có lỗi xảy ra khi lưu danh sách!', 'Đóng', {
+        //             duration: 3000,
+        //             panelClass: ['error-snackbar']
+        //         });
+        //     }
+        // );
     }
 
 
@@ -469,7 +492,7 @@ export class ProductDetailViewComponent implements OnInit {
         this.listChiTietSP = [];
         this.selectedSizes = [];
         this.selectedColors = [];
-        this.getCtsp();
+        // this.getCtsp();
         this.loadSanPhamChiTietByNgayTao();
 
         this.router.navigate(['/admin/san-pham-chi-tiet']).then(() => {
