@@ -50,6 +50,25 @@ import { RatingViewComponent } from './page/rating-view/rating-view.component';
 import { MaskValuePipe } from './page/profile/mask-value-pipe';
 import { TaiKhoanService } from './service/TaiKhoanService';
 import {NgSelectModule} from "@ng-select/ng-select";
+import {Button} from 'primeng/button';
+import { MultiSelectModule } from 'primeng/multiselect';
+import {AvatarModule} from "primeng/avatar";
+import {SidebarModule} from "primeng/sidebar";
+import {StyleClassModule} from "primeng/styleclass";
+import {Ripple} from "primeng/ripple";
+import {TableModule} from "primeng/table";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {FileUploadModule} from "primeng/fileupload";
+import {ToolbarModule} from "primeng/toolbar";
+import {DialogModule} from "primeng/dialog";
+import {DropdownModule} from "primeng/dropdown";
+import {TagModule} from "primeng/tag";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {InputTextModule} from "primeng/inputtext";
+import {RatingModule} from "primeng/rating";
+import {PaginatorModule} from "primeng/paginator";
+import {ToastModule} from "primeng/toast";
+import {ConfirmationService, MessageService} from "primeng/api";
 
 @NgModule({
   declarations: [
@@ -100,12 +119,33 @@ import {NgSelectModule} from "@ng-select/ng-select";
     BrowserAnimationsModule,
     MatSnackBarModule,
     NgSelectModule,
+    BrowserModule,
     AngularFireStorageModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    MultiSelectModule,
+    Button,
+    AvatarModule,
+    SidebarModule,
+    StyleClassModule,
+    Ripple,
+    TableModule,
+    ConfirmDialogModule,
+    FileUploadModule,
+    ToolbarModule,
+    DialogModule,
+    DropdownModule,
+    TagModule,
+    RadioButtonModule,
+    InputTextModule,
+    RatingModule,
+    PaginatorModule,
+    ToastModule,
   ],
   providers: [
     TaiKhoanService,
     AngularFireAuth,
+    ConfirmationService,
+    MessageService,
     provideHttpClient(withInterceptorsFromDi())
   ],
   bootstrap: [HomeComponent]
