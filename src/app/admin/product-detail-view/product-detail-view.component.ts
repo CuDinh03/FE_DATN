@@ -1,15 +1,15 @@
-import { EOF } from '@angular/compiler';
+import {EOF} from '@angular/compiler';
 import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ChiTietSanPhamDto } from 'src/app/model/chi-tiet-san-pham-dto.model';
-import { AuthenticationService } from 'src/app/service/AuthenticationService';
-import { ChatLieuService } from 'src/app/service/ChatLieuService';
-import { DanhMucService } from 'src/app/service/DanhMucService';
-import { KichThuocService } from 'src/app/service/KichThuocService';
-import { MauSacService } from 'src/app/service/MauSacService';
-import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
-import { SanPhamService } from 'src/app/service/SanPhamService';
-import { ThuongHieuService } from 'src/app/service/ThuongHieuService';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ChiTietSanPhamDto} from 'src/app/model/chi-tiet-san-pham-dto.model';
+import {AuthenticationService} from 'src/app/service/AuthenticationService';
+import {ChatLieuService} from 'src/app/service/ChatLieuService';
+import {DanhMucService} from 'src/app/service/DanhMucService';
+import {KichThuocService} from 'src/app/service/KichThuocService';
+import {MauSacService} from 'src/app/service/MauSacService';
+import {SanPhamCTService} from 'src/app/service/SanPhamCTService';
+import {SanPhamService} from 'src/app/service/SanPhamService';
+import {ThuongHieuService} from 'src/app/service/ThuongHieuService';
 import {AngularFireStorage} from "@angular/fire/compat/storage";
 import {ApiResponse} from "../../model/ApiResponse";
 import {MauSacDto} from "../../model/mau-sac-dto.model";
@@ -20,6 +20,7 @@ import {ThuongHieuDto} from "../../model/thuong-hieu-dto.model";
 import {DanhMucDto} from "../../model/danh-muc-dto.model";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+
 @Component({
   selector: 'app-product-detail-view',
   templateUrl: './product-detail-view.component.html',
@@ -28,10 +29,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class ProductDetailViewComponent implements OnInit {
 
 
-    selectedSanPham: SanPhamDto[] = [];
-    selectedChatLieu: ChatLieuDto[] = [];
-    selectedThuongHieu: ThuongHieuDto[] = [];
-    selectedDanhMuc: DanhMucDto[] = [];
+  selectedSanPham: SanPhamDto[] = [];
+  selectedChatLieu: ChatLieuDto[] = [];
+  selectedThuongHieu: ThuongHieuDto[] = [];
+  selectedDanhMuc: DanhMucDto[] = [];
   selectedColors: MauSacDto[] = [];
   selectedSizes: KichThuocDto[] = [];
   listChiTietSP: any [] = [];
@@ -65,7 +66,7 @@ export class ProductDetailViewComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private snackBar: MatSnackBar,
-    private fireStorage :AngularFireStorage
+    private fireStorage: AngularFireStorage
   ) {
   }
 
@@ -126,7 +127,6 @@ export class ProductDetailViewComponent implements OnInit {
       }
     );
   }
-
 
 
   loadSanPhamChiTietByNgayTao(): void {
@@ -389,83 +389,83 @@ export class ProductDetailViewComponent implements OnInit {
     )
   }
 
-    logSelectedColors(): void {
-        console.log('Selected Colors:', this.selectedColors);
-    }
+  logSelectedColors(): void {
+    console.log('Selected Colors:', this.selectedColors);
+  }
 
-    // Log selected sizes
-    logSelectedSizes(): void {
-        console.log('Selected Sizes:', this.selectedSizes);
-    }
+  // Log selected sizes
+  logSelectedSizes(): void {
+    console.log('Selected Sizes:', this.selectedSizes);
+  }
 
   get f() {
     return this.chiTietSanPhamFormAdd.controls;
   }
 
   // @ts-ignore
-    selectedSp(): SanPhamDto | undefined {
-        return this.selectedSanPham.length > 0 ? this.selectedSanPham[0] : undefined;
-    }
+  selectedSp(): SanPhamDto | undefined {
+    return this.selectedSanPham.length > 0 ? this.selectedSanPham[0] : undefined;
+  }
 
-    selectedCl(): ChatLieuDto | undefined {
-        return this.selectedChatLieu.length > 0 ? this.selectedChatLieu[0] : undefined;
-    }
+  selectedCl(): ChatLieuDto | undefined {
+    return this.selectedChatLieu.length > 0 ? this.selectedChatLieu[0] : undefined;
+  }
 
-    selectedTh(): ThuongHieuDto | undefined {
-        return this.selectedThuongHieu.length > 0 ? this.selectedThuongHieu[0] : undefined;
-    }
+  selectedTh(): ThuongHieuDto | undefined {
+    return this.selectedThuongHieu.length > 0 ? this.selectedThuongHieu[0] : undefined;
+  }
 
-    selectedDm(): DanhMucDto | undefined {
-        return this.selectedDanhMuc.length > 0 ? this.selectedDanhMuc[0] : undefined;
-    }
+  selectedDm(): DanhMucDto | undefined {
+    return this.selectedDanhMuc.length > 0 ? this.selectedDanhMuc[0] : undefined;
+  }
 
-    selectedMauSac(): MauSacDto[] {
-        return this.listMauSac.filter(ms => this.selectedColors.some(selMs => selMs.id === ms.id));
-    }
+  selectedMauSac(): MauSacDto[] {
+    return this.listMauSac.filter(ms => this.selectedColors.some(selMs => selMs.id === ms.id));
+  }
 
-    selectedSize(): KichThuocDto[] {
-        return this.listKichThuoc.filter(kt => this.selectedSizes.some(selSize => selSize.id === kt.id));
-    }
+  selectedSize(): KichThuocDto[] {
+    return this.listKichThuoc.filter(kt => this.selectedSizes.some(selSize => selSize.id === kt.id));
+  }
 
-    addChiTietSanPham() {
-        const saveCtspRequest = {
-            sanPham: this.selectedSp(),
-            mauSacList: this.selectedMauSac(),
-            chatLieu: this.selectedCl(),
-            danhMuc: this.selectedDm(),
-            thuongHieu: this.selectedTh(),
-            kichThuocList: this.selectedSize()
-        };
+  addChiTietSanPham() {
+    const saveCtspRequest = {
+      sanPham: this.selectedSp(),
+      mauSacList: this.selectedMauSac(),
+      chatLieu: this.selectedCl(),
+      danhMuc: this.selectedDm(),
+      thuongHieu: this.selectedTh(),
+      kichThuocList: this.selectedSize()
+    };
 
-        this.sanPhamCTService.saveChiTietSanPham(saveCtspRequest).subscribe(
-            (response: ApiResponse<any>) => {
-                console.log('Lưu chi tiết sản phẩm thành công', response);
-                this.snackBar.open('Lưu chi tiết sản phẩm thành công', 'Đóng', {
-                    duration: 3000,
-                    panelClass: ['success-snackbar']
-                });
-                this.router.navigate(['/admin/san-pham-chi-tiet']);
-                this.getCtsp();
-            },
-            (error) => {
-                console.error('Có lỗi xảy ra khi lưu chi tiết sản phẩm', error);
-                this.snackBar.open('Có lỗi xảy ra khi lưu danh sách!', 'Đóng', {
-                    duration: 3000,
-                    panelClass: ['error-snackbar']
-                });
-            }
-        );
-    }
+    this.sanPhamCTService.saveChiTietSanPham(saveCtspRequest).subscribe(
+      (response: ApiResponse<any>) => {
+        console.log('Lưu chi tiết sản phẩm thành công', response);
+        this.snackBar.open('Lưu chi tiết sản phẩm thành công', 'Đóng', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+        this.router.navigate(['/admin/san-pham-chi-tiet']);
+        this.getCtsp();
+      },
+      (error) => {
+        console.error('Có lỗi xảy ra khi lưu chi tiết sản phẩm', error);
+        this.snackBar.open('Có lỗi xảy ra khi lưu danh sách!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    );
+  }
 
 
-    saveListCt(list: any[]): void {
+  saveListCt(list: any[]): void {
     this.sanPhamCTService.saveListCt(list).subscribe(
       (response: ApiResponse<any>) => {
 
-        this.selectedDanhMuc =[];
-        this.selectedSanPham =[];
-        this.selectedThuongHieu =[];
-        this.selectedChatLieu =[];
+        this.selectedDanhMuc = [];
+        this.selectedSanPham = [];
+        this.selectedThuongHieu = [];
+        this.selectedChatLieu = [];
         this.listChiTietSP = [];
         this.selectedSizes = [];
         this.selectedColors = [];
@@ -491,46 +491,40 @@ export class ProductDetailViewComponent implements OnInit {
       }
     );
   }
-    async onFileChange(event: any, ctsp: any) {
-        const files = event.target.files;
-        if (files && files.length > 0) {
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const path = `yt/${file.name}`;
-                const uploadTask = await this.fireStorage.upload(path, file);
-                const url = await uploadTask.ref.getDownloadURL();
-                console.log(`File ${i + 1} uploaded. Download URL: ${url}`);
 
-                // Thêm URL ảnh vào danh sách hình ảnh của sản phẩm chi tiết hiện tại
-                if (!ctsp.hinhAnhUrls) {
-                    ctsp.hinhAnhUrls = [];
-                }
-                ctsp.hinhAnhUrls.push(url);
-            }
+  async onFileChange(event: any, ctsp: any) {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const path = `yt/${file.name}`;
+        const uploadTask = await this.fireStorage.upload(path, file);
+        const url = await uploadTask.ref.getDownloadURL();
+        console.log(`File ${i + 1} uploaded. Download URL: ${url}`);
+
+        // Thêm URL ảnh vào danh sách hình ảnh của sản phẩm chi tiết hiện tại
+        if (!ctsp.hinhAnhUrls) {
+          ctsp.hinhAnhUrls = [];
         }
+        ctsp.hinhAnhUrls.push(url);
+      }
     }
+  }
 
-    // submit(): void {
-    //     if (this.selectedImage != null) {
-    //         const filePath = this.selectedImage.name;
-    //         const fileRef = this.storage.ref(filePath);
-    //         this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(finalize
-    //         (() => (fileRef.getDownloadURL().subscribe(url => {
-    //             let image: img = {id: 0, name: "", status: 1};
-    //             image.name = url;
-    //             this.listPicture.push(image);
-    //             console.log(this.listPicture);
-    //         })))).subscribe((data) => {
-    //         });
-    //     }
-    // }
+  // submit(): void {
+  //     if (this.selectedImage != null) {
+  //         const filePath = this.selectedImage.name;
+  //         const fileRef = this.storage.ref(filePath);
+  //         this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(finalize
+  //         (() => (fileRef.getDownloadURL().subscribe(url => {
+  //             let image: img = {id: 0, name: "", status: 1};
+  //             image.name = url;
+  //             this.listPicture.push(image);
+  //             console.log(this.listPicture);
+  //         })))).subscribe((data) => {
+  //         });
+  //     }
+  // }
 
 
 }
-
-
-
-
-
-
-

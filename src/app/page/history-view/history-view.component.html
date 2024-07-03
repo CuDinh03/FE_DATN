@@ -105,3 +105,24 @@
   </div>
 </section>
 <app-footer></app-footer>
+
+<div class="modal fade" #confirmUpdate tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel1">Lý do hủy đơn</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                (click)="closeconfirmUpdate()"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Xác nhận chuyển trạng thái</label>
+        <input type="text" class="form-control" placeholder="Lý do hủy đơn">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="updateTrangThai(hoaDonSingle.id, 6)" data-bs-dismiss="modal">Xác nhận
+        </button>
+        <button class="btn btn-danger" (click)="closeconfirmUpdate()" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
