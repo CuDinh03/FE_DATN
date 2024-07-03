@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {TaiKhoanDto} from "../../model/tai-khoan-dto.model";
 import {TaiKhoanService} from "../../service/TaiKhoanService";
 import {KhachHangDto} from "../../model/khachHangDto";

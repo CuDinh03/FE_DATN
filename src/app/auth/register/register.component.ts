@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import {TaiKhoanService} from '../../service/TaiKhoanService';
 import {TaiKhoanDto} from '../../model/tai-khoan-dto.model';
 import {ApiResponse} from '../../model/ApiResponse';

@@ -17,7 +17,7 @@ import {AdminViewComponent} from './admin/admin-view/admin-view.component';
 import {AuthenticationLoginComponent} from './auth/authentication-login/authentication-login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaiKhoanService} from "./service/TaiKhoanService";
-import {HttpClientModule} from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import {ShoppingCartComponent} from './page/shopping-cart/shopping-cart.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {SidebarComponent} from './admin/sidebar/sidebar.component';
@@ -45,60 +45,51 @@ import {HinhAnhViewComponent} from './admin/hinhanh-view/hinhanh-view.component'
 import {RatingViewComponent} from './page/rating-view/rating-view.component';
 import {MaskValuePipe} from './page/profile/mask-value-pipe';
 
-@NgModule({
-  declarations: [
-
-    HomeComponent,
-    HeaderComponent,
-    MainViewComponent,
-    FooterComponent,
-    ShoppingCartViewComponent,
-    ProductDetailComponent,
-    BannerComponent,
-    PreviewProductComponent,
-    TrendingProductComponent,
-    BestSellingProductComponent,
-    OfferSectionComponent,
-    ShopCategoryComponent,
-    AdminViewComponent,
-    AuthenticationLoginComponent,
-    ShoppingCartComponent,
-    RegisterComponent,
-    SidebarComponent,
-    ProfileComponent,
-    ProductViewComponent,
-    AccountViewComponent,
-    CategoryViewComponent,
-    ShoppingViewComponent,
-    VoucherViewComponent,
-    AdminHeaderComponent,
-    OrdersViewComponent,
-    CustomerViewComponent,
-    PaymentViewComponent,
-    SidebarProfileComponent,
-    HistoryViewComponent,
-    OrderDetailComponent,
-    ChatLieuViewComponent,
-    MauSacViewComponent,
-    KichThuocViewComponent,
-    ThuongHieuViewComponent,
-    HinhAnhViewComponent,
-    ProductDetailViewComponent,
-    RatingViewComponent,
-    MaskValuePipe
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatSnackBarModule
-
-  ],
-  providers: [TaiKhoanService],
-  bootstrap: [HomeComponent]
-})
+@NgModule({ declarations: [
+        HomeComponent,
+        HeaderComponent,
+        MainViewComponent,
+        FooterComponent,
+        ShoppingCartViewComponent,
+        ProductDetailComponent,
+        BannerComponent,
+        PreviewProductComponent,
+        TrendingProductComponent,
+        BestSellingProductComponent,
+        OfferSectionComponent,
+        ShopCategoryComponent,
+        AdminViewComponent,
+        AuthenticationLoginComponent,
+        ShoppingCartComponent,
+        RegisterComponent,
+        SidebarComponent,
+        ProfileComponent,
+        ProductViewComponent,
+        AccountViewComponent,
+        CategoryViewComponent,
+        ShoppingViewComponent,
+        VoucherViewComponent,
+        AdminHeaderComponent,
+        OrdersViewComponent,
+        CustomerViewComponent,
+        PaymentViewComponent,
+        SidebarProfileComponent,
+        HistoryViewComponent,
+        OrderDetailComponent,
+        ChatLieuViewComponent,
+        MauSacViewComponent,
+        KichThuocViewComponent,
+        ThuongHieuViewComponent,
+        HinhAnhViewComponent,
+        ProductDetailViewComponent,
+        RatingViewComponent,
+        MaskValuePipe
+    ],
+    bootstrap: [HomeComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatSnackBarModule], providers: [TaiKhoanService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
 }

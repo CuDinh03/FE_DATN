@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {VoucherService} from "../../service/VoucherService";
 import {ApiResponse} from "../../model/ApiResponse";
-import {HttpErrorResponse} from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import {Voucher} from "../../model/voucher";
 
 @Component({
