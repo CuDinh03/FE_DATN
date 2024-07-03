@@ -221,13 +221,7 @@
                         <option *ngFor="let th of listThuongHieu" [ngValue]="th">{{ th?.ten }}</option>
                       </select>
                     </div>
-                    <div class="col-5 mt-2">
-                      <label>Danh muc</label>
-                      <select id="dm" class="form-select" aria-label="Default select example" style="width: 100%"
-                              [(ngModel)]="selectedDanhMuc">
-                        <option *ngFor="let dm of listDanhMuc" [ngValue]="dm">{{ dm?.ten }}</option>
-                      </select>
-                    </div>
+
                     <div class="col-5 mt-2">
                       <label for="sizes">Kích cỡ</label>
                       <select #sizeSelect id="sizes" class="form-select" aria-label="Default select example"
@@ -236,12 +230,9 @@
                       </select>
                       <div id="selectedSizes">
                         <h3>Kích cỡ đã chọn:</h3>
-                        <ul id="sizeList">
-                          <li *ngFor="let size of selectedSizes">
-                            {{ size }}
-                            <!--                          <button class="btn btn-sm btn-danger ms-2" (click)="removeSize(size)">Xoá</button>-->
-                          </li>
-                        </ul>
+                        <div class="d-flex">
+                          <button *ngFor="let size of selectedSizes" class="btn btn-info me-2">{{ size }}</button>
+                        </div>
                       </div>
                     </div>
                     <div class="col-5 mt-2">
@@ -252,13 +243,19 @@
                       </select>
                       <div id="selectedColors">
                         <h3>Màu sắc đã chọn:</h3>
-                        <ul id="colorList">
-                          <li *ngFor="let color of selectedColors">
-                            {{ color }}
-                            <button class="btn btn-sm btn-danger ms-2" (click)="removeColor(color)">Xoá</button>
-                          </li>
-                        </ul>
+                        <div class="d-flex flex-wrap">
+                          <button *ngFor="let color of selectedColors" class="btn btn-info me-2 mb-2"> {{ color }}
+                          </button>
+                        </div>
                       </div>
+                    </div>
+
+                    <div class="col-5 mt-2">
+                      <label>Danh muc</label>
+                      <select id="dm" class="form-select" aria-label="Default select example" style="width: 100%"
+                              [(ngModel)]="selectedDanhMuc">
+                        <option *ngFor="let dm of listDanhMuc" [ngValue]="dm">{{ dm?.ten }}</option>
+                      </select>
                     </div>
 
                     <div class="row mt-2">
