@@ -564,22 +564,22 @@ export class ProductDetailViewComponent implements OnInit {
     );
   }
 
-  async onFileChange(event: any, ctsp: any) {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const path = `yt/${file.name}`;
-        const uploadTask = await this.fireStorage.upload(path, file);
-        const url = await uploadTask.ref.getDownloadURL();
-        console.log(`File ${i + 1} uploaded. Download URL: ${url}`);
+  uploadedFiles: any[] = [];
 
-        // Thêm URL ảnh vào danh sách hình ảnh của sản phẩm chi tiết hiện tại
-        if (!ctsp.hinhAnhUrls) {
-          ctsp.hinhAnhUrls = [];
-        }
-        ctsp.hinhAnhUrls.push(url);
+  async onFileChange(event: any, ctsp: any) {
+    for (let file of event.files) {
+      this.uploadedFiles.push(file);
+
+      const path = `yt/${file.name}`;
+      const uploadTask = await this.fireStorage.upload(path, file);
+      const url = await uploadTask.ref.getDownloadURL();
+      console.log(`File uploaded. Download URL: ${url}`);
+
+      // Thêm URL ảnh vào danh sách hình ảnh của sản phẩm chi tiết hiện tại
+      if (!ctsp.hinhAnhUrls) {
+        ctsp.hinhAnhUrls = [];
       }
+      ctsp.hinhAnhUrls.push(url);
     }
   }
 
@@ -599,6 +599,24 @@ export class ProductDetailViewComponent implements OnInit {
   // }
 
 
+
+  confirm() {
+    this.confirmationService.confirm({
+      header: 'Xác nhận',
+      message: 'Bạn chắc chắn muốn thêm biến thể chứ?',
+      acceptIcon: 'pi pi-check mr-2',
+      rejectIcon: 'pi pi-times mr-2',
+      rejectButtonStyleClass: 'p-button-sm',
+      acceptButtonStyleClass: 'p-button-outlined p-button-sm',
+      accept: () => {
+        this.saveListCt(this.listChiTietSP);
+        this.messageService.add({ severity: 'success', summary: 'Đã xác nhận', detail: 'Xác nhận', life: 3000 });
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'error', summary: 'Đã huỷ', detail: 'Đã huỷ xác nhận', life: 3000 });
+      }
+    });
+  }
 }
 
 

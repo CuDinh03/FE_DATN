@@ -69,6 +69,7 @@ import {RatingModule} from "primeng/rating";
 import {PaginatorModule} from "primeng/paginator";
 import {ToastModule} from "primeng/toast";
 import {ConfirmationService, MessageService} from "primeng/api";
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [
@@ -139,6 +140,7 @@ import {ConfirmationService, MessageService} from "primeng/api";
     InputTextModule,
     RatingModule,
     PaginatorModule,
+    InputNumberModule,
     ToastModule,
   ],
   providers: [

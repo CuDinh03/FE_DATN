@@ -436,18 +436,47 @@
               <td>{{ ctsp.danhMuc.ten }}</td>
               <td>{{ ctsp.kichThuoc.ten }}</td>
               <td>{{ ctsp.mauSac.ten }}</td>
-              <td><input class="form-control" type="number" [(ngModel)]="ctsp.soLuong"></td>
-              <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaNhap"></td>
-              <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaBan"></td>
+              <td><p-inputNumber
+                inputId="integeronly"
+                [(ngModel)]="ctsp.soLuong"/></td>
+              <td><p-inputNumber
+                inputId="integeronly"
+                [(ngModel)]="ctsp.giaNhap"/></td>
+              <td><p-inputNumber
+                inputId="integeronly"
+                [(ngModel)]="ctsp.giaBan"/></td>
               <!-- Hiển thị ảnh -->
               <td>
                 <!-- Hiển thị danh sách ảnh hiện tại của sản phẩm chi tiết nếu có -->
-                <div *ngFor="let url of ctsp.hinhAnhUrls">
-                  <img [src]="url" alt="Ảnh sản phẩm" style="max-width: 100px; max-height: 100px;">
-                </div>
-                <!-- Input để chọn nhiều file ảnh mới -->
-                <input type="file" multiple (change)="onFileChange($event, ctsp)">
+<!--                <div *ngFor="let url of ctsp.hinhAnhUrls">-->
+<!--                  <img [src]="url" alt="Ảnh sản phẩm" style="max-width: 100px; max-height: 100px;">-->
+<!--                </div>-->
+<!--                &lt;!&ndash; Input để chọn nhiều file ảnh mới &ndash;&gt;-->
+<!--                <input type="file" multiple (change)="onFileChange($event, ctsp)">-->
+                <p-toast />
+                <p-fileUpload
+                  name="demo[]"
+                  url="https://www.primefaces.org/cdn/api/upload.php"
+                  (onUpload)="onFileChange($event, ctsp)"
+                  [multiple]="true"
+                  accept="image/*"
+                  maxFileSize="10000000">
+                  <ng-template pTemplate="content">
+                      <li *ngFor="let file of ctsp.hinhAnhUrls">
+                        {{ file.name }} - {{ file.size }} bytes
+                      </li>
+
+                  </ng-template>
+                </p-fileUpload>
               </td>
+            </tr>
+            <tr>
+              <div *ngIf="ctsp.hinhAnhUrls && ctsp.hinhAnhUrls.length > 0" class="image-gallery">
+                <h5>Hình ảnh đã tải lên:</h5>
+                <div class="image-list">
+                  <img *ngFor="let url of ctsp.hinhAnhUrls" [src]="url" class="uploaded-image" />
+                </div>
+              </div>
             </tr>
           </ng-template>
         </p-table>
@@ -456,8 +485,12 @@
     <button  pButton
              pRipple
              label="Lưu các biến thể"
-             class="p-button-success" (click)="saveListCt(listChiTietSP)"></button>
+             class="p-button-success" (click)="confirm()"></button>
   </div>
 
+</div>
+
+<div class="card flex justify-content-center">
+  <p-toast />
 </div>
 
