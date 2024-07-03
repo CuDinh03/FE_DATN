@@ -528,3 +528,4 @@ export class ProductDetailViewComponent implements OnInit {
 
 
 }
+
