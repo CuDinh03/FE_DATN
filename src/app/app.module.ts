@@ -70,6 +70,8 @@ import {PaginatorModule} from "primeng/paginator";
 import {ToastModule} from "primeng/toast";
 import {ConfirmationService, MessageService} from "primeng/api";
 import { InputNumberModule } from 'primeng/inputnumber';
+import {ChartModule} from "primeng/chart";
+import {MenuModule} from "primeng/menu";
 
 @NgModule({
   declarations: [
@@ -142,6 +144,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     PaginatorModule,
     InputNumberModule,
     ToastModule,
+    ChartModule,
+    MenuModule,
   ],
   providers: [
     TaiKhoanService,

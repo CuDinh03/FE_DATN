@@ -24,6 +24,7 @@
     "@ng-select/ng-select": "^13.4.1",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.3",
     "firebase": "^10.12.2",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.2",
