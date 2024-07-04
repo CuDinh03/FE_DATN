@@ -70,8 +70,8 @@ import {PaginatorModule} from "primeng/paginator";
 import {ToastModule} from "primeng/toast";
 import {ConfirmationService, MessageService} from "primeng/api";
 import { InputNumberModule } from 'primeng/inputnumber';
-import {ChartModule} from "primeng/chart";
-import {MenuModule} from "primeng/menu";
+import { PrimeNGConfig } from 'primeng/api';
+import {PanelModule} from "primeng/panel";
 
 @NgModule({
   declarations: [
@@ -144,14 +144,15 @@ import {MenuModule} from "primeng/menu";
     PaginatorModule,
     InputNumberModule,
     ToastModule,
-    ChartModule,
-    MenuModule,
+    PanelModule,
+
   ],
   providers: [
     TaiKhoanService,
     AngularFireAuth,
     ConfirmationService,
     MessageService,
+    PrimeNGConfig,
     provideHttpClient(withInterceptorsFromDi())
   ],
   bootstrap: [HomeComponent]
