@@ -1,3 +1,5 @@
+import {HinhAnhDto} from "./hinh-anh-dto.model";
+
 export interface ChiTietSanPhamDto {
     id?: string;
     ma?: string;
@@ -14,5 +16,5 @@ export interface ChiTietSanPhamDto {
     ngayTao?: Date;
     ngaySua?: Date;
     trangThai?: number;
-    hinhAnh?: any[];
+    hinhAnh?: HinhAnhDto[];
   }

@@ -20,6 +20,8 @@ import {DanhMucDto} from "../../model/danh-muc-dto.model";
 import {Router} from "@angular/router";
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {HinhAnhService} from "../../service/HinhAnhService";
+import {HinhAnhDto} from "../../model/hinh-anh-dto.model";
 
 interface Column {
   field: string;
@@ -46,7 +48,7 @@ export class ProductDetailViewComponent implements OnInit {
   listChiTietSP: any [] = [];
   page = 0;
   size = 5;
-  listSanPhamChiTiet: any[] = [];
+  listSanPhamChiTiet: ChiTietSanPhamDto[] = [];
   totalElements = 0;
   totalPages: number = 0;
   listSanPham: SanPhamDto[] = [];
@@ -55,6 +57,7 @@ export class ProductDetailViewComponent implements OnInit {
   listMauSac: MauSacDto[] = [];
   listDanhMuc: DanhMucDto[] = [];
   listThuongHieu: ThuongHieuDto[] = [];
+  listHinhAnh: HinhAnhDto[] = [];
   sanPhamChiTietID: any;
   chiTietSanPhamFormAdd!: FormGroup;
   chiTietSanPhamFormUpdate!: FormGroup;
@@ -87,7 +90,9 @@ export class ProductDetailViewComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private fireStorage: AngularFireStorage,
-    private messageService: MessageService, private confirmationService: ConfirmationService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private hinhAnhService: HinhAnhService
   ) {
     this.loadMacSac();
   }
@@ -101,6 +106,12 @@ export class ProductDetailViewComponent implements OnInit {
     this.loadKichThuoc();
     this.loadMacSac();
     this.getCtsp();
+    this.loadHinhAnh();
+    // this.listSanPhamChiTiet.forEach(product => {
+    //   if (product.soLuong <= 0) {
+    //     product.trangThai = 2;
+    //   }
+    // });
   }
 
 
@@ -499,7 +510,7 @@ export class ProductDetailViewComponent implements OnInit {
           ngayTao: new Date,
           ngaySua: new Date,
           trangThai: 1,
-          hinhAnh: [],
+          hinhAnh: this.listHinhAnhSelect,
         }
         listSPCT.push(ctsp);
       }
@@ -508,25 +519,6 @@ export class ProductDetailViewComponent implements OnInit {
     this.selectedListSp = listSPCT;
     this.getCtsp();
     console.log(saveCtspRequest);
-
-    // this.sanPhamCTService.saveChiTietSanPham(saveCtspRequest).subscribe(
-    //     (response: ApiResponse<any>) => {
-    //         console.log('Lưu chi tiết sản phẩm thành công', response);
-    //         this.snackBar.open('Lưu chi tiết sản phẩm thành công', 'Đóng', {
-    //             duration: 3000,
-    //             panelClass: ['success-snackbar']
-    //         });
-    //         this.router.navigate(['/admin/san-pham-chi-tiet']);
-    //         this.getCtsp();
-    //     },
-    //     (error) => {
-    //         console.error('Có lỗi xảy ra khi lưu chi tiết sản phẩm', error);
-    //         this.snackBar.open('Có lỗi xảy ra khi lưu danh sách!', 'Đóng', {
-    //             duration: 3000,
-    //             panelClass: ['error-snackbar']
-    //         });
-    //     }
-    // );
   }
 
 
@@ -565,40 +557,53 @@ export class ProductDetailViewComponent implements OnInit {
   }
 
   uploadedFiles: any[] = [];
+  listHinhAnhSelect: HinhAnhDto[] = [];
 
   async onFileChange(event: any, ctsp: any) {
+    const index = ctsp.index;
+    const imgList: HinhAnhDto[] = [];
     for (let file of event.files) {
       this.uploadedFiles.push(file);
 
       const path = `yt/${file.name}`;
       const uploadTask = await this.fireStorage.upload(path, file);
-      const url = await uploadTask.ref.getDownloadURL();
-      console.log(`File uploaded. Download URL: ${url}`);
+      const aurl = await uploadTask.ref.getDownloadURL();
 
-      // Thêm URL ảnh vào danh sách hình ảnh của sản phẩm chi tiết hiện tại
+      const hinhAnhDto: HinhAnhDto = {
+        id: '',
+        ma: index,
+        url: aurl,
+        chiTietSanPham: ctsp,
+        trangThai: 1,
+      }
+
+      imgList.push(hinhAnhDto)
+
       if (!ctsp.hinhAnhUrls) {
         ctsp.hinhAnhUrls = [];
       }
-      ctsp.hinhAnhUrls.push(url);
+      ctsp.hinhAnhUrls.push(aurl);
+      console.log(`File uploaded. Download URL: ${aurl}`);
     }
+
+    for (const spct of this.listChiTietSP) {
+      if (spct.index == index) {
+
+        spct.hinhAnh = imgList;
+
+      }
+    }
+
+    console.log('saukhi luu anh vao' + this.listChiTietSP.toString())
+    this.listHinhAnhSelect = imgList;
+    this.hinhAnhService.createImg(imgList).subscribe(
+      (response :ApiResponse<any>)=>{
+        this.snackBar.open('Lưu danh sách thành công!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+    })
   }
-
-  // submit(): void {
-  //     if (this.selectedImage != null) {
-  //         const filePath = this.selectedImage.name;
-  //         const fileRef = this.storage.ref(filePath);
-  //         this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(finalize
-  //         (() => (fileRef.getDownloadURL().subscribe(url => {
-  //             let image: img = {id: 0, name: "", status: 1};
-  //             image.name = url;
-  //             this.listPicture.push(image);
-  //             console.log(this.listPicture);
-  //         })))).subscribe((data) => {
-  //         });
-  //     }
-  // }
-
-
 
   confirm() {
     this.confirmationService.confirm({
@@ -610,12 +615,20 @@ export class ProductDetailViewComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-outlined p-button-sm',
       accept: () => {
         this.saveListCt(this.listChiTietSP);
-        this.messageService.add({ severity: 'success', summary: 'Đã xác nhận', detail: 'Xác nhận', life: 3000 });
+        this.messageService.add({severity: 'success', summary: 'Đã xác nhận', detail: 'Xác nhận', life: 3000});
       },
       reject: () => {
-        this.messageService.add({ severity: 'error', summary: 'Đã huỷ', detail: 'Đã huỷ xác nhận', life: 3000 });
+        this.messageService.add({severity: 'error', summary: 'Đã huỷ', detail: 'Đã huỷ xác nhận', life: 3000});
       }
     });
+  }
+
+  private loadHinhAnh() {
+    this.hinhAnhService.getAllHinhAnh().subscribe(
+      (response: ApiResponse<any>) => {
+        this.listHinhAnh = response.result;
+        console.log('list ha' + this.listHinhAnh)
+      })
   }
 }
 

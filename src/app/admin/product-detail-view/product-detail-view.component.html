@@ -48,12 +48,12 @@
               <p-sortIcon field="giaBan"/>
             </th>
             <th pSortableColumn="category" style="min-width:10rem">
-              Category
+              Danh mục
               <p-sortIcon field="category"/>
             </th>
-            <th pSortableColumn="rating">
-              Reviews
-              <p-sortIcon field="rating"/>
+            <th pSortableColumn="quantity">
+              Số lượng
+              <p-sortIcon field="quantity"/>
             </th>
             <th pSortableColumn="inventoryStatus" style="min-width:10rem">
               Status
@@ -69,13 +69,18 @@
             </td>
             <td>
               {{ product.sanPham.ten }}
+              <p style="color: #B5C0D0; font-size: 12px">[{{ product.mauSac.ten }} - {{ product.kichThuoc.ten }}]</p>
             </td>
             <td>
-              <img
-                [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.hinhAnh"
-                [alt]="product.sanPham.ten"
-                width="50"
-                class="shadow-4"/>
+              <div *ngFor="let aurl of listHinhAnh">
+                <ng-container *ngIf="aurl.chiTietSanPham.id === product.id">
+                  <img
+                    [src]="aurl.url"
+                    [alt]="product.sanPham.ten"
+                    width="50"
+                    class="shadow-4"/>
+                </ng-container>
+              </div>
             </td>
             <td>
               {{ product.giaBan | currency : 'USD' }}
@@ -84,14 +89,11 @@
               {{ product.danhMuc.ten }}
             </td>
             <td>
-              <p-rating
-                [(ngModel)]="product.rating"
-                [readonly]="true"
-                [cancel]="false"/>
+              {{ product.soLuong }}
             </td>
             <td>
               <p-tag [value]="product.trangThai === 1 ? 'Còn hàng' : (product.trangThai === 2 ? 'Sắp hết' : 'Hết hàng')"
-                     [severity]="getSeverity(product.trangThai)"/>
+                     [severity]="getSeverity(product.trangThai)"></p-tag>
             </td>
             <td>
               <p-button
@@ -418,7 +420,6 @@
         <p-table [value]="selectedListSp" [tableStyle]="{ 'min-width': '50rem' }" class="col-12">
           <ng-template pTemplate="header">
             <tr>
-              <th>Mã</th>
               <th>Sản phẩm</th>
               <th>Thương hiệu</th>
               <th>Chất liệu</th>
@@ -433,7 +434,6 @@
           </ng-template>
           <ng-template pTemplate="body" let-ctsp>
             <tr *ngIf="ctsp.mauSac.ten === ms.ten ">
-              <td>{{ ctsp.ma }}</td>
               <td>{{ ctsp.sanPham.ten }}</td>
               <td>{{ ctsp.thuongHieu.ten }}</td>
               <td>{{ ctsp.chatLieu.ten }}</td>
@@ -451,12 +451,6 @@
                 [(ngModel)]="ctsp.giaBan"/></td>
               <!-- Hiển thị ảnh -->
               <td>
-                <!-- Hiển thị danh sách ảnh hiện tại của sản phẩm chi tiết nếu có -->
-<!--                <div *ngFor="let url of ctsp.hinhAnhUrls">-->
-<!--                  <img [src]="url" alt="Ảnh sản phẩm" style="max-width: 100px; max-height: 100px;">-->
-<!--                </div>-->
-<!--                &lt;!&ndash; Input để chọn nhiều file ảnh mới &ndash;&gt;-->
-<!--                <input type="file" multiple (change)="onFileChange($event, ctsp)">-->
                 <p-toast />
                 <p-fileUpload
                   name="demo[]"
