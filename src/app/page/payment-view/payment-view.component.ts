@@ -22,6 +22,7 @@ import {GioHangDto} from "../../model/gio-hang-dto";
 export class PaymentViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   @ViewChild('userInfor') userInfor!: ElementRef;
+  @ViewChild('paymentModal') paymentModal!: ElementRef;
   totalElements = 0;
   totalPages: number = 0;
   currentPage = 0;
@@ -191,7 +192,12 @@ export class PaymentViewComponent {
       this.loadVoucher();
     }
   }
-
+  showModalinfo(): void {
+    if (this.paymentModal && this.paymentModal.nativeElement) {
+      this.paymentModal.nativeElement.classList.add('show');
+      this.paymentModal.nativeElement.style.display = 'block';
+    }
+  }
   showModalInfor(): void {
     if (this.userInfor && this.userInfor.nativeElement) {
       this.userInfor.nativeElement.classList.add('show');
@@ -241,6 +247,12 @@ export class PaymentViewComponent {
     if (this.userInfor && this.userInfor.nativeElement) {
       this.userInfor.nativeElement.classList.remove('show');
       this.userInfor.nativeElement.style.display = 'none';
+    }
+  }
+  closePaymentModal(): void {
+    if (this.paymentModal && this.paymentModal.nativeElement) {
+      this.paymentModal.nativeElement.classList.remove('show');
+      this.paymentModal.nativeElement.style.display = 'none';
     }
   }
 
@@ -305,6 +317,7 @@ export class PaymentViewComponent {
   }
 
   saveInfoPayment() {
+    this.closePaymentModal();
     if (this.customerForm.invalid) {
       return;
     }

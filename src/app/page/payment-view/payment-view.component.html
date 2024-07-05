@@ -70,8 +70,9 @@
                   </div>
                   <button type="button" class="btn btn-info" (click)="showModal()">Chọn Voucher</button>
                 </div>
-                <button type="submit" data-mdb-ripple-init class="btn btn-primary btn-block btn-lg mt-3"> Đặt hàng
-                </button>
+                  <button type="button" class="btn btn-primary" (click)="showModalinfo()" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Đặt hàng
+                  </button>
               </div>
             </form>
           </div>
@@ -217,6 +218,23 @@
         <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
                 (click)="closeInforModal()">Hủy
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" #paymentModal id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận đơn hàng</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closePaymentModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closePaymentModal()" data-bs-dismiss="modal">Huỷ</button>
+        <button type="submit" class="btn btn-primary" (click)="saveInfoPayment()">Xác nhận đặt hàng</button>
       </div>
     </div>
   </div>
