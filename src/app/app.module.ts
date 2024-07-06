@@ -72,6 +72,9 @@ import {ConfirmationService, MessageService} from "primeng/api";
 import { InputNumberModule } from 'primeng/inputnumber';
 import { PrimeNGConfig } from 'primeng/api';
 import {PanelModule} from "primeng/panel";
+import {IconFieldModule} from "primeng/iconfield";
+import {InputIconModule} from "primeng/inputicon";
+import {InputSwitchModule} from "primeng/inputswitch";
 
 @NgModule({
   declarations: [
@@ -145,6 +148,9 @@ import {PanelModule} from "primeng/panel";
     InputNumberModule,
     ToastModule,
     PanelModule,
+    IconFieldModule,
+    InputIconModule,
+    InputSwitchModule,
 
   ],
   providers: [
