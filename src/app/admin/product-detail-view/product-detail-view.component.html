@@ -92,7 +92,7 @@
               {{ product.soLuong }}
             </td>
             <td>
-              <p-tag [value]="product.trangThai === 1 ? 'Còn hàng' : (product.trangThai === 2 ? 'Sắp hết' : 'Hết hàng')"
+              <p-tag [value]="product.trangThai === 1 ? 'Còn hàng' : (product.trangThai === 0 ? 'Sắp hết' : 'Hết hàng')"
                      [severity]="getSeverity(product.trangThai)"></p-tag>
             </td>
             <td>
@@ -124,17 +124,22 @@
       <p-dialog
         [(visible)]="productDialog"
         [style]="{ width: '450px' }"
-        header="Product Details"
+        header="Chi tiết sản phẩm"
         [modal]="true"
         styleClass="p-fluid">
         <ng-template pTemplate="content">
+          <div *ngFor="let aurl of listHinhAnh">
+            <ng-container *ngIf="aurl.chiTietSanPham.id === product.id">
           <img
-            [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.hinhAnh"
-            [alt]="product.hinhAnh"
+            [src]="aurl.url"
+            [alt]="product.sanPham.ten"
+            width="500"
             class="block m-auto pb-3"
             *ngIf="product.hinhAnh"/>
+            </ng-container>
+          </div>
           <div class="field">
-            <label for="name">Name</label>
+            <label for="name">Tên</label>
             <input
               type="text"
               pInputText
@@ -149,30 +154,30 @@
 
 
           <div class="field">
-            <label class="mb-3">Category</label>
+            <label class="mb-3">Danh mục</label>
             <div class="formgrid grid">
               <div class="field-radiobutton col-6">
                 <p-radioButton
                   id="category1"
-                  name="category"
-                  value="Accessories"
+                  name="{{product.danhMuc.ten}}"
+                  value="{{product.danhMuc.ten}}"
                   [(ngModel)]="product.danhMuc.ten"/>
-                <label for="category1">Accessories</label>
+                <label for="category1">{{product.danhMuc.ten}}</label>
               </div>
-              <div class="field-radiobutton col-6">
-                <p-radioButton
-                  id="category2"
-                  name="category"
-                  value="Clothing"
-                  [(ngModel)]="product.danhMuc.ten"/>
-                <label for="category2">Clothing</label>
-              </div>
+<!--              <div class="field-radiobutton col-6">-->
+<!--                <p-radioButton-->
+<!--                  id="category2"-->
+<!--                  name="category"-->
+<!--                  value="Clothing"-->
+<!--                  [(ngModel)]="product.danhMuc.ten"/>-->
+<!--                <label for="category2">Clothing</label>-->
+<!--              </div>-->
             </div>
           </div>
 
           <div class="formgrid grid">
             <div class="field col">
-              <label for="price">Price</label>
+              <label for="price">Giá bán</label>
               <p-inputNumber
                 id="price"
                 [(ngModel)]="product.giaBan"
@@ -181,7 +186,7 @@
                 locale="en-US"/>
             </div>
             <div class="field col">
-              <label for="quantity">Quantity</label>
+              <label for="quantity">số lượng</label>
               <p-inputNumber
                 id="quantity"
                 [(ngModel)]="product.soLuong"/>
@@ -432,7 +437,7 @@
               <th>IMG</th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-ctsp>
+          <ng-template pTemplate="body" let-ctsp let-i="rowIndex">
             <tr *ngIf="ctsp.mauSac.ten === ms.ten ">
               <td>{{ ctsp.sanPham.ten }}</td>
               <td>{{ ctsp.thuongHieu.ten }}</td>
@@ -455,7 +460,7 @@
                 <p-fileUpload
                   name="demo[]"
                   url="https://www.primefaces.org/cdn/api/upload.php"
-                  (onUpload)="onFileChange($event, ctsp)"
+                  (onUpload)="onFileChange($event, ctsp, i)"
                   [multiple]="true"
                   accept="image/*"
                   maxFileSize="10000000">

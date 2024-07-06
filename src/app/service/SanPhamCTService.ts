@@ -10,6 +10,8 @@ import {DanhMucDto} from "../model/danh-muc-dto.model";
 import {ChatLieuDto} from "../model/chat-lieu-dto.model";
 import {ThuongHieuDto} from "../model/thuong-hieu-dto.model";
 import {MauSacDto} from "../model/mau-sac-dto.model";
+import {HinhAnhDto} from "../model/hinh-anh-dto.model";
+import {IMG} from "../model/IMG";
 
 
 @Injectable({
@@ -62,10 +64,6 @@ export class SanPhamCTService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/updateTrangThai/${id}`, options);
   }
 
-// <<<<<<< HEAD
-//   suaSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto, id : string): Observable<any> {
-// =======
-
   // Thêm sản phẩm chi tiết
   themSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto): Observable<any> {
 
@@ -78,7 +76,7 @@ export class SanPhamCTService {
   }
 
   // Sửa sản phẩm chi tiết
-  suaSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto, id: string): Observable<any> {
+  suaSanPhamChiTiet(sanPhamChiTiet: ChiTietSanPhamDto): Observable<any> {
 
 
     const token = localStorage.getItem('token');
@@ -86,7 +84,7 @@ export class SanPhamCTService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.put(`${this.apiUrl}/update/${id}`, sanPhamChiTiet, { headers });
+    return this.http.put(`${this.apiUrl}/update`, sanPhamChiTiet, { headers });
   }
 
 
@@ -212,14 +210,14 @@ export class SanPhamCTService {
   }
 
 
-  saveListCt(list: any[]): Observable<ApiResponse<any>> {
+  saveListCt(ctsp:IMG): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/saveListCt`, list, { headers });
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/saveListCt`, ctsp , { headers });
   }
 
 
