@@ -96,12 +96,6 @@
                       <h6 class="fw-semibold mb-0">Danh mục</h6>
                     </th>
                     <th scope="col">
-                      <h6 class="fw-semibold mb-0">Kích thước</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Màu sắc</h6>
-                    </th>
-                    <th scope="col">
                       <h6 class="fw-semibold mb-0">Số lượng</h6>
                     </th>
                     <th scope="col">
@@ -128,12 +122,12 @@
                   <tr style="height: 30px;" *ngFor=" let sanPhamChiTiet of listSanPhamChiTiet; let i = index">
                     <th>{{ i + 1 }}</th>
                     <td title="{{ sanPhamChiTiet.ma }}">{{ sanPhamChiTiet.ma }}</td>
-                    <td title="{{ sanPhamChiTiet.sanPham.ten }}">{{ sanPhamChiTiet.sanPham.ten }}</td>
+                    <td title="{{ sanPhamChiTiet.sanPham.ten }}">{{ sanPhamChiTiet.sanPham.ten }}
+                      <p style="color: #ccc; font-size: 12px">[{{ sanPhamChiTiet.mauSac.ten }} - {{ sanPhamChiTiet.kichThuoc.ten }}]</p>
+                    </td>
                     <td title="{{ sanPhamChiTiet.thuongHieu.ten }}">{{ sanPhamChiTiet.thuongHieu.ten }}</td>
                     <td title="{{ sanPhamChiTiet.chatLieu.ten }}">{{ sanPhamChiTiet.chatLieu.ten }}</td>
                     <td title="{{ sanPhamChiTiet.danhMuc.ten }}">{{ sanPhamChiTiet.danhMuc.ten }}</td>
-                    <td title="{{ sanPhamChiTiet.kichThuoc.ten }}">{{ sanPhamChiTiet.kichThuoc.ten }}</td>
-                    <td title="{{ sanPhamChiTiet.mauSac.ten }}">{{ sanPhamChiTiet.mauSac.ten }}</td>
                     <td title="{{ sanPhamChiTiet.soLuong }}">{{ sanPhamChiTiet.soLuong }}</td>
                     <td title="{{ sanPhamChiTiet.giaNhap }}">{{ sanPhamChiTiet.giaNhap }}</td>
                     <td title="{{ sanPhamChiTiet.giaBan }}">{{ sanPhamChiTiet.giaBan }}</td>

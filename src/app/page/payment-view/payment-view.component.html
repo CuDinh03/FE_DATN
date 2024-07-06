@@ -70,8 +70,11 @@
                   </div>
                   <button type="button" class="btn btn-info" (click)="showModal()">Chọn Voucher</button>
                 </div>
-                <button type="submit" data-mdb-ripple-init class="btn btn-primary btn-block btn-lg mt-3"> Đặt hàng
+                <button type="submit" data-mdb-ripple-init class="btn btn-primary btn-block btn-lg mt-3" [disabled]="loading"> Đặt hàng
                 </button>
+                <div *ngIf="loading" class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
               </div>
             </form>
           </div>
@@ -221,3 +224,5 @@
     </div>
   </div>
 </div>
+
+

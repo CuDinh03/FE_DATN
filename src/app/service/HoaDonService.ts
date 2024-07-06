@@ -155,5 +155,25 @@ export class HoaDonService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/find-time`, {params, headers});
   }
 
+  getThongKeDoanhThu(): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/doanhthu`, {headers});
+  }
+
+  getThongKeDonHang(): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/soluong`, {headers});
+  }
+
 }
 

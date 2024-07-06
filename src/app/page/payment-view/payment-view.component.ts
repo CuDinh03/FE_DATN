@@ -44,6 +44,7 @@ export class PaymentViewComponent {
   discount: number = 0;
   customerForm: FormGroup;
   selectedCustomerId: string | null = null;
+  loading = false;
 
   // submitted = false;
 
@@ -305,7 +306,9 @@ export class PaymentViewComponent {
   }
 
   saveInfoPayment() {
+    this.loading = true;
     if (this.customerForm.invalid) {
+      this.loading = false;
       return;
     }
 
@@ -317,6 +320,7 @@ export class PaymentViewComponent {
         this.khachHang = response.result;
         if (!this.khachHang || !this.khachHang.id) {
           console.error('Không tìm thấy thông tin khách hàng.');
+          this.loading = true;
           return;
         }
         this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
@@ -324,6 +328,7 @@ export class PaymentViewComponent {
             const gioHang = gioHangResponse.result;
             if (!gioHang) {
               console.error('Không tìm thấy giỏ hàng.');
+              this.loading = true;
               return;
             }
             this.gioHangChiTietService.getAllBỵKhachHang(gioHang.id).subscribe(
@@ -342,6 +347,7 @@ export class PaymentViewComponent {
 
                 this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
                   (response: ApiResponse<ThanhToanOnl>) => {
+                    this.loading = false;
                     if (response.result) {
                       this.snackBar.open('Đặt hàng thành công!', 'Đóng', {
                         duration: 3000,
@@ -360,16 +366,19 @@ export class PaymentViewComponent {
               },
               (error) => {
                 console.error('Lỗi hiển giỏ hàng chi tiêt:', error);
+                this.loading = false;
               }
             );
           },
           (error) => {
             console.error('Lỗi tải giỏ hàng:', error);
+            this.loading = false;
           }
         );
       },
       (error) => {
         console.error('Lỗi tải khách hàng:', error);
+        this.loading = false;
       }
     );
   }
