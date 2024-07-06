@@ -10,6 +10,7 @@ import {DanhMucDto} from "../model/danh-muc-dto.model";
 import {ChatLieuDto} from "../model/chat-lieu-dto.model";
 import {ThuongHieuDto} from "../model/thuong-hieu-dto.model";
 import {MauSacDto} from "../model/mau-sac-dto.model";
+import {IMG} from "../model/IMG";
 
 
 @Injectable({
@@ -89,6 +90,15 @@ export class SanPhamCTService {
     return this.http.put(`${this.apiUrl}/update/${id}`, sanPhamChiTiet, { headers });
   }
 
+  saveListCt(ctsp:IMG): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/saveListCt`, ctsp , { headers });
+  }
 
   getSanPhamChiTiet(page: number, size: number): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
@@ -217,18 +227,6 @@ export class SanPhamCTService {
 
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getCtsp`, { headers });
   }
-
-
-  saveListCt(list: any[]): Observable<ApiResponse<any>> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/saveListCt`, list, { headers });
-  }
-
 
 
 }
