@@ -10,6 +10,7 @@ import {DanhMucDto} from "../model/danh-muc-dto.model";
 import {ChatLieuDto} from "../model/chat-lieu-dto.model";
 import {ThuongHieuDto} from "../model/thuong-hieu-dto.model";
 import {MauSacDto} from "../model/mau-sac-dto.model";
+// @ts-ignore
 import {IMG} from "../model/IMG";
 
 

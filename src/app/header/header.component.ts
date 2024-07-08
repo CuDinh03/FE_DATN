@@ -8,6 +8,8 @@ import {GioHangService} from 'src/app/service/GioHangService';
 import {GioHangChiTietService} from './../service/GioHangChiTietService';
 import {Component} from '@angular/core';
 import {Router} from "@angular/router";
+import {LayoutService} from "../service/app.layout.service";
+
 
 @Component({
   selector: 'app-header',
@@ -15,140 +17,159 @@ import {Router} from "@angular/router";
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  showSearch: boolean = false;
-  isLoggedInCart: boolean = false;
-  isCartHovered = false;
-  khachHang: any = {};
-  gioHang: any
-  gioHangChiTiet: any[] = [];
+  model: any[] = [];
 
-  constructor(private auth: AuthenticationService, private router: Router,
-              private gioHangChiTietService: GioHangChiTietService,
-              private gioHangService: GioHangService,
-              private khachHangService: KhachHangService,
-              private sanPhamCTService: SanPhamCTService
-  ) {
-    const tenDangNhap = localStorage.getItem('tenDangNhap');
-    if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
-          this.khachHang = response.result;
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
-      );
-    }
-
-  }
+  constructor(public layoutService: LayoutService) { }
 
   ngOnInit() {
-    // Kiểm tra trạng thái đăng nhập của người dùng
-    this.checkLoginStatus();
-    this.findShoppingCart()
-  }
-
-
-  findShoppingCart() {
-    const tenDangNhap = this.auth.getTenDangNhap();
-    if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
-          const khachHang = response.result;
-          this.khachHang = response.result;
-          if (khachHang && khachHang.id) {
-            this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
-              (response) => {
-                const gioHang = response.result;
-                if (gioHang && gioHang.id) {
-                  this.loadGioHangChiTiet(gioHang.id);
-                }
-              },
-              (error) => {
-                console.error('Error fetching shopping cart:', error);
-              }
-            );
-          } else {
-            console.error('Không tìm thấy thông tin khách hàng.');
-          }
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
-      );
-    }
-  }
-
-  loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAllBỵKhachHang(idGioHang).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          this.gioHangChiTiet = response.result;
-          console.log(this.gioHangChiTiet);
-        } else {
-          this.gioHangChiTiet = [];
-        }
+    this.model = [
+      {
+        label: 'Home',
+        items: [
+          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+        ]
       },
-      (error: HttpErrorResponse) => {
-        console.error('Unexpected error:', error);
+      {
+        label: 'UI Components',
+        items: [
+          { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
+          { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
+          { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
+          { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },
+          { label: 'Button', icon: 'pi pi-fw pi-box', routerLink: ['/uikit/button'] },
+          { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
+          { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
+          { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
+          { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
+          { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
+          { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
+          { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'], routerLinkActiveOptions: { paths: 'subset', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' } },
+          { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
+          { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
+          { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
+          { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
+        ]
+      },
+      {
+        label: 'Prime Blocks',
+        items: [
+          { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', routerLink: ['/blocks'], badge: 'NEW' },
+          { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
+        ]
+      },
+      {
+        label: 'Utilities',
+        items: [
+          { label: 'PrimeIcons', icon: 'pi pi-fw pi-prime', routerLink: ['/utilities/icons'] },
+          { label: 'PrimeFlex', icon: 'pi pi-fw pi-desktop', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
+        ]
+      },
+      {
+        label: 'Pages',
+        icon: 'pi pi-fw pi-briefcase',
+        items: [
+          {
+            label: 'Landing',
+            icon: 'pi pi-fw pi-globe',
+            routerLink: ['/landing']
+          },
+          {
+            label: 'Auth',
+            icon: 'pi pi-fw pi-user',
+            items: [
+              {
+                label: 'Login',
+                icon: 'pi pi-fw pi-sign-in',
+                routerLink: ['/auth/login']
+              },
+              {
+                label: 'Error',
+                icon: 'pi pi-fw pi-times-circle',
+                routerLink: ['/auth/error']
+              },
+              {
+                label: 'Access Denied',
+                icon: 'pi pi-fw pi-lock',
+                routerLink: ['/auth/access']
+              }
+            ]
+          },
+          {
+            label: 'Crud',
+            icon: 'pi pi-fw pi-pencil',
+            routerLink: ['/pages/crud']
+          },
+          {
+            label: 'Timeline',
+            icon: 'pi pi-fw pi-calendar',
+            routerLink: ['/pages/timeline']
+          },
+          {
+            label: 'Not Found',
+            icon: 'pi pi-fw pi-exclamation-circle',
+            routerLink: ['/notfound']
+          },
+          {
+            label: 'Empty',
+            icon: 'pi pi-fw pi-circle-off',
+            routerLink: ['/pages/empty']
+          },
+        ]
+      },
+      {
+        label: 'Hierarchy',
+        items: [
+          {
+            label: 'Submenu 1', icon: 'pi pi-fw pi-bookmark',
+            items: [
+              {
+                label: 'Submenu 1.1', icon: 'pi pi-fw pi-bookmark',
+                items: [
+                  { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
+                  { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-bookmark' },
+                  { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-bookmark' },
+                ]
+              },
+              {
+                label: 'Submenu 1.2', icon: 'pi pi-fw pi-bookmark',
+                items: [
+                  { label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-bookmark' }
+                ]
+              },
+            ]
+          },
+          {
+            label: 'Submenu 2', icon: 'pi pi-fw pi-bookmark',
+            items: [
+              {
+                label: 'Submenu 2.1', icon: 'pi pi-fw pi-bookmark',
+                items: [
+                  { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
+                  { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' },
+                ]
+              },
+              {
+                label: 'Submenu 2.2', icon: 'pi pi-fw pi-bookmark',
+                items: [
+                  { label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' },
+                ]
+              },
+            ]
+          }
+        ]
+      },
+      {
+        label: 'Get Started',
+        items: [
+          {
+            label: 'Documentation', icon: 'pi pi-fw pi-question', routerLink: ['/documentation']
+          },
+          {
+            label: 'View Source', icon: 'pi pi-fw pi-search', url: ['https://github.com/primefaces/sakai-ng'], target: '_blank'
+          }
+        ]
       }
-    );
-  }
-
-  toggleSearch() {
-    this.showSearch = !this.showSearch;
-  }
-
-  checkLoginStatus() {
-    const token = localStorage.getItem('token');
-    this.isLoggedInCart = !!token;
-  }
-
-  isLoggedIn(): boolean {
-    return this.auth.isLoggedIn();
-  }
-
-  getAccount(): boolean {
-    if (this.auth.getRole() == 'ADMIN') {
-      return true;
-    }
-    return false;
-
-  }
-
-  onMouseOver() {
-    this.isCartHovered = true;
-  }
-
-  onMouseLeave() {
-    this.isCartHovered = false;
-  }
-
-  getCartTotal(): number {
-    return this.gioHangChiTiet.reduce((total, item) => {
-      return total + item.soLuong * item.chiTietSanPham.giaBan;
-    }, 0);
-  }
-
-  logout() {
-    // Gọi phương thức logout từ AuthenticationService
-    this.auth.logout();
-    // Redirect đến trang đăng nhập sau khi đăng xuất
-    this.router.navigate(['/trang-chu']).then(() => {
-      console.log('Redirected to /trang-chu');
-      this.router.navigate(['/trang-chu']).then(() => {
-        console.log('Redirected to /trang-chu');
-      }).catch(err => {
-        console.error('Error navigating to /trang-chu:', err);
-      });
-    }).catch(err => {
-      console.error('Error navigating to /trang-chu:', err);
-    });
-    window.location.reload();
-  }
-
-  getTotalQuantity(): number {
-    return this.gioHangChiTiet.reduce((total, item) => total + item.soLuong, 0);
+    ];
   }
 
 }
