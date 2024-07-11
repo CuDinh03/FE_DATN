@@ -24,5 +24,13 @@ export class DanhGiaService {
     return this.http.post<ApiResponse<DanhGiaDto>>(`${this.apiUrl}/create`, danhGiaDto, {headers});
   }
 
+  getSoLuongDanhGia(productId: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/count/${productId}`);
+  }
+
+  getDiemDanhGia(productId: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/average/${productId}`);
+  }
+
 
 }

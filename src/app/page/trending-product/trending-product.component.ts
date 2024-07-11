@@ -1,69 +1,82 @@
+import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApiResponse } from './../../model/ApiResponse';
 import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
-import { Component, Pipe } from '@angular/core';
 import { AuthenticationService } from "../../service/AuthenticationService";
 import { Router } from "@angular/router";
-import {SanPhamService} from "../../service/SanPhamService";
-
-
+import { SanPhamService } from "../../service/SanPhamService";
+import { DanhGiaService } from "../../service/DanhGiaService";
 
 @Component({
   selector: 'app-trending-product',
   templateUrl: './trending-product.component.html',
   styleUrls: ['./trending-product.component.css']
 })
-
-
-export class TrendingProductComponent {
+export class TrendingProductComponent implements OnInit {
   chiTietSanPham: any[] = [];
   findSanPhamChiTiet: any = {};
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
-  listSanPham: any[] =[];
+  danhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ số lượng đánh giá theo từng productId
+  diemDanhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ điểm đánh giá theo từng productId
 
   constructor(private auth: AuthenticationService,
               private router: Router,
               private sanPhamCTService: SanPhamCTService,
-              private sanPhamService: SanPhamService
-
-  ) {
-  }
+              private sanPhamService: SanPhamService,
+              private danhGiaService: DanhGiaService) {}
 
   ngOnInit(): void {
     this.loadDanhSachSanPham();
   }
 
-
   findSanPhamById(id: string): void {
-    this.sanPhamCTService.getChiTietSanPhamById(id).
-    subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.result) {
-            this.findSanPhamChiTiet = response.result
-            localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result))
-            this.router.navigate(['/san-pham']);
-          }
-        })
+    this.sanPhamCTService.getChiTietSanPhamById(id).subscribe(
+      (response: ApiResponse<any>) => {
+        if (response.result) {
+          this.findSanPhamChiTiet = response.result;
+          localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result));
+          this.router.navigate(['/san-pham']);
+        }
+      });
   }
 
   loadDanhSachSanPham(): void {
     this.sanPhamCTService.getAllSanPhamChiTiet().subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.result && response.result.length > 0) {
-            // Nếu có hóa đơn chi tiết, gán danh sách vào biến và đặt noProductsFound là false
-            this.chiTietSanPham = response.result;
-
-          } else {
-            console.log(response);
-          }
-        },
-        (error: HttpErrorResponse) => {
+      (response: ApiResponse<any>) => {
+        if (response.result && response.result.length > 0) {
+          this.chiTietSanPham = response.result;
+          this.chiTietSanPham.forEach((sanPham) => {
+            this.danhGiaService.getSoLuongDanhGia(sanPham.id).subscribe(
+              (apiResponse: ApiResponse<any>) => {
+                if (apiResponse.result) {
+                  this.danhGiaMap[sanPham.id] = apiResponse.result; // Lưu số lượng đánh giá vào danhGiaMap
+                }
+              },
+              (error: HttpErrorResponse) => {
+                console.error(`Error loading danh gia count for productId ${sanPham.id}:`, error);
+              }
+            );
+            this.danhGiaService.getDiemDanhGia(sanPham.id).subscribe(
+              (apiResponse: ApiResponse<any>) => {
+                if (apiResponse.result) {
+                  this.diemDanhGiaMap[sanPham.id] = apiResponse.result; // Lưu điểm đánh giá vào diemDanhGiaMap
+                }
+              },
+              (error: HttpErrorResponse) => {
+                console.error(`Error loading diem danh gia for productId ${sanPham.id}:`, error);
+              }
+            );
+          });
+        } else {
+          console.log(response);
         }
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Error loading products:', error);
+      }
     );
-    // this.sanPhamService.getSanPham()
-
   }
 
   onPageChange(page: number): void {
@@ -71,5 +84,11 @@ export class TrendingProductComponent {
     this.loadDanhSachSanPham();
   }
 
+  getSoLuongDanhGia(productId: string): number {
+    return this.danhGiaMap[productId] || 0; // Trả về số lượng đánh giá từ danhGiaMap hoặc mặc định là 0
+  }
 
+  getDiemDanhGia(productId: string): number {
+    return this.diemDanhGiaMap[productId] || 0; // Trả về điểm đánh giá từ diemDanhGiaMap hoặc mặc định là 0
+  }
 }
