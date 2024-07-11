@@ -27,7 +27,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class ProductDetailViewComponent implements OnInit {
 
-
+  cities!: MauSacDto[];
+  selectedCities!: MauSacDto[];
     selectedSanPham: SanPhamDto[] = [];
     selectedChatLieu: ChatLieuDto[] = [];
     selectedThuongHieu: ThuongHieuDto[] = [];

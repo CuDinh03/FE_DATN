@@ -50,6 +50,7 @@ import { RatingViewComponent } from './page/rating-view/rating-view.component';
 import { MaskValuePipe } from './page/profile/mask-value-pipe';
 import { TaiKhoanService } from './service/TaiKhoanService';
 import {NgSelectModule} from "@ng-select/ng-select";
+import {MultiSelectModule} from "primeng/multiselect";
 
 @NgModule({
   declarations: [
@@ -92,17 +93,18 @@ import {NgSelectModule} from "@ng-select/ng-select";
     RatingViewComponent,
     MaskValuePipe
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatSnackBarModule,
-    NgSelectModule,
-    AngularFireStorageModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatSnackBarModule,
+        NgSelectModule,
+        AngularFireStorageModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        MultiSelectModule,
+    ],
   providers: [
     TaiKhoanService,
     AngularFireAuth,
