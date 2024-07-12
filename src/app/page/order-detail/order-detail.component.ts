@@ -20,14 +20,42 @@ export class OrderDetailComponent {
   listHoaDonChiTiet: any[] = [];
   noCartDetail = false;
   trangThaiList: number[] = [0, 1, 2, 3, 4, 5];
+  showNoteInput: boolean = false;
+  noteText: string = '';
+  notePlaceholder: string = '';
+  selectedOption1: string = '';
+  selectedOption2: string = 'Thay đổi đơn hàng (màu sắc, kích thước, thêm mã giảm giá...)';
+  selectedOption3: string = 'Tôi không có nhu cầu mua nữa';
 
-  constructor(private auth: AuthenticationService, private router: Router,
+  onRadioChange(noteText: string) {
+    this.notePlaceholder = noteText;
+    this.showNoteInput = true;
+  }
+
+  constructor(private auth: AuthenticationService,
+              private router: Router,
               private hoaDonChiTietService: HoaDonChiTietService,
+              private hoaDonService: HoaDonService
   ) {
   }
 
   ngOnInit() {
     this.loadHoaDonChiTiet();
+  }
+
+  submitRequest() {
+    const requestPayload = {
+      ghiChu: this.selectedOption1 + ' - ' + this.noteText
+    };
+
+    const invoiceId = this.hoaDon.id; // Thay thế bằng UUID của hóa đơn
+
+    this.hoaDonService.yeuCauSuaHoaDon(invoiceId, requestPayload)
+      .subscribe(response => {
+        console.log('Yêu cầu sửa thành công', response);
+      }, error => {
+        console.error('Yêu cầu sửa thất bại', error);
+      });
   }
 
 
@@ -72,11 +100,11 @@ export class OrderDetailComponent {
       case 3:
         return 'Đang giao';
       case 4:
-        return 'Đã nhận hàng';
-      case 5:
         return 'Hoàn thành';
-      case 6:
+      case 5:
         return 'Hủy đơn';
+      case 6:
+        return 'Sửa đơn';
       default:
         return '';
     }
@@ -95,10 +123,9 @@ export class OrderDetailComponent {
       case 4:
         return '#228B22';
       case 5:
-        return '#228B22';
+        return '#FF0000';
       case 6:
         return '#FF0000';
-
       default:
         return '';
     }

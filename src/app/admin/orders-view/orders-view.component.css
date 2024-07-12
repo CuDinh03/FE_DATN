@@ -1,0 +1,16 @@
+.table-container {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed; /* Đảm bảo các ô có chiều rộng cố định */
+}
+
+.table th,
+.table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 150px; /* Điều chỉnh kích thước tối đa theo nhu cầu */
+}

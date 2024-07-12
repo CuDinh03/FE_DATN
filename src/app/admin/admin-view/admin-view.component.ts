@@ -7,6 +7,9 @@ import {Observable, of} from "rxjs";
 import {ApiResponse} from "../../model/ApiResponse";
 import {HoaDonService} from "../../service/HoaDonService";
 import {HoaDonChiTietService} from "../../service/HoaDonChiTietService";
+import {Chart, registerables} from "chart.js";
+import {DanhGiaDto} from "../../model/danh-gia-dto";
+Chart.register(...registerables)
 
 @Component({
   selector: 'app-admin-view',

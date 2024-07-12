@@ -47,6 +47,13 @@
                 Hủy hàng
               </button>
             </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="contact-tab5" data-bs-toggle="tab" data-bs-target="#contact-tab-5"
+                      type="button" role="tab" aria-controls="contact-tab-5" aria-selected="false"
+                      (click)="onTabChange(6)">
+                Sửa đơn
+              </button>
+            </li>
           </ul>
         </div>
         <div class="mb-3">
@@ -412,6 +419,62 @@
               <p>Không có hóa đơn nào được tìm thấy.</p>
             </div>
           </div>
+
+          <div class="tab-pane fade" id="contact-tab-5" role="tabpanel" aria-labelledby="contact-tab5">
+            <div *ngIf="!noProductsFound">
+              <div class="card mb-4" *ngFor="let item of hoaDonChiTiet" type="button">
+                <div class="d-flex align-items-center mt-3 ms-3">
+                <span class="align-items-center" style="color: black;">
+                  <i class="ti ti-brand-shopee "></i>MT-Shirt
+                </span>
+                  <span [style.color]="getTrangThaiColor(item.hoaDon.trangThai)" class="ms-auto me-3">
+                  {{ getTrangThaiText(item.hoaDon.trangThai) }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex align-items-center" (click)="findHoaDonById(item.hoaDon.id)">
+                <span class="ms-2">
+                  <div class="media">
+                    <div class="d-flex">
+                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[1]" alt=""
+                           class="product-image">
+                    </div>
+                    <div class="media-body">
+                      <p style="color: black; font-size: 16px;"> {{ item.chiTietSanPham.sanPham.ten }}
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản phẩm: </span>
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.mauSac.ten }}
+                          ,
+                        </span>
+                        <span
+                          style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.kichThuoc.ten }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </span>
+                  <span class="ms-auto me-3" style="color: #5D87FF;">
+                  {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-end align-items-center me-3 mb-1">
+                  <p style="color: black; font-size: 14px;">Thành tiền:
+                    <span style="color: #5D87FF;">{{
+                        item.hoaDon.tongTien |
+                          currency:'VND':'symbol':'1.0-0'
+                      }}</span>
+                  </p>
+                </div>
+                <div class="d-flex align-items-center justify-content-end mb-2 me-3">
+                  <button class="btn btn-primary" (click)="findSanPhamById(item.chiTietSanPham.id)">Mua lại</button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
+              <p>Không có hóa đơn nào được tìm thấy.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -432,7 +495,7 @@
         <input type="text" class="form-control" placeholder="Lý do hủy đơn">
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" (click)="updateTrangThai(hoaDonSingle.id, 6)" data-bs-dismiss="modal">Xác nhận
+        <button class="btn btn-success" (click)="updateTrangThai(hoaDonSingle.id, 5)" data-bs-dismiss="modal">Xác nhận
         </button>
         <button class="btn btn-danger" (click)="closeconfirmUpdate()" data-bs-dismiss="modal">Hủy</button>
       </div>
