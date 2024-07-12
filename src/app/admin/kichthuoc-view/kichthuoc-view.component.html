@@ -1,7 +1,4 @@
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-  data-sidebar-position="fixed" data-header-position="fixed">
-  <app-sidebar></app-sidebar>
-  <!--  Main wrapper -->
+
   <div class="body-wrapper">
     <!--  Header Start -->
     <app-admin-header></app-admin-header>
@@ -103,7 +100,7 @@
                   <div class="row alig n-items-start">
                     <form [formGroup]="kichThuocForm" (ngSubmit)="onSubmit()">
                       <input type="hidden" formControlName="id" id="id">
-                      
+
                       <div class="mb-3">
                         <span><label for="ma" class="form-label">Mã: </label> </span>
 
@@ -151,7 +148,7 @@
                         {{successMessage}}
                         <button type="button" class="btn-close" aria-label="Close" (click)="closeSuccessAlert()"></button>
                       </div>
-                      
+
                       <!-- Thông báo lỗi -->
                       <div *ngIf="errorMessage" class="alert alert-danger">
                         {{ errorMessage }}
@@ -168,4 +165,3 @@
       </div>
     </div>
   </div>
-</div>

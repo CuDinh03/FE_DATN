@@ -17,6 +17,8 @@ import { ApiResponse } from "../../model/ApiResponse";
 import { ErrorCode } from "../../model/ErrorCode";
 import { GioHangService } from 'src/app/service/GioHangService';
 import { ThanhToanService } from 'src/app/service/ThanhToanService';
+import {NhanVienService} from "../../service/nhanVienService";
+import {TaiKhoanDto} from "../../model/tai-khoan-dto.model";
 
 @Component({
   selector: 'app-shopping-view',
@@ -38,6 +40,7 @@ export class ShoppingViewComponent {
   submitted = false;
   errorMessage: string = '';
   ghiChu: string = '';
+  nhanVien!: any;
   selectedDanhMuc: any;
   maxHoaDon = 5;
   isModalVisible = false;
@@ -84,14 +87,14 @@ export class ShoppingViewComponent {
               private thanhToanService: ThanhToanService,
               private activatedRoute: ActivatedRoute,
               private snackBar: MatSnackBar,
-
+              private nvService: NhanVienService
   ) {
     this.thanhToanDto = {
       hoaDonDto: {
         id: '',
         ma: '',
-        khachHangId: '',
-        nhanVienId: '',
+        khachHang: '',
+        nhanVien: '',
         tongTien:'',
         voucher: '',
         ghiChu: '',
@@ -111,7 +114,41 @@ export class ShoppingViewComponent {
     this.loadMaHoaDonFromLocalStorage();
     this.loadDanhMuc();
     this.getCustomer();
+    this.getNhanVien();
+    this.nhanVien
   }
+  getNhanVien(): void {
+    const username = localStorage.getItem('tenDangNhap');
+
+    if (!username) {
+      console.error('Không tìm thấy tên đăng nhập trong local storage.');
+      return;
+    }
+
+    const taiKhoan: TaiKhoanDto = {
+      id: '',
+      tenDangNhap: username,
+      matKhau: '',
+      chucVu: null,
+      ngayTao: new Date(),
+      ngaySua: new Date(),
+      trangThai: 1
+    };
+
+    this.nvService.findByUserName(taiKhoan).subscribe(
+        (response: ApiResponse<TaiKhoanDto>) => {
+          this.nhanVien = response.result;
+          console.log('Thông tin nhân viên:', this.nhanVien);
+
+          // Move your log statement here
+          console.log('Log nhanVien:', this.nhanVien);
+        },
+        error => {
+          console.error('Lỗi khi lấy thông tin nhân viên:', error);
+        }
+    );
+  }
+
 
   ghiChuText(event: any): void {// Chuyển đổi giá trị từ chuỗi sang số
     event = this.ghiChu
@@ -119,9 +156,15 @@ export class ShoppingViewComponent {
   }
 
   onSubmitPayment() {
+
     const storedVoucher= localStorage.getItem('voucher');
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
+
+
+    if (this.customer.ten === 'Khách lẻ'){
+      this.customer = null;
+    }
 
     if (this.tienKhachDua>=this.thanhTien){
       if (storedHoaDon && storedGioHangChiTiet) {
@@ -130,41 +173,29 @@ export class ShoppingViewComponent {
         const tongTien = this.calculateThanhTien();
         hoaDon.tongTien = tongTien;
         hoaDon.khachHang = this.customer;
+        hoaDon.ghiChu = this.ghiChu;
+        hoaDon.nhanVien = this.nhanVien;
         hoaDon.voucher = storedVoucher ? JSON.parse(storedVoucher) : null;
         hoaDon.tongTienGiam = this.discount;
-        console.log(hoaDon.tongTienGiam)
         hoaDon.ghiChu = this.ghiChu;
+        console.log(hoaDon)
 
-        const ThanhToanDto: ThanhToanDto = {
+
+        const thanhToanDto: ThanhToanDto = {
           hoaDonDto: hoaDon,
           gioHangChiTietDtoList: gioHangChiTiet,
         };
 
-        this.thanhToanService.thanhToan(ThanhToanDto).subscribe(
+        this.thanhToanService.thanhToan(thanhToanDto).subscribe(
           (response: ApiResponse<ThanhToanDto>) => {
             if (response.result) {
-              this.snackBar.open('Thanh toán thành công!', 'Đóng', {
-                duration: 3000,
-                panelClass: ['success-snackbar']
-              });
-              this.loadHoaDonGioHang();
-              this.loadGioHangChiTiet(this.hoaDon.id);
-              localStorage.removeItem('voucher');
-              localStorage.removeItem('kh');
-              localStorage.removeItem('dbhoadon');
-              localStorage.removeItem('gioHangChiTiet');
-              localStorage.removeItem('hoaDon');
-              localStorage.removeItem('gioHang');
+              this.handleSuccessfulPayment();
+            } else {
+              this.handleFailedPayment();
             }
-            this.clearForm();
-            this.loadHoaDonGioHang();
-            this.closeConfirmPayment();
           },
           (error: HttpErrorResponse) => {
-            this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['error-snackbar']
-            });
+            this.handleFailedPayment();
           }
         );
 
@@ -188,6 +219,23 @@ export class ShoppingViewComponent {
     }
 
 
+  }
+  handleSuccessfulPayment(): void {
+    this.snackBar.open('Thanh toán thành công!', 'Đóng', {
+      duration: 3000,
+      panelClass: ['success-snackbar']
+    });
+
+    this.clearLocalStorageItems();
+    this.loadHoaDonGioHang();
+    this.closeConfirmPayment();
+  }
+
+  handleFailedPayment(): void {
+    this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
   }
 
 
@@ -225,6 +273,15 @@ export class ShoppingViewComponent {
         }
       }
     );
+  }
+
+  clearLocalStorageItems(): void {
+    localStorage.removeItem('voucher');
+    localStorage.removeItem('kh');
+    localStorage.removeItem('dbhoadon');
+    localStorage.removeItem('gioHangChiTiet');
+    localStorage.removeItem('hoaDon');
+    localStorage.removeItem('gioHang');
   }
 
 

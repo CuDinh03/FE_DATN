@@ -1,7 +1,4 @@
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-  data-sidebar-position="fixed" data-header-position="fixed">
-  <app-sidebar></app-sidebar>
-  <!--  Main wrapper -->
+
   <div class="body-wrapper">
     <!--  Header Start -->
     <app-admin-header></app-admin-header>
@@ -62,7 +59,7 @@
                       <td>{{hinhAnh.ma }}</td>
                       <td>{{hinhAnh.url}}</td>
 
-                     
+
                       <!-- <td>
                         <p *ngIf="hinhAnh.chiTietSanPham != null">{{hinhAnh.chiTietSanPham.sanPham}}</p>
                             <p *ngIf="hinhAnh.chiTietSanPham === null"> - </p>
@@ -113,7 +110,7 @@
                   <div class="row alig n-items-start">
                     <form [formGroup]="hinhAnhForm" (ngSubmit)="onSubmit()">
                       <input type="hidden" formControlName="id" id="id">
-                      
+
                       <div class="mb-3">
                         <span><label for="ma" class="form-label">Mã: </label> </span>
 
@@ -141,7 +138,7 @@
 
                       <!-- <div class="mb-4">
                         <label for="chiTietSanPham" class="form-label">Chi Tiết Sản Phẩm: </label>
-                        
+
                         <select class="form-select">
                           <option value="0">Chi Tiết Sản Phẩm</option>
                           <option *ngFor="let chiTietSanPham of chiTietSanPhamList" [value]="chiTietSanPham.id">{{ chiTietSanPham.sanPham }}</option>
@@ -178,7 +175,7 @@
                         {{successMessage}}
                         <button type="button" class="btn-close" aria-label="Close" (click)="closeSuccessAlert()"></button>
                       </div>
-                      
+
                       <!-- Thông báo lỗi -->
                       <div *ngIf="errorMessage" class="alert alert-danger">
                         {{ errorMessage }}
@@ -195,4 +192,3 @@
       </div>
     </div>
   </div>
-</div>

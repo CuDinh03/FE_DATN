@@ -25,21 +25,21 @@ export class CustomerViewComponent implements OnInit{
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
-  khachHangForm: FormGroup; 
+  khachHangForm: FormGroup;
   id: string;
   successMessage = '';
   selectedDanhMuc: KhachHangDto | null = null;
   isEditMode = false;
   taiKhoanList: TaiKhoanDto[] = [];
 
-  
-  
+
+
 
   constructor(
-    private apiService: KhachHangService, 
+    private apiService: KhachHangService,
     private formBuilder: FormBuilder,
-    private router: Router, 
-    private auth: AuthenticationService, 
+    private router: Router,
+    private auth: AuthenticationService,
     private route: ActivatedRoute,
     private taiKhoanService: TaiKhoanService
   ) {
@@ -88,9 +88,9 @@ export class CustomerViewComponent implements OnInit{
   loadKhachHang(): void {
     this.apiService.getKhs(this.currentPage, this.pageSize)
       .subscribe(response => {
-        
+
         this.khachHang = response.result.content;
-    
+
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
       });
@@ -145,7 +145,7 @@ export class CustomerViewComponent implements OnInit{
     );
   }
 
-  
+
 
   findById(id: string): void {
     this.apiService.findById(id)
@@ -161,7 +161,7 @@ export class CustomerViewComponent implements OnInit{
             gioiTinh: response.result.gioiTinh,
             ngaySinh: response.result.ngaySinh,
             diaChi: response.result.diaChi,
-            trangThai: response.result.trangThai.toString() // Chuyển đổi boolean thành string
+            trangThai: response.result.trangThai
           });
           this.isEditMode = true;
         },

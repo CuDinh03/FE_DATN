@@ -7,8 +7,8 @@ export interface HoaDonDto {
   tongTienGiam: number;
   voucher: string;
   ghiChu: string;
-  khachHangId: string;
-  nhanVienId: string;
+  khachHang: string;
+  nhanVien: string;
   ngayTao: Date;
   ngaySua: Date;
   trangThai: boolean;

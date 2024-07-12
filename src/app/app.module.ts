@@ -44,6 +44,11 @@ import {ThuongHieuViewComponent} from './admin/thuonghieu-view/thuonghieu-view.c
 import {HinhAnhViewComponent} from './admin/hinhanh-view/hinhanh-view.component';
 import {RatingViewComponent} from './page/rating-view/rating-view.component';
 import {MaskValuePipe} from './page/profile/mask-value-pipe';
+import { DemoComponent } from './demo/demo.component';
+import {AdminRoutingModule} from "./admin-routing.module";
+import {CustomerRoutingModule} from "./customer-routing.module";
+import {GuestRoutingModule} from "./guest-routing.module";
+import { TrangChuComponent } from './page/trang-chu/trang-chu.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +90,9 @@ import {MaskValuePipe} from './page/profile/mask-value-pipe';
     HinhAnhViewComponent,
     ProductDetailViewComponent,
     RatingViewComponent,
-    MaskValuePipe
+    MaskValuePipe,
+    DemoComponent,
+    TrangChuComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +101,10 @@ import {MaskValuePipe} from './page/profile/mask-value-pipe';
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AdminRoutingModule,
+    CustomerRoutingModule,
+    GuestRoutingModule
 
   ],
   providers: [TaiKhoanService],

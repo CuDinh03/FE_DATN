@@ -7,9 +7,9 @@ import {Component, HostListener} from '@angular/core';
 })
 export class HomeComponent {
 
-  // @HostListener('window:beforeunload', ['$event'])
-  // clearLocalStorage(event: any) {
-  //   // Clear localStorage
-  //   localStorage.clear();
-  // }
+  @HostListener('window:beforeunload', ['$event'])
+  clearLocalStorage(event: any) {
+    // Clear localStorage
+    localStorage.clear();
+  }
 }

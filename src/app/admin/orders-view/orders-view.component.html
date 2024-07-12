@@ -1,10 +1,6 @@
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-     data-sidebar-position="fixed" data-header-position="fixed">
-  <app-sidebar></app-sidebar>
-  <!--  Main wrapper -->
+
   <div class="body-wrapper">
     <!--  Header Start -->
-    <app-admin-header></app-admin-header>
     <!--  Header End -->
     <div class="container-fluid">
       <!--  Row 1 -->
@@ -106,7 +102,7 @@
                         <td>{{ listHoaDon.ma }}</td>
                         <td>{{ formatDate(listHoaDon.ngayTao) }}</td>
                         <td>
-                          <p *ngIf="listHoaDon.ghiChu != null">{{ listHoaDon.ghiChu }}%</p>
+                          <p *ngIf="listHoaDon.ghiChu != null">{{ listHoaDon.ghiChu }}</p>
                           <p *ngIf="listHoaDon.ghiChu === null"> - </p>
                         </td>
                         <td>{{ listHoaDon.tongTien }}</td>
@@ -807,7 +803,6 @@
     </div>
   </div>
 
-
   <!-- <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                 <div class="mb-3 mb-sm-0">
                   <h5 class="card-title fw-semibold">Danh sách hóa đơn</h5>
@@ -825,7 +820,7 @@
 
 
   <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  <div class="modal fade modal-xl" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
        aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
@@ -834,34 +829,81 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="container-fluid" *ngIf="!noCartDetail">
-            <table class="table">
-              <thead>
-              <tr>
-                <th>Mã sản phẩm</th>
-                <th>Tên sản phẩm</th>
-                <th>Màu sắc</th>
-                <th>Kích thước</th>
-                <th>Số lượng</th>
-                <th>Đơn giá</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let chiTiet of hoaDonChiTiet">
-                <td>{{ chiTiet.chiTietSanPham.sanPham.ma }}</td>
-                <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
-                <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
-                <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
-                <td>{{ chiTiet.soLuong }}</td>
-                <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div *ngIf="noCartDetail" class="m-5 d-flex justify-content-center">
-          <p>Chưa có sản phẩm nào</p>
-        </div>
+            <div class="row">
+              <div class="col-md-4">
+                <h6>Thông tin khách hàng</h6>
+                <p><strong>Tên:</strong> Nguyễn Văn A</p>
+                <p><strong>Địa chỉ:</strong> 123 Đường ABC, Quận 1, TP.HCM</p>
+                <p><strong>Số điện thoại:</strong> 0123456789</p>
+              </div>
+              <div class="col-md-1 d-flex align-items-center">
+                <div class="divider"></div>
+              </div>
+              <div class="col-md-7">
+                <h6>Thông tin đơn hàng</h6>
+                <p><strong>Mã đơn hàng:</strong> ORD123456</p>
+                <p><strong>Hóa đơn:</strong> HĐ789012</p>
+                <p><strong>Chi tiết sản phẩm:</strong></p>
+                <table class="table" *ngIf="!noCartDetail">
+                                <thead>
+                                <tr>
+                                  <th>Mã sản phẩm</th>
+                                  <th>Tên sản phẩm</th>
+                                  <th>Màu sắc</th>
+                                  <th>Kích thước</th>
+                                  <th>Số lượng</th>
+                                  <th>Đơn giá</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let chiTiet of hoaDonChiTiet">
+                                  <td>{{ chiTiet.chiTietSanPham.sanPham.ma }}</td>
+                                  <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
+                                  <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
+                                  <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
+                                  <td>{{ chiTiet.soLuong }}</td>
+                                  <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
+                                </tr>
+                                </tbody>
+                              </table>
+                <p><strong>Voucher:</strong></p>
+                <p><strong>Tong tien</strong></p>
+              </div>
+
+              <hr>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <h6>Thông tin nhan vien ban</h6>
+                <p><strong>Tên:</strong> Nguyễn Văn B</p>
+                <p><strong>thoiGian:</strong> 11:00 </p>
+                <p><strong>Số điện thoại:</strong> 0123456789</p>
+              </div>
+              <div class="col-md-1 d-flex align-items-center">
+                <div class="divider"></div>
+              </div>
+              <div class="col-md-7">
+                <h6>Thông tin mo ta</h6>
+                <p><strong>Trang thai don hang:</strong> Dang xu ly</p>
+                <p><strong>Hinh thuc mua:</strong>
+                  <select class="form-select">
+                    <option>onl</option>
+                    <option>off</option>
+                  </select></p>
+                <p><strong>Ghi chu:</strong>
+                  <textarea class="form-control" id="ghiChu" rows="3"></textarea></p>
+                <p><strong>Doi tra:</strong>
+                  <select class="form-select">
+                    <option>Khong</option>
+                    <option>Doi hang</option>
+                    <option>Tra hang</option>
+                  </select></p>
+                <p><strong>Ly do doi tra:</strong>
+                  <textarea class="form-control" id="lyDo" rows="3"></textarea></p>
+                <p><strong>Nguoi thuc hien:</strong> Admin </p>
+
+              </div>
+            </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger">Xác nhận</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -890,3 +932,11 @@
     </div>
   </div>
 </div>
+
+    <style>
+      .divider {
+        border-left: 1px solid #dee2e6;
+        height: 100%;
+      }
+    </style>
+

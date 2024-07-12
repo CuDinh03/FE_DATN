@@ -33,7 +33,7 @@ export class TaiKhoanService {
   }
 
 
-  checkUsernameExists(username: string): Observable<ApiResponse<TaiKhoanDto>> {
+  checkUsernameExists(username: string | undefined): Observable<ApiResponse<TaiKhoanDto>> {
     return this.http.post<ApiResponse<TaiKhoanDto>>(`${this.apiUrl}/check-username`, { tenDangNhap: username });
   }
 

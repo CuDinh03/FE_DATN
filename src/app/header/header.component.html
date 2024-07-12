@@ -14,7 +14,7 @@
         <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
           <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/trang-chu" style="font-size: 12px; position: relative;">HÀNG MỚI VỀ
+              <a class="nav-link" [routerLink]="['/trang-chu']" style="font-size: 12px; position: relative;">HÀNG MỚI VỀ
                 <span class="new-badge">NEW</span>
               </a>
             </li>
@@ -69,7 +69,7 @@
 
 
             <span class="position-relative" (mouseover)="onMouseOver()" (mouseleave)="onMouseLeave()" *ngIf="isLoggedIn()">
-              <a href="/shopping-cart" style="text-decoration: none; color: black;" class="btn">
+              <a [routerLink]="['/customer/shopping-cart']" style="text-decoration: none; color: black;" class="btn">
                 <i class="ti ti-shopping-cart" style="font-size: 20px"></i>
                 <span class="cart-badge">{{ getTotalQuantity() }}</span>
               </a>
@@ -101,7 +101,7 @@
                     <span style="font-size: 10px; margin-top: 15px; margin-left: 20px;">có {{ getTotalQuantity() }} sản phẩm trong giỏ hàng</span>
                     <span>
                       <p>Tổng: {{ getCartTotal() | currency:'VND':'symbol':'1.0-0' }}</p>
-                      <a href="/shopping-cart" class="btn btn-primary">Xem giỏ hàng</a>
+                      <a [routerLink]="['/customer/shopping-cart']" class="btn btn-primary">Xem giỏ hàng</a>
                     </span>
                   </div>
                 </div>
@@ -114,11 +114,11 @@
 
           <div *ngIf="!isLoggedInCart">
             <span>
-              <a href="/log-in" class="auth-link">Đăng nhập</a>
+              <a [routerLink]="['/log-in']"  class="auth-link">Đăng nhập</a>
             </span>
             /
             <span>
-              <a href="/sign-up" class="auth-link">Đăng ký</a>
+              <a [routerLink]="['/sign-up']" class="auth-link">Đăng ký</a>
             </span>
           </div>
 
@@ -136,7 +136,7 @@
 
                   <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                     <div class="message-body">
-                      <a href="/profile" class="d-flex align-items-center gap-2 dropdown-item">
+                      <a [routerLink]="['/customer/profile']" class="d-flex align-items-center gap-2 dropdown-item">
                         <i class="ti ti-user fs-6"></i>
                         <p class="mb-0 fs-3">My Profile</p>
                       </a>
