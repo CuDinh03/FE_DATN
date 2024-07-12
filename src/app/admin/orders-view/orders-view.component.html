@@ -1,0 +1,985 @@
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+  <app-sidebar></app-sidebar>
+  <!--  Main wrapper -->
+  <div class="body-wrapper">
+    <!--  Header Start -->
+    <app-admin-header></app-admin-header>
+    <!--  Header End -->
+    <div class="container-fluid">
+      <!--  Row 1 -->
+      <div class="row">
+        <div class="col-lg-12 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div class="card-body">
+              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all"
+                          type="button" role="tab" aria-controls="pills-all" aria-selected="true">Tất cả
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-0-tab" data-bs-toggle="pill" data-bs-target="#pills-0"
+                          type="button" role="tab" aria-controls="pills-0" aria-selected="true"
+                          (click)="onTabChange(0)">Chưa
+                    thanh toán
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-2-tab" data-bs-toggle="pill" data-bs-target="#pills-2"
+                          type="button" role="tab" aria-controls="pills-2" aria-selected="false"
+                          (click)="onTabChange(1)">Chờ xác nhận
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-3-tab" data-bs-toggle="pill" data-bs-target="#pills-3"
+                          type="button" role="tab" aria-controls="pills-3" aria-selected="false"
+                          (click)="onTabChange(2)">Đã xử lý
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-4-tab" data-bs-toggle="pill" data-bs-target="#pills-4"
+                          type="button" role="tab" aria-controls="pills-4" aria-selected="false"
+                          (click)="onTabChange(3)">Đang giao
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-5-tab" data-bs-toggle="pill" data-bs-target="#pills-5"
+                          type="button" role="tab" aria-controls="pills-5" aria-selected="false"
+                          (click)="onTabChange(4)">Hoàn thành
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-6-tab" data-bs-toggle="pill" data-bs-target="#pills-6"
+                          type="button" role="tab" aria-controls="pills-6" aria-selected="false"
+                          (click)="onTabChange(5)">Hủy hàng
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-7-tab" data-bs-toggle="pill" data-bs-target="#pills-7"
+                          type="button" role="tab" aria-controls="pills-7" aria-selected="false"
+                          (click)="onTabChange(6)">Sửa đơn
+                  </button>
+                </li>
+              </ul>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
+                  <div *ngIf="listHoaDon.length > 0">
+                    <table class="table text-nowrap mb-0 align-middle">
+                      <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0" scope="col">
+                          <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Mã</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ngày tạo</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền giảm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Khách hàng</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Nhân viên</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thao tác</h6>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let listHoaDon of listHoaDon; let i = index" style="height: 30px;">
+                        <th scope="row">{{ currentPage * pageSize + i + 1 }}</th>
+                        <td>{{ listHoaDon.ma }}</td>
+                        <td>{{ formatDate(listHoaDon.ngayTao) }}</td>
+                        <td>
+                          <p *ngIf="listHoaDon.ghiChu != null">{{ listHoaDon.ghiChu }}%</p>
+                          <p *ngIf="listHoaDon.ghiChu === null"> - </p>
+                        </td>
+                        <td>{{ listHoaDon.tongTien }}</td>
+                        <td>
+                          <p *ngIf="listHoaDon.voucher != null">{{ listHoaDon.voucher.giaTriGiam }}%</p>
+                          <p *ngIf="listHoaDon.voucher === null"> - </p>
+                        </td>
+                        <td>
+                          <p *ngIf="listHoaDon.khachHang != null">{{ listHoaDon.khachHang.ten }}</p>
+                          <p *ngIf="listHoaDon.khachHang === null"> Khách lẻ </p>
+                        </td>
+                        <td>
+                          <p *ngIf="listHoaDon.nhanVien != null">{{ listHoaDon.nhanVien.ten }}</p>
+                          <p *ngIf="listHoaDon.nhanVien === null"> Mua online </p>
+                        </td>
+                        <td [style.color]="getTrangThaiColor(listHoaDon.trangThai)">
+                          {{ getTrangThaiText(listHoaDon.trangThai) }}
+                        </td>
+                        <td>
+                          <button
+                            style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(listHoaDon.id)"
+                            (click)="loadHoaDonById(listHoaDon.id)">
+                            Xem
+                          </button>
+                        </td>
+                      </tr>
+
+                      </tbody>
+                    </table>
+                    <div class="mt-3">
+                      <button class="btn btn-primary" (click)="onPageChangeAll(currentPage - 1)"
+                              [disabled]="currentPage === 0">
+                        <
+                      </button>
+                      <span style="margin: 5px">Trang {{ currentPage + 1 }}</span>
+                      <button class="btn btn-primary" (click)="onPageChangeAll(currentPage + 1)"
+                              [disabled]="currentPage === totalPages - 1">>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="listHoaDon.length === 0">
+                    <p>Không có hóa đơn nào được tìm thấy.</p>
+                  </div>
+                </div>
+                <div class="tab-pane fade " id="pills-0" role="tabpanel" aria-labelledby="pills-0-tab">
+                  <div *ngIf="!noProductsFound">
+                    <table class="table text-nowrap mb-0 align-middle">
+                      <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0" scope="col">
+                          <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Mã</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ngày tạo</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ghi Chú</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền giảm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Khách hàng</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Nhân viên</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thao tác</h6>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let hoaDons of hoaDons; let i = index" style="height: 30px;">
+                        <th scope="row">{{ currentPage * pageSize + i + 1 }}</th>
+                        <td>{{ hoaDons.ma }}</td>
+                        <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.ghiChu != null">{{ hoaDons.ghiChu }}%</p>
+                          <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                        </td>
+                        <td>{{ hoaDons.tongTien }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.voucher != null">{{ hoaDons.voucher.giaTriGiam }}%</p>
+                          <p *ngIf="hoaDons.voucher === null"> - </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.khachHang != null">{{ hoaDons.khachHang.ten }}</p>
+                          <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.nhanVien != null">{{ hoaDons.nhanVien.ten }}</p>
+                          <p *ngIf="hoaDons.nhanVien === null"> Mua online </p>
+                        </td>
+                        <td [style.color]="getTrangThaiColor(hoaDons.trangThai)">
+                          {{ getTrangThaiText(hoaDons.trangThai) }}
+                        </td>
+                        <td>
+                          <button
+                            style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)"
+                            (click)="loadHoaDonById(hoaDons.id)">
+                            Xem
+                          </button>
+                        </td>
+
+                      </tr>
+                      </tbody>
+                    </table>
+                    <div class="mt-3">
+                      <button class="btn btn-primary" (click)="onPageChange(page - 1)" [disabled]="page === 0">
+                        <
+                      </button>
+                      <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                      <button class="btn btn-primary" (click)="onPageChange(page + 1)"
+                              [disabled]="page === totalPages - 1">>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="noProductsFound"
+                       class=" mt-4 text-center d-flex justify-content-center align-items-center">
+                    <p class="mt-5">Không có hóa đơn nào được tìm thấy.</p>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab">
+                  <div *ngIf="!noProductsFound">
+                    <table class="table text-nowrap mb-0 align-middle">
+                      <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0" scope="col">
+                          <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Mã</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ngày tạo</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền giảm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Khách hàng</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Nhân viên</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thao tác</h6>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let hoaDons of hoaDons; let i = index" style="height: 30px;">
+                        <th scope="row">{{ page * pageSize + i + 1 }}</th>
+                        <td>{{ hoaDons.ma }}</td>
+                        <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.ghiChu != null">{{ hoaDons.ghiChu }}%</p>
+                          <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                        </td>
+                        <td>{{ hoaDons.tongTien }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.voucher != null">{{ hoaDons.voucher.giaTriGiam }}%</p>
+                          <p *ngIf="hoaDons.voucher === null"> - </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.khachHang != null">{{ hoaDons.khachHang.ten }}</p>
+                          <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.nhanVien != null">{{ hoaDons.nhanVien.ten }}</p>
+                          <p *ngIf="hoaDons.nhanVien === null"> Mua online </p>
+                        </td>
+                        <td [style.color]="getTrangThaiColor(hoaDons.trangThai)">
+                          {{ getTrangThaiText(hoaDons.trangThai) }}
+                        </td>
+                        <td>
+                          <button
+                            style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)"
+                            (click)="loadHoaDonById(hoaDons.id)">
+                            Xem
+                          </button>
+                          <label class="ms-1 me-1"> | </label>
+                          <button
+                            style="color: #fc8f00;font-size: 16px; margin: 0px; border: none !important; background-color: transparent;"
+                            (click)="loadHoaDonById(hoaDons.id)" (click)="showModal()">
+                            <i class="ti ti-check"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    <div class="mt-3">
+                      <button class="btn btn-primary" (click)="onPageChange(page - 1)" [disabled]="page === 0">
+                        <
+                      </button>
+                      <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                      <button class="btn btn-primary" (click)="onPageChange(page + 1)"
+                              [disabled]="page === totalPages - 1">>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="noProductsFound"
+                       class=" mt-4 text-center d-flex justify-content-center align-items-center">
+                    <p class="mt-5">Không có hóa đơn nào được tìm thấy.</p>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="pills-3" role="tabpanel" aria-labelledby="pills-3-tab">
+                  <div *ngIf="!noProductsFound">
+                    <table class="table text-nowrap mb-0 align-middle">
+                      <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0" scope="col">
+                          <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Mã</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ngày tạo</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền giảm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Khách hàng</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Nhân viên</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thao tác</h6>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let hoaDons of hoaDons; let i = index" style="height: 30px;">
+                        <th scope="row">{{ page * pageSize + i + 1 }}</th>
+                        <td>{{ hoaDons.ma }}</td>
+                        <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.ghiChu != null">{{ hoaDons.ghiChu }}%</p>
+                          <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                        </td>
+                        <td>{{ hoaDons.tongTien }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.voucher != null">{{ hoaDons.voucher.giaTriGiam }}%</p>
+                          <p *ngIf="hoaDons.voucher === null"> - </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.khachHang != null">{{ hoaDons.khachHang.ten }}</p>
+                          <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.nhanVien != null">{{ hoaDons.nhanVien.ten }}</p>
+                          <p *ngIf="hoaDons.nhanVien === null"> Mua online </p>
+                        </td>
+                        <td [style.color]="getTrangThaiColor(hoaDons.trangThai)">
+                          {{ getTrangThaiText(hoaDons.trangThai) }}
+                        </td>
+                        <td>
+                          <button
+                            style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)"
+                            (click)="loadHoaDonById(hoaDons.id)">
+                            Xem
+                          </button>
+                          <label class="ms-1 me-1"> | </label>
+                          <button
+                            style="color: #fc8f00;font-size: 16px; margin: 0px; border: none !important; background-color: transparent;"
+                            (click)="loadHoaDonById(hoaDons.id)" (click)="showModal()">
+                            <i class="ti ti-check"></i>
+                          </button>
+                        </td>
+
+                      </tr>
+                      </tbody>
+                    </table>
+                    <div class="mt-3">
+                      <button class="btn btn-primary" (click)="onPageChange(page - 1)" [disabled]="page === 0">
+                        <
+                      </button>
+                      <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                      <button class="btn btn-primary" (click)="onPageChange(page + 1)"
+                              [disabled]="page === totalPages - 1">>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="noProductsFound"
+                       class=" mt-4 text-center d-flex justify-content-center align-items-center">
+                    <p class="mt-5">Không có hóa đơn nào được tìm thấy.</p>
+                  </div>
+
+                </div>
+                <div class="tab-pane fade" id="pills-4" role="tabpanel" aria-labelledby="pills-4-tab">
+                  <div *ngIf="!noProductsFound">
+                    <table class="table text-nowrap mb-0 align-middle">
+                      <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0" scope="col">
+                          <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Mã</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ngày tạo</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền giảm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Khách hàng</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Nhân viên</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thao tác</h6>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let hoaDons of hoaDons; let i = index" style="height: 30px;">
+                        <th scope="row">{{ page * pageSize + i + 1 }}</th>
+                        <td>{{ hoaDons.ma }}</td>
+                        <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.ghiChu != null">{{ hoaDons.ghiChu }}%</p>
+                          <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                        </td>
+                        <td>{{ hoaDons.tongTien }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.voucher != null">{{ hoaDons.voucher.giaTriGiam }}%</p>
+                          <p *ngIf="hoaDons.voucher === null"> - </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.khachHang != null">{{ hoaDons.khachHang.ten }}</p>
+                          <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.nhanVien != null">{{ hoaDons.nhanVien.ten }}</p>
+                          <p *ngIf="hoaDons.nhanVien === null"> Mua online </p>
+                        </td>
+                        <td [style.color]="getTrangThaiColor(hoaDons.trangThai)">
+                          {{ getTrangThaiText(hoaDons.trangThai) }}
+                        </td>
+                        <td>
+                          <button
+                            style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)"
+                            (click)="loadHoaDonById(hoaDons.id)">
+                            Xem
+                          </button>
+                          <label class="ms-1 me-1"> | </label>
+                          <button
+                            style="color: #fc8f00;font-size: 16px; margin: 0px; border: none !important; background-color: transparent;"
+                            (click)="loadHoaDonById(hoaDons.id)" (click)="showModal()">
+                            <i class="ti ti-check"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    <div class="mt-3">
+                      <button class="btn btn-primary" (click)="onPageChange(page - 1)" [disabled]="page === 0">
+                        <
+                      </button>
+                      <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                      <button class="btn btn-primary" (click)="onPageChange(page + 1)"
+                              [disabled]="page === totalPages - 1">>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="noProductsFound"
+                       class=" mt-4 text-center d-flex justify-content-center align-items-center">
+                    <p class="mt-5">Không có hóa đơn nào được tìm thấy.</p>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="pills-5" role="tabpanel" aria-labelledby="pills-5-tab">
+                  <div *ngIf="!noProductsFound">
+                    <table class="table text-nowrap mb-0 align-middle">
+                      <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0" scope="col">
+                          <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Mã</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ngày tạo</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền giảm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Khách hàng</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Nhân viên</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thao tác</h6>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let hoaDons of hoaDons; let i = index" style="height: 30px;">
+                        <th scope="row">{{ page * pageSize + i + 1 }}</th>
+                        <td>{{ hoaDons.ma }}</td>
+                        <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.ghiChu != null">{{ hoaDons.ghiChu }}%</p>
+                          <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                        </td>
+                        <td>{{ hoaDons.tongTien }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.voucher != null">{{ hoaDons.voucher.giaTriGiam }}%</p>
+                          <p *ngIf="hoaDons.voucher === null"> - </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.khachHang != null">{{ hoaDons.khachHang.ten }}</p>
+                          <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.nhanVien != null">{{ hoaDons.nhanVien.ten }}</p>
+                          <p *ngIf="hoaDons.nhanVien === null"> Mua online </p>
+                        </td>
+                        <td [style.color]="getTrangThaiColor(hoaDons.trangThai)">
+                          {{ getTrangThaiText(hoaDons.trangThai) }}
+                        </td>
+                        <td>
+                          <button
+                            style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)"
+                            (click)="loadHoaDonById(hoaDons.id)">
+                            Xem
+                          </button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    <div class="mt-3">
+                      <button class="btn btn-primary" (click)="onPageChange(page - 1)" [disabled]="page === 0">
+                        <
+                      </button>
+                      <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                      <button class="btn btn-primary" (click)="onPageChange(page + 1)"
+                              [disabled]="page === totalPages - 1">>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="noProductsFound"
+                       class=" mt-4 text-center d-flex justify-content-center align-items-center">
+                    <p class="mt-5">Không có hóa đơn nào được tìm thấy.</p>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-6" role="tabpanel" aria-labelledby="pills-6-tab">
+                  <div *ngIf="!noProductsFound">
+                    <table class="table text-nowrap mb-0 align-middle">
+                      <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0" scope="col">
+                          <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Mã</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ngày tạo</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền giảm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Khách hàng</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Nhân viên</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thao tác</h6>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let hoaDons of hoaDons; let i = index" style="height: 30px;">
+                        <th scope="row">{{ page * pageSize + i + 1 }}</th>
+                        <td>{{ hoaDons.ma }}</td>
+                        <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.ghiChu != null">{{ hoaDons.ghiChu }}%</p>
+                          <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                        </td>
+                        <td>{{ hoaDons.tongTien }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.voucher != null">{{ hoaDons.voucher.giaTriGiam }}%</p>
+                          <p *ngIf="hoaDons.voucher === null"> - </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.khachHang != null">{{ hoaDons.khachHang.ten }}</p>
+                          <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.nhanVien != null">{{ hoaDons.nhanVien.ten }}</p>
+                          <p *ngIf="hoaDons.nhanVien === null"> Mua online </p>
+                        </td>
+                        <td [style.color]="getTrangThaiColor(hoaDons.trangThai)">
+                          {{ getTrangThaiText(hoaDons.trangThai) }}
+                        </td>
+                        <td>
+                          <button
+                            style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop" (click)="loadHoaDonChiTiet(hoaDons.id)"
+                            (click)="loadHoaDonById(hoaDons.id)">
+                            Xem
+                          </button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    <div class="mt-3">
+                      <button class="btn btn-primary" (click)="onPageChange(page - 1)" [disabled]="page === 0">
+                        <
+                      </button>
+                      <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                      <button class="btn btn-primary" (click)="onPageChange(page + 1)"
+                              [disabled]="page === totalPages - 1">>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="noProductsFound"
+                       class=" mt-4 text-center d-flex justify-content-center align-items-center">
+                    <p class="mt-5">Không có hóa đơn nào được tìm thấy.</p>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-7" role="tabpanel" aria-labelledby="pills-7-tab">
+                  <div *ngIf="!noProductsFound">
+                    <table class="table text-nowrap mb-0 align-middle">
+                      <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0" scope="col">
+                          <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Mã</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ngày tạo</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Ghi chú</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Tổng tiền giảm</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Khách hàng</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Nhân viên</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                        </th>
+                        <th scope="col">
+                          <h6 class="fw-semibold mb-0">Thao tác</h6>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let hoaDons of hoaDons; let i = index" style="height: 30px;">
+                        <th scope="row">{{ page * pageSize + i + 1 }}</th>
+                        <td>{{ hoaDons.ma }}</td>
+                        <td>{{ formatDate(hoaDons.ngayTao) }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.ghiChu != null">{{ hoaDons.ghiChu }}%</p>
+                          <p *ngIf="hoaDons.ghiChu === null"> - </p>
+                        </td>
+                        <td>{{ hoaDons.tongTien }}</td>
+                        <td>
+                          <p *ngIf="hoaDons.voucher != null">{{ hoaDons.voucher.giaTriGiam }}%</p>
+                          <p *ngIf="hoaDons.voucher === null"> - </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.khachHang != null">{{ hoaDons.khachHang.ten }}</p>
+                          <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>
+                        </td>
+                        <td>
+                          <p *ngIf="hoaDons.nhanVien != null">{{ hoaDons.nhanVien.ten }}</p>
+                          <p *ngIf="hoaDons.nhanVien === null"> Mua online </p>
+                        </td>
+                        <td [style.color]="getTrangThaiColor(hoaDons.trangThai)">
+                          {{ getTrangThaiText(hoaDons.trangThai) }}
+                        </td>
+                        <td>
+                          <button
+                            style="color: #7A98FE;font-size: 14px; margin: 0px; border: none !important; background-color: transparent;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop1" (click)="loadHoaDonChiTiet(hoaDons.id)"
+                            (click)="loadHoaDonById(hoaDons.id)">
+                            Xem
+                          </button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    <div class="mt-3">
+                      <button class="btn btn-primary" (click)="onPageChange(page - 1)" [disabled]="page === 0">
+                        <
+                      </button>
+                      <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                      <button class="btn btn-primary" (click)="onPageChange(page + 1)"
+                              [disabled]="page === totalPages - 1">>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="noProductsFound"
+                       class=" mt-4 text-center d-flex justify-content-center align-items-center">
+                    <p class="mt-5">Không có hóa đơn nào được tìm thấy.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                <div class="mb-3 mb-sm-0">
+                  <h5 class="card-title fw-semibold">Danh sách hóa đơn</h5>
+                </div>
+                <div>
+
+                  <select class="form-select">
+                    <option value="ALL">All</option>
+                    <option value="CUSTOMER">Chưa thanh toán</option>
+                    <option value="STAFF">Đã thanh toán</option>
+                  </select>
+                </div>
+              </div>
+               -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+       aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Hóa đơn chi tiết</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid" *ngIf="!noCartDetail">
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Màu sắc</th>
+                <th>Kích thước</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let chiTiet of hoaDonChiTiet">
+                <td>{{ chiTiet.chiTietSanPham.sanPham.ma }}</td>
+                <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
+                <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
+                <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
+                <td>{{ chiTiet.soLuong }}</td>
+                <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div *ngIf="noCartDetail" class="m-5 d-flex justify-content-center">
+          <p>Chưa có sản phẩm nào</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger">Xác nhận</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" #confirmUpdate tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel1">Xác nhận chuyển trạng tháu</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                (click)="closeconfirmUpdate()"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Xác nhận chuyển trạng thái</label>
+        <input type="text" class="form-control" placeholder="Ghi chú">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="suaTrangThaiModal()" data-bs-dismiss="modal">Xác nhận</button>
+        <button class="btn btn-danger" (click)="closeconfirmUpdate()" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade modal-xl" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel1">Hóa đơn chi tiết</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-3">
+            <h6>Thông tin khách hàng</h6>
+            <div class="d-flex">
+              <span class="me-2 fw-bold">Voucher:</span>
+              <span>{{tenKhachHang}}</span>
+            </div>
+            <p><strong>Địa chỉ:</strong> {{diaChiKhachHang}}</p>
+            <p><strong>Số điện thoại: </strong> {{sdtKhachHang}}</p>
+          </div>
+          <div class="col-md-1 d-flex align-items-center">
+            <div class="divider"></div>
+          </div>
+          <div class="col-md-8">
+            <h6>Thông tin đơn hàng</h6>
+            <p><strong>Mã đơn hàng:</strong> ORD123456</p>
+            <p><strong>Hóa đơn:</strong> {{hoaDonSua.ma}}</p>
+            <p><strong>Chi tiết sản phẩm:</strong></p>
+            <table class="table" *ngIf="!noCartDetail">
+              <thead>
+              <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Màu sắc</th>
+                <th>Kích thước</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let chiTiet of hoaDonChiTiet">
+                <td>{{ chiTiet.chiTietSanPham.sanPham.ma }}</td>
+                <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
+                <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
+                <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
+                <td>{{ chiTiet.soLuong }}</td>
+                <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="d-flex">
+              <span class="me-2 fw-bold">Voucher:</span>
+              <span *ngIf="hoaDonSua.voucher === null">Không</span>
+              <span *ngIf="hoaDonSua.voucher != null">{{hoaDonSua.voucher.ten}}</span>
+            </div>
+            <div class="d-flex">
+              <span class="me-2 fw-bold">Tông tiền:</span>
+              <span>{{hoaDonSua.tongTien}}</span>
+            </div>
+          </div>
+
+          <hr>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <h6>Thông tin nhan vien ban</h6>
+            <p><strong>Tên:</strong> admin</p>
+            <p><strong>Số điện thoại:</strong> 0123456789</p>
+          </div>
+          <div class="col-md-1 d-flex align-items-center">
+            <div class="divider"></div>
+          </div>
+          <div class="col-md-8">
+            <h6>Thông tin mo ta</h6>
+            <p><strong>Trạng thái đơn hàng:</strong> Đã xử lý</p>
+            <p><strong>Hinh thuc mua:</strong>
+              <select class="form-select">
+                <option>onl</option>
+                <option>off</option>
+              </select></p>
+            <p><strong>Ly do doi tra:</strong>
+              <textarea class="form-control" id="lyDo" rows="3">{{hoaDonSua.ghiChu}}</textarea></p>
+            <p><strong>Nguoi thuc hien:</strong> Admin </p>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger">Xác nhận</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

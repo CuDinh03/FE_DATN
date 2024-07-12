@@ -1,0 +1,17 @@
+.card {
+  overflow-x: auto;
+}
+
+.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table th, .table td {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.table tbody tr:hover {
+  background-color: #f0f0f0; /* Thay đổi màu nền khi hover */
+}

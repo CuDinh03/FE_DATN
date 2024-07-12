@@ -1,0 +1,441 @@
+<app-header></app-header>
+<section style="background-color: #ffffff;">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center">
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <app-sidebar-profile></app-sidebar-profile>
+      </div>
+      <div class="col-lg-9">
+        <div class="card mb-4">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                      type="button" role="tab" aria-controls="home" aria-selected="true" (click)="findOrder()">Tất cả
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                      type="button" role="tab" aria-controls="profile" aria-selected="false" (click)="onTabChange(1)">
+                Chờ xác nhận
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="contact-tab1" data-bs-toggle="tab" data-bs-target="#contact-tab-1"
+                      type="button" role="tab" aria-controls="contact-tab-1" aria-selected="false"
+                      (click)="onTabChange(2)">Đã
+                xử lý
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="contact-tab2" data-bs-toggle="tab" data-bs-target="#contact-tab-2"
+                      type="button" role="tab" aria-controls="contact-tab-2" aria-selected="false"
+                      (click)="onTabChange(3)">
+                Đang giao
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="contact-tab3" data-bs-toggle="tab" data-bs-target="#contact-tab-3"
+                      type="button" role="tab" aria-controls="contact-tab-3" aria-selected="false"
+                      (click)="onTabChange(4)">Hoàn thành
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="contact-tab4" data-bs-toggle="tab" data-bs-target="#contact-tab-4"
+                      type="button" role="tab" aria-controls="contact-tab-4" aria-selected="false"
+                      (click)="onTabChange(5)">
+                Hủy hàng
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="mb-3">
+          <div class="row">
+            <div class="col-8">
+              <input class="form-control" type="text" placeholder="Tìm kiếm" #searchInput
+                     (input)="onSearch(searchInput.value)">
+            </div>
+            <div class="col-4 d-flex align-content-center justify-content-between">
+              <input class="date-filter" type="date" placeholder="Tìm kiếm"
+                     aria-label="default input example"
+                     (change)="onDateChange()" [(ngModel)]="startDate">
+              <label class="ti ti-arrow-right"></label>
+              <input class="date-filter" type="date" placeholder="Tìm kiếm"
+                     aria-label="default input example"
+                     (change)="onDateChange()" [(ngModel)]="endDate">
+            </div>
+
+          </div>
+        </div>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div *ngIf="!noProductsFound">
+              <div class="card mb-4" *ngFor="let item of hoaDonChiTiet" type="button">
+                <div class="d-flex align-items-center mt-3 ms-3">
+                <span class="align-items-center" style="color: black;">
+                  <i class="ti ti-brand-shopee "></i>MT-Shirt
+                </span>
+                  <span [style.color]="getTrangThaiColor(item.hoaDon.trangThai)" class="ms-auto me-3">
+                  {{ getTrangThaiText(item.hoaDon.trangThai) }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex align-items-center" (click)="findHoaDonById(item.hoaDon.id)">
+                <span class="ms-2">
+                  <div class="media">
+                    <div class="d-flex">
+                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[1]" alt=""
+                           class="product-image">
+                    </div>
+                    <div class="media-body">
+                      <p style="color: black; font-size: 16px;"> {{ item.chiTietSanPham.sanPham.ten }}
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản phẩm: </span>
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.mauSac.ten }}
+                          ,
+                        </span>
+                        <span
+                          style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.kichThuoc.ten }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </span>
+                  <span class="ms-auto me-3" style="color: #5D87FF;">
+                  {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-end align-items-center me-3 mb-1">
+                  <p style="color: black; font-size: 14px;">Thành tiền:
+                    <span style="color: #5D87FF;">{{
+                        item.hoaDon.tongTien |
+                          currency:'VND':'symbol':'1.0-0'
+                      }}</span>
+                  </p>
+                </div>
+                <div class="d-flex align-items-center justify-content-end mb-2 me-3">
+                  <button class="btn btn-primary" (click)="findSanPhamById(item.chiTietSanPham.id)">Mua lại</button>
+                  <button *ngIf="item.hoaDon.trangThai === 5 && item.trangThai === 1" class="btn btn-warning m-2"
+                          (click)="findOrderDetailByid(item.id)">Đánh giá
+                  </button>
+                  <button *ngIf="item.hoaDon.trangThai === 1" class="btn btn-danger ms-2"
+                          (click)="suaTrangThaiModal(item.id)">Hủy hàng
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
+              <p>Không có hóa đơn nào được tìm thấy.</p>
+            </div>
+          </div>
+
+          <!--          new-->
+          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div *ngIf="!noProductsFound">
+              <div class="card mb-4" *ngFor="let item of hoaDonChiTiet" type="button">
+                <div class="d-flex align-items-center mt-3 ms-3">
+                <span class="align-items-center" style="color: black;">
+                  <i class="ti ti-brand-shopee "></i>MT-Shirt
+                </span>
+                  <span [style.color]="getTrangThaiColor(item.hoaDon.trangThai)" class="ms-auto me-3">
+                  {{ getTrangThaiText(item.hoaDon.trangThai) }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex align-items-center" (click)="findHoaDonById(item.hoaDon.id)">
+                <span class="ms-2">
+                  <div class="media">
+                    <div class="d-flex">
+                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[1]" alt=""
+                           class="product-image">
+                    </div>
+                    <div class="media-body">
+                      <p style="color: black; font-size: 16px;"> {{ item.chiTietSanPham.sanPham.ten }}
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản phẩm: </span>
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.mauSac.ten }}
+                          ,
+                        </span>
+                        <span
+                          style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.kichThuoc.ten }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </span>
+                  <span class="ms-auto me-3" style="color: #5D87FF;">
+                  {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-end align-items-center me-3 mb-1">
+                  <p style="color: black; font-size: 14px;">Thành tiền:
+                    <span style="color: #5D87FF;">{{
+                        item.hoaDon.tongTien |
+                          currency:'VND':'symbol':'1.0-0'
+                      }}</span>
+                  </p>
+                </div>
+                <div class="d-flex align-items-center justify-content-end mb-2 me-3">
+                  <button class="btn btn-primary" (click)="findSanPhamById(item.chiTietSanPham.id)">Mua lại</button>
+                  <button class="btn btn-danger ms-2"
+                          (click)="suaTrangThaiModal(item.id)">Hủy hàng
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
+              <p>Không có hóa đơn nào được tìm thấy.</p>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="contact-tab-1" role="tabpanel" aria-labelledby="contact-tab1">
+            <div *ngIf="!noProductsFound">
+              <div class="card mb-4" *ngFor="let item of hoaDonChiTiet" type="button">
+                <div class="d-flex align-items-center mt-3 ms-3">
+                <span class="align-items-center" style="color: black;">
+                  <i class="ti ti-brand-shopee "></i>MT-Shirt
+                </span>
+                  <span [style.color]="getTrangThaiColor(item.hoaDon.trangThai)" class="ms-auto me-3">
+                  {{ getTrangThaiText(item.hoaDon.trangThai) }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex align-items-center" (click)="findHoaDonById(item.hoaDon.id)">
+                <span class="ms-2">
+                  <div class="media">
+                    <div class="d-flex">
+                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[1]" alt=""
+                           class="product-image">
+                    </div>
+                    <div class="media-body">
+                      <p style="color: black; font-size: 16px;"> {{ item.chiTietSanPham.sanPham.ten }}
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản phẩm: </span>
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.mauSac.ten }}
+                          ,
+                        </span>
+                        <span
+                          style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.kichThuoc.ten }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </span>
+                  <span class="ms-auto me-3" style="color: #5D87FF;">
+                  {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-end align-items-center me-3 mb-1">
+                  <p style="color: black; font-size: 14px;">Thành tiền:
+                    <span style="color: #5D87FF;">{{
+                        item.hoaDon.tongTien |
+                          currency:'VND':'symbol':'1.0-0'
+                      }}</span>
+                  </p>
+                </div>
+                <div class="d-flex align-items-center justify-content-end mb-2 me-3">
+                  <button class="btn btn-primary" (click)="findSanPhamById(item.chiTietSanPham.id)">Mua lại</button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
+              <p>Không có hóa đơn nào được tìm thấy.</p>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="contact-tab-2" role="tabpanel" aria-labelledby="contact-tab2">
+            <div *ngIf="!noProductsFound">
+              <div class="card mb-4" *ngFor="let item of hoaDonChiTiet" type="button">
+                <div class="d-flex align-items-center mt-3 ms-3">
+                <span class="align-items-center" style="color: black;">
+                  <i class="ti ti-brand-shopee "></i>MT-Shirt
+                </span>
+                  <span [style.color]="getTrangThaiColor(item.hoaDon.trangThai)" class="ms-auto me-3">
+                  {{ getTrangThaiText(item.hoaDon.trangThai) }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex align-items-center" (click)="findHoaDonById(item.hoaDon.id)">
+                <span class="ms-2">
+                  <div class="media">
+                    <div class="d-flex">
+                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[1]" alt=""
+                           class="product-image">
+                    </div>
+                    <div class="media-body">
+                      <p style="color: black; font-size: 16px;"> {{ item.chiTietSanPham.sanPham.ten }}
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản phẩm: </span>
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.mauSac.ten }}
+                          ,
+                        </span>
+                        <span
+                          style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.kichThuoc.ten }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </span>
+                  <span class="ms-auto me-3" style="color: #5D87FF;">
+                  {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-end align-items-center me-3 mb-1">
+                  <p style="color: black; font-size: 14px;">Thành tiền:
+                    <span style="color: #5D87FF;">{{
+                        item.hoaDon.tongTien |
+                          currency:'VND':'symbol':'1.0-0'
+                      }}</span>
+                  </p>
+                </div>
+                <div class="d-flex align-items-center justify-content-end mb-2 me-3">
+                  <button class="btn btn-primary" (click)="findSanPhamById(item.chiTietSanPham.id)">Mua lại</button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
+              <p>Không có hóa đơn nào được tìm thấy.</p>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="contact-tab-3" role="tabpanel" aria-labelledby="contact-tab3">
+            <div *ngIf="!noProductsFound">
+              <div class="card mb-4" *ngFor="let item of hoaDonChiTiet" type="button">
+                <div class="d-flex align-items-center mt-3 ms-3">
+                <span class="align-items-center" style="color: black;">
+                  <i class="ti ti-brand-shopee "></i>MT-Shirt
+                </span>
+                  <span [style.color]="getTrangThaiColor(item.hoaDon.trangThai)" class="ms-auto me-3">
+                  {{ getTrangThaiText(item.hoaDon.trangThai) }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex align-items-center" (click)="findHoaDonById(item.hoaDon.id)">
+                <span class="ms-2">
+                  <div class="media">
+                    <div class="d-flex">
+                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[1]" alt=""
+                           class="product-image">
+                    </div>
+                    <div class="media-body">
+                      <p style="color: black; font-size: 16px;"> {{ item.chiTietSanPham.sanPham.ten }}
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản phẩm: </span>
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.mauSac.ten }}
+                          ,
+                        </span>
+                        <span
+                          style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.kichThuoc.ten }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </span>
+                  <span class="ms-auto me-3" style="color: #5D87FF;">
+                  {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-end align-items-center me-3 mb-1">
+                  <p style="color: black; font-size: 14px;">Thành tiền:
+                    <span style="color: #5D87FF;">{{
+                        item.hoaDon.tongTien |
+                          currency:'VND':'symbol':'1.0-0'
+                      }}</span>
+                  </p>
+                </div>
+                <div class="d-flex align-items-center justify-content-end mb-2 me-3">
+                  <button class="btn btn-primary" (click)="findSanPhamById(item.chiTietSanPham.id)">Mua lại</button>
+                  <button class="btn btn-warning m-2"
+                          (click)="findOrderDetailByid(item.id)">Đánh giá
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
+              <p>Không có hóa đơn nào được tìm thấy.</p>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="contact-tab-4" role="tabpanel" aria-labelledby="contact-tab4">
+            <div *ngIf="!noProductsFound">
+              <div class="card mb-4" *ngFor="let item of hoaDonChiTiet" type="button">
+                <div class="d-flex align-items-center mt-3 ms-3">
+                <span class="align-items-center" style="color: black;">
+                  <i class="ti ti-brand-shopee "></i>MT-Shirt
+                </span>
+                  <span [style.color]="getTrangThaiColor(item.hoaDon.trangThai)" class="ms-auto me-3">
+                  {{ getTrangThaiText(item.hoaDon.trangThai) }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex align-items-center" (click)="findHoaDonById(item.hoaDon.id)">
+                <span class="ms-2">
+                  <div class="media">
+                    <div class="d-flex">
+                      <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[1]" alt=""
+                           class="product-image">
+                    </div>
+                    <div class="media-body">
+                      <p style="color: black; font-size: 16px;"> {{ item.chiTietSanPham.sanPham.ten }}
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản phẩm: </span>
+                        <br>
+                        <span style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.mauSac.ten }}
+                          ,
+                        </span>
+                        <span
+                          style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.kichThuoc.ten }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </span>
+                  <span class="ms-auto me-3" style="color: #5D87FF;">
+                  {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+                </span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-end align-items-center me-3 mb-1">
+                  <p style="color: black; font-size: 14px;">Thành tiền:
+                    <span style="color: #5D87FF;">{{
+                        item.hoaDon.tongTien |
+                          currency:'VND':'symbol':'1.0-0'
+                      }}</span>
+                  </p>
+                </div>
+                <div class="d-flex align-items-center justify-content-end mb-2 me-3">
+                  <button class="btn btn-primary" (click)="findSanPhamById(item.chiTietSanPham.id)">Mua lại</button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="noProductsFound" class="d-flex justify-content-lg-center align-content-center m-3">
+              <p>Không có hóa đơn nào được tìm thấy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>
+
+<div class="modal fade" #confirmUpdate tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel1">Lý do hủy đơn</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                (click)="closeconfirmUpdate()"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Xác nhận chuyển trạng thái</label>
+        <input type="text" class="form-control" placeholder="Lý do hủy đơn">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="updateTrangThai(hoaDonSingle.id, 6)" data-bs-dismiss="modal">Xác nhận
+        </button>
+        <button class="btn btn-danger" (click)="closeconfirmUpdate()" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>

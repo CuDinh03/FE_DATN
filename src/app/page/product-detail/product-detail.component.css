@@ -1,0 +1,262 @@
+.card {
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-body {
+    padding: 10px;
+  }
+  
+  .thumbnail-container {
+    margin-bottom: 5px;  /* Adjust as needed to reduce space between thumbnails */
+  }
+  
+  .img-thumbnail {
+    cursor: pointer;
+    transition: transform 0.2s;
+    max-width: 90px;  /* Adjust size as needed */
+    max-height: 90px; /* Adjust size as needed */
+    margin-top: 5px;
+
+  }
+  
+  .img-thumbnail:hover {
+    transform: scale(1.1);
+  }
+  
+  .large-image-container {
+    padding-left: 0;   /* Reduce padding to bring the images closer */
+    margin-top: 5px;
+  }
+  
+  .large-image {
+    max-width: 100%;
+    height: 100%;
+  }
+  
+  .product-info {
+    padding-left: 20px;  /* Adjust padding to position product info */
+  }
+  
+  .row > .col-6 {
+    padding-left: 0; /* Ensure no additional padding is added between columns */
+  }
+  
+  .mb-3 {
+    margin-bottom: 10px; /* Adjust as needed to reduce space below the large image */
+  }
+  
+
+  .custom-heading {
+    color: black;
+    font-weight: bold; /* In đậm */
+  }
+
+  section {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .rating {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-top: 10px;
+  }
+  
+  .rating .ti-star {
+    font-size: 16px;
+    color: #ccc;
+  }
+  
+  .rating .ti-star.filled {
+    color: #f8b600;
+  }
+  
+  .rating span {
+    margin-left: 5px;
+    font-size: 14px;
+  }
+
+  .price-label {
+    color: #000; /* Màu chữ đen */
+    text-decoration: underline; /* Gạch chân */
+    font-size: 16px;
+  }
+  
+  .price {
+    font-size: 20px;
+    color: green; /* Màu xanh cho giá bán */
+  }
+
+  .product-header{
+    margin-bottom: 30px;
+  }
+
+  .color-label{
+    color: #000; /* Màu chữ đen */
+    font-size: 16px;
+  }
+
+  .form-select {
+    font-size: 16px; /* Kích thước font chữ */
+    padding: 10px; /* Kích thước padding */
+    width: 230px; /* Độ rộng */
+    line-height: 1; /* Chiều cao dòng */
+    height: auto; /* Chiều cao tự động */
+  }
+
+  
+  .product_count {
+    display: flex;
+    align-items: center;
+    font-size: 16px; /* Bạn có thể điều chỉnh kích thước font nếu cần */
+    position: relative; /* Đặt vị trí tương đối cho container để các phần tử con có thể sử dụng vị trí tuyệt đối */
+  }
+  
+  /* Điều chỉnh kích thước ô nhập liệu */
+  .product_count .qty {
+    width: 200px; /* Đặt chiều rộng của ô nhập liệu */
+    height: 38px; /* Đặt chiều cao của ô nhập liệu */
+    font-size: 16px; /* Điều chỉnh kích thước font */
+    padding-right: 40px; /* Thêm khoảng đệm bên phải để tạo chỗ cho các nút */
+    box-sizing: border-box;
+  }
+  
+  /* Điều chỉnh kích thước của các nút */
+  .product_count .items-count {
+    width: 20px; /* Đặt chiều rộng của các nút */
+    height: 20px; /* Đặt chiều cao của các nút */
+    font-size: 16px; /* Điều chỉnh kích thước font của các biểu tượng */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none; /* Bỏ viền nếu cần */
+    background-color: #f0f0f0; /* Đặt màu nền */
+    position: absolute; /* Đặt vị trí tuyệt đối */
+    right: 3rem; /* Đặt các nút ở cuối bên phải */
+  }
+  
+  /* Định vị các nút tăng giảm */
+  .product_count .increase {
+    top: 0px; /* Điều chỉnh vị trí theo chiều dọc */
+  }
+  
+  .product_count .reduced {
+    top: 17px; /* Điều chỉnh vị trí theo chiều dọc */
+  }
+  
+  .product_count .items-count i {
+    font-size: 11px; /* Điều chỉnh kích thước biểu tượng */
+  }
+  
+  .custom-radio {
+    display: d-flex;
+    position: relative;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-right: 20px; /* Khoảng cách giữa các nút radio */
+  }
+  
+  .custom-radio input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .custom-radio label {
+    position: relative;
+    display: inline-block;
+    width: 60px; /* Kích thước của nút radio */
+    height: 30px; /* Kích thước của nút radio */
+    border: 1px solid #787878; /* Màu viền mặc định là đỏ */
+    border-radius: 30px; /* Hình dạng tròn */
+    margin-right: 5px; /* Khoảng cách giữa nút radio và mẫu màu */
+  }
+  
+  .custom-radio input[type="radio"]:checked + label {
+    background-color: #5D87FF;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #5D87FF;
+  }
+  
+  
+  .color-swatch {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  .custom-radio label:hover {
+    /* Đổi kiểu con trỏ thành bàn tay khi hover vào */
+    cursor: pointer;
+  }
+  
+
+  .custom-radio-size {
+    display: flex; /* Sử dụng flexbox để căn giữa */
+    align-items: center; /* Căn các thành phần vào giữa theo chiều dọc */
+    position: relative;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-right: 10px; /* Khoảng cách giữa các nút radio */
+  }
+  
+  .custom-radio-size input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .custom-radio-size label {
+    position: relative;
+    display: inline-flex; /* Sử dụng inline-flex để căn giữa nội dung theo chiều ngang */
+    align-items: center; /* Căn các thành phần vào giữa theo chiều dọc */
+    justify-content: center; /* Căn các thành phần vào giữa theo chiều ngang */
+    width: 38px; /* Kích thước của nút radio */
+    height: 38px; /* Kích thước của nút radio */
+    border: 1px solid #9d9d9d; /* Màu viền mặc định */
+    border-radius: 5px; /* Hình dạng tròn */
+    padding: 10px;
+    margin-right: 5px; /* Khoảng cách giữa nút radio và mẫu màu */
+  }
+  
+  /* Hiển thị nút radio được chọn */
+  .custom-radio-size input[type="radio"]:checked + label {
+    background-color: #000000;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000000;
+  }
+
+  .custom-radio-size input[type="radio"]:checked + label .size-swatch{
+    color: #ffffff;
+  }
+  
+  
+  .size-swatch {
+    text-align: center; /* Căn giữa nội dung của size-swatch */
+    color: #000;
+
+  }
+  
+  .custom-radio-size label:hover {
+    cursor: pointer; /* Đổi kiểu con trỏ thành bàn tay khi hover vào */
+  }
+
+  .color-name {
+    color: #000;
+    font-size: 14px; /* Kích thước chữ có thể thay đổi tùy ý */
+    text-align: center;
+    white-space: nowrap; /* Giữ văn bản trên một dòng */
+    overflow: hidden; /* Ẩn phần văn bản bị tràn */
+    text-overflow: ellipsis; /* Thêm dấu ba chấm nếu văn bản quá dài */
+  }
+  
+  
+  
+  
+  
+  

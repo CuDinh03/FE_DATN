@@ -1,0 +1,17 @@
+
+.product-image {
+  max-width: 80px;
+  /* Thay đổi giá trị này theo kích thước mong muốn */
+  height: auto;
+  margin-right: 5px;
+}
+
+.text-warning {
+  color: yellow;
+  fill: yellow;
+}
+
+.text-muted {
+  color: grey;
+  fill: grey;
+}

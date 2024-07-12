@@ -1,0 +1,275 @@
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+  data-sidebar-position="fixed" data-header-position="fixed">
+  <app-sidebar></app-sidebar>
+  <!--  Main wrapper -->
+  <div class="body-wrapper">
+    <!--  Header Start -->
+    <app-admin-header></app-admin-header>
+    <!--  Header End -->
+    <div class="container-fluid">
+      <!--  Row 1 -->
+      <div class="row">
+        <div class="col-lg-12 mb-3 d-flex align-items-strech">
+          <div class="card w-100">
+            <div class="card-body">
+              <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                <div class="mb-3 mb-sm-0">
+                  <h5 class="card-title fw-semibold">Danh sách khách hàng</h5>
+                </div>
+                <!-- <div *ngIf="errorMessage" class="alert alert-danger position-fixed top-50 start-50 translate-middle"
+                  role="alert">
+                  {{ errorMessage }}
+                </div> -->
+                <div>
+
+                  <select class="form-select">
+                    <option value="ALL">All</option>
+                    <option value="CUSTOMER">Hoạt động</option>
+                    <option value="STAFF">Không hoạt động</option>
+                    <!--                    <option value="3">May 2023</option>-->
+                    <!--                    <option value="4">June 2023</option>-->
+                  </select>
+                </div>
+              </div>
+              <div *ngIf="khachHang.length > 0">
+                <table class="table text-nowrap mb-0 align-middle">
+                  <thead class="text-dark fs-4">
+                    <tr>
+                      <th class="border-bottom-0" scope="col">
+                        <h6 class="fw-semibold mb-0">#</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Mã</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Tên</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Tài khoản</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Email</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Sdt</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Giới tính</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Ngày Sinh</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Địa chỉ</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Thao tác</h6>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let khachHang of khachHang; let i = index" style="height: 30px;">
+                      <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
+                      <td>{{khachHang.ma }}</td>
+                      <td>{{khachHang.ten}}</td>
+                      <!-- <td>{{khachHang.taiKhoan.tenDangNhap}}</td> -->
+                       <td>
+                        <p *ngIf="khachHang.taiKhoan != null">{{khachHang.taiKhoan.tenDangNhap}}</p>
+                            <p *ngIf="khachHang.taiKhoan === null"> - </p>
+                       </td>
+                      <td>{{khachHang.email}}</td>
+                      <td>{{khachHang.sdt}}</td>
+                      <td>{{khachHang.gioiTinh}}</td>
+                      <td>{{khachHang.ngaySinh| date:'yyyy-MM-dd'}}</td>
+                      <td>{{khachHang.diaChi}}</td>
+                      <td>
+                        <div *ngIf="khachHang.trangThai === 1">
+                          <div class="form-check form-switch" (click)="delete(khachHang.id)">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                          </div>
+                        </div>
+                        <div *ngIf="khachHang.trangThai === 0">
+                          <div class="form-check form-switch" (click)="openKhachHang(khachHang.id)">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <a (click)="findById(khachHang.id)" style="color: #7A98FE;font-size: 20px;">
+                          <i class="ti ti-edit"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="mt-3">
+                  <button class="btn btn-primary" (click)="onPageChange(currentPage - 1)"
+                    [disabled]="currentPage === 0">
+                    < </button>
+                      <span style="margin: 5px">Trang {{ currentPage + 1 }}</span>
+                      <button class="btn btn-primary" (click)="onPageChange(currentPage + 1)"
+                        [disabled]="currentPage === totalPages - 1">>
+                      </button>
+                </div>
+                <div *ngIf="khachHang.length === 0">
+                  <p>Không có tài khoản nào được tìm thấy.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row alig n-items-start">
+                    <form [formGroup]="khachHangForm" (ngSubmit)="onSubmit()">
+                      <input type="hidden" formControlName="id" id="id">
+                      
+                      <div class="mb-3">
+                        <span><label for="ma" class="form-label">Mã: </label> </span>
+                         
+                        <span id="ma">{{ khachHangForm.get('ma')?.value }}</span>
+
+                        <!-- <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched)">
+                                <div *ngIf="f['ma'].errors">
+                                  <div id="validationServer03Feedback">
+                                    <small style="color: red;">Không được để trống</small>
+                                  </div>
+                                </div>
+                              </div> -->
+                      </div>
+                      <div class="mb-4">
+                        <label for="ten" class="form-label">Tên: </label>
+                        <input type="text" class="form-control" formControlName="ten" id="ten">
+                        <div *ngIf="f['ten'].invalid &&  (f['ten'].dirty || f['ten'].touched)">
+                          <div *ngIf="f['ten'].errors">
+                            <div id="validationServer03Feedback">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- <div class="mb-4">
+                        <label for="taiKhoan" class="form-label">Tài khoản: </label>
+                        
+                        <select class="form-select">
+                          <option value="0">Tài Khoản</option>
+                          <option *ngFor="let taiKhoan of taiKhoanList" [value]="taiKhoan.id">{{ taiKhoan.tenDangNhap }}</option>
+                        </select>
+                        <div *ngIf="f['taiKhoan'].invalid &&  (f['taiKhoan'].dirty || f['taiKhoan'].touched)">
+                          <div *ngIf="f['taiKhoan'].errors">
+                            <div id="validationServer03Feedback">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+
+                      <div class="mb-4">
+                        <label for="email" class="form-label">Email: </label>
+                        <input type="text" class="form-control" formControlName="email" id="email">
+                        <div *ngIf="f['email'].invalid &&  (f['email'].dirty || f['email'].touched)">
+                          <div *ngIf="f['email'].errors">
+                            <div id="validationServer03Feedback">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mb-4">
+                        <label for="sdt" class="form-label">Sdt: </label>
+                        <input type="text" class="form-control" formControlName="sdt" id="sdt">
+                        <div *ngIf="f['sdt'].invalid &&  (f['sdt'].dirty || f['sdt'].touched)">
+                          <div *ngIf="f['sdt'].errors">
+                            <div id="validationServer03Feedback">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="mb-4">
+                        <label for="gioiTinh" class="form-label">Giới tính: </label>
+                        <input type="text" class="form-control" formControlName="gioiTinh" id="gioiTinh">
+                        <div *ngIf="f['gioiTinh'].invalid &&  (f['gioiTinh'].dirty || f['gioiTinh'].touched)">
+                          <div *ngIf="f['gioiTinh'].errors">
+                            <div id="validationServer03Feedback">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mb-4">
+                        <label for="ngaySinh" class="form-label">Ngày Sinh: </label>
+                        <input type="text" class="form-control" formControlName="ngaySinh" id="ngaySinh">
+                        <div *ngIf="f['ngaySinh'].invalid &&  (f['ngaySinh'].dirty || f['ngaySinh'].touched)">
+                          <div *ngIf="f['ngaySinh'].errors">
+                            <div id="validationServer03Feedback">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mb-4">
+                        <label for="diaChi" class="form-label">Địa chỉ: </label>
+                        <input type="text" class="form-control" formControlName="diaChi" id="diaChi">
+                        <div *ngIf="f['diaChi'].invalid &&  (f['diaChi'].dirty || f['diaChi'].touched)">
+                          <div *ngIf="f['diaChi'].errors">
+                            <div id="validationServer03Feedback">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mb-4">
+                        <label for="trangThai" class="form-label">Trạng thái: </label>
+                        <br>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" formControlName="trangThai" id="inlineRadio1"
+                            value="1">
+                          <label class="form-check-label" for="inlineRadio1">Hoạt động</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" formControlName="trangThai" id="inlineRadio1"
+                            value="0">
+                          <label class="form-check-label" for="inlineRadio1">Không hoạt động</label>
+                        </div>
+                      </div>
+                      <div>
+                        <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" [disabled]="!khachHangForm.valid">
+                          {{ isEditMode ? 'Cập nhật' : 'Thêm' }}
+                        </button>
+                      </div>
+                      <div *ngIf="showSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{successMessage}}
+                        <button type="button" class="btn-close" aria-label="Close" (click)="closeSuccessAlert()"></button>
+                      </div>
+                      
+                      <!-- Thông báo lỗi -->
+                      <div *ngIf="errorMessage" class="alert alert-danger">
+                        {{ errorMessage }}
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+                <div id="earning"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

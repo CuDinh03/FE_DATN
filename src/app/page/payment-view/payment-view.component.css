@@ -1,0 +1,24 @@
+.customer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.customer-details {
+  flex-grow: 1;
+}
+
+.customer-name {
+  font-weight: bold;
+  color: black;
+}
+
+.customer-sdt,
+.customer-address {
+  opacity: 0.6;
+}
+
+.update-link {
+  margin-left: auto;
+}
