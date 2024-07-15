@@ -89,14 +89,18 @@ export class ShoppingViewComponent {
               private snackBar: MatSnackBar,
               private nvService: NhanVienService
   ) {
+    // @ts-ignore
     this.thanhToanDto = {
       hoaDonDto: {
         id: '',
         ma: '',
-        khachHang: '',
-        nhanVien: '',
+        // @ts-ignore
+        khachHang: null,
+        // @ts-ignore
+        nhanVien: null,
         tongTien:'',
-        voucher: '',
+        // @ts-ignore
+        voucher: null,
         ghiChu: '',
         tongTienGiam: 0,
         ngayTao: new Date(),

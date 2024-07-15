@@ -1,4 +1,3 @@
-<app-header></app-header>
 <section style="background-color: #ffffff;">
   <div class="container py-5">
     <div class="row d-flex justify-content-center">
@@ -93,7 +92,9 @@
                 <div class="d-flex align-items-center justify-content-end mb-2 me-3">
                                 <button class="btn btn-primary me-2">Mua lại</button>
                                 <button class="btn btn-warning">Phản hồi</button>
-                                <button *ngIf="item.hoaDon.trangThai === 1" class="btn btn-danger ms-2">Hủy hàng</button>
+                  <button type="button" *ngIf="item.hoaDon.trangThai === 1" class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#lyDoHuyModal">
+                    Hủy hàng
+                  </button>
               </div>
                         </a>
                     </div>
@@ -104,4 +105,65 @@
     </div>
   </div>
 </section>
-<app-footer></app-footer>
+
+
+<div class="modal fade" id="lyDoHuyModal" tabindex="-1" aria-labelledby="lyDoHuyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="lyDoHuyModalLabel">Lý Do Hủy</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="lyDoHuy" id="lyDo1" value="capNhatDiaChiSdt">
+            <label class="form-check-label" for="lyDo1">
+              Tôi muốn cập nhật địa chỉ/sđt nhận hàng.
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="lyDoHuy" id="lyDo2" value="thayDoiMaGiamGia">
+            <label class="form-check-label" for="lyDo2">
+              Tôi muốn thêm/thay đổi Mã giảm giá
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="lyDoHuy" id="lyDo3" value="thayDoiSanPham">
+            <label class="form-check-label" for="lyDo3">
+              Tôi muốn thay đổi sản phẩm (kích thước, màu sắc, số lượng...)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="lyDoHuy" id="lyDo4" value="thanhToanRacRoi">
+            <label class="form-check-label" for="lyDo4">
+              Thủ tục thanh toán rắc rối
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="lyDoHuy" id="lyDo5" value="timThayNoiKhacTotHon">
+            <label class="form-check-label" for="lyDo5">
+              Tôi tìm thấy chỗ mua khác tốt hơn (Rẻ hơn, uy tín hơn, giao nhanh hơn...)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="lyDoHuy" id="lyDo6" value="khongCoNhuCauMuaNua">
+            <label class="form-check-label" for="lyDo6">
+              Tôi không có nhu cầu mua nữa
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="lyDoHuy" id="lyDo7" value="khongTimThayLyDoPhuHop">
+            <label class="form-check-label" for="lyDo7">
+              Tôi không tìm thấy lý do hủy phù hợp
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" class="btn btn-primary">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>

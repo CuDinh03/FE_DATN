@@ -121,13 +121,8 @@ export class HeaderComponent {
 
   logout() {
     // Redirect đến trang đăng nhập sau khi đăng xuất
-    this.router.navigate(['/trang-chu']).then(() => {
       this.auth.logout();
-      console.log('Redirected to /trang-chu');
-    }).catch(err => {
-      console.error('Error navigating to /trang-chu:', err);
-    });
-    window.location.reload();
+
   }
 
   getTotalQuantity(): number {

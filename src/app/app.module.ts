@@ -92,7 +92,7 @@ import { TrangChuComponent } from './page/trang-chu/trang-chu.component';
     RatingViewComponent,
     MaskValuePipe,
     DemoComponent,
-    TrangChuComponent
+    TrangChuComponent,
   ],
   imports: [
     BrowserModule,

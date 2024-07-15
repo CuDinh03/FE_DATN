@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class AuthenticationService {
   private apiUrl = 'http://localhost:9091/api/auth/log-in';
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   login(tenDangNhap: string, matKhau: string): Observable<any> {
@@ -61,19 +62,14 @@ export class AuthenticationService {
 
 
   logout(): void {
-    // Xoá token khi đăng xuất
-    localStorage.removeItem('token');
-    localStorage.removeItem('chiTietSanPham');
-    localStorage.removeItem('khachHang');
-    localStorage.removeItem('gioHang');
-    localStorage.removeItem('dbhoadon');
-    localStorage.removeItem('tenDangNhap');
-    localStorage.removeItem('hoaDon');
-    localStorage.removeItem('maHoaDon');
-    localStorage.removeItem('listHoaDon');
-    localStorage.removeItem('gioHangChiTiet');
-    localStorage.removeItem('voucher');
-    localStorage.removeItem('sanPhamChiTiet');
-    localStorage.removeItem('findSanPhamChiTiet');
+    localStorage.clear();
+
+    if (window.location.pathname === '/trang-chu') {
+      window.location.reload();
+    }
+
+    // Chuyển hướng về trang chủ
+    this.router.navigate(['/trang-chu']);
   }
+
 }

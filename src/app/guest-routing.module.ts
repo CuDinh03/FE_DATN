@@ -11,13 +11,14 @@ import {TrangChuComponent} from "./page/trang-chu/trang-chu.component";
 
 const guestRoutes: Routes = [
   { path: 'trang-chu', component: TrangChuComponent },
+  { path: '', component: TrangChuComponent },
   { path: 'log-in', component: AuthenticationLoginComponent },
   { path: 'list-p', component: ShopCategoryComponent },
   { path: 'detail/:id', component: ProductDetailComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'sign-up', component: RegisterComponent },
   { path: 'danh-gia', component: RatingViewComponent },
-  { path: 'demo', component: DemoComponent }
+  { path: 'demo', component: DemoComponent },
 ];
 
 @NgModule({

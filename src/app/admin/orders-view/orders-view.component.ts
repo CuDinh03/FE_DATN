@@ -7,14 +7,17 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {AuthenticationService} from './../../service/AuthenticationService';
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {ErrorCode} from "../../model/ErrorCode";
+import {HoaDonDto} from "../../model/hoa-don-dto.model";
 
 @Component({
   selector: 'app-orders-view',
   templateUrl: './orders-view.component.html',
   styleUrls: ['./orders-view.component.css']
 })
-export class OrdersViewComponent {
+export class OrdersViewComponent implements OnInit{
   @ViewChild('confirmUpdate') confirmUpdate!: ElementRef;
+  @ViewChild('deleteHoaDon') deleteHoaDon!: ElementRef;
+  @ViewChild('detailHoaDon') detailHoaDon!: ElementRef;
   listHoaDon: any[] = [];
   hoaDonChiTiet: any[] = [];
   totalElements = 0;
@@ -26,6 +29,7 @@ export class OrdersViewComponent {
   errorMessage: string = '';
   successMessage = '';
   hoaDon = ''
+  hoaDonSelect!: any;
   noProductsFound = false;
   noCartDetail = false;
   hoaDons: any[] = [];
@@ -38,6 +42,7 @@ export class OrdersViewComponent {
   constructor(
     private apiService: HoaDonService,
     private hoaDonChiTietService: HoaDonChiTietService,
+    private hoaDonService: HoaDonService,
     private router: Router,
     private auth: AuthenticationService,
     private snackBar: MatSnackBar,
@@ -46,6 +51,7 @@ export class OrdersViewComponent {
   }
 
   ngOnInit(): void {
+    this.getHoaDons();
     this.loadHoaDon();
 
   }
@@ -84,6 +90,7 @@ export class OrdersViewComponent {
         this.listHoaDon = response.result.content;
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
+        this.getHoaDons();
       });
   }
 
@@ -153,6 +160,23 @@ export class OrdersViewComponent {
     );
   }
 
+  loadHoaDonByidHoaDon(hoaDon: string){
+    this.showModalHoaDonDetail();
+    this.hoaDonSelect = null;
+    this.hoaDonService.getHoaDonById(hoaDon).subscribe(
+      (response: ApiResponse<any>) => {
+        if (response.result) {
+          this.hoaDonSelect = response.result;
+        }
+    });
+  }
+  showModalHoaDonDetail(): void {
+    if (this.detailHoaDon && this.detailHoaDon.nativeElement) {
+      this.detailHoaDon.nativeElement.classList.add('show');
+      this.detailHoaDon.nativeElement.style.display = 'block';
+    }
+  }
+
   showModal(): void {
     if (this.confirmUpdate && this.confirmUpdate.nativeElement) {
       this.confirmUpdate.nativeElement.classList.add('show');
@@ -179,42 +203,40 @@ export class OrdersViewComponent {
   }
 
   suaTrangThaiModal(): void {
-    const storedHoaDon = localStorage.getItem('hoaDon');
+    const storedHoaDon = this.hoaDonSelect
     if (storedHoaDon) {
-      const hoaDon = JSON.parse(storedHoaDon);
+      const hoaDon = storedHoaDon
       let trangThaiMoi = hoaDon.trangThai + 1
       this.updateTrangThai(hoaDon.id, trangThaiMoi);
-      this.getHoaDons();
-      this.loadHoaDon();
-
       this.closeconfirmUpdate();
+      this.closeDetailHoaDon();
     } else {
       this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
     }
   }
 
 
-  loadHoaDonById(idHoaDon: string): void {
-    this.apiService.getHoaDonById(idHoaDon)
-      .subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.result) {
-            this.hoaDon = response.result;
-            localStorage.setItem('hoaDon', JSON.stringify(response.result));
-            this.router.navigate(['/admin/hoa-don'])
-          }
-        })
-  }
+  // loadHoaDonById(idHoaDon: string): void {
+  //   this.apiService.getHoaDonById(idHoaDon)
+  //     .subscribe(
+  //       (response: ApiResponse<any>) => {
+  //         if (response.result) {
+  //           this.hoaDon = response.result;
+  //           localStorage.setItem('hoaDon', JSON.stringify(response.result));
+  //           this.router.navigate(['/admin/hoa-don'])
+  //         }
+  //       })
+  // }
 
 
-  handleError(error: HttpErrorResponse): void {
-    console.error(error);
-    if (error.error.code === ErrorCode.PASSWORD_INVALID) {
-      this.errorMessage = 'Mã danh mục không được để trống';
-    } else {
-      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
-    }
-  }
+  // handleError(error: HttpErrorResponse): void {
+  //   console.error(error);
+  //   if (error.error.code === ErrorCode.PASSWORD_INVALID) {
+  //     this.errorMessage = 'Mã danh mục không được để trống';
+  //   } else {
+  //     this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+  //   }
+  // }
 
   updateTrangThai(id: string, trangThai: number): void {
     this.apiService.updateTrangThai(id, trangThai).subscribe(
@@ -224,6 +246,8 @@ export class OrdersViewComponent {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
+          this.getHoaDons();
+          this.loadHoaDon();
         } else {
           this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
             duration: 3000,
@@ -257,15 +281,46 @@ export class OrdersViewComponent {
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
-
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear(); // Get full year
-
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-
     return `${day}/${month}/${year} || ${hours}:${minutes}`;
+  }
+
+
+  closeconfirmDelete() {
+    if (this.deleteHoaDon && this.deleteHoaDon.nativeElement) {
+      this.deleteHoaDon.nativeElement.classList.remove('show');
+      this.deleteHoaDon.nativeElement.style.display = 'none';
+    }
+  }
+  closeDetailHoaDon() {
+    if (this.detailHoaDon && this.detailHoaDon.nativeElement) {
+      this.detailHoaDon.nativeElement.classList.remove('show');
+      this.detailHoaDon.nativeElement.style.display = 'none';
+    }
+  }
+
+  huyHoaDon() {
+    const storedHoaDon = this.hoaDonSelect
+    if (storedHoaDon) {
+      const hoaDon = storedHoaDon;
+      let trangThaiMoi = 6
+      this.updateTrangThai(hoaDon.id, trangThaiMoi);
+      this.closeconfirmDelete();
+      this.closeDetailHoaDon();
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
+
+  showDeleteModal(): void {
+    if (this.deleteHoaDon && this.deleteHoaDon.nativeElement) {
+      this.deleteHoaDon.nativeElement.classList.add('show');
+      this.deleteHoaDon.nativeElement.style.display = 'block';
+    }
   }
 
 
