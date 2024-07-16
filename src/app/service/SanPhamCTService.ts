@@ -10,6 +10,8 @@ import {DanhMucDto} from "../model/danh-muc-dto.model";
 import {ChatLieuDto} from "../model/chat-lieu-dto.model";
 import {ThuongHieuDto} from "../model/thuong-hieu-dto.model";
 import {MauSacDto} from "../model/mau-sac-dto.model";
+import {FilterSanPhamRequest} from "../model/FilterSanPhamRequest";
+
 
 
 @Injectable({
@@ -227,6 +229,14 @@ export class SanPhamCTService {
     });
 
     return this.http.post<ApiResponse<any>>(`${this.apiUrl}/saveListCt`, list, { headers });
+  }
+
+  filterSanPham(request: FilterSanPhamRequest, page: number, size: number): Observable<ApiResponse<any>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/filter`, request, { params });
   }
 
 

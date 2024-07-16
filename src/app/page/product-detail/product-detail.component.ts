@@ -8,6 +8,10 @@ import { ApiResponse } from './../../model/ApiResponse';
 import { SanPhamCTService } from './../../service/SanPhamCTService';
 import { AuthenticationService } from "../../service/AuthenticationService";
 import { ActivatedRoute, Router } from "@angular/router";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {HoaDonChiTietService} from "../../service/HoaDonChiTietService";
+import {DanhGiaService} from "../../service/DanhGiaService";
+import {DanhGiaDto} from "../../model/danh-gia-dto";
 
 @Component({
   selector: 'app-product-detail',
@@ -34,8 +38,32 @@ export class ProductDetailComponent implements OnInit {
     private gioHangService: GioHangService,
     private khachHangService: KhachHangService,
     private snackBar: MatSnackBar,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private hoaDonChiTietService: HoaDonChiTietService,
+    private formBuilder: FormBuilder,
+    private danhGiaServe: DanhGiaService,
+  ) {
+    this.danhGiaForm = this.formBuilder.group({
+      khachHang: [''],
+      hoaDonChiTiet: [''],
+      tieuDe: [''],
+      noiDung: [''],
+      diem: [''],
+      trangThai: [''],
+    })
+
+    const tenDangNhap = localStorage.getItem('tenDangNhap');
+    if (tenDangNhap) {
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+        (response) => {
+          this.khachHang = response.result;
+        },
+        (error) => {
+          console.error('Error fetching customer:', error);
+        }
+      );
+    }
+  }
 
   ngOnInit(): void {
     this.loadSanPhamChiTiet();
@@ -44,6 +72,66 @@ export class ProductDetailComponent implements OnInit {
     this.loadColors();
     this.loadSize();
     this.loadSelectedOptions();
+
+  }
+
+  hoaDonChiTiet: any = {};
+  danhGiaForm: FormGroup;
+  selectedRating: number = 0;
+  stars: number[] = [1, 2, 3, 4, 5];
+
+  get f() {
+    return this.danhGiaForm.controls;
+  }
+
+
+  createRating(): void {
+    const danhGiaDto: DanhGiaDto = {
+      khachHang: this.khachHang,
+      hoaDonChiTiet: null,
+      tieuDe: this.danhGiaForm.value.tieuDe,
+      noiDung: this.danhGiaForm.value.noiDung,
+      diem: this.selectedRating,
+      trangThai: 1,
+    };
+    this.danhGiaServe.createRating(danhGiaDto).subscribe(
+      (response) => {
+        this.snackBar.open('Đã đánh giá sản phẩm!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+        this.router.navigate(['/don-mua']);
+      },
+      (error) => {
+        this.snackBar.open('Đánh giá sản phẩm thất bại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    );
+  }
+
+
+  selectRating(rating: number): void {
+    this.selectedRating = rating;
+  }
+
+
+  getRatingText(rating: number): string {
+    switch (rating) {
+      case 1:
+        return 'Tệ';
+      case 2:
+        return 'Không hài lòng';
+      case 3:
+        return 'Bình thường';
+      case 4:
+        return 'Hài lòng';
+      case 5:
+        return 'Tuyệt vời!';
+      default:
+        return '';
+    }
   }
 
   loadSelectedOptions(): void {

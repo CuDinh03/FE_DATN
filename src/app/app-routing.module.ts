@@ -55,7 +55,7 @@ const routes: Routes = [
   {path: 'trang-chu', component: MainViewComponent},
   {path: '', component: MainViewComponent},
   {path: 'log-in', component: AuthenticationLoginComponent},
-  {path: 'list-p', component: ShopCategoryComponent},
+  {path: 'list-product', component: ShopCategoryComponent},
   {path: 'detail/:id', component: ProductDetailComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'shopping-cart', component: ShoppingCartComponent, canActivate: [AuthGuard]},

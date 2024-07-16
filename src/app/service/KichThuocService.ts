@@ -111,6 +111,9 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
         });
         return this.http.put<ApiResponse<void>>(`${this.apiUrl}/${id}`, kichThuocData, { headers });
       }
+  getAllSize(): Observable<ApiResponse<any>> {
 
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`);
+  }
 
   }
