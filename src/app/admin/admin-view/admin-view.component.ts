@@ -7,9 +7,7 @@ import {Observable, of} from "rxjs";
 import {ApiResponse} from "../../model/ApiResponse";
 import {HoaDonService} from "../../service/HoaDonService";
 import {HoaDonChiTietService} from "../../service/HoaDonChiTietService";
-import {Chart, registerables} from "chart.js";
-import {DanhGiaDto} from "../../model/danh-gia-dto";
-Chart.register(...registerables)
+import { Chart } from 'angular-highcharts';
 
 @Component({
   selector: 'app-admin-view',
@@ -20,6 +18,7 @@ export class AdminViewComponent implements OnInit {
   doanhThu: number = 0;
   donHang: number =  0;
   listHoaDonChiTiet: any[] = [];
+  title = 'angular-charts-youtube';
 
 
   constructor(
@@ -62,4 +61,30 @@ export class AdminViewComponent implements OnInit {
     })
   }
 
+  lineChart=new Chart({
+    chart: {
+      type: 'line'
+    },
+    title: {
+      text: 'Thống kê số lượng đơn hàng'
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      categories: ['1', '2', '3', '4', '5', '6','7','8','9','10','11','12'] // Ví dụ về categories
+    },
+    yAxis: {
+      title: {
+        text: 'Đơn hàng'
+      }
+    },
+    series: [
+      {
+        name: 'Số lượng đơn hàng',
+        data: [10, 2, 3,6,9,17,20,10,5,2,16]
+      } as any
+    ]
+
+  })
 }

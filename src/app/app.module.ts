@@ -44,6 +44,7 @@ import {ThuongHieuViewComponent} from './admin/thuonghieu-view/thuonghieu-view.c
 import {HinhAnhViewComponent} from './admin/hinhanh-view/hinhanh-view.component';
 import {RatingViewComponent} from './page/rating-view/rating-view.component';
 import {MaskValuePipe} from './page/profile/mask-value-pipe';
+import {ChartModule} from "angular-highcharts";
 
 @NgModule({ declarations: [
         HomeComponent,
@@ -90,6 +91,7 @@ import {MaskValuePipe} from './page/profile/mask-value-pipe';
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        ChartModule,
         MatSnackBarModule], providers: [TaiKhoanService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
 }

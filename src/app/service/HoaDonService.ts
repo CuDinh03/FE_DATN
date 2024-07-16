@@ -184,5 +184,15 @@ export class HoaDonService {
     return this.http.put<ApiResponse<void>>(`${this.apiUrl}/yeuCauSuaHoaDon/${id}`, payload, { headers });
   }
 
+  getDoanhThuTheoThang(): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/thongke/doanhthu/thang"`, {headers});
+  }
+
 }
 
