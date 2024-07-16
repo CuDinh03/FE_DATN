@@ -13,6 +13,8 @@ import {KichThuocDto} from "../../model/kich-thuoc-dto.model";
 import {MauSacDto} from "../../model/mau-sac-dto.model";
 import {DanhMucDto} from "../../model/danh-muc-dto.model";
 import {FilterSanPhamRequest} from "../../model/FilterSanPhamRequest";
+import {error} from "@angular/compiler-cli/src/transformers/util";
+import {ErrorCode} from "../../model/ErrorCode";
 
 @Component({
   selector: 'app-shop-category',
@@ -33,7 +35,9 @@ export class ShopCategoryComponent {
   selectedCategory: DanhMucDto | null = null;
   selectedColor: MauSacDto | null = null;
   selectedSize: KichThuocDto | null = null;
-
+  size: number = 12;
+  page: number = 0;
+  noProductsFound: boolean = false;
 
 
   constructor(private auth: AuthenticationService,
@@ -47,11 +51,40 @@ export class ShopCategoryComponent {
               ) {}
 
   ngOnInit(): void {
-    this.loadDanhSachSanPham();
     this.getMauSac();
     this.getKichThuoc();
     this.getDanhMuc();
     this.filterProducts();
+  }
+
+  onSelectChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedValue = selectElement.value;
+
+    // Thực hiện hành động tương ứng với giá trị được chọn
+    this.handleSelection(selectedValue);
+  }
+
+  // Phương thức để xử lý giá trị được chọn
+  handleSelection(value: string): void {
+    if (value === '4') {
+      // Thực hiện hành động khi chọn "10"
+      this.size = 4;
+      this.filterProducts();
+    } else if (value === '8') {
+      // Thực hiện hành động khi chọn "15"
+      this.size = 8;
+      this.filterProducts();
+    }
+    else if (value === '12') {
+      // Thực hiện hành động khi chọn "15"
+      this.size = 12;
+      this.filterProducts();
+    }else if (value === '20') {
+      // Thực hiện hành động khi chọn "15"
+      this.size = 20;
+      this.filterProducts();
+    }
   }
 
   onCategoryChange(category: DanhMucDto) {
@@ -76,11 +109,51 @@ export class ShopCategoryComponent {
       kichThuoc: this.selectedSize ? this.selectedSize : null
     };
 
-    this.sanPhamCTService.filterSanPham(request, 0, 10).subscribe((response: ApiResponse<any>) => {
+    this.sanPhamCTService.filterSanPham(request, this.page, this.size).subscribe((response: ApiResponse<any>) => {
       if (response.result) {
         this.chiTietSanPham = response.result.content;
+        this.noProductsFound = false;
+        this.chiTietSanPham.forEach((sanPham) => {
+          this.danhGiaService.getSoLuongDanhGia(sanPham.id).subscribe(
+            (apiResponse: ApiResponse<any>) => {
+              if (apiResponse.result) {
+                this.danhGiaMap[sanPham.id] = apiResponse.result; // Lưu số lượng đánh giá vào danhGiaMap
+              }
+            },
+            (error: HttpErrorResponse) => {
+              console.error(`Error loading danh gia count for productId ${sanPham.id}:`, error);
+            }
+          );
+          this.danhGiaService.getDiemDanhGia(sanPham.id).subscribe(
+            (apiResponse: ApiResponse<any>) => {
+              if (apiResponse.result) {
+                this.diemDanhGiaMap[sanPham.id] = apiResponse.result; // Lưu điểm đánh giá vào diemDanhGiaMap
+              }
+            },
+            (error: HttpErrorResponse) => {
+              console.error(`Error loading diem danh gia for productId ${sanPham.id}:`, error);
+            }
+          );
+        });
+      }else {
+        this.chiTietSanPham = [];
+        this.noProductsFound = true;
       }
-    });
+    },(error: HttpErrorResponse) => {
+        if (error.error.code === ErrorCode.NO_LISTSPChiTiet_FOUND) {
+          this.chiTietSanPham = [];
+          this.noProductsFound = true;
+        } else {
+          console.error('Unexpected error:', error);
+        }
+      }
+
+      );
+  }
+
+  onPageChangeSanPhamCT(page: number): void {
+    this.page = page;
+    this.filterProducts();
   }
 
   findSanPhamById(id: string): void {
@@ -94,47 +167,6 @@ export class ShopCategoryComponent {
       });
   }
 
-  loadDanhSachSanPham(): void {
-    this.sanPhamCTService.getAllSanPhamChiTiet().subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          this.chiTietSanPham = response.result;
-          this.chiTietSanPham.forEach((sanPham) => {
-            this.danhGiaService.getSoLuongDanhGia(sanPham.id).subscribe(
-              (apiResponse: ApiResponse<any>) => {
-                if (apiResponse.result) {
-                  this.danhGiaMap[sanPham.id] = apiResponse.result; // Lưu số lượng đánh giá vào danhGiaMap
-                }
-              },
-              (error: HttpErrorResponse) => {
-                console.error(`Error loading danh gia count for productId ${sanPham.id}:`, error);
-              }
-            );
-            this.danhGiaService.getDiemDanhGia(sanPham.id).subscribe(
-              (apiResponse: ApiResponse<any>) => {
-                if (apiResponse.result) {
-                  this.diemDanhGiaMap[sanPham.id] = apiResponse.result; // Lưu điểm đánh giá vào diemDanhGiaMap
-                }
-              },
-              (error: HttpErrorResponse) => {
-                console.error(`Error loading diem danh gia for productId ${sanPham.id}:`, error);
-              }
-            );
-          });
-        } else {
-          console.log(response);
-        }
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Error loading products:', error);
-      }
-    );
-  }
-
-  onPageChange(page: number): void {
-    this.currentPage = page;
-    this.loadDanhSachSanPham();
-  }
 
   getMauSac(): void{
     this.mauSacService.getAllColors().subscribe(

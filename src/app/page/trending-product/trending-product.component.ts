@@ -18,13 +18,14 @@ export class TrendingProductComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
+  page: number = 0;
+  size: number = 20;
   danhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ số lượng đánh giá theo từng productId
   diemDanhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ điểm đánh giá theo từng productId
 
   constructor(private auth: AuthenticationService,
               private router: Router,
               private sanPhamCTService: SanPhamCTService,
-              private sanPhamService: SanPhamService,
               private danhGiaService: DanhGiaService) {}
 
   ngOnInit(): void {
@@ -43,10 +44,10 @@ export class TrendingProductComponent implements OnInit {
   }
 
   loadDanhSachSanPham(): void {
-    this.sanPhamCTService.getAllSanPhamChiTiet().subscribe(
+    this.sanPhamCTService.getSanPhamChiTietSapXepByNGayTao(this.page, this.size).subscribe(
       (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          this.chiTietSanPham = response.result;
+        if (response.result.content && response.result.content.length > 0) {
+          this.chiTietSanPham = response.result.content;
           this.chiTietSanPham.forEach((sanPham) => {
             this.danhGiaService.getSoLuongDanhGia(sanPham.id).subscribe(
               (apiResponse: ApiResponse<any>) => {

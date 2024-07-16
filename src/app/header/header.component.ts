@@ -79,6 +79,8 @@ export class HeaderComponent {
     }
   }
 
+
+
   loadGioHangChiTiet(idGioHang: string): void {
     this.gioHangChiTietService.getAllBỵKhachHang(idGioHang).subscribe(
       (response: ApiResponse<any>) => {

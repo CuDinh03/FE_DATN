@@ -67,11 +67,11 @@
         <!-- Start Filter Bar -->
         <div class="filter-bar d-flex flex-wrap align-items-center">
           <div class="sorting mr-auto">
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" aria-label="Default select example" (change)="onSelectChange($event)">
               <option selected>12 Sản phẩm</option>
-              <option value="1">20 Sản phẩm</option>
-              <option value="2">32 Sản phẩm</option>
-              <option value="3">40 Sản phẩm</option>
+              <option value="4">4 Sản phẩm</option>
+              <option value="8">8 Sản phẩm</option>
+              <option value="20">20 Sản phẩm</option>
             </select>
           </div>
           <div>
@@ -86,7 +86,7 @@
         <!-- End Filter Bar -->
         <!-- Start Best Seller -->
         <section class="lattest-product-area pb-40 category-list">
-          <div class="row">
+          <div class="row" *ngIf="!noProductsFound">
             <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let sanPham of chiTietSanPham">
               <div class="card text-center card-product" (click)="findSanPhamById(sanPham.id)">
                 <div class="card-product__img">
@@ -120,8 +120,19 @@
               </div>
             </div>
           </div>
+          <div *ngIf="noProductsFound" class="no-products-message">
+            Không có sản phẩm nào phù hợp
+          </div>
         </section>
-        <!-- End Best Seller -->
+        <div class="d-flex justify-content-end">
+          <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary" [disabled]="page === 0">
+            <
+          </button>
+          <span style="margin: 5px">Trang {{ page + 1 }}</span>
+          <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"
+                  [disabled]="page === totalPages - 1"> >
+          </button>
+        </div>
       </div>
     </div>
   </div>
