@@ -124,7 +124,7 @@
           <div class="d-flex justify-content-end mt-3">
             <a class="gray_btn me-3" href="#">Tiếp tục mua hàng</a>
             <a style="font-size: 14px; width: 200px; color: rgb(255, 255, 255); padding: 10px; border-radius: 20px !important;  background-color: #5D87FF;"
-              class="d-flex justify-content-center align-items-center" [routerLink]="['/thanh-toan']">Thanh toán</a>
+              class="d-flex justify-content-center align-items-center" (click)="checkCartAndProceed()" type="button">Thanh toán</a>
           </div>
         </td>
       </tr>

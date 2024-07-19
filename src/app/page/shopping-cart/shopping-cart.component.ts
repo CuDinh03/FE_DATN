@@ -216,4 +216,15 @@ export class ShoppingCartComponent {
     this.isCartHovered = false;
   }
 
+  checkCartAndProceed(): void {
+    if (this.selectedItems.length === 0) {
+      this.snackBar.open('Vui lòng chọn sản phẩm', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    } else {
+      this.router.navigate(['/thanh-toan']);
+    }
+  }
+
 }

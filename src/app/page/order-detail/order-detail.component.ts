@@ -35,7 +35,8 @@ export class OrderDetailComponent {
   constructor(private auth: AuthenticationService,
               private router: Router,
               private hoaDonChiTietService: HoaDonChiTietService,
-              private hoaDonService: HoaDonService
+              private hoaDonService: HoaDonService,
+              private snackBar: MatSnackBar,
   ) {
   }
 
@@ -43,7 +44,7 @@ export class OrderDetailComponent {
     this.loadHoaDonChiTiet();
   }
 
-  submitRequest() {
+  submitRequest(): void {
     const requestPayload = {
       ghiChu: this.selectedOption1 + ' - ' + this.noteText
     };
@@ -51,12 +52,22 @@ export class OrderDetailComponent {
     const invoiceId = this.hoaDon.id; // Thay thế bằng UUID của hóa đơn
 
     this.hoaDonService.yeuCauSuaHoaDon(invoiceId, requestPayload)
-      .subscribe(response => {
-        console.log('Yêu cầu sửa thành công', response);
-      }, error => {
-        console.error('Yêu cầu sửa thất bại', error);
-      });
+      .subscribe(
+        response => {
+          this.snackBar.open('Yêu cầu sửa thành công', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        },
+        error => {
+          this.snackBar.open('Yêu cầu sửa thất bại', 'Đóng', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      );
   }
+
 
 
   loadHoaDonChiTiet(): void {

@@ -882,7 +882,7 @@
           </div>
           <div class="col-md-8">
             <h6>Thông tin mo ta</h6>
-            <p><strong>Trạng thái đơn hàng:</strong> Đã xử lý</p>
+            <p [style.color]="getTrangThaiColor(hoaDonSua.trangThai)"><strong>Trạng thái đơn hàng:</strong> {{getTrangThaiText(hoaDonSua.trangThai)}}</p>
             <p><strong>Hinh thuc mua:</strong>
               <select class="form-select">
                 <option>onl</option>
@@ -984,7 +984,8 @@
           </div>
           <div class="col-md-8">
             <h6>Thông tin mo ta</h6>
-            <p><strong>Trạng thái đơn hàng:</strong> Đã xử lý</p>
+
+            <p [style.color]="getTrangThaiColor(hoaDonSua.trangThai)"><strong>Trạng thái đơn hàng:</strong> {{ getTrangThaiText(hoaDonSua.trangThai) }}</p>
             <p><strong>Hinh thuc mua:</strong>
               <select class="form-select">
                 <option>onl</option>
