@@ -336,6 +336,7 @@ export class PaymentViewComponent {
                   });
                   this.router.navigate(['/trang-chu']);
                 }
+                localStorage.removeItem('selectedItems');
               },
               (error) => {
                 this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {

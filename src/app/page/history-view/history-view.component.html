@@ -123,11 +123,11 @@
                 </div>
                 <div class="d-flex align-items-center justify-content-end mb-2 me-3">
                   <button class="btn btn-primary" (click)="findSanPhamById(item.chiTietSanPham.id)">Mua lại</button>
-                  <button *ngIf="item.hoaDon.trangThai === 5 && item.trangThai === 1" class="btn btn-warning m-2"
+                  <button *ngIf="item.hoaDon.trangThai === 4 && item.trangThai === 1" class="btn btn-warning m-2"
                           (click)="findOrderDetailByid(item.id)">Đánh giá
                   </button>
                   <button *ngIf="item.hoaDon.trangThai === 1" class="btn btn-danger ms-2"
-                          (click)="suaTrangThaiModal(item.id)">Hủy hàng
+                          data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="findHoaDonById1(item.hoaDon.id)">Hủy hàng
                   </button>
                 </div>
               </div>
@@ -186,8 +186,8 @@
                 </div>
                 <div class="d-flex align-items-center justify-content-end mb-2 me-3">
                   <button class="btn btn-primary" (click)="findSanPhamById(item.chiTietSanPham.id)">Mua lại</button>
-                  <button class="btn btn-danger ms-2"
-                          (click)="suaTrangThaiModal(item.id)">Hủy hàng
+                  <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                          (click)="findHoaDonById1(item.hoaDon.id)">Hủy hàng
                   </button>
                 </div>
               </div>
@@ -482,7 +482,9 @@
 </section>
 <app-footer></app-footer>
 
-<div class="modal fade" #confirmUpdate tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -491,14 +493,17 @@
                 (click)="closeconfirmUpdate()"></button>
       </div>
       <div class="modal-body">
-        <label class="form-label">Xác nhận chuyển trạng thái</label>
-        <input type="text" class="form-control" placeholder="Lý do hủy đơn">
+        <div class="mb-3">
+          <label class="form-label">Xác nhận hủy đơn</label>
+          <textarea class="form-control" rows="3" [(ngModel)]="ghiChu"></textarea>
+        </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" (click)="updateTrangThai(hoaDonSingle.id, 5)" data-bs-dismiss="modal">Xác nhận
+        <button class="btn btn-success" (click)="huyDonModal()" data-bs-dismiss="modal">Xác nhận
         </button>
         <button class="btn btn-danger" (click)="closeconfirmUpdate()" data-bs-dismiss="modal">Hủy</button>
       </div>
     </div>
   </div>
 </div>
+

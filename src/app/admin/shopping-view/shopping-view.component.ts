@@ -98,7 +98,7 @@ export class ShoppingViewComponent {
         tongTienGiam: 0,
         ngayTao: new Date(),
         ngaySua: new Date(),
-        trangThai: true,
+        trangThai: 0,
       },
       gioHangChiTietDtoList: []
     };

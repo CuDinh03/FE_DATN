@@ -3,6 +3,8 @@ import {Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
+import {DanhMucDto} from "../model/danh-muc-dto.model";
+import {HoaDonDto} from "../model/hoa-don-dto.model";
 
 
 @Injectable({
@@ -106,16 +108,28 @@ export class HoaDonService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getHoaDonsByTranThai/${trangThai}`, {params, headers});
   }
 
-  updateTrangThai(id: string, trangThai: number): Observable<ApiResponse<void>> {
+  updateTrangThai(id: string, trangThai: number): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
     let params = new HttpParams();
-    params = params.append('trangThai', trangThai.toString());
+    params = params.append('trangThai', trangThai.toString())
 
-    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/updateTrangThai/${id}`, null, {params, headers});
+    return this.http.put<ApiResponse<any>>(`${this.apiUrl}/updateTrangThai/${id}`, null, {params, headers});
+  }
+
+  updateTrangThainew(id: string, trangThai: number, hoaDonDto: HoaDonDto): Observable<ApiResponse<HoaDonDto>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    let params = new HttpParams();
+    params = params.append('trangThai', trangThai.toString())
+
+    return this.http.put<ApiResponse<HoaDonDto>>(`${this.apiUrl}/updateTrangThai/${id}`, hoaDonDto, {params, headers});
   }
 
   findHoaDonByIdKhachHang(id: string): Observable<any> {

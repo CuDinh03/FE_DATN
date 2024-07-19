@@ -7,6 +7,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {AuthenticationService} from './../../service/AuthenticationService';
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {ErrorCode} from "../../model/ErrorCode";
+import {HoaDonDto} from "../../model/hoa-don-dto.model";
+import {ThanhToanOnl} from "../../model/thanh-toan-onl";
 
 @Component({
   selector: 'app-orders-view',
@@ -37,7 +39,7 @@ export class OrdersViewComponent {
   tenKhachHang: string = '';
   diaChiKhachHang: string = '';
   sdtKhachHang: string = '';
-
+  ghiChu: string = '';
 
   constructor(
     private apiService: HoaDonService,
@@ -186,11 +188,71 @@ export class OrdersViewComponent {
     const storedHoaDon = localStorage.getItem('hoaDon');
     if (storedHoaDon) {
       const hoaDon = JSON.parse(storedHoaDon);
-      let trangThaiMoi = hoaDon.trangThai + 1
-      this.updateTrangThai(hoaDon.id, trangThaiMoi);
-      this.getHoaDons();
+      const hoaDonDto: HoaDonDto = {
+        id: hoaDon.id,
+        ma: hoaDon.ma,
+        tongTien: hoaDon.tongTien,
+        tongTienGiam: hoaDon.tongTienGiam,
+        voucher: hoaDon.voucher,
+        ghiChu: this.ghiChu,
+        khachHangId: hoaDon.khachHangId,
+        nhanVienId: hoaDon.nhanVienId,
+        ngayTao: hoaDon.ngayTao,
+        ngaySua: new Date(),
+        trangThai: hoaDon.trangThai + 1,
+      };
+      this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
       this.loadHoaDon();
+      this.closeconfirmUpdate();
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
 
+  huyDonModal(): void {
+    const storedHoaDon = localStorage.getItem('hoaDon');
+    if (storedHoaDon) {
+      const hoaDon = JSON.parse(storedHoaDon);
+      const hoaDonDto: HoaDonDto = {
+        id: hoaDon.id,
+        ma: hoaDon.ma,
+        tongTien: hoaDon.tongTien,
+        tongTienGiam: hoaDon.tongTienGiam,
+        voucher: hoaDon.voucher,
+        ghiChu: this.ghiChu,
+        khachHangId: hoaDon.khachHangId,
+        nhanVienId: hoaDon.nhanVienId,
+        ngayTao: hoaDon.ngayTao,
+        ngaySua: new Date(),
+        trangThai: 5,
+      };
+      this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
+      this.loadHoaDon();
+      this.closeconfirmUpdate();
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
+
+  xacNhanSuaModal(): void {
+    const storedHoaDon = localStorage.getItem('hoaDon');
+    if (storedHoaDon) {
+      const hoaDon = JSON.parse(storedHoaDon);
+      const hoaDonDto: HoaDonDto = {
+        id: hoaDon.id,
+        ma: hoaDon.ma,
+        tongTien: hoaDon.tongTien,
+        tongTienGiam: hoaDon.tongTienGiam,
+        voucher: hoaDon.voucher,
+        ghiChu: this.ghiChu,
+        khachHangId: hoaDon.khachHangId,
+        nhanVienId: hoaDon.nhanVienId,
+        ngayTao: hoaDon.ngayTao,
+        ngaySua: new Date(),
+        trangThai: 2,
+      };
+      this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
+      this.loadHoaDon();
       this.closeconfirmUpdate();
     } else {
       this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
@@ -225,14 +287,30 @@ export class OrdersViewComponent {
     }
   }
 
-  updateTrangThai(id: string, trangThai: number): void {
-    this.apiService.updateTrangThai(id, trangThai).subscribe(
-      (response) => {
+  updateTrangThai(id: string, trangThai: number, hoaDonDto: HoaDonDto): void {
+    this.apiService.updateTrangThainew(id, trangThai, hoaDonDto).subscribe(
+      (response: ApiResponse<HoaDonDto>) => {
         if (response) {
-          this.snackBar.open('Cập nhật trạng thái thành công', 'Đóng', {
+          let message = '';
+          switch (trangThai) {
+            case 2:
+              message = 'Đã xác nhận đơn hàng';
+              break;
+            case 4:
+              message = 'Hoàn thành đơn hàng';
+              break;
+            case 5:
+              message = 'Hủy đơn thành công';
+              break;
+            default:
+              message = 'Cập nhật trạng thái thành công';
+              break;
+          }
+          this.snackBar.open(message, 'Đóng', {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
+          console.log(response);
         } else {
           this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
             duration: 3000,
@@ -249,6 +327,7 @@ export class OrdersViewComponent {
       }
     );
   }
+
 
 
   logout(): void {
