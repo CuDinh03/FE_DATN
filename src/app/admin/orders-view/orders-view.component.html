@@ -992,13 +992,15 @@
                 <option>off</option>
               </select></p>
             <p><strong>Ly do doi tra: </strong>{{hoaDonSua.ghiChu}}</p>
-            <p><strong>Ghi chú:</strong>
-              <textarea class="form-control" id="lyDo" rows="3"></textarea></p>
-            <p><strong>Nguoi thuc hien:</strong> Admin </p>
+            <div class="mb-3">
+              <label class="form-label">Ghi chú</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="ghiChu"></textarea>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Xác nhận</button>
+          <button type="button" class="btn btn-danger" (click)="huyDonModal()" data-bs-dismiss="modal">Hủy đơn</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>

@@ -13,6 +13,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {ThanhToanService} from "../../service/ThanhToanService";
 import {ThanhToanOnl} from "../../model/thanh-toan-onl";
 import {GioHangDto} from "../../model/gio-hang-dto";
+import {DiaChiService} from "../../service/DiaChiService";
 
 @Component({
   selector: 'app-payment-view',
@@ -37,7 +38,7 @@ export class PaymentViewComponent {
   customerForm: FormGroup;
   selectedCustomerId: string | null = null;
   loading = false;
-
+  thongTinDatHang: any[] = []
   showUpperFooter: boolean = true;
   selectedCustomer: any = null;
 
@@ -49,7 +50,8 @@ export class PaymentViewComponent {
               private el: ElementRef, private renderer: Renderer2,
               private voucherService: VoucherService,
               private formBuilder: FormBuilder,
-              private thanhToanService: ThanhToanService
+              private thanhToanService: ThanhToanService,
+              private diaChiService: DiaChiService
   ) {
     this.customerForm = this.formBuilder.group({
       ten: [''],
@@ -76,12 +78,9 @@ export class PaymentViewComponent {
     return item.chiTietSanPham.giaBan * item.soLuong;
   }
 
-  selectCustomer(customerId: string): void {
-    this.selectedCustomerId = customerId;
-  }
 
-  // Hiển thị thông tin khách hàng vào form
-  selectCustomerForUpdate(customer: any): void {
+  selectCustomer(customer: any): void {
+    this.selectedCustomerId = customer.id;
     this.selectedCustomer = customer;
     this.customerForm.patchValue({
       ten: customer.ten,
@@ -93,15 +92,29 @@ export class PaymentViewComponent {
   }
 
   updateCustomerInfo(): void {
-    if (this.customerForm.invalid) {
-      return;
+    if (this.selectedCustomer) {
+      this.customerForm.patchValue({
+        ten: this.selectedCustomer.ten,
+        diaChi: this.selectedCustomer.diaChi,
+        sdt: this.selectedCustomer.sdt,
+        email: this.selectedCustomer.email,
+        note: this.selectedCustomer.note
+      });
     }
-    const updatedCustomer = {
-      ...this.selectedCustomer,
-      ...this.customerForm.value
-    };
-    this.selectCustomerForUpdate(this.khachHang);
     this.closeInforModal();
+  }
+
+
+  // Hiển thị thông tin khách hàng vào form
+  selectCustomerForUpdate(customer: any): void {
+    this.selectedCustomer = customer;
+    this.customerForm.patchValue({
+      ten: customer.ten,
+      diaChi: customer.diaChi,
+      sdt: customer.sdt,
+      email: customer.email,
+      note: customer.note
+    });
   }
 
   findShoppingCart() {
@@ -141,6 +154,9 @@ export class PaymentViewComponent {
         (response) => {
           if (response.result) {
             this.khachHang = response.result;
+            this.diaChiService.getAllByIdKhachHang(response.result.id).subscribe((response) =>{
+              this.thongTinDatHang = response.result;
+            })
           } else {
             console.error('Không tìm thấy thông tin khách hàng.');
           }
