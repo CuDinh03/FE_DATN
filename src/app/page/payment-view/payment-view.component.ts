@@ -27,26 +27,16 @@ export class PaymentViewComponent {
   currentPage = 0;
   pageSize = 6;
   tenDangNhap: string = '';
-  showSearch: boolean = false;
-  isLoggedInCart: boolean = false;
-  isCartHovered = false;
   results: string[] = [];
   khachHang: any;
   vouchers: any[] = [];
   gioHang: any = {};
   gioHangChiTiet: any[] = [];
-  showConfirmationModal: boolean = false;
-  itemToDeleteId: string = '';
-  allSelected = false;
-  selectedTotal = 0;
-  showFooter: boolean = false;
   voucher: any;
   discount: number = 0;
   customerForm: FormGroup;
   selectedCustomerId: string | null = null;
   loading = false;
-
-  // submitted = false;
 
   showUpperFooter: boolean = true;
   selectedCustomer: any = null;
@@ -164,19 +154,9 @@ export class PaymentViewComponent {
 
 
   loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAllBỵKhachHang(idGioHang).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          this.gioHangChiTiet = response.result;
-          console.log(this.gioHangChiTiet);
-        } else {
-          this.gioHangChiTiet = [];
-        }
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Unexpected error:', error);
-      }
-    );
+    const storedGioHangChiTiet = localStorage.getItem('selectedItems');
+    const gioHangChiTietList = storedGioHangChiTiet ? JSON.parse(storedGioHangChiTiet) : [];
+    this.gioHangChiTiet = gioHangChiTietList;
   }
 
   getCartTotal(): number {
@@ -320,7 +300,7 @@ export class PaymentViewComponent {
         this.khachHang = response.result;
         if (!this.khachHang || !this.khachHang.id) {
           console.error('Không tìm thấy thông tin khách hàng.');
-          this.loading = true;
+          this.loading = false;
           return;
         }
         this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
@@ -328,44 +308,40 @@ export class PaymentViewComponent {
             const gioHang = gioHangResponse.result;
             if (!gioHang) {
               console.error('Không tìm thấy giỏ hàng.');
-              this.loading = true;
+              this.loading = false;
               return;
             }
-            this.gioHangChiTietService.getAllBỵKhachHang(gioHang.id).subscribe(
-              (gioHangChiTietResponse: ApiResponse<any>) => {
-                const gioCt = gioHangChiTietResponse.result || [];
 
-                const thanhToanOnl: ThanhToanOnl = {
-                  gioHang: gioHang,
-                  tongTien: this.getCartTotal() - this.discount,
-                  tongTienGiam: this.discount,
-                  voucher: storedVoucher ? JSON.parse(storedVoucher) : null,
-                  diaChiGiaoHang: this.customerForm.value.diaChi,
-                  ghiChu: this.customerForm.value.note,
-                  gioHangChiTietList: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
-                };
+            // Lấy dữ liệu giỏ hàng chi tiết từ localStorage
+            const storedGioHangChiTiet = localStorage.getItem('selectedItems');
+            const gioHangChiTietList = storedGioHangChiTiet ? JSON.parse(storedGioHangChiTiet) : [];
 
-                this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
-                  (response: ApiResponse<ThanhToanOnl>) => {
-                    this.loading = false;
-                    if (response.result) {
-                      this.snackBar.open('Đặt hàng thành công!', 'Đóng', {
-                        duration: 3000,
-                        panelClass: ['success-snackbar']
-                      });
-                      this.router.navigate(['/trang-chu']);
-                    }
-                  },
-                  (error) => {
-                    this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {
-                      duration: 3000,
-                      panelClass: ['error-snackbar']
-                    });
-                  }
-                );
+            const thanhToanOnl: ThanhToanOnl = {
+              gioHang: gioHang,
+              tongTien: this.getCartTotal() - this.discount,
+              tongTienGiam: this.discount,
+              voucher: storedVoucher ? JSON.parse(storedVoucher) : null,
+              diaChiGiaoHang: this.customerForm.value.diaChi,
+              ghiChu: this.customerForm.value.note,
+              gioHangChiTietList: gioHangChiTietList
+            };
+
+            this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
+              (response: ApiResponse<ThanhToanOnl>) => {
+                this.loading = false;
+                if (response.result) {
+                  this.snackBar.open('Đặt hàng thành công!', 'Đóng', {
+                    duration: 3000,
+                    panelClass: ['success-snackbar']
+                  });
+                  this.router.navigate(['/trang-chu']);
+                }
               },
               (error) => {
-                console.error('Lỗi hiển giỏ hàng chi tiêt:', error);
+                this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {
+                  duration: 3000,
+                  panelClass: ['error-snackbar']
+                });
                 this.loading = false;
               }
             );
@@ -382,4 +358,5 @@ export class PaymentViewComponent {
       }
     );
   }
+
 }

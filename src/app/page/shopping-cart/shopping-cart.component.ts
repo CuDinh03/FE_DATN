@@ -15,7 +15,6 @@ import { Component, ElementRef, Renderer2, HostListener } from '@angular/core';
   styleUrls: ['./shopping-cart.component.css'],
 })
 export class ShoppingCartComponent {
-  showSearch: boolean = false;
   isLoggedInCart: boolean = false;
   isCartHovered = false;
   khachHang: any;
@@ -25,28 +24,33 @@ export class ShoppingCartComponent {
   itemToDeleteId: string = '';
   allSelected = false;
   selectedTotal = 0;
-  showFooter: boolean = false;
-  showUpperFooter: boolean = true;
-
+  selectedItems: any[] = []
 
 
 
   constructor(private auth: AuthenticationService, private router: Router,
-    private gioHangChiTietService: GioHangChiTietService,
-    private gioHangService: GioHangService,
-    private khachHangService: KhachHangService,
-    private snackBar: MatSnackBar,
-    private el: ElementRef, private renderer: Renderer2
+              private gioHangChiTietService: GioHangChiTietService,
+              private gioHangService: GioHangService,
+              private khachHangService: KhachHangService,
+              private snackBar: MatSnackBar,
+              private el: ElementRef, private renderer: Renderer2
   ) {
-    
+
 
   }
   ngOnInit() {
     // Kiểm tra trạng thái đăng nhập của người dùng
     this.checkLoginStatus();
     this.findShoppingCart();
+    const savedItems = localStorage.getItem('selectedItems');
+    if (savedItems) {
+      this.selectedItems = JSON.parse(savedItems);
+      this.gioHangChiTiet.forEach(item => {
+        item.selected = this.selectedItems.some(selectedItem => selectedItem.id === item.id);
+      });
+    }
   }
-  
+
   confirmDelete(id: string) {
     this.itemToDeleteId = id;
     this.showConfirmationModal = true;
@@ -81,39 +85,38 @@ export class ShoppingCartComponent {
     }
     this.gioHangChiTietService.updateGioHangKH(idGioHangChiTiet, soLuong).subscribe(
       (response: ApiResponse<any>) => {
-          console.log(response.message);
-          if (soLuong === 0) {
-            this.snackBar.open('Xóa thành công!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-            
-          } else {
-            this.snackBar.open('Sửa số lượng thành công!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-          }
-          this.loadGioHangChiTiet(response.result.gioHang.id);
-          this.cancelDelete();
+        console.log(response.message);
+        if (soLuong === 0) {
+          this.snackBar.open('Xóa thành công!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+
+        } else {
+          this.snackBar.open('Sửa số lượng thành công!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        }
+        this.loadGioHangChiTiet(response.result.gioHang.id);
+        this.cancelDelete();
       },
       (error: HttpErrorResponse) => {
-          if (error.status === 400 ) {
-            this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
-              duration: 3000,
-              panelClass: ['error-snackbar']
-            });
-              const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
-              if (item) {
-                  item.soLuong = originalSoLuong;
-              }
-          } else {
-              console.error('Error updating gio hang:', error);
+        if (error.status === 400 ) {
+          this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+          const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
+          if (item) {
+            item.soLuong = originalSoLuong;
           }
+        } else {
+          console.error('Error updating gio hang:', error);
+        }
       }
     );
   }
-
 
 
   toggleSelectAll(event: any) {
@@ -129,12 +132,15 @@ export class ShoppingCartComponent {
 
   calculateSelectedTotal(): void {
     let total = 0;
+    this.selectedItems = [];
     this.gioHangChiTiet.forEach(item => {
       if (item.selected) {
         total += this.calculateSubtotal(item);
+        this.selectedItems.push(item);
       }
     });
     this.selectedTotal = total;
+    localStorage.setItem('selectedItems', JSON.stringify(this.selectedItems));
   }
 
   getSelectedTotal(): number {
@@ -193,49 +199,21 @@ export class ShoppingCartComponent {
         }
       },
       (error: HttpErrorResponse) => {
-          console.error('Unexpected error:', error);
+        console.error('Unexpected error:', error);
       }
     );
   }
 
 
-
-  toggleSearch() {
-    this.showSearch = !this.showSearch;
-  }
   checkLoginStatus() {
     const token = localStorage.getItem('token');
     this.isLoggedInCart = !!token;
   }
 
-  isLoggedIn(): boolean {
-    return this.auth.isLoggedIn();
-  }
 
-  getAccount(): boolean {
-    if (this.auth.getRole() == 'ADMIN') {
-      return true;
-    }
-    return false;
-
-  }
-
-  onMouseOver() {
-    this.isCartHovered = true;
-  }
 
   onMouseLeave() {
     this.isCartHovered = false;
   }
 
-  getCartTotal(): number {
-    return this.gioHangChiTiet.reduce((total, item) => {
-      return total + item.soLuong * item.chiTietSanPham.giaBan;
-    }, 0);
-  }
-
-
-  getTotalQuantity(): number {
-    return this.gioHangChiTiet.reduce((total, item) => total + item.soLuong, 0);
-  }
 }
