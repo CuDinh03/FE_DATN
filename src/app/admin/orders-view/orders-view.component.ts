@@ -310,7 +310,8 @@ export class OrdersViewComponent {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
-          console.log(response);
+          this.getHoaDons()
+          this.loadHoaDon()
         } else {
           this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
             duration: 3000,
