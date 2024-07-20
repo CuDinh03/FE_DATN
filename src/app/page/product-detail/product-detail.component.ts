@@ -38,8 +38,6 @@ export class ProductDetailComponent implements OnInit {
     private gioHangService: GioHangService,
     private khachHangService: KhachHangService,
     private snackBar: MatSnackBar,
-    private http: HttpClient,
-    private hoaDonChiTietService: HoaDonChiTietService,
     private formBuilder: FormBuilder,
     private danhGiaServe: DanhGiaService,
   ) {
@@ -207,7 +205,7 @@ export class ProductDetailComponent implements OnInit {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.sanPhamCTService.getChiTietSanPhamById(chiTietSanPham.id)
+      this.sanPhamCTService.getChiTietSanPhamByIdKH(chiTietSanPham.id)
         .subscribe((response: ApiResponse<any>) => {
           if (response.result) {
             this.findCiTietSanPham = response.result;

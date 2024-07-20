@@ -1,11 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import {TaiKhoanDto} from "../../model/tai-khoan-dto.model";
 import {TaiKhoanService} from "../../service/TaiKhoanService";
 import {KhachHangDto} from "../../model/khachHangDto";
 import {KhachHangService} from 'src/app/service/KhachHangService';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {error} from '@angular/compiler-cli/src/transformers/util';
 
 
 @Component({
@@ -17,9 +14,9 @@ export class ProfileComponent {
 
   taiKhoanInfo: KhachHangDto | undefined;
   idTaiKhoan: any;
-  myInfo: any;
+  myInfo!: KhachHangDto;
   thongTinKhachHang: any;
-  khachHang: any;
+  khachHang!: KhachHangDto;
   formKhachHang!: FormGroup;
   isEdit: boolean = false;
   isEditEmail: boolean = false;
@@ -52,13 +49,16 @@ export class ProfileComponent {
   }
 
   getMyInfo(): void {
-    this.taiKhoanService.getMyInfo().subscribe( // => ID tài khoản, username, chucVu
+    this.taiKhoanService.getMyInfo().subscribe(
       response => {
-        // ID tài khoản, username, chucVu
         this.myInfo = response.result;
-        // => KhachHang
         if (this.myInfo && this.myInfo.id) {
-          this.getKHByIdTaiKhoan(this.myInfo.id);
+          // this.getKHByIdTaiKhoan(this.myInfo.id);
+          this.khachHang = this.myInfo;
+          // @ts-ignore
+          this.khachHang.ngaySinh = this.formatDate(this.khachHang.ngaySinh);
+
+          this.fillValueToForm(this.khachHang);
         }
       }, error => {
         console.error('Lỗi khi lấy thông tin tài khoản:', error);
@@ -67,19 +67,18 @@ export class ProfileComponent {
 
   // Lấy Thông tin khách hàng từ id tài khoản đang đăng nhập
 
-  getKHByIdTaiKhoan(idTaiKhoan: string): void {
-    this.khachHangService.getKhachHangByIdTaiKhoan(idTaiKhoan)
-      .subscribe(response => {
-        this.taiKhoanInfo = response.result?.taiKhoan;
-        this.khachHang = response.result;
-        if (this.khachHang) {
-          this.khachHang.ngaySinh = this.formatDate(this.khachHang.ngaySinh);
-          this.fillValueToForm(this.khachHang);
-        }
-      }, error => {
-        console.error('Lỗi khi lấy thông tin khách hàng:', error);
-      });
-  }
+  // getKHByIdTaiKhoan(idTaiKhoan: string): void {
+  //   this.khachHangService.getKhachHangByIdTaiKhoan(idTaiKhoan)
+  //     .subscribe(response => {
+  //       this.taiKhoanInfo = response.result?.taiKhoan;
+  //       this.khachHang = response.result;
+  //       if (this.khachHang) {
+  //         this.khachHang.ngaySinh = this.formatDate(this.khachHang.ngaySinh);
+  //       }
+  //     }, error => {
+  //       console.error('Lỗi khi lấy thông tin khách hàng:', error);
+  //     });
+  // }
 
 
   statusTransition() {
@@ -141,6 +140,7 @@ export class ProfileComponent {
         res => {
 
           this.khachHang = res.result;
+          // @ts-ignore
           this.khachHang.ngaySinh = this.formatDate(this.khachHang.ngaySinh);
           this.isEdit = false;
           alert("Cập nhật thành công");

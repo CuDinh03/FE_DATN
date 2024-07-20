@@ -2,7 +2,7 @@
   <div class="main_menu">
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container">
-        <a class="navbar-brand logo_h" href="index.html">
+        <a class="navbar-brand logo_h" [routerLink]="['/trang-chu']">
           <h3>MT-Shirt</h3>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -14,19 +14,26 @@
         <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
           <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/trang-chu" style="font-size: 12px; position: relative;">HÀNG MỚI VỀ
+              <a class="nav-link" [routerLink]="['/trang-chu']" style="font-size: 12px; position: relative;">HÀNG MỚI VỀ
                 <span class="new-badge">NEW</span>
               </a>
             </li>
             <li class="nav-item submenu dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                 aria-expanded="false" style="font-size: 12px" [routerLink]="['/list-product']">TẤT CẢ SẢN PHẨM</a>
+                 aria-expanded="false" style="font-size: 12px">QUẦN NAM</a>
+              <ul class="dropdown-menu">
+                <li class="nav-item"><a class="nav-link" href="#">Quần jeans</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần chinos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần kaki</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần âu</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Quần jogger</a></li>
+              </ul>
             </li>
             <li class="nav-item submenu dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                  aria-expanded="false" style="font-size: 12px">ÁO NAM</a>
               <ul class="dropdown-menu">
-                <li class="nav-item"><a class="nav-link" >Áo sơ mi</a></li>
+                <li class="nav-item"><a class="nav-link" href="/list-p">Áo sơ mi</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Áo vest</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Áo Polo</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Áo thun</a></li>
@@ -61,21 +68,18 @@
             </span>
 
 
-            <span class="position-relative" (mouseover)="onMouseOver()" (mouseleave)="onMouseLeave()"
-                  *ngIf="isLoggedIn()">
-              <a href="/shopping-cart" style="text-decoration: none; color: black;" class="btn">
+            <span class="position-relative" (mouseover)="onMouseOver()" (mouseleave)="onMouseLeave()" *ngIf="isLoggedIn()">
+              <a [routerLink]="['/customer/shopping-cart']" style="text-decoration: none; color: black;" class="btn">
                 <i class="ti ti-shopping-cart" style="font-size: 20px"></i>
                 <span class="cart-badge">{{ getTotalQuantity() }}</span>
               </a>
               <div class="mini-cart" *ngIf="isCartHovered">
                 <h5>Sản phẩm mới thêm</h5>
                 <div *ngIf="gioHangChiTiet.length > 0">
-                  <a class="mini-cart-item container-fluid row d-flex" style="text-decoration: none; color: black;"
-                     *ngFor="let item of gioHangChiTiet.slice(0,6)">
+                  <a class="mini-cart-item container-fluid row d-flex" style="text-decoration: none; color: black;" *ngFor="let item of gioHangChiTiet.slice(0,6)">
                     <div class="col-8 d-flex justify-content-start mb-3">
                       <span>
-                        <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[0]" alt=""
-                             class="product-image me-3">
+                        <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0" [src]="item.hinhAnhUrls[0]" alt="" class="product-image me-3">
                       </span>
                       <span>
                           <p style="margin: 0;">{{ item.chiTietSanPham.sanPham.ten }} x {{ item.soLuong }}</p>
@@ -90,15 +94,14 @@
                       </span>
                     </div>
                     <div class="col-4 d-flex justify-content-end">
-                      <p
-                        style="margin: 0; color: #7A98FF;">{{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</p>
+                      <p style="margin: 0; color: #7A98FF;">{{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</p>
                     </div>
                   </a>
                   <div class="mini-cart-footer d-flex justify-content-between">
                     <span style="font-size: 10px; margin-top: 15px; margin-left: 20px;">có {{ getTotalQuantity() }} sản phẩm trong giỏ hàng</span>
                     <span>
                       <p>Tổng: {{ getCartTotal() | currency:'VND':'symbol':'1.0-0' }}</p>
-                      <a href="/shopping-cart" class="btn btn-primary">Xem giỏ hàng</a>
+                          <a [routerLink]="['/customer/shopping-cart']" class="btn btn-primary">Xem giỏ hàng</a>
                     </span>
                   </div>
                 </div>
@@ -111,11 +114,11 @@
 
           <div *ngIf="!isLoggedInCart">
             <span>
-              <a href="/log-in" class="auth-link">Đăng nhập</a>
+              <a [routerLink]="['/log-in']"  class="auth-link">Đăng nhập</a>
             </span>
             /
             <span>
-              <a href="/sign-up" class="auth-link">Đăng ký</a>
+              <a [routerLink]="['/sign-up']" class="auth-link">Đăng ký</a>
             </span>
           </div>
 
@@ -128,23 +131,24 @@
                     <img src="assets/shopping/img/blog/author.png" alt="" width="35" height="35" class="rounded-circle">
                     <div class="online-dot"></div> <!-- Thêm chấm xanh -->
                   </a>
-                  <span style="font-size: 12px; color: black;">{{ khachHang.ten }}</span>
+                  <span style="font-size: 12px; color: black;">{{khachHang.ten}}</span>
 
 
                   <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                     <div class="message-body">
-                      <a href="/profile" class="d-flex align-items-center gap-2 dropdown-item">
+                      <a [routerLink]="['/customer/profile']" class="d-flex align-items-center gap-2 dropdown-item">
                         <i class="ti ti-user fs-6"></i>
                         <p class="mb-0 fs-3">My Profile</p>
                       </a>
-                      <a [routerLink]="['/don-mua']" class="d-flex align-items-center gap-2 dropdown-item">
-
-                        <span>
-                        <i class="ti ti-list-check fs-6"></i>
-                        </span>
-                        <span class="hide-menu fs-3">Đơn mua</span>
+                      <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-mail fs-6"></i>
+                        <p class="mb-0 fs-3">My Account</p>
                       </a>
-                      <a (click)="logout()" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                      <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-list-check fs-6"></i>
+                        <p class="mb-0 fs-3">My Task</p>
+                      </a>
+                      <a [routerLink]="['/trang-chu']" (click)="logout()" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                     </div>
                   </div>
                 </li>

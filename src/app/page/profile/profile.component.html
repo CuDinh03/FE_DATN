@@ -1,4 +1,3 @@
-<app-header></app-header>
 <section style="background-color: #eee;">
   <div class="container py-5">
     <div class="row d-flex justify-content-center">
@@ -17,7 +16,7 @@
                     <label class="form-label">Tên đăng nhập:</label>
                   </div>
                   <div class="col-sm-9">
-                    <label>{{ myInfo.username }}</label>
+                    <label>{{ myInfo.taiKhoan.tenDangNhap }}</label>
                   </div>
                 </div>
 
@@ -43,7 +42,7 @@
                     <label for="email" class="form-label">Email:</label>
                   </div>
                   <div class="col-sm-9">
-                    <label *ngIf="!isEditEmail">{{ khachHang.email | maskValue:3:10 }}</label>
+                    <label *ngIf="!isEditEmail">{{ myInfo.email | maskValue:3:10 }}</label>
                     <input *ngIf="isEditEmail" type="email" id="email" class="form-control"
                            formControlName="email" name="email">
                     <a href="#" (click)="changeEditEmail()">Thay Đổi</a>
@@ -63,7 +62,7 @@
                     <label for="sdt" class="form-label">Số điện thoại:</label>
                   </div>
                   <div class="col-sm-9">
-                    <label *ngIf="!isEditSDT">{{ khachHang.sdt | maskValue:1:2 }}</label>
+                    <label *ngIf="!isEditSDT">{{ myInfo.sdt | maskValue:1:2 }}</label>
                     <input *ngIf="isEditSDT" type="tel" id="sdt" class="form-control"
                            formControlName="sdt" name="sdt">
                     <a href="#" (click)="changeEditSDT()">Thay Đổi</a>
@@ -131,4 +130,3 @@
     </div>
   </div>
 </section>
-<app-footer></app-footer>

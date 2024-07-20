@@ -442,7 +442,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
         for (const kt of this.listKichThuoc) {
           this.availableSizes.push(kt.ten)
         }
-
       }
     )
   }

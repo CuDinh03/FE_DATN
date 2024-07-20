@@ -17,7 +17,7 @@ import {AdminViewComponent} from './admin/admin-view/admin-view.component';
 import {AuthenticationLoginComponent} from './auth/authentication-login/authentication-login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaiKhoanService} from "./service/TaiKhoanService";
-import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import {HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import {ShoppingCartComponent} from './page/shopping-cart/shopping-cart.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {SidebarComponent} from './admin/sidebar/sidebar.component';
@@ -44,49 +44,56 @@ import {ThuongHieuViewComponent} from './admin/thuonghieu-view/thuonghieu-view.c
 import {HinhAnhViewComponent} from './admin/hinhanh-view/hinhanh-view.component';
 import {RatingViewComponent} from './page/rating-view/rating-view.component';
 import {MaskValuePipe} from './page/profile/mask-value-pipe';
-import {ChartModule} from "angular-highcharts";
-import {SpinnerComponent} from "./page/spinner/spinner.component";
+import { DemoComponent } from './demo/demo.component';
+import {AdminRoutingModule} from "./admin-routing.module";
+import {CustomerRoutingModule} from "./customer-routing.module";
+import {GuestRoutingModule} from "./guest-routing.module";
+import { TrangChuComponent } from './page/trang-chu/trang-chu.component';
 import {CommonModule} from "@angular/common";
+import {SpinnerComponent} from "./page/spinner/spinner.component";
+import {ChartModule} from "angular-highcharts";
 
 @NgModule({ declarations: [
-        HomeComponent,
-        HeaderComponent,
-        MainViewComponent,
-        FooterComponent,
-        ShoppingCartViewComponent,
-        ProductDetailComponent,
-        BannerComponent,
-        PreviewProductComponent,
-        TrendingProductComponent,
-        BestSellingProductComponent,
-        OfferSectionComponent,
-        ShopCategoryComponent,
-        AdminViewComponent,
-        AuthenticationLoginComponent,
-        ShoppingCartComponent,
-        RegisterComponent,
-        SidebarComponent,
-        ProfileComponent,
-        ProductViewComponent,
-        AccountViewComponent,
-        CategoryViewComponent,
-        ShoppingViewComponent,
-        VoucherViewComponent,
-        AdminHeaderComponent,
-        OrdersViewComponent,
-        CustomerViewComponent,
-        PaymentViewComponent,
-        SidebarProfileComponent,
-        HistoryViewComponent,
-        OrderDetailComponent,
-        ChatLieuViewComponent,
-        MauSacViewComponent,
-        KichThuocViewComponent,
-        ThuongHieuViewComponent,
-        HinhAnhViewComponent,
-        ProductDetailViewComponent,
-        RatingViewComponent,
-        MaskValuePipe
+    HomeComponent,
+    HeaderComponent,
+    MainViewComponent,
+    FooterComponent,
+    ShoppingCartViewComponent,
+    ProductDetailComponent,
+    BannerComponent,
+    PreviewProductComponent,
+    TrendingProductComponent,
+    BestSellingProductComponent,
+    OfferSectionComponent,
+    ShopCategoryComponent,
+    AdminViewComponent,
+    AuthenticationLoginComponent,
+    ShoppingCartComponent,
+    RegisterComponent,
+    SidebarComponent,
+    ProfileComponent,
+    ProductViewComponent,
+    AccountViewComponent,
+    CategoryViewComponent,
+    ShoppingViewComponent,
+    VoucherViewComponent,
+    AdminHeaderComponent,
+    OrdersViewComponent,
+    CustomerViewComponent,
+    PaymentViewComponent,
+    SidebarProfileComponent,
+    HistoryViewComponent,
+    OrderDetailComponent,
+    ChatLieuViewComponent,
+    MauSacViewComponent,
+    KichThuocViewComponent,
+    ThuongHieuViewComponent,
+    HinhAnhViewComponent,
+    ProductDetailViewComponent,
+    RatingViewComponent,
+    MaskValuePipe,
+    DemoComponent,
+    TrangChuComponent
     ],
     bootstrap: [HomeComponent], imports: [BrowserModule,
         AppRoutingModule,
@@ -95,6 +102,9 @@ import {CommonModule} from "@angular/common";
         BrowserAnimationsModule,
         ChartModule,
         CommonModule,
+        AdminRoutingModule,
+        CustomerRoutingModule,
+        GuestRoutingModule,
         MatSnackBarModule, SpinnerComponent], providers: [TaiKhoanService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
 }
