@@ -333,7 +333,7 @@ export class HistoryViewComponent {
           if (response.result) {
             this.hoaDon = response.result;
             localStorage.setItem('hoaDon', JSON.stringify(response.result));
-            this.router.navigate(['/customer/order-detail'])
+            this.router.navigate(['/customer/order-detail', id]); // Thay đổi đường dẫn
           }
         })
   }

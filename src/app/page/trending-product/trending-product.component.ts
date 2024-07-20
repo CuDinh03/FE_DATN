@@ -43,7 +43,7 @@ export class TrendingProductComponent {
           if (response.result) {
             this.findSanPhamChiTiet = response.result
             localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result))
-            this.router.navigate(['/san-pham']);
+            this.router.navigate(['/customer/san-pham']);
           }
         })
   }

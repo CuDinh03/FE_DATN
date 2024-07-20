@@ -19,6 +19,7 @@ const guestRoutes: Routes = [
   { path: 'sign-up', component: RegisterComponent },
   { path: 'danh-gia', component: RatingViewComponent },
   { path: 'demo', component: DemoComponent },
+  {path: 'san-pham', component:ProductDetailComponent}
 ];
 
 @NgModule({

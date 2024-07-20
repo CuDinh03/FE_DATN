@@ -165,7 +165,6 @@ export class ShoppingViewComponent {
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
 
-
     if (this.customer.ten === 'Khách lẻ'){
       this.customer = null;
     }
