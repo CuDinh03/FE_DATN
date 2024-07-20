@@ -822,11 +822,15 @@
           <div class="col-md-3">
             <h6>Thông tin khách hàng</h6>
             <div class="d-flex">
-              <span class="me-2 fw-bold">Voucher:</span>
-              <span>{{tenKhachHang}}</span>
+<!--              <p *ngIf="hoaDons.khachHang != null">{{ hoaDons.khachHang.ten }}</p>-->
+<!--              <p *ngIf="hoaDons.khachHang === null"> Khách lẻ </p>-->
+              <span class="me-2 fw-bold">Họ và tên:</span>
+              <span>
+                {{tenKhachHang ? tenKhachHang : 'Khách lẻ'}}
+              </span>
             </div>
-            <p><strong>Địa chỉ:</strong> {{diaChiKhachHang}}</p>
-            <p><strong>Số điện thoại: </strong> {{sdtKhachHang}}</p>
+            <p><strong>Địa chỉ:</strong> {{ diaChiKhachHang ? diaChiKhachHang : 'Mua tại quầy'}}</p>
+            <p><strong>Số điện thoại: </strong> {{ sdtKhachHang ? sdtKhachHang : 'Khách lẻ'}}</p>
           </div>
           <div class="col-md-1 d-flex align-items-center">
             <div class="divider"></div>
@@ -924,7 +928,7 @@
           <div class="col-md-3">
             <h6>Thông tin khách hàng</h6>
             <div class="d-flex">
-              <span class="me-2 fw-bold">Voucher:</span>
+              <span class="me-2 fw-bold">Họ và tên:</span>
               <span>{{tenKhachHang}}</span>
             </div>
             <p><strong>Địa chỉ:</strong> {{diaChiKhachHang}}</p>

@@ -226,9 +226,16 @@ export class OrdersViewComponent {
         ngaySua: new Date(),
         trangThai: 5,
       };
-      this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
-      this.loadHoaDon();
-      this.closeconfirmUpdate();
+      if (hoaDonDto.ghiChu){
+        this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
+        this.loadHoaDon();
+        this.closeconfirmUpdate();
+      }else {
+        this.snackBar.open('Cập nhật trạng thái thất bại. Vui Lòng nhập ghi chú', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
     } else {
       this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
     }
