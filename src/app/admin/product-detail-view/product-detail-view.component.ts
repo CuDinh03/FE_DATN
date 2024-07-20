@@ -1,15 +1,15 @@
-import { EOF } from '@angular/compiler';
+import {EOF} from '@angular/compiler';
 import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ChiTietSanPhamDto } from 'src/app/model/chi-tiet-san-pham-dto.model';
-import { AuthenticationService } from 'src/app/service/AuthenticationService';
-import { ChatLieuService } from 'src/app/service/ChatLieuService';
-import { DanhMucService } from 'src/app/service/DanhMucService';
-import { KichThuocService } from 'src/app/service/KichThuocService';
-import { MauSacService } from 'src/app/service/MauSacService';
-import { SanPhamCTService } from 'src/app/service/SanPhamCTService';
-import { SanPhamService } from 'src/app/service/SanPhamService';
-import { ThuongHieuService } from 'src/app/service/ThuongHieuService';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ChiTietSanPhamDto} from 'src/app/model/chi-tiet-san-pham-dto.model';
+import {AuthenticationService} from 'src/app/service/AuthenticationService';
+import {ChatLieuService} from 'src/app/service/ChatLieuService';
+import {DanhMucService} from 'src/app/service/DanhMucService';
+import {KichThuocService} from 'src/app/service/KichThuocService';
+import {MauSacService} from 'src/app/service/MauSacService';
+import {SanPhamCTService} from 'src/app/service/SanPhamCTService';
+import {SanPhamService} from 'src/app/service/SanPhamService';
+import {ThuongHieuService} from 'src/app/service/ThuongHieuService';
 // @ts-ignore
 import * as $ from 'jquery';
 import 'select2';
@@ -24,6 +24,7 @@ import {ThuongHieuDto} from "../../model/thuong-hieu-dto.model";
 import {DanhMucDto} from "../../model/danh-muc-dto.model";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+
 @Component({
   selector: 'app-product-detail-view',
   templateUrl: './product-detail-view.component.html',
@@ -441,7 +442,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
         for (const kt of this.listKichThuoc) {
           this.availableSizes.push(kt.ten)
         }
-
       }
     )
   }
@@ -625,9 +625,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
 }
 
 
-
-
-
 // deleteSanPham(id: string): Observable<ApiResponse<void>> {
 //   const token = localStorage.getItem('token');
 //   const headers = new HttpHeaders({
@@ -650,6 +647,3 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
 //     this.router.navigate(['/admin/san-pham']);
 //   });
 // }
-
-
-

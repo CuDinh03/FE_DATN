@@ -105,7 +105,7 @@ export class ShoppingViewComponent {
         tongTienGiam: 0,
         ngayTao: new Date(),
         ngaySua: new Date(),
-        trangThai: true,
+        trangThai: 0,
       },
       gioHangChiTietDtoList: []
     };
@@ -119,7 +119,6 @@ export class ShoppingViewComponent {
     this.loadDanhMuc();
     this.getCustomer();
     this.getNhanVien();
-    this.nhanVien
   }
   getNhanVien(): void {
     const username = localStorage.getItem('tenDangNhap');
@@ -165,7 +164,7 @@ export class ShoppingViewComponent {
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
 
-    if (this.customer.ten === 'Khách lẻ'){
+    if (this.customer.ten === 'Khách lẻ' || this.customer.ten === ''){
       this.customer = null;
     }
 
@@ -183,22 +182,36 @@ export class ShoppingViewComponent {
         hoaDon.ghiChu = this.ghiChu;
         console.log(hoaDon)
 
-
-        const thanhToanDto: ThanhToanDto = {
+        const ThanhToanDto: ThanhToanDto = {
           hoaDonDto: hoaDon,
           gioHangChiTietDtoList: gioHangChiTiet,
         };
 
-        this.thanhToanService.thanhToan(thanhToanDto).subscribe(
+        this.thanhToanService.thanhToan(ThanhToanDto).subscribe(
           (response: ApiResponse<ThanhToanDto>) => {
             if (response.result) {
-              this.handleSuccessfulPayment();
-            } else {
-              this.handleFailedPayment();
+              this.snackBar.open('Thanh toán thành công!', 'Đóng', {
+                duration: 3000,
+                panelClass: ['success-snackbar']
+              });
+              this.loadHoaDonGioHang();
+              this.loadGioHangChiTiet(this.hoaDon.id);
+              localStorage.removeItem('voucher');
+              localStorage.removeItem('kh');
+              localStorage.removeItem('dbhoadon');
+              localStorage.removeItem('gioHangChiTiet');
+              localStorage.removeItem('hoaDon');
+              localStorage.removeItem('gioHang');
             }
+            this.clearForm();
+            this.loadHoaDonGioHang();
+            this.closeConfirmPayment();
           },
           (error: HttpErrorResponse) => {
-            this.handleFailedPayment();
+            this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
+              duration: 3000,
+              panelClass: ['error-snackbar']
+            });
           }
         );
 
@@ -222,23 +235,6 @@ export class ShoppingViewComponent {
     }
 
 
-  }
-  handleSuccessfulPayment(): void {
-    this.snackBar.open('Thanh toán thành công!', 'Đóng', {
-      duration: 3000,
-      panelClass: ['success-snackbar']
-    });
-
-    this.clearLocalStorageItems();
-    this.loadHoaDonGioHang();
-    this.closeConfirmPayment();
-  }
-
-  handleFailedPayment(): void {
-    this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
-      duration: 3000,
-      panelClass: ['error-snackbar']
-    });
   }
 
 
@@ -276,15 +272,6 @@ export class ShoppingViewComponent {
         }
       }
     );
-  }
-
-  clearLocalStorageItems(): void {
-    localStorage.removeItem('voucher');
-    localStorage.removeItem('kh');
-    localStorage.removeItem('dbhoadon');
-    localStorage.removeItem('gioHangChiTiet');
-    localStorage.removeItem('hoaDon');
-    localStorage.removeItem('gioHang');
   }
 
 
@@ -368,7 +355,7 @@ export class ShoppingViewComponent {
   clearForm(): void {
 
     this.sdtValue = '';
-    this.customer = null;
+    this.customer = {ten: "Khách lẻ"};
     this.voucher = null;
     this.tienKhachDua = 0;
     this.thanhTien = 0;

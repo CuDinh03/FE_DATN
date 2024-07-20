@@ -85,7 +85,7 @@ export class KhachHangService {
   }
 
   // ==> Update khách hàng
-  suaKhachHang(id: string | undefined, khachHang: any): Observable<ApiResponse<any>> {
+  suaKhachHang(id: string, khachHang: any): Observable<ApiResponse<any>> {
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -122,7 +122,7 @@ export class KhachHangService {
         return this.http.get<ApiResponse<KhachHangDto>>(`${this.apiUrl}/detail/${id}`, {headers});
     }
 
-    updateKhachHang(id: string | undefined, khachHangData: KhachHangDto): Observable<ApiResponse<void>> {
+  updateKhachHang(id: string, khachHangData: KhachHangDto): Observable<ApiResponse<void>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`

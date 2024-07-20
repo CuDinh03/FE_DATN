@@ -29,10 +29,34 @@
   height: auto;
   margin-right: 5px;
 }
+
 .card {
   transition: box-shadow 0.3s ease;
 }
 
 .card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.date-filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 38px;
+  padding: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+/*.date-filter {*/
+/*  flex: 1;*/
+/*}*/
+
+.ti-arrow-right {
+  margin: 0 5px; /* Khoảng cách giữa mũi tên và các thẻ input */
+  display: flex;
+  align-items: center;
 }

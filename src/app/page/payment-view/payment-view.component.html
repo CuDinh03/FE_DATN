@@ -1,3 +1,4 @@
+<app-header></app-header>
 <section>
   <div class="container mt-3">
     <div class="row d-flex justify-content-center pb-5">
@@ -30,10 +31,6 @@
               <div class="mb-2">
                 <label class="form-label">Số điện thoai</label>
                 <input type="text" class="form-control" formControlName="sdt" id="sdt">
-              </div>
-              <div class="mb-2">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" formControlName="email" id="email">
               </div>
               <div class="pt-2">
                 <div class="mb-3">
@@ -69,15 +66,16 @@
                   </div>
                   <button type="button" class="btn btn-info" (click)="showModal()">Chọn Voucher</button>
                 </div>
-                  <button type="button" class="btn btn-primary" (click)="showModalinfo()" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                  Đặt hàng
-                  </button>
+                <button type="submit" data-mdb-ripple-init class="btn btn-primary btn-block btn-lg mt-3" [disabled]="loading"> Đặt hàng
+                </button>
+                <div *ngIf="loading" class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
               </div>
             </form>
           </div>
         </div>
       </div>
-
       <div class="col-md-5 col-xl-4 offset-xl-1">
         <div class="card">
           <div class="card-body">
@@ -181,6 +179,8 @@
   </div>
 </div>
 
+<app-footer></app-footer>
+
 <div class="modal fade" #userInfor tabindex="-1" aria-labelledby="userInForModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -191,48 +191,45 @@
       <div class="modal-body">
         <div class="container">
           <div class="d-flex justify-content-start align-items-stretch customer-info">
-                        <span class="me-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" [value]="khachHang.id"
-                                       (change)="selectCustomer(khachHang.id)">
-                            </div>
-                        </span>
+            <span class="me-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" [value]="khachHang.id" (change)="selectCustomer(khachHang)" name="diaChi">
+              </div>
+            </span>
             <span class="customer-details">
-                            <span class="customer-name">{{ khachHang.ten }}</span> |
-                            <span class="customer-sdt">{{ khachHang.sdt }}</span>
-                            <p class="customer-address mt-2">{{ khachHang.diaChi }}</p>
-                        </span>
+              <span class="customer-name">{{ khachHang.ten }}</span> |
+              <span class="customer-sdt">{{ khachHang.sdt }}</span> |
+              <span class="customer-sdt text-bg-danger">Mặc định</span>
+              <p class="customer-address mt-2">{{ khachHang.diaChi }}</p>
+            </span>
             <span class="ms-auto update-link">
-                            <a href="">Cập nhật</a>
-                        </span>
+              <a href="" class="ti ti-edit-circle"></a>
+            </span>
+          </div>
+
+          <div class="d-flex justify-content-start align-items-stretch customer-info mb-4" *ngFor="let item of thongTinDatHang">
+            <span class="me-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="diaChi" [value]="item.id" (change)="selectCustomer(item)">
+              </div>
+            </span>
+            <span class="customer-details">
+              <span class="customer-name">{{ item.ten }}</span> |
+              <span class="customer-sdt">{{ item.sdt }}</span>
+              <p class="customer-address mt-2">{{ item.diaChi }}</p>
+            </span>
+            <span class="ms-auto update-link">
+              <a href="" class="ti ti-edit-circle"></a>
+            </span>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
-                data-bs-dismiss="modal" (click)="updateCustomerInfo()">Sử dụng
-        </button>
-        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
-                (click)="closeInforModal()">Hủy
-        </button>
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal" (click)="updateCustomerInfo()">Sử dụng</button>
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" (click)="closeInforModal()">Hủy</button>
       </div>
     </div>
   </div>
 </div>
 
-
-<!-- Modal -->
-<div class="modal fade" #paymentModal id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận đơn hàng</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closePaymentModal()" aria-label="Close"></button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="closePaymentModal()" data-bs-dismiss="modal">Huỷ</button>
-        <button type="submit" class="btn btn-primary" (click)="saveInfoPayment()">Xác nhận đặt hàng</button>
-      </div>
-    </div>
-  </div>
-</div>
+<app-spinner [isLoading]="loading"></app-spinner>

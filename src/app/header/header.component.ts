@@ -1,9 +1,9 @@
-import {SanPhamCTService} from './../service/SanPhamCTService';
+import {SanPhamCTService} from '../service/SanPhamCTService';
 import {ErrorCode} from './../model/ErrorCode';
-import {HttpErrorResponse} from '@angular/common/http';
-import {ApiResponse} from './../model/ApiResponse';
-import {KhachHangService} from './../service/KhachHangService';
-import {AuthenticationService} from './../service/AuthenticationService';
+import { HttpErrorResponse } from '@angular/common/http';
+import {ApiResponse} from '../model/ApiResponse';
+import {KhachHangService} from '../service/KhachHangService';
+import {AuthenticationService} from '../service/AuthenticationService';
 import {GioHangService} from 'src/app/service/GioHangService';
 import {GioHangChiTietService} from './../service/GioHangChiTietService';
 import {Component} from '@angular/core';

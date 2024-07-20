@@ -17,7 +17,7 @@ import {AdminViewComponent} from './admin/admin-view/admin-view.component';
 import {AuthenticationLoginComponent} from './auth/authentication-login/authentication-login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaiKhoanService} from "./service/TaiKhoanService";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import {ShoppingCartComponent} from './page/shopping-cart/shopping-cart.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {SidebarComponent} from './admin/sidebar/sidebar.component';
@@ -49,10 +49,11 @@ import {AdminRoutingModule} from "./admin-routing.module";
 import {CustomerRoutingModule} from "./customer-routing.module";
 import {GuestRoutingModule} from "./guest-routing.module";
 import { TrangChuComponent } from './page/trang-chu/trang-chu.component';
+import {CommonModule} from "@angular/common";
+import {SpinnerComponent} from "./page/spinner/spinner.component";
+import {ChartModule} from "angular-highcharts";
 
-@NgModule({
-  declarations: [
-
+@NgModule({ declarations: [
     HomeComponent,
     HeaderComponent,
     MainViewComponent,
@@ -104,10 +105,12 @@ import { TrangChuComponent } from './page/trang-chu/trang-chu.component';
     MatSnackBarModule,
     AdminRoutingModule,
     CustomerRoutingModule,
-    GuestRoutingModule
+    GuestRoutingModule,
+    ChartModule,
+    CommonModule,
 
   ],
-  providers: [TaiKhoanService],
+  providers: [TaiKhoanService, provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [HomeComponent]
 })
 export class AppModule {

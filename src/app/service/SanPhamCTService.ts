@@ -10,6 +10,8 @@ import {DanhMucDto} from "../model/danh-muc-dto.model";
 import {ChatLieuDto} from "../model/chat-lieu-dto.model";
 import {ThuongHieuDto} from "../model/thuong-hieu-dto.model";
 import {MauSacDto} from "../model/mau-sac-dto.model";
+import {FilterSanPhamRequest} from "../model/FilterSanPhamRequest";
+
 
 
 @Injectable({
@@ -24,25 +26,21 @@ export class SanPhamCTService {
 
   getSanPhamChiTietSapXepByNGayTao(page: number, size: number): Observable<ApiResponse<any>> {
 
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
     let params = new HttpParams();
     params = params.append('page', page.toString());
     params = params.append('size', size.toString());
 
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/sap-xep-ngay-tao`, { params, headers });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/sap-xep-ngay-tao`, { params });
   }
 
   // Get chitietSanPham by id
   getChiTietSanPhamById(id: string): Observable<ApiResponse<any>> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`, { headers });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`);
+  }
+
+  getChiTietSanPhamByIdKH(id: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`);
   }
 
 
@@ -227,6 +225,14 @@ export class SanPhamCTService {
     });
 
     return this.http.post<ApiResponse<any>>(`${this.apiUrl}/saveListCt`, list, { headers });
+  }
+
+  filterSanPham(request: FilterSanPhamRequest, page: number, size: number): Observable<ApiResponse<any>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/filter`, request, { params });
   }
 
 

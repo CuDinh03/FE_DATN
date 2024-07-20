@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ApiResponse} from "../model/ApiResponse";
 import {ThanhToanDto} from "../model/thanh-toan-dto.model";
@@ -22,6 +22,14 @@ export class DanhGiaService {
       'Authorization': `Bearer ${token}`
     });
     return this.http.post<ApiResponse<DanhGiaDto>>(`${this.apiUrl}/create`, danhGiaDto, {headers});
+  }
+
+  getSoLuongDanhGia(productId: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/count/${productId}`);
+  }
+
+  getDiemDanhGia(productId: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/average/${productId}`);
   }
 
 

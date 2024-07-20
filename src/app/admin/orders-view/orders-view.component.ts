@@ -3,21 +3,20 @@ import {ApiResponse} from './../../model/ApiResponse';
 import {HoaDonChiTietService} from './../../service/HoaDonChiTietService';
 import {HoaDonService} from './../../service/HoaDonService';
 import {Router} from '@angular/router';
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import {AuthenticationService} from './../../service/AuthenticationService';
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {ErrorCode} from "../../model/ErrorCode";
 import {HoaDonDto} from "../../model/hoa-don-dto.model";
+import {ThanhToanOnl} from "../../model/thanh-toan-onl";
 
 @Component({
   selector: 'app-orders-view',
   templateUrl: './orders-view.component.html',
   styleUrls: ['./orders-view.component.css']
 })
-export class OrdersViewComponent implements OnInit{
+export class OrdersViewComponent {
   @ViewChild('confirmUpdate') confirmUpdate!: ElementRef;
-  @ViewChild('deleteHoaDon') deleteHoaDon!: ElementRef;
-  @ViewChild('detailHoaDon') detailHoaDon!: ElementRef;
   listHoaDon: any[] = [];
   hoaDonChiTiet: any[] = [];
   totalElements = 0;
@@ -29,7 +28,6 @@ export class OrdersViewComponent implements OnInit{
   errorMessage: string = '';
   successMessage = '';
   hoaDon = ''
-  hoaDonSelect!: any;
   noProductsFound = false;
   noCartDetail = false;
   hoaDons: any[] = [];
@@ -37,12 +35,15 @@ export class OrdersViewComponent implements OnInit{
   page: number = 0;
   size: number = 5;
   selectedTab: number = 0;
-
+  hoaDonSua: any = {};
+  tenKhachHang: string = '';
+  diaChiKhachHang: string = '';
+  sdtKhachHang: string = '';
+  ghiChu: string = '';
 
   constructor(
     private apiService: HoaDonService,
     private hoaDonChiTietService: HoaDonChiTietService,
-    private hoaDonService: HoaDonService,
     private router: Router,
     private auth: AuthenticationService,
     private snackBar: MatSnackBar,
@@ -51,7 +52,6 @@ export class OrdersViewComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.getHoaDons();
     this.loadHoaDon();
 
   }
@@ -90,7 +90,6 @@ export class OrdersViewComponent implements OnInit{
         this.listHoaDon = response.result.content;
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
-        this.getHoaDons();
       });
   }
 
@@ -106,11 +105,11 @@ export class OrdersViewComponent implements OnInit{
       case 3:
         return 'Đang giao';
       case 4:
-        return 'Đã nhận hàng';
-      case 5:
         return 'Hoàn thành';
-      case 6:
+      case 5:
         return 'Hủy đơn';
+      case 6:
+        return 'Sửa đơn';
       default:
         return '';
     }
@@ -129,7 +128,7 @@ export class OrdersViewComponent implements OnInit{
       case 4:
         return '#228B22';
       case 5:
-        return '#228B22';
+        return '#FF0000';
       case 6:
         return '#FF0000';
 
@@ -160,23 +159,6 @@ export class OrdersViewComponent implements OnInit{
     );
   }
 
-  loadHoaDonByidHoaDon(hoaDon: string){
-    this.showModalHoaDonDetail();
-    this.hoaDonSelect = null;
-    this.hoaDonService.getHoaDonById(hoaDon).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result) {
-          this.hoaDonSelect = response.result;
-        }
-    });
-  }
-  showModalHoaDonDetail(): void {
-    if (this.detailHoaDon && this.detailHoaDon.nativeElement) {
-      this.detailHoaDon.nativeElement.classList.add('show');
-      this.detailHoaDon.nativeElement.style.display = 'block';
-    }
-  }
-
   showModal(): void {
     if (this.confirmUpdate && this.confirmUpdate.nativeElement) {
       this.confirmUpdate.nativeElement.classList.add('show');
@@ -203,51 +185,140 @@ export class OrdersViewComponent implements OnInit{
   }
 
   suaTrangThaiModal(): void {
-    const storedHoaDon = this.hoaDonSelect
+    const storedHoaDon = localStorage.getItem('hoaDon');
     if (storedHoaDon) {
-      const hoaDon = storedHoaDon
-      let trangThaiMoi = hoaDon.trangThai + 1
-      this.updateTrangThai(hoaDon.id, trangThaiMoi);
+      const hoaDon = JSON.parse(storedHoaDon);
+      const hoaDonDto: HoaDonDto = {
+        id: hoaDon.id,
+        ma: hoaDon.ma,
+        tongTien: hoaDon.tongTien,
+        tongTienGiam: hoaDon.tongTienGiam,
+        voucher: hoaDon.voucher,
+        ghiChu: this.ghiChu,
+        khachHangId: hoaDon.khachHangId,
+        nhanVienId: hoaDon.nhanVienId,
+        ngayTao: hoaDon.ngayTao,
+        ngaySua: new Date(),
+        trangThai: hoaDon.trangThai + 1,
+      };
+      this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
+      this.loadHoaDon();
       this.closeconfirmUpdate();
-      this.closeDetailHoaDon();
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
+
+  huyDonModal(): void {
+    const storedHoaDon = localStorage.getItem('hoaDon');
+    if (storedHoaDon) {
+      const hoaDon = JSON.parse(storedHoaDon);
+      const hoaDonDto: HoaDonDto = {
+        id: hoaDon.id,
+        ma: hoaDon.ma,
+        tongTien: hoaDon.tongTien,
+        tongTienGiam: hoaDon.tongTienGiam,
+        voucher: hoaDon.voucher,
+        ghiChu: this.ghiChu,
+        khachHangId: hoaDon.khachHangId,
+        nhanVienId: hoaDon.nhanVienId,
+        ngayTao: hoaDon.ngayTao,
+        ngaySua: new Date(),
+        trangThai: 5,
+      };
+      if (hoaDonDto.ghiChu){
+        this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
+        this.loadHoaDon();
+        this.closeconfirmUpdate();
+      }else {
+        this.snackBar.open('Cập nhật trạng thái thất bại. Vui Lòng nhập ghi chú', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
+
+  xacNhanSuaModal(): void {
+    const storedHoaDon = localStorage.getItem('hoaDon');
+    if (storedHoaDon) {
+      const hoaDon = JSON.parse(storedHoaDon);
+      const hoaDonDto: HoaDonDto = {
+        id: hoaDon.id,
+        ma: hoaDon.ma,
+        tongTien: hoaDon.tongTien,
+        tongTienGiam: hoaDon.tongTienGiam,
+        voucher: hoaDon.voucher,
+        ghiChu: this.ghiChu,
+        khachHangId: hoaDon.khachHangId,
+        nhanVienId: hoaDon.nhanVienId,
+        ngayTao: hoaDon.ngayTao,
+        ngaySua: new Date(),
+        trangThai: 2,
+      };
+      this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
+      this.loadHoaDon();
+      this.closeconfirmUpdate();
     } else {
       this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
     }
   }
 
 
-  // loadHoaDonById(idHoaDon: string): void {
-  //   this.apiService.getHoaDonById(idHoaDon)
-  //     .subscribe(
-  //       (response: ApiResponse<any>) => {
-  //         if (response.result) {
-  //           this.hoaDon = response.result;
-  //           localStorage.setItem('hoaDon', JSON.stringify(response.result));
-  //           this.router.navigate(['/admin/hoa-don'])
-  //         }
-  //       })
-  // }
+  loadHoaDonById(idHoaDon: string): void {
+    this.apiService.getHoaDonById(idHoaDon)
+      .subscribe(
+        (response: ApiResponse<any>) => {
+          if (response.result) {
+            this.hoaDonSua = response.result;
+            localStorage.setItem('hoaDon', JSON.stringify(response.result));
+            this.tenKhachHang = this.hoaDonSua.khachHang.ten;
+            this.diaChiKhachHang = this.hoaDonSua.khachHang.diaChi;
+            this.sdtKhachHang = this.hoaDonSua.khachHang.sdt;
+            console.log(this.hoaDonSua)
+            this.router.navigate(['/admin/hoa-don'])
+          }
+        })
+  }
 
 
-  // handleError(error: HttpErrorResponse): void {
-  //   console.error(error);
-  //   if (error.error.code === ErrorCode.PASSWORD_INVALID) {
-  //     this.errorMessage = 'Mã danh mục không được để trống';
-  //   } else {
-  //     this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
-  //   }
-  // }
 
-  updateTrangThai(id: string, trangThai: number): void {
-    this.apiService.updateTrangThai(id, trangThai).subscribe(
-      (response) => {
+  handleError(error: HttpErrorResponse): void {
+    console.error(error);
+    if (error.error.code === ErrorCode.PASSWORD_INVALID) {
+      this.errorMessage = 'Mã danh mục không được để trống';
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
+
+  updateTrangThai(id: string, trangThai: number, hoaDonDto: HoaDonDto): void {
+    this.apiService.updateTrangThainew(id, trangThai, hoaDonDto).subscribe(
+      (response: ApiResponse<HoaDonDto>) => {
         if (response) {
-          this.snackBar.open('Cập nhật trạng thái thành công', 'Đóng', {
+          let message = '';
+          switch (trangThai) {
+            case 2:
+              message = 'Đã xác nhận đơn hàng';
+              break;
+            case 4:
+              message = 'Hoàn thành đơn hàng';
+              break;
+            case 5:
+              message = 'Hủy đơn thành công';
+              break;
+            default:
+              message = 'Cập nhật trạng thái thành công';
+              break;
+          }
+          this.snackBar.open(message, 'Đóng', {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
-          this.getHoaDons();
-          this.loadHoaDon();
+          this.getHoaDons()
+          this.loadHoaDon()
         } else {
           this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
             duration: 3000,
@@ -266,6 +337,7 @@ export class OrdersViewComponent implements OnInit{
   }
 
 
+
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/log-in']).then(() => {
@@ -281,46 +353,15 @@ export class OrdersViewComponent implements OnInit{
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
+
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear(); // Get full year
+
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
+
     return `${day}/${month}/${year} || ${hours}:${minutes}`;
-  }
-
-
-  closeconfirmDelete() {
-    if (this.deleteHoaDon && this.deleteHoaDon.nativeElement) {
-      this.deleteHoaDon.nativeElement.classList.remove('show');
-      this.deleteHoaDon.nativeElement.style.display = 'none';
-    }
-  }
-  closeDetailHoaDon() {
-    if (this.detailHoaDon && this.detailHoaDon.nativeElement) {
-      this.detailHoaDon.nativeElement.classList.remove('show');
-      this.detailHoaDon.nativeElement.style.display = 'none';
-    }
-  }
-
-  huyHoaDon() {
-    const storedHoaDon = this.hoaDonSelect
-    if (storedHoaDon) {
-      const hoaDon = storedHoaDon;
-      let trangThaiMoi = 6
-      this.updateTrangThai(hoaDon.id, trangThaiMoi);
-      this.closeconfirmDelete();
-      this.closeDetailHoaDon();
-    } else {
-      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
-    }
-  }
-
-  showDeleteModal(): void {
-    if (this.deleteHoaDon && this.deleteHoaDon.nativeElement) {
-      this.deleteHoaDon.nativeElement.classList.add('show');
-      this.deleteHoaDon.nativeElement.style.display = 'block';
-    }
   }
 
 

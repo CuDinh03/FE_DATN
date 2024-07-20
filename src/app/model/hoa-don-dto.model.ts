@@ -14,6 +14,6 @@ export interface HoaDonDto {
   nhanVien: NguoiDung;
   ngayTao: Date;
   ngaySua: Date;
-  trangThai: boolean;
+  trangThai: number;
 }
 

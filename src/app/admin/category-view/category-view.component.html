@@ -1,5 +1,12 @@
-<div class="body-wrapper">
-<div class="container-fluid">
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+  data-sidebar-position="fixed" data-header-position="fixed">
+  <app-sidebar></app-sidebar>
+  <!--  Main wrapper -->
+  <div class="body-wrapper">
+    <!--  Header Start -->
+    <app-admin-header></app-admin-header>
+    <!--  Header End -->
+    <div class="container-fluid">
       <!--  Row 1 -->
       <div class="row">
         <div class="col-lg-7 d-flex align-items-strech">
@@ -96,7 +103,7 @@
                   <div class="row alig n-items-start">
                     <form [formGroup]="danhMucForm" (ngSubmit)="onSubmit()">
                       <input type="hidden" formControlName="id" id="id">
-
+                      
                       <div class="mb-3">
                         <span><label for="ma" class="form-label">Mã: </label> </span>
 
@@ -122,7 +129,7 @@
                         </div>
                       </div>
                       <div class="mb-4">
-                        <label class="form-label">Trạng thái: </label>
+                        <label for="trangThai" class="form-label">Trạng thái: </label>
                         <br>
                         <div class="form-check form-check-inline">
                           <input class="form-check-input" type="radio" formControlName="trangThai" id="inlineRadio1"
@@ -144,7 +151,7 @@
                         {{successMessage}}
                         <button type="button" class="btn-close" aria-label="Close" (click)="closeSuccessAlert()"></button>
                       </div>
-
+                      
                       <!-- Thông báo lỗi -->
                       <div *ngIf="errorMessage" class="alert alert-danger">
                         {{ errorMessage }}
@@ -160,4 +167,5 @@
         </div>
       </div>
     </div>
+  </div>
 </div>
