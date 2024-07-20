@@ -38,7 +38,7 @@ export class TrendingProductComponent implements OnInit {
         if (response.result) {
           this.findSanPhamChiTiet = response.result;
           localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result));
-          this.router.navigate(['/san-pham']);
+          this.router.navigate(['/customer/san-pham']);
         }
       });
   }

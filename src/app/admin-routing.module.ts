@@ -15,6 +15,7 @@ import {ShoppingViewComponent} from "./admin/shopping-view/shopping-view.compone
 import {VoucherViewComponent} from "./admin/voucher-view/voucher-view.component";
 import {OrdersViewComponent} from "./admin/orders-view/orders-view.component";
 import {CustomerViewComponent} from "./admin/customer-view/customer-view.component";
+import {DashBoardComponent} from "./admin/dash-board/dash-board.component";
 
 const adminRoutes: Routes = [
   {
@@ -34,7 +35,8 @@ const adminRoutes: Routes = [
       {path: 'voucher', component: VoucherViewComponent},
       {path: 'hoa-don', component: OrdersViewComponent},
       {path: 'khach-hang', component: CustomerViewComponent},
-      {path: 'san-pham-chi-tiet', component: ProductDetailViewComponent}
+      {path: 'san-pham-chi-tiet', component: ProductDetailViewComponent},
+      {path:'dash-board', component:DashBoardComponent}
     ],
 
   }

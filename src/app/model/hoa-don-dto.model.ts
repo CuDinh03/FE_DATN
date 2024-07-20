@@ -1,19 +1,15 @@
 import { DecimalPipe } from "@angular/common";
-import {NguoiDung} from "./NguoiDung";
-import {KhachHangDto} from "./khachHangDto";
-import {Voucher} from "./voucher";
 
 export interface HoaDonDto {
   id: string;
   ma: string;
   tongTien:string;
   tongTienGiam: number;
-  voucher: Voucher;
+  voucher: string;
   ghiChu: string;
-  khachHang: KhachHangDto;
-  nhanVien: NguoiDung;
+  khachHangId: string;
+  nhanVienId: string;
   ngayTao: Date;
   ngaySua: Date;
   trangThai: number;
 }
-

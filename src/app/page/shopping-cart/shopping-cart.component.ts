@@ -223,7 +223,7 @@ export class ShoppingCartComponent {
         panelClass: ['error-snackbar']
       });
     } else {
-      this.router.navigate(['/thanh-toan']);
+      this.router.navigate(['/customer/thanh-toan']);
     }
   }
 

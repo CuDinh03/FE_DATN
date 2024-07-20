@@ -108,6 +108,7 @@ import {ChartModule} from "angular-highcharts";
     GuestRoutingModule,
     ChartModule,
     CommonModule,
+    SpinnerComponent,
 
   ],
   providers: [TaiKhoanService, provideHttpClient(withInterceptorsFromDi())],
