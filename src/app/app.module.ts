@@ -93,7 +93,7 @@ import {ChartModule} from "angular-highcharts";
     RatingViewComponent,
     MaskValuePipe,
     DemoComponent,
-    TrangChuComponent,
+    TrangChuComponent
   ],
   imports: [
     BrowserModule,
