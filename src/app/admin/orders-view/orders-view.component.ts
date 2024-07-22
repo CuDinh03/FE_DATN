@@ -269,7 +269,7 @@ export class OrdersViewComponent {
 
   loadHoaDonById(idHoaDon: string): void {
     this.apiService.getHoaDonById(idHoaDon)
-      .subscribe(
+        .subscribe(
         (response: ApiResponse<any>) => {
           if (response.result) {
             this.hoaDonSua = response.result;

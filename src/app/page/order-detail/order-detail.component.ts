@@ -2,7 +2,7 @@ import {ErrorCode} from 'src/app/model/ErrorCode';
 import { HttpErrorResponse } from '@angular/common/http';
 import {ApiResponse} from 'src/app/model/ApiResponse';
 import {AuthenticationService} from './../../service/AuthenticationService';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HoaDonChiTietService} from './../../service/HoaDonChiTietService';
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {HoaDonService} from "../../service/HoaDonService";
@@ -26,6 +26,7 @@ export class OrderDetailComponent {
   selectedOption1: string = '';
   selectedOption2: string = 'Thay đổi đơn hàng (màu sắc, kích thước, thêm mã giảm giá...)';
   selectedOption3: string = 'Tôi không có nhu cầu mua nữa';
+  orderId: string | null = '';
 
   onRadioChange(noteText: string) {
     this.notePlaceholder = noteText;
@@ -34,6 +35,7 @@ export class OrderDetailComponent {
 
   constructor(private auth: AuthenticationService,
               private router: Router,
+              private route: ActivatedRoute,
               private hoaDonChiTietService: HoaDonChiTietService,
               private hoaDonService: HoaDonService,
               private snackBar: MatSnackBar,
@@ -41,8 +43,14 @@ export class OrderDetailComponent {
   }
 
   ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.orderId = params.get('id');
+      // Thực hiện các hành động khác với orderId nếu cần
+      console.log(this.orderId);
+    });
     this.loadHoaDonChiTiet();
   }
+
 
   submitRequest(): void {
     const requestPayload = {
@@ -71,12 +79,18 @@ export class OrderDetailComponent {
 
 
   loadHoaDonChiTiet(): void {
-    const storeHoaDon = localStorage.getItem('hoaDon');
-    if (storeHoaDon) {
-      const hoaDon = JSON.parse(storeHoaDon);
-      this.hoaDon = hoaDon
-      this.currentStatus = hoaDon.trangThai;
-      this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id).subscribe(
+    // const storeHoaDon = localStorage.getItem('hoaDon');
+    this.hoaDonService.getHoaDonById(this.orderId).subscribe(
+      (response: ApiResponse<any>) =>{
+        this.hoaDon = response.result
+        console.log(this.hoaDon)
+      }
+    )
+    if (this.orderId) {
+      // const hoaDon = JSON.parse(storeHoaDon);
+      // this.hoaDon = hoaDon
+      // this.currentStatus = this.hoaDon.trangThai;
+      this.hoaDonChiTietService.getAllBỵKhachHang(this.orderId).subscribe(
         (response: ApiResponse<any>) => {
           if (response.result && response.result.length > 0) {
             this.listHoaDonChiTiet = response.result;
