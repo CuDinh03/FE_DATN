@@ -1,0 +1,38 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+hr {
+    margin: 30px 0;
+}
+
+.custom-table {
+    border-collapse: collapse; /* Kết hợp các border để không có khoảng cách */
+    width: 100%;
+}
+
+.custom-table th, .custom-table td {
+    border: none; /* Xóa border mặc định của các ô */
+    padding: 8px;
+}
+
+.custom-table thead th {
+    border-bottom: 0.01rem solid #000; /* Border dưới tiêu đề */
+}
+
+.custom-table tbody td {
+    border-bottom: none; /* Xóa border giữa các dòng body */
+}
