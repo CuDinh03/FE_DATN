@@ -1,0 +1,44 @@
+[debug] [2024-07-22T17:30:49.116Z] ----------------------------------------------------------------------
+[debug] [2024-07-22T17:30:49.117Z] Command:       /opt/homebrew/Cellar/node@18/18.20.3/bin/node /opt/homebrew/bin/firebase init
+[debug] [2024-07-22T17:30:49.118Z] CLI Version:   13.13.3
+[debug] [2024-07-22T17:30:49.118Z] Platform:      darwin
+[debug] [2024-07-22T17:30:49.118Z] Node Version:  v18.20.3
+[debug] [2024-07-22T17:30:49.119Z] Time:          Tue Jul 23 2024 00:30:49 GMT+0700 (Indochina Time)
+[debug] [2024-07-22T17:30:49.119Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-07-22T17:30:49.122Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-07-22T17:30:49.122Z] > authorizing via signed-in user (dinhhuycu0305@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/maccuacu/Desktop/Nhom-DATN/FE_DATN/ShopApp-angular
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2024-07-22T17:31:49.191Z] > refreshing access token with scopes: []
+[debug] [2024-07-22T17:31:49.193Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-07-22T17:31:49.193Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-07-22T17:31:49.403Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2024-07-22T17:31:49.403Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-07-22T17:31:49.404Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects [none]
+[debug] [2024-07-22T17:31:49.404Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"projectId":"mt-shop","name":"mt-shop"}
+[debug] [2024-07-22T17:31:50.380Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects 401
+[debug] [2024-07-22T17:31:50.381Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"ACCESS_TOKEN_TYPE_UNSUPPORTED","metadata":{"method":"google.cloudresourcemanager.v1.Projects.CreateProject","service":"cloudresourcemanager.googleapis.com"}}]}}
+[debug] [2024-07-22T17:31:50.519Z] FirebaseError: HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+    at responseToError (/opt/homebrew/lib/node_modules/firebase-tools/lib/responseToError.js:49:12)
+    at RetryOperation._fn (/opt/homebrew/lib/node_modules/firebase-tools/lib/apiv2.js:305:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.
