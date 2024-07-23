@@ -7,7 +7,6 @@ import {Observable, of} from "rxjs";
 import {ApiResponse} from "../../model/ApiResponse";
 import {HoaDonService} from "../../service/HoaDonService";
 import {HoaDonChiTietService} from "../../service/HoaDonChiTietService";
-import { Chart } from 'angular-highcharts';
 
 @Component({
   selector: 'app-admin-view',

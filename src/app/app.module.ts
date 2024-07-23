@@ -50,10 +50,6 @@ import {CustomerRoutingModule} from "./customer-routing.module";
 import {GuestRoutingModule} from "./guest-routing.module";
 import {TrangChuComponent } from './page/trang-chu/trang-chu.component';
 import {CommonModule} from "@angular/common";
-// @ts-ignore
-import {ChartModule} from "angular-highcharts";
-import {SpinnerComponent} from "./page/spinner/spinner.component";
-// @ts-ignore
 import {NgxSpinner, NgxSpinnerModule} from "ngx-spinner";
 import {ToastModule} from "primeng/toast";
 import {FileUploadModule} from "primeng/fileupload";
@@ -126,7 +122,6 @@ import {ConfirmationService, MessageService, PrimeNGConfig} from "primeng/api";
     MaskValuePipe,
     DemoComponent,
     TrangChuComponent,
-    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -139,7 +134,6 @@ import {ConfirmationService, MessageService, PrimeNGConfig} from "primeng/api";
     AdminRoutingModule,
     CustomerRoutingModule,
     GuestRoutingModule,
-    ChartModule,
     CommonModule,
     NgxSpinnerModule,
     BrowserModule,

@@ -175,7 +175,7 @@ export class ProductDetailComponent implements OnInit {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.sanPhamCTService.getAllMauSacByMa(chiTietSanPham.ma).subscribe(
+      this.sanPhamCTService.getAllMauSacByMa(chiTietSanPham.sanPham.ma).subscribe(
         (response: ApiResponse<any>) => {
           this.listMauSac = response.result;
         },
@@ -190,7 +190,7 @@ export class ProductDetailComponent implements OnInit {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.sanPhamCTService.getAllKichThuocByMa(chiTietSanPham.ma).subscribe(
+      this.sanPhamCTService.getAllKichThuocByMa(chiTietSanPham.sanPham.ma).subscribe(
         (response: ApiResponse<any>) => {
           this.listKichThuoc = response.result;
         },
@@ -293,7 +293,7 @@ export class ProductDetailComponent implements OnInit {
       const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
       if (storeChiTietSanPham) {
         const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-        this.sanPhamCTService.findChiTietSanPhamByMauSacAndKichThuoc(chiTietSanPham.ma, this.selectedSize.id, this.selectedColor.id)
+        this.sanPhamCTService.findChiTietSanPhamByMauSacAndKichThuoc(chiTietSanPham.sanPham.ma, this.selectedSize.id, this.selectedColor.id)
           .subscribe((response: ApiResponse<any>) => {
             if (response.result) {
               this.findCiTietSanPham = response.result;

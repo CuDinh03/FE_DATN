@@ -46,3 +46,112 @@
     transform: scale(1.05); /* Phóng to hình ảnh khi hover */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Tăng cường đổ bóng khi hover */
 }
+
+/*css*/
+.p-panel .p-panel-header {
+  background-color: #007ad9;
+  color: #ffffff;
+}
+
+.p-panel .p-panel-content {
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.p-table {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.p-table thead th {
+  background-color: #007ad9;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.p-table tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.p-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.p-table tbody td {
+  vertical-align: middle;
+}
+
+.p-table .p-button {
+  margin-right: 0.5rem;
+}
+
+.p-dialog .p-dialog-header {
+  background-color: #007ad9;
+  color: #ffffff;
+}
+
+.p-dialog .p-dialog-content {
+  background-color: #f9f9f9;
+}
+
+.p-dialog .p-dialog-footer .p-button {
+  margin-right: 1rem;
+}
+
+.p-toolbar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #dddddd;
+  padding: 0.5rem;
+}
+
+.p-toolbar .p-button {
+  margin-right: 0.5rem;
+}
+
+/* Custom styles */
+.product-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.product-category {
+  font-size: 14px;
+  color: #777;
+}
+
+.product-price {
+  color: #007ad9;
+  font-weight: bold;
+}
+
+.product-status {
+  font-size: 14px;
+}
+
+.p-toast {
+  background-color: #007ad9;
+  color: #ffffff;
+}
+
+/* Input field styles */
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  font-weight: bold;
+  color: #333;
+}
+
+.p-inputtext, .p-inputnumber {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #dddddd;
+}
+
+.p-inputtext:focus, .p-inputnumber:focus {
+  border-color: #007ad9;
+  box-shadow: 0 0 5px rgba(0, 122, 217, 0.5);
+}
