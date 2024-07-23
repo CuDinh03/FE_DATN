@@ -11,7 +11,7 @@ import { MauSacDto } from '../model/mau-sac-dto.model';
   })
   export class MauSacService {
 
-    apiUrl = 'http://localhost:9091/api/mau-sac';
+    apiUrl = 'https://datn-5iv4.onrender.com/api/mau-sac';
 
     constructor(private http: HttpClient) {}
 

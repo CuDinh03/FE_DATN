@@ -13,7 +13,7 @@ import {HoaDonDto} from "../model/hoa-don-dto.model";
 export class HoaDonService {
 
 
-  apiUrl = 'http://localhost:9091/api/hoa-don';
+  apiUrl = 'https://datn-5iv4.onrender.com/api/hoa-don';
 
 
   constructor(private http: HttpClient) {

@@ -10,7 +10,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
   })
   export class HoaDonChiTietService {
 
-    apiUrl = 'http://localhost:9091/api/hoa-don-chi-tiet';
+    apiUrl = 'https://datn-5iv4.onrender.com/api/hoa-don-chi-tiet';
 
 
     constructor(private http: HttpClient) {}

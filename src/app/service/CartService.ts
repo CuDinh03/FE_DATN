@@ -10,7 +10,7 @@ export class CartService {
 
   items: Product[] = [];
 
-  apiUrl = 'http://localhost:9091/gio-hang-chi-tiet';
+  apiUrl = 'https://datn-5iv4.onrender.com/gio-hang-chi-tiet';
 
   constructor() { }
 

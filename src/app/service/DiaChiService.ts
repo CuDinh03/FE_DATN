@@ -10,7 +10,7 @@ import { DanhMucDto } from '../model/danh-muc-dto.model';
 })
 export class DiaChiService {
 
-  apiUrl = 'http://localhost:9091/api/thong-tin-dat-hang';
+  apiUrl = 'https://datn-5iv4.onrender.com/api/thong-tin-dat-hang';
 
   constructor(private http: HttpClient) {}
 

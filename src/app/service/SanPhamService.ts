@@ -10,7 +10,7 @@ import { SanPhamDto } from '../model/san-pham-dto.model';
   })
   export class SanPhamService {
 
-    apiUrl = 'http://localhost:9091/api/san-pham';
+    apiUrl = 'https://datn-5iv4.onrender.com/api/san-pham';
 
     constructor(private http: HttpClient) {}
 

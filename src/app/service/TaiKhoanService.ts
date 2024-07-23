@@ -12,7 +12,7 @@ import {DangNhapDto} from "../model/dangNhapDto";
 })
 export class TaiKhoanService {
 
-  apiUrl = 'http://localhost:9091/api/users';
+  apiUrl = 'https://datn-5iv4.onrender.com/api/users';
 
   constructor(private http: HttpClient) {
 

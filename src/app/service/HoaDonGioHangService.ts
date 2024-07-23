@@ -9,15 +9,15 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
     providedIn: 'root'
   })
   export class HoaDonGioHangService {
-  
-    apiUrl = 'http://localhost:9091/api/hoa-don-gio-hang';
-  
-  
+
+    apiUrl = 'https://datn-5iv4.onrender.com/api/hoa-don-gio-hang';
+
+
     constructor(private http: HttpClient) {}
-  
+
       getAll(): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
-    
+
         // Thêm token vào header của yêu cầu
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
@@ -27,15 +27,15 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
 
       createHoaDon(gioHangHoaDon: any): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
-    
+
         // Thêm token vào header của yêu cầu
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-    
+
         return this.http.post<ApiResponse<any>>(`${this.apiUrl}` +'/create', gioHangHoaDon, { headers });
       }
-  
 
-  
+
+
   }

@@ -11,7 +11,7 @@ import {TaiKhoanDto} from "../model/tai-khoan-dto.model";
 })
 export class NhanVienService {
 
-  apiUrl : string = 'http://localhost:9091/api/nguoi-dung';
+  apiUrl : string = 'https://datn-5iv4.onrender.com/api/nguoi-dung';
 
   constructor(private http: HttpClient) { }
 

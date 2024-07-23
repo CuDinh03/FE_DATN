@@ -11,7 +11,7 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
   })
   export class KichThuocService {
 
-    apiUrl = 'http://localhost:9091/api/kich-thuoc';
+    apiUrl = 'https://datn-5iv4.onrender.com/api/kich-thuoc';
 
     constructor(private http: HttpClient) {}
 

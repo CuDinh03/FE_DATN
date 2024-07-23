@@ -9,7 +9,7 @@ import {Voucher} from "../model/voucher";
 })
 export class VoucherService{
 
-    apiUrl : string ='http://localhost:9091/api/voucher';
+    apiUrl : string ='https://datn-5iv4.onrender.com/api/voucher';
 
     constructor(private http:HttpClient) {
     }

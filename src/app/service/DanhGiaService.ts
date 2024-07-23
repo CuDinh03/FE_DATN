@@ -11,7 +11,7 @@ import {DanhGiaDto} from "../model/danh-gia-dto";
 })
 export class DanhGiaService {
 
-  apiUrl: string = 'http://localhost:9091/api/danh-gia';
+  apiUrl: string = 'https://datn-5iv4.onrender.com/api/danh-gia';
 
   constructor(private http: HttpClient) {
   }

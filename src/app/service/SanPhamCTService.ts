@@ -20,7 +20,7 @@ import {FilterSanPhamRequest} from "../model/FilterSanPhamRequest";
 
 export class SanPhamCTService {
 
-  apiUrl = 'http://localhost:9091/api/chi-tiet-san-pham';
+  apiUrl = 'https://datn-5iv4.onrender.com/api/chi-tiet-san-pham';
 
   constructor(private http: HttpClient) {}
 
