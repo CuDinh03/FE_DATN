@@ -211,6 +211,7 @@ export class ProductDetailComponent implements OnInit {
             this.findCiTietSanPham = response.result;
             if (this.findCiTietSanPham.hinhAnh && this.findCiTietSanPham.hinhAnh.length > 0) {
               this.currentLargeImage = this.findCiTietSanPham.hinhAnh[0].url;
+
             }
           }
         });
