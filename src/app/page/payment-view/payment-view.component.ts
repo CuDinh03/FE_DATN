@@ -14,6 +14,7 @@ import {ThanhToanService} from "../../service/ThanhToanService";
 import {ThanhToanOnl} from "../../model/thanh-toan-onl";
 import {GioHangDto} from "../../model/gio-hang-dto";
 import {DiaChiService} from "../../service/DiaChiService";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-payment-view',
@@ -51,7 +52,8 @@ export class PaymentViewComponent {
               private voucherService: VoucherService,
               private formBuilder: FormBuilder,
               private thanhToanService: ThanhToanService,
-              private diaChiService: DiaChiService
+              private diaChiService: DiaChiService,
+              private spinner: NgxSpinnerService
   ) {
     this.customerForm = this.formBuilder.group({
       ten: [''],
@@ -307,6 +309,7 @@ export class PaymentViewComponent {
       this.loading = false;
       return;
     }
+    this.spinner.show();
 
     const storedVoucher = localStorage.getItem('voucher') || '';
     const tenDangNhap = localStorage.getItem('tenDangNhap') || '';
@@ -316,7 +319,7 @@ export class PaymentViewComponent {
         this.khachHang = response.result;
         if (!this.khachHang || !this.khachHang.id) {
           console.error('Không tìm thấy thông tin khách hàng.');
-          this.loading = false;
+          this.spinner.hide();
           return;
         }
         this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
@@ -324,7 +327,7 @@ export class PaymentViewComponent {
             const gioHang = gioHangResponse.result;
             if (!gioHang) {
               console.error('Không tìm thấy giỏ hàng.');
-              this.loading = false;
+              this.spinner.hide();
               return;
             }
 
@@ -351,28 +354,26 @@ export class PaymentViewComponent {
                     panelClass: ['success-snackbar']
                   });
                   this.router.navigate(['/trang-chu']);
+                  localStorage.removeItem('selectedItems');
+                  this.spinner.hide();
                 }
-                localStorage.removeItem('selectedItems');
               },
               (error) => {
                 this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {
                   duration: 3000,
                   panelClass: ['error-snackbar']
                 });
-                this.loading = false;
-              }
+                this.spinner.hide();              }
             );
           },
           (error) => {
             console.error('Lỗi tải giỏ hàng:', error);
-            this.loading = false;
-          }
+            this.spinner.hide();          }
         );
       },
       (error) => {
         console.error('Lỗi tải khách hàng:', error);
-        this.loading = false;
-      }
+        this.spinner.hide();      }
     );
   }
 

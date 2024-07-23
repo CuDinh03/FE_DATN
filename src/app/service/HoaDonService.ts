@@ -32,7 +32,7 @@ export class HoaDonService {
 
 
   // Phương thức lấy hóa đơn theo ID
-  getHoaDonById(id: string): Observable<ApiResponse<any>> {
+  getHoaDonById(id: string | null): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
 
     // Thêm token vào header của yêu cầu

@@ -10,12 +10,12 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
     providedIn: 'root'
   })
   export class GioHangService {
-  
+
     apiUrl = 'http://localhost:9091/api/gio-hang';
-  
-  
+
+
     constructor(private http: HttpClient) {}
-  
+
     // Phương thức lấy hóa đơn theo ID
     getGioHangById(id: string): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');

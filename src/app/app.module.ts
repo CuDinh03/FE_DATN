@@ -48,10 +48,11 @@ import { DemoComponent } from './demo/demo.component';
 import {AdminRoutingModule} from "./admin-routing.module";
 import {CustomerRoutingModule} from "./customer-routing.module";
 import {GuestRoutingModule} from "./guest-routing.module";
-import { TrangChuComponent } from './page/trang-chu/trang-chu.component';
+import {TrangChuComponent } from './page/trang-chu/trang-chu.component';
 import {CommonModule} from "@angular/common";
-import {SpinnerComponent} from "./page/spinner/spinner.component";
 import {ChartModule} from "angular-highcharts";
+import {SpinnerComponent} from "./page/spinner/spinner.component";
+import {NgxSpinner, NgxSpinnerModule} from "ngx-spinner";
 
 @NgModule({ declarations: [
     HomeComponent,
@@ -93,7 +94,8 @@ import {ChartModule} from "angular-highcharts";
     RatingViewComponent,
     MaskValuePipe,
     DemoComponent,
-    TrangChuComponent
+    TrangChuComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -108,7 +110,7 @@ import {ChartModule} from "angular-highcharts";
     GuestRoutingModule,
     ChartModule,
     CommonModule,
-    SpinnerComponent,
+    NgxSpinnerModule
 
   ],
   providers: [TaiKhoanService, provideHttpClient(withInterceptorsFromDi())],

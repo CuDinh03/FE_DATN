@@ -48,7 +48,7 @@
                                 <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Đăng ký</button>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <p class="fs-4 mb-0 fw-bold">Nếu bạn đã có tài khoản!</p>
-                                    <a class="text-primary fw-bold ms-2" href="/log-in">Đăng nhập</a>
+                                    <a class="text-primary fw-bold ms-2" [routerLink]="['/log-in']">Đăng nhập</a>
                                 </div>
                             </form>
                             <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">

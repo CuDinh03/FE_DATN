@@ -1,4 +1,4 @@
-import { GioHangChiTietDto } from './../model/gio-hang-chi-tiet-dto.model';
+import { GioHangChiTietDto } from '../model/gio-hang-chi-tiet-dto.model';
 import { ApiResponse } from '../model/ApiResponse';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -10,12 +10,12 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
     providedIn: 'root'
   })
   export class GioHangChiTietService {
-  
+
     apiUrl = 'http://localhost:9091/api/gio-hang-chi-tiet';
-  
-  
+
+
     constructor(private http: HttpClient) {}
-  
+
     getAll(id: string): Observable<ApiResponse<any>> {
       const token = localStorage.getItem('token');
       // Thêm token vào header của yêu cầu
@@ -24,15 +24,15 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
       });
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/${id}`, { headers });
       }
-      
+
       updateGioHang(id: string, soLuong: number): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-    
+
         let params = new HttpParams().set('soLuong', soLuong.toString());
-    
+
         return this.http.put<ApiResponse<any>>(`${this.apiUrl}/${id}`, null, { headers, params });
       }
 
@@ -44,7 +44,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
         });
         return this.http.post<ApiResponse<GioHangChiTietDto>>(`${this.apiUrl}/create`,gioHangChiTiet, { headers });
       }
-  
+
       getAllBỵKhachHang(id: string): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
         // Thêm token vào header của yêu cầu
@@ -59,12 +59,12 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
             .set('idGioHang', idGioHang)
             .set('idSanPham', idSanPham)
             .set('soLuong', soLuong.toString());
-      
+
           const token = localStorage.getItem('token');
           const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
           });
-      
+
           return this.http.post<ApiResponse<any>>(`${this.apiUrl}/addProductToCartKH`,null ,{ params, headers });
         }
 
@@ -73,12 +73,12 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
             .set('idGioHang', idGioHang)
             .set('idSanPham', idSanPham)
             .set('soLuong', soLuong.toString());
-      
+
           const token = localStorage.getItem('token');
           const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
           });
-      
+
           return this.http.post<ApiResponse<any>>(`${this.apiUrl}/addProductToCart`,null ,{ params, headers });
         }
 
@@ -87,11 +87,11 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
           const headers = new HttpHeaders({
             'Authorization': `Bearer ${token}`
           });
-      
+
           let params = new HttpParams().set('soLuong', soLuong.toString());
-      
+
           return this.http.put<ApiResponse<any>>(`${this.apiUrl}/updateCartKH/${id}`, null, { headers, params });
         }
-        
-  
+
+
   }
