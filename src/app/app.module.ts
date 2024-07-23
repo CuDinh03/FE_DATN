@@ -52,6 +52,7 @@ import {TrangChuComponent } from './page/trang-chu/trang-chu.component';
 import {CommonModule} from "@angular/common";
 import {ChartModule} from "angular-highcharts";
 import {SpinnerComponent} from "./page/spinner/spinner.component";
+import {NgxSpinner, NgxSpinnerModule} from "ngx-spinner";
 
 @NgModule({ declarations: [
     HomeComponent,
@@ -109,6 +110,7 @@ import {SpinnerComponent} from "./page/spinner/spinner.component";
     GuestRoutingModule,
     ChartModule,
     CommonModule,
+    NgxSpinnerModule
 
   ],
   providers: [TaiKhoanService, provideHttpClient(withInterceptorsFromDi())],

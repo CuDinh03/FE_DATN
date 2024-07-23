@@ -31,7 +31,8 @@
               "src/assets/shopping/css/style.css",
               "src/assets/admin/assets/css/styles.min.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/ngx-spinner/animations/ball-scale-multiple.css"
             ],
             "scripts": [
               "src/assets/shopping/js/main.js",
