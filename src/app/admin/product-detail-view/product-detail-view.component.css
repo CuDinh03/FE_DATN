@@ -1,17 +1,48 @@
-.card {
-  overflow-x: auto;
+/* CSS cho .image-gallery */
+.image-gallery {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-top: 1rem;
 }
 
-.table {
-  table-layout: fixed;
-  width: 100%;
+/* CSS cho danh sách hình ảnh */
+.image-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
 }
 
-.table th, .table td {
-  white-space: nowrap;
-  overflow: hidden;
+/* CSS cho mỗi hình ảnh trong danh sách */
+.uploaded-image {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 4px;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.table tbody tr:hover {
-  background-color: #f0f0f0; /* Thay đổi màu nền khi hover */
+/* CSS cho tiêu đề hình ảnh */
+.image-gallery h5 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #333;
+}
+/* CSS cho mỗi hình ảnh tải lên */
+.uploaded-image {
+    max-width: 150px; /* Kích thước tối đa của hình ảnh */
+    max-height: 150px; /* Kích thước tối đa của hình ảnh */
+    border-radius: 8px; /* Bo tròn các góc hình ảnh */
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo mó */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng cho hình ảnh */
+    margin: 0.5rem; /* Khoảng cách giữa các hình ảnh */
+    transition: transform 0.3s ease-in-out; /* Hiệu ứng chuyển động khi hover */
+}
+
+/* CSS cho hiệu ứng hover */
+.uploaded-image:hover {
+    transform: scale(1.05); /* Phóng to hình ảnh khi hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Tăng cường đổ bóng khi hover */
 }

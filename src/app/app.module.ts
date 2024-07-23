@@ -53,6 +53,35 @@ import {CommonModule} from "@angular/common";
 import {ChartModule} from "angular-highcharts";
 import {SpinnerComponent} from "./page/spinner/spinner.component";
 import {NgxSpinner, NgxSpinnerModule} from "ngx-spinner";
+import {ToastModule} from "primeng/toast";
+import {FileUploadModule} from "primeng/fileupload";
+import {InputNumberModule} from "primeng/inputnumber";
+import {TableModule} from "primeng/table";
+import {MultiSelectModule} from "primeng/multiselect";
+import {ToolbarModule} from "primeng/toolbar";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {DialogModule} from "primeng/dialog";
+import {TagModule} from "primeng/tag";
+import {PanelModule} from "primeng/panel";
+import {AngularFireStorageModule} from "@angular/fire/compat/storage";
+import {AngularFireModule} from "@angular/fire/compat";
+import {environment} from "../environments/environment";
+import {NgSelectModule} from "@ng-select/ng-select";
+import {Button} from 'primeng/button';
+import {AvatarModule} from "primeng/avatar";
+import {SidebarModule} from "primeng/sidebar";
+import {StyleClassModule} from "primeng/styleclass";
+import {Ripple} from "primeng/ripple";
+import {DropdownModule} from "primeng/dropdown";
+import {InputTextModule} from "primeng/inputtext";
+import {RatingModule} from "primeng/rating";
+import {PaginatorModule} from "primeng/paginator";
+import {IconFieldModule} from "primeng/iconfield";
+import {InputIconModule} from "primeng/inputicon";
+import {InputSwitchModule} from "primeng/inputswitch";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {ConfirmationService, MessageService, PrimeNGConfig} from "primeng/api";
 
 @NgModule({ declarations: [
     HomeComponent,
@@ -97,23 +126,61 @@ import {NgxSpinner, NgxSpinnerModule} from "ngx-spinner";
     TrangChuComponent,
     SpinnerComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatSnackBarModule,
-    AdminRoutingModule,
-    CustomerRoutingModule,
-    GuestRoutingModule,
-    ChartModule,
-    CommonModule,
-    NgxSpinnerModule
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatSnackBarModule,
+        AdminRoutingModule,
+        CustomerRoutingModule,
+        GuestRoutingModule,
+        ChartModule,
+        CommonModule,
+        NgxSpinnerModule,
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatSnackBarModule,
+        NgSelectModule,
+        BrowserModule,
+        AngularFireStorageModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        MultiSelectModule,
+        Button,
+        AvatarModule,
+        SidebarModule,
+        StyleClassModule,
+        Ripple,
+        TableModule,
+        ConfirmDialogModule,
+        FileUploadModule,
+        ToolbarModule,
+        DialogModule,
+        DropdownModule,
+        TagModule,
+        RadioButtonModule,
+        InputTextModule,
+        RatingModule,
+        PaginatorModule,
+        InputNumberModule,
+        ToastModule,
+        PanelModule,
+        IconFieldModule,
+        InputIconModule,
+        InputSwitchModule,
 
-  ],
-  providers: [TaiKhoanService, provideHttpClient(withInterceptorsFromDi())],
+    ],
+  providers: [TaiKhoanService,
+      AngularFireAuth,
+      ConfirmationService,
+      MessageService,
+      PrimeNGConfig,
+      provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [HomeComponent]
 })
 export class AppModule {
