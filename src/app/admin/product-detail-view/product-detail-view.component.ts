@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { FormGroup,} from '@angular/forms';
 import {ChiTietSanPhamDto} from 'src/app/model/chi-tiet-san-pham-dto.model';
 import {ChatLieuService} from 'src/app/service/ChatLieuService';
@@ -35,9 +35,9 @@ interface Column {
 
 })
 export class ProductDetailViewComponent implements OnInit {
+  @ViewChild('editModal') editModal!: ElementRef;
 
   cols!: Column[];
-
   uploadedFiles: any[] = [];
   listHinhAnhSelect: HinhAnhDto[] = [];
   selectedListSp: ChiTietSanPhamDto[] = [];
@@ -63,16 +63,14 @@ export class ProductDetailViewComponent implements OnInit {
   sanPhamChiTietID: any;
   chiTietSanPhamFormAdd!: FormGroup;
   chiTietSanPhamFormUpdate!: FormGroup;
-
   productDialog: boolean = false;
-
   product!: ChiTietSanPhamDto;
-
   selectedProducts!: ChiTietSanPhamDto[] | null;
-
   submitted: boolean = false;
-
+  currentSlide = 0;
   statuses!: any[];
+  sanPhamChiTiet: any = {};
+  currentSlideNew: { [page: number]: { [key: string]: number } } = {};
 
   constructor(
     private sanPhamCTService: SanPhamCTService,
@@ -102,7 +100,83 @@ export class ProductDetailViewComponent implements OnInit {
     this.loadMacSac();
     this.getCtsp();
     this.loadHinhAnh();
+    this.loadSanPhamChiTietByNgayTao1();
   }
+
+  showModalEdit(): void {
+    if (this.editModal && this.editModal.nativeElement) {
+      this.editModal.nativeElement.classList.add('show');
+      this.editModal.nativeElement.style.display = 'block';
+    }
+  }
+
+  closeModalEdit(): void {
+    if (this.editModal && this.editModal.nativeElement) {
+      this.editModal.nativeElement.classList.remove('show');
+      this.editModal.nativeElement.style.display = 'none';
+    }
+  }
+
+  loadSanPhamChiTietByNgayTao1(): void {
+    this.sanPhamCTService.getSanPhamChiTietSapXepByNGayTao(this.page, this.size)
+      .subscribe(response => {
+        this.listChiTietSP = response.result.content;
+        this.totalElements = response.result.totalElements;
+        this.totalPages = response.result.totalPages;
+
+        // Khởi tạo currentSlideNew cho các sản phẩm trên trang hiện tại
+        if (!this.currentSlideNew[this.page]) {
+          this.currentSlideNew[this.page] = this.listChiTietSP.reduce((acc, sanPham) => {
+            acc[sanPham.ma] = 0; // Khởi tạo slide đầu tiên cho mỗi sản phẩm
+            return acc;
+          }, {} as { [key: string]: number });
+        } else {
+          // Đảm bảo rằng trạng thái hiện tại của slide cho các sản phẩm đã được giữ lại
+          this.listChiTietSP.forEach(sanPham => {
+            if (!(sanPham.ma in this.currentSlideNew[this.page])) {
+              this.currentSlideNew[this.page][sanPham.ma] = 0;
+            }
+          });
+        }
+      });
+  }
+
+  prevSlide(ma: string): void {
+    const sanPham = this.listChiTietSP.find(sp => sp.ma === ma);
+    if (sanPham && sanPham.hinhAnh && sanPham.hinhAnh.length > 0) {
+      if (this.currentSlideNew[this.page]) {
+        const currentSlides = this.currentSlideNew[this.page];
+        currentSlides[ma] = (currentSlides[ma] > 0)
+          ? currentSlides[ma] - 1
+          : sanPham.hinhAnh.length - 1;
+      }
+    }
+  }
+
+  nextSlide(ma: string): void {
+    const sanPham = this.listChiTietSP.find(sp => sp.ma === ma);
+    if (sanPham && sanPham.hinhAnh && sanPham.hinhAnh.length > 0) {
+      if (this.currentSlideNew[this.page]) {
+        const currentSlides = this.currentSlideNew[this.page];
+        currentSlides[ma] = (currentSlides[ma] < sanPham.hinhAnh.length - 1)
+          ? currentSlides[ma] + 1
+          : 0;
+      }
+    }
+  }
+
+
+
+  loadSanPhamChiTietByNgayTao(): void {
+    this.sanPhamCTService.getSanPhamChiTietSapXepByNGayTao(this.page, this.size)
+      .subscribe(response => {
+        this.listSanPhamChiTiet = response.result.content;
+        this.totalElements = response.result.totalElements;
+        this.totalPages = response.result.totalPages;
+
+      });
+  }
+
 
   deleteSelectedProducts() {
     this.confirmationService.confirm({
@@ -211,16 +285,9 @@ export class ProductDetailViewComponent implements OnInit {
   }
 
 
-  loadSanPhamChiTietByNgayTao(): void {
-    this.sanPhamCTService.getAllSanPhamChiTiet()
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result;
-      });
-  }
-
   onPageChangeSanPhamCT(page: number): void {
     this.page = page;
-    this.loadSanPhamChiTietByNgayTao();
+    this.loadSanPhamChiTietByNgayTao1();
   }
 
 

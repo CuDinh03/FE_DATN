@@ -1,229 +1,110 @@
 <div class="container-fluid">
 
 <div class="card justify-content-center">
-
-  <p-panel header="Quản lý sản phẩm" [toggleable]="true">
-    <p-toast/>
-    <p-table
-      #dt
-      [value]="listSanPhamChiTiet"
-      [rows]="10"
-      [paginator]="true"
-      [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-      [tableStyle]="{ 'min-width': '75rem' }"
-      [(selection)]="selectedProducts"
-      [rowHover]="true"
-      dataKey="id"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      [showCurrentPageReport]="true"
-    >
-      <ng-template pTemplate="caption">
-
-        <div class="flex align-items-center justify-content-between">
-          <h5 class="m-0">Danh sách sản phẩm</h5>
-          <!--          <span class="p-input-icon-left">-->
-          <!--                    <i class="pi pi-search"></i>-->
-          <!--                    <input-->
-          <!--                      pInputText-->
-          <!--                      type="text"-->
-          <!--                      (input)="dt?.filterGlobal($event.target.value, 'contains')"-->
-          <!--                      placeholder="Search..." />-->
-          <!--                </span>-->
-        </div>
-      </ng-template>
-      <ng-template pTemplate="header">
-        <tr>
-          <th style="width: 4rem">
-            <p-tableHeaderCheckbox/>
-          </th>
-          <th pSortableColumn="ten" style="min-width: 15rem">
-            Tên sản phẩm
-            <p-sortIcon field="ten"></p-sortIcon>
-          </th>
-          <th>
-            Ảnh
-          </th>
-          <th pSortableColumn="giaBam">
-            Giá bán
-            <p-sortIcon field="giaBan"/>
-          </th>
-          <th pSortableColumn="category" style="min-width:10rem">
-            Danh mục
-            <p-sortIcon field="category"/>
-          </th>
-          <th pSortableColumn="quantity">
-            Số lượng
-            <p-sortIcon field="quantity"/>
-          </th>
-          <th pSortableColumn="inventoryStatus" style="min-width:10rem">
-            Status
-            <p-sortIcon field="inventoryStatus"/>
-          </th>
-          <th></th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-product>
-        <tr>
-          <td>
-            <p-tableCheckbox [value]="product"/>
-          </td>
-          <td>
-            {{ product.sanPham.ten }}
-            <p style="color: #B5C0D0; font-size: 12px">[{{ product.mauSac.ten }} - {{ product.kichThuoc.ten }}]</p>
-          </td>
-          <td>
-            <div *ngFor="let aurl of listHinhAnh">
-              <ng-container *ngIf="aurl.chiTietSanPham.id === product.id">
-                <img
-                  [src]="aurl.url"
-                  [alt]="product.sanPham.ten"
-                  width="50"
-                  class="shadow-4"/>
-              </ng-container>
+  <div class="row">
+    <div class="col-lg-12 d-flex align-items-strech">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+            <div class="mb-3 mb-sm-0">
+              <h2 class="card-title fw-semibold">Danh sách sản phẩm chi tiết</h2>
             </div>
-          </td>
-          <td>
-            {{ product.giaBan | currency : 'USD' }}
-          </td>
-          <td>
-            {{ product.danhMuc.ten }}
-          </td>
-          <td>
-            {{ product.soLuong }}
-          </td>
-          <td>
-            <p-tag [value]="product.trangThai === 1 ? 'Còn hàng' : (product.trangThai === 0 ? 'Sắp hết' : 'Hết hàng')"
-                   [severity]="getSeverity(product.trangThai)"></p-tag>
-          </td>
-          <td>
-            <p-button
-              pRipple
-              icon="pi pi-pencil"
-              class="mr-2"
-              [rounded]="true"
-              [outlined]="true"
-              severity="success"
-              (click)="editProduct(product)"/>
-            <p-button
-              pRipple
-              icon="pi pi-trash"
-              severity="danger"
-              [rounded]="true"
-              [outlined]="true"
-              (click)="deleteProduct(product)"/>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="summary">
-        <div class="flex align-items-center justify-content-between">
-          Có tổng {{ listSanPhamChiTiet ? listSanPhamChiTiet.length : 0 }} sản phẩm.
-        </div>
-      </ng-template>
-    </p-table>
-
-    <p-dialog
-      [(visible)]="productDialog"
-      [style]="{ width: '450px' }"
-      header="Chi tiết sản phẩm"
-      [modal]="true"
-      styleClass="p-fluid">
-      <ng-template pTemplate="content">
-        <div *ngFor="let aurl of listHinhAnh">
-          <ng-container *ngIf="aurl.chiTietSanPham.id === product.id">
-            <img
-              [src]="aurl.url"
-              [alt]="product.sanPham.ten"
-              width="500"
-              class="block m-auto pb-3"
-              *ngIf="product.hinhAnh"/>
-          </ng-container>
-        </div>
-        <div class="field">
-          <label for="name">Tên</label>
-          <input
-            type="text"
-            pInputText
-            id="name"
-            [(ngModel)]="product.sanPham.ten"
-            required
-            autofocus/>
-          <small class="p-error" *ngIf="submitted && !product.sanPham.ten">
-            Name is required.
-          </small>
-        </div>
-
-
-        <div class="field">
-          <label class="mb-3">Danh mục</label>
-          <div class="formgrid grid">
-            <div class="field-radiobutton col-6">
-              <p-radioButton
-                id="category1"
-                name="{{product.danhMuc.ten}}"
-                value="{{product.danhMuc.ten}}"
-                [(ngModel)]="product.danhMuc.ten"/>
-              <label for="category1">{{product.danhMuc.ten}}</label>
+            <!-- <div *ngIf="errorMessage" class="alert alert-danger position-fixed top-50 start-50 translate-middle"
+              role="alert">
+              {{ errorMessage }}
+            </div> -->
+            <div>
+              <select class="form-select" >
+                <option value="5">5 sản phẩm</option>
+                <option value="10">10 sản phẩm</option>
+                <option value="15">15 sản phẩm</option>
+              </select>
             </div>
-            <!--              <div class="field-radiobutton col-6">-->
-            <!--                <p-radioButton-->
-            <!--                  id="category2"-->
-            <!--                  name="category"-->
-            <!--                  value="Clothing"-->
-            <!--                  [(ngModel)]="product.danhMuc.ten"/>-->
-            <!--                <label for="category2">Clothing</label>-->
-            <!--              </div>-->
+          </div>
+
+          <div>
+            <table class="table text-nowrap mb-0 align-middle">
+              <thead class="text-dark fs-4">
+              <tr>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Mã</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Tên</h6>
+                </th>
+                <th scope="col" style="width: 20% ;text-align: center;vertical-align: middle;">
+                  <h6 class="fw-semibold mb-0">Hình ảnh</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Danh mục</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Số lượng</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Giá bán</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Thao tác</h6>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr style="height: 30px;" *ngFor="let sanPhamChiTiet of listChiTietSP; let i = index">
+                <td title="{{ sanPhamChiTiet.ma }}">{{ sanPhamChiTiet.ma }}</td>
+                <td title="{{ sanPhamChiTiet.sanPham.ten }}">{{ sanPhamChiTiet.sanPham.ten }}
+                  <p style="color: #ccc; font-size: 12px">[{{ sanPhamChiTiet.mauSac.ten }} - {{ sanPhamChiTiet.kichThuoc.ten }}]</p>
+                </td>
+                <td *ngIf="sanPhamChiTiet.hinhAnh && sanPhamChiTiet.hinhAnh.length > 0" style="text-align: center; vertical-align: middle;">
+                  <div class="slides-container">
+                    <div *ngFor="let hinhAnh of sanPhamChiTiet.hinhAnh; let i = index"
+                         class="slides"
+                         [ngClass]="{'active': currentSlideNew[this.page] && currentSlideNew[this.page][sanPhamChiTiet.ma] === i}">
+                      <img [src]="hinhAnh.url" />
+                    </div>
+                    <a class="prev" (click)="prevSlide(sanPhamChiTiet.ma)">&#10094;</a>
+                    <a class="next" (click)="nextSlide(sanPhamChiTiet.ma)">&#10095;</a>
+                  </div>
+                </td>
+                <td title="{{ sanPhamChiTiet.danhMuc.ten }}">{{ sanPhamChiTiet.danhMuc.ten }}</td>
+                <td title="{{ sanPhamChiTiet.soLuong }}">{{ sanPhamChiTiet.soLuong }}</td>
+                <td title="{{ sanPhamChiTiet.giaBan }}">{{ sanPhamChiTiet.giaBan }}</td>
+                <td title="{{ sanPhamChiTiet.trangThai == 1 ? 'Còn hàng' : 'Hết hàng' }}">
+                  {{ sanPhamChiTiet.trangThai == 1 ? "Còn hàng" : "Hết hàng" }}
+                </td>
+                <td>
+                   <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                     <i class="ti ti-edit"></i>
+                   </button>
+                   <button class="btn btn-danger">
+                      <i class="ti ti-x"></i>
+                   </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div>
+              <div class="d-flex justify-content-end">
+                <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary" [disabled]="page === 0">
+                  <
+                </button>
+                <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"
+                        [disabled]="page === totalPages - 1"> >
+                </button>
+              </div>
+            </div>
+            <div *ngIf="listSanPhamChiTiet.length === 0">
+              <p>Không có sản phẩm chi tiết nào được tìm thấy.</p>
+            </div>
           </div>
         </div>
-
-        <div class="formgrid grid">
-          <div class="field col">
-            <label for="price">Giá bán</label>
-            <p-inputNumber
-              id="price"
-              [(ngModel)]="product.giaBan"
-              mode="currency"
-              currency="USD"
-              locale="en-US"/>
-          </div>
-          <div class="field col">
-            <label for="quantity">số lượng</label>
-            <p-inputNumber
-              id="quantity"
-              [(ngModel)]="product.soLuong"/>
-          </div>
-        </div>
-      </ng-template>
-
-      <ng-template pTemplate="footer">
-        <p-button
-          pRipple
-          label="Cancel"
-          icon="pi pi-times"
-          [text]="true"
-          (click)="hideDialog()"/>
-        <p-button
-          pRipple
-          label="Save"
-          icon="pi pi-check"
-          [text]="true"
-          (click)="saveProduct()"/>
-      </ng-template>
-    </p-dialog>
-
-    <p-confirmDialog [style]="{ width: '450px' }"/>
-    <p-toolbar styleClass="mb-4 gap-2">
-      <ng-template pTemplate="right">
-        <p-button
-          pRipple
-          severity="danger"
-          label="Xóa"
-          icon="pi pi-trash"
-          (click)="deleteSelectedProducts()"
-          [disabled]="!selectedProducts || !selectedProducts.length"
-        ></p-button>
-      </ng-template>
-    </p-toolbar>
-  </p-panel>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -504,3 +385,91 @@
   <p-toast />
 </div>
 </div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">CTSP472 | 19/11/2024</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container mb-3" style="text-align: center">
+          <img src="https://firebasestorage.googleapis.com/v0/b/uploadimg-84016.appspot.com/o/yt%2FIMG_2136_1x900x900x4.jpeg?alt=media&token=143f9755-d250-49fc-a58d-b2021b3f9089" style="width: 60%; height: auto;">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Tên sản phẩm</label>
+          <input type="text" class="form-control" >
+        </div>
+        <div class="mb-3 row">
+          <div class="col-6">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Danh mục</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+          </div>
+          <div class="col-6">
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Chất liệu</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <div class="col-6">
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Màu sắc</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Kích thước</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3 container">
+          <table class="table">
+            <thead>
+            <tr>
+              <th style="text-align: center; vertical-align: middle;">Số lương</th>
+              <th style="text-align: center; vertical-align: middle;">Giá nhập</th>
+              <th style="text-align: center; vertical-align: middle;">Giá bán</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td style="text-align: center; vertical-align: middle;">
+                <input type="number" style="width: 100px ">
+              </td>
+              <td style="text-align: center; vertical-align: middle;">
+                <input type="number" style="width: 100px ">
+              </td>
+              <td style="text-align: center; vertical-align: middle;">
+                <input type="number" style="width: 100px ">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Edit</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
