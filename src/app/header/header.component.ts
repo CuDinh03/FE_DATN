@@ -1,9 +1,9 @@
-import {SanPhamCTService} from './../service/SanPhamCTService';
+import {SanPhamCTService} from '../service/SanPhamCTService';
 import {ErrorCode} from './../model/ErrorCode';
 import { HttpErrorResponse } from '@angular/common/http';
-import {ApiResponse} from './../model/ApiResponse';
-import {KhachHangService} from './../service/KhachHangService';
-import {AuthenticationService} from './../service/AuthenticationService';
+import {ApiResponse} from '../model/ApiResponse';
+import {KhachHangService} from '../service/KhachHangService';
+import {AuthenticationService} from '../service/AuthenticationService';
 import {GioHangService} from 'src/app/service/GioHangService';
 import {GioHangChiTietService} from './../service/GioHangChiTietService';
 import {Component} from '@angular/core';
@@ -28,17 +28,6 @@ export class HeaderComponent {
               private khachHangService: KhachHangService,
               private sanPhamCTService: SanPhamCTService
   ) {
-    const tenDangNhap = localStorage.getItem('tenDangNhap');
-    if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
-          this.khachHang = response.result;
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
-      );
-    }
 
   }
 
@@ -131,20 +120,9 @@ export class HeaderComponent {
   }
 
   logout() {
-    // Gọi phương thức logout từ AuthenticationService
-    this.auth.logout();
     // Redirect đến trang đăng nhập sau khi đăng xuất
-    this.router.navigate(['/trang-chu']).then(() => {
-      console.log('Redirected to /trang-chu');
-      this.router.navigate(['/trang-chu']).then(() => {
-        console.log('Redirected to /trang-chu');
-      }).catch(err => {
-        console.error('Error navigating to /trang-chu:', err);
-      });
-    }).catch(err => {
-      console.error('Error navigating to /trang-chu:', err);
-    });
-    window.location.reload();
+      this.auth.logout();
+
   }
 
   getTotalQuantity(): number {

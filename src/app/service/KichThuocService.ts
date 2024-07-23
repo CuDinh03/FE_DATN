@@ -17,24 +17,8 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
 
   // 1. get all
   getAll(): Observable<ApiResponse<any>> {
-    const token = localStorage.getItem('token');
-    // Thêm token vào header của yêu cầu
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
 
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, { headers });
-  }
-
-
-  getAllKichThuocDangHoatDong(): Observable<ApiResponse<any>> {
-    const token = localStorage.getItem('token');
-    // Thêm token vào header của yêu cầu
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll/dang-hoat-dong`, { headers });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`);
   }
 
 
@@ -55,12 +39,8 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
 
 
       getAllKichThuoc(): Observable<ApiResponse<any>> {
-        const token = localStorage.getItem('token');
-        // Thêm token vào header của yêu cầu
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${token}`
-        });
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`, { headers });
+
+        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`);
     }
 
       createKichThuoc(kichThuoc: KichThuocDto): Observable<ApiResponse<KichThuocDto>> {
@@ -111,6 +91,9 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
         });
         return this.http.put<ApiResponse<void>>(`${this.apiUrl}/${id}`, kichThuocData, { headers });
       }
+  getAllSize(): Observable<ApiResponse<any>> {
 
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`);
+  }
 
   }

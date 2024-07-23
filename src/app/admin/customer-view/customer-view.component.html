@@ -1,11 +1,4 @@
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-  data-sidebar-position="fixed" data-header-position="fixed">
-  <app-sidebar></app-sidebar>
-  <!--  Main wrapper -->
-  <div class="body-wrapper">
-    <!--  Header Start -->
-    <app-admin-header></app-admin-header>
-    <!--  Header End -->
+
     <div class="container-fluid">
       <!--  Row 1 -->
       <div class="row">
@@ -130,10 +123,10 @@
                   <div class="row alig n-items-start">
                     <form [formGroup]="khachHangForm" (ngSubmit)="onSubmit()">
                       <input type="hidden" formControlName="id" id="id">
-                      
+
                       <div class="mb-3">
                         <span><label for="ma" class="form-label">Mã: </label> </span>
-                         
+
                         <span id="ma">{{ khachHangForm.get('ma')?.value }}</span>
 
                         <!-- <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched)">
@@ -158,7 +151,7 @@
 
                       <!-- <div class="mb-4">
                         <label for="taiKhoan" class="form-label">Tài khoản: </label>
-                        
+
                         <select class="form-select">
                           <option value="0">Tài Khoản</option>
                           <option *ngFor="let taiKhoan of taiKhoanList" [value]="taiKhoan.id">{{ taiKhoan.tenDangNhap }}</option>
@@ -195,7 +188,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                       <div class="mb-4">
                         <label for="gioiTinh" class="form-label">Giới tính: </label>
                         <input type="text" class="form-control" formControlName="gioiTinh" id="gioiTinh">
@@ -255,7 +248,7 @@
                         {{successMessage}}
                         <button type="button" class="btn-close" aria-label="Close" (click)="closeSuccessAlert()"></button>
                       </div>
-                      
+
                       <!-- Thông báo lỗi -->
                       <div *ngIf="errorMessage" class="alert alert-danger">
                         {{ errorMessage }}
@@ -271,5 +264,3 @@
         </div>
       </div>
     </div>
-  </div>
-</div>

@@ -1,8 +1,6 @@
-import {EOF} from '@angular/compiler';
-import {AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import { FormGroup,} from '@angular/forms';
 import {ChiTietSanPhamDto} from 'src/app/model/chi-tiet-san-pham-dto.model';
-import {AuthenticationService} from 'src/app/service/AuthenticationService';
 import {ChatLieuService} from 'src/app/service/ChatLieuService';
 import {DanhMucService} from 'src/app/service/DanhMucService';
 import {KichThuocService} from 'src/app/service/KichThuocService';
@@ -10,11 +8,7 @@ import {MauSacService} from 'src/app/service/MauSacService';
 import {SanPhamCTService} from 'src/app/service/SanPhamCTService';
 import {SanPhamService} from 'src/app/service/SanPhamService';
 import {ThuongHieuService} from 'src/app/service/ThuongHieuService';
-// @ts-ignore
-import * as $ from 'jquery';
-import 'select2';
-// @ts-ignore
-import JQuery from "$GLOBAL$";
+import {AngularFireStorage} from "@angular/fire/compat/storage";
 import {ApiResponse} from "../../model/ApiResponse";
 import {MauSacDto} from "../../model/mau-sac-dto.model";
 import {KichThuocDto} from "../../model/kich-thuoc-dto.model";
@@ -23,29 +17,40 @@ import {ChatLieuDto} from "../../model/chat-lieu-dto.model";
 import {ThuongHieuDto} from "../../model/thuong-hieu-dto.model";
 import {DanhMucDto} from "../../model/danh-muc-dto.model";
 import {Router} from "@angular/router";
+import {ConfirmationService, MessageService} from 'primeng/api';
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {HinhAnhService} from "../../service/HinhAnhService";
+import {HinhAnhDto} from "../../model/hinh-anh-dto.model";
+import {IMG} from "../../model/IMG";
+
+interface Column {
+  field: string;
+  header: string;
+}
 
 @Component({
   selector: 'app-product-detail-view',
   templateUrl: './product-detail-view.component.html',
-  styleUrls: ['./product-detail-view.component.css']
-})
-export class ProductDetailViewComponent implements OnInit, AfterViewInit {
+  styleUrls: ['./product-detail-view.component.css'],
 
-  selectedSanPham: SanPhamDto | undefined;
-  selectedChatLieu: ChatLieuDto | undefined;
-  selectedThuongHieu: ThuongHieuDto | undefined;
-  selectedDanhMuc: DanhMucDto | undefined;
-  selectedColors: string[] = [];
-  selectedSizes: string[] = [];
-  availableColors: string[] = [];
-  availableSizes: string[] = [];
+})
+export class ProductDetailViewComponent implements OnInit {
+
+  cols!: Column[];
+
+  uploadedFiles: any[] = [];
+  listHinhAnhSelect: HinhAnhDto[] = [];
+  selectedListSp: ChiTietSanPhamDto[] = [];
+  selectedSanPham: SanPhamDto[] = [];
+  selectedChatLieu: ChatLieuDto[] = [];
+  selectedThuongHieu: ThuongHieuDto[] = [];
+  selectedDanhMuc: DanhMucDto[] = [];
+  selectedColors: MauSacDto[] = [];
+  selectedSizes: KichThuocDto[] = [];
   listChiTietSP: any [] = [];
-  @ViewChild('colorsSelect') colorsSelect: ElementRef | undefined;
-  @ViewChild('sizeSelect') sizeSelect: ElementRef | undefined;
   page = 0;
   size = 5;
-  listSanPhamChiTiet: any[] = [];
+  listSanPhamChiTiet: ChiTietSanPhamDto[] = [];
   totalElements = 0;
   totalPages: number = 0;
   listSanPham: SanPhamDto[] = [];
@@ -54,64 +59,40 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
   listMauSac: MauSacDto[] = [];
   listDanhMuc: DanhMucDto[] = [];
   listThuongHieu: ThuongHieuDto[] = [];
+  listHinhAnh: HinhAnhDto[] = [];
   sanPhamChiTietID: any;
   chiTietSanPhamFormAdd!: FormGroup;
   chiTietSanPhamFormUpdate!: FormGroup;
-  sanPhamForm!: FormGroup; // Khai báo sanPhamForm là một FormGroup
-  showConfirmationModalAdd: boolean = false;
-  showConfirmationModalUpdate: boolean = false;
+
+  productDialog: boolean = false;
+
+  product!: ChiTietSanPhamDto;
+
+  selectedProducts!: ChiTietSanPhamDto[] | null;
+
+  submitted: boolean = false;
+
+  statuses!: any[];
 
   constructor(
     private sanPhamCTService: SanPhamCTService,
-    private auth: AuthenticationService,
     private sanPhamService: SanPhamService,
     private thuongHieuService: ThuongHieuService,
     private chatLieuService: ChatLieuService,
     private danhMucService: DanhMucService,
     private kichThuocService: KichThuocService,
     private mauSacService: MauSacService,
-    private formBuilder: FormBuilder,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private fireStorage: AngularFireStorage,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private hinhAnhService: HinhAnhService
   ) {
+    this.loadMacSac();
   }
 
   ngOnInit(): void {
-    // Khởi tạo form add
-    this.chiTietSanPhamFormAdd = this.formBuilder.group({
-      ma: ['', Validators.required],  //
-      giaNhap: ['', Validators.required],
-      giaBan: ['', Validators.required],
-      soLuong: ['', Validators.required],
-      sanPham: ['', Validators.required],
-      thuongHieu: ['', Validators.required],
-      chatLieu: ['', Validators.required],
-      danhMuc: ['', Validators.required],
-      kichThuoc: ['', Validators.required],
-      mauSac: ['', Validators.required]
-    });
-    // Khởi tạo form update
-    this.chiTietSanPhamFormUpdate = this.formBuilder.group({
-      ma: [''],
-      giaNhap: [''],
-      giaBan: [''],
-      // soLuong: [''],
-      sanPham: [''],
-      thuongHieu: [''],
-      chatLieu: [''],
-      danhMuc: [''],
-      kichThuoc: [''],
-      mauSac: ['']
-    });
-
-    this.sanPhamForm = this.formBuilder.group({
-      sanPham: [''],     // FormControl cho loại sản phẩm
-      thuongHieu: [''],  // FormControl cho thương hiệu
-      chatLieu: [''],    // FormControl cho chất liệu
-      danhMuc: [''],     // FormControl cho danh mục
-      kichThuoc: [''],   // FormControl cho kích thước
-      mauSac: ['']       // FormControl cho màu sắc
-    });
     this.loadSanPhamChiTietByNgayTao();
     this.loadSanPham();
     this.loadThuongHieu();
@@ -119,86 +100,121 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     this.loadDanhMuc();
     this.loadKichThuoc();
     this.loadMacSac();
+    this.getCtsp();
+    this.loadHinhAnh();
+  }
+
+  deleteSelectedProducts() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the selected products?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.listSanPhamChiTiet = this.listSanPhamChiTiet.filter((val) => !this.selectedProducts?.includes(val));
+        this.selectedProducts = null;
+        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});
+      }
+    });
+  }
+
+  editProduct(product: ChiTietSanPhamDto) {
+    this.product = {...product};
+    this.productDialog = true;
+  }
+
+  deleteProduct(product: ChiTietSanPhamDto) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete ' + product.sanPham.ten + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.listSanPhamChiTiet = this.listSanPhamChiTiet.filter((val) => val.id !== product.id);
+        this.product = {};
+        // this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+      }
+    });
+  }
+
+  hideDialog() {
+    this.productDialog = false;
+    this.submitted = false;
+  }
+
+
+  saveProduct() {
+    this.submitted = true;
+
+    if (this.product.sanPham.ten?.trim()) {
+      if (this.product.id) {
+        this.listSanPhamChiTiet[this.findIndexById(this.product.id)] = this.product;
+        this.sanPhamCTService.suaSanPhamChiTiet(this.product).subscribe({
+          next: () => {
+            this.loadSanPhamChiTietByNgayTao();
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Cập nhật sản phẩm thành công', life: 3000 });
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Cập nhật thất bại', life: 3000 });
+            console.error('Update failed', err);
+          }
+        });
+      } else {
+        this.product.id = this.createId();
+        this.listSanPhamChiTiet.push(this.product);
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+      }
+
+      this.listSanPhamChiTiet = [...this.listSanPhamChiTiet];
+      this.productDialog = false;
+      this.product = {};
+    }
+  }
+
+
+
+  findIndexById(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.listSanPhamChiTiet.length; i++) {
+      if (this.listSanPhamChiTiet[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    return index;
+  }
+
+  createId(): string {
+    let id = '';
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0; i < 5; i++) {
+      id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+  }
+
+  // @ts-ignore
+  getSeverity(status: number) {
+    switch (status) {
+      case 1:
+        return 'success';
+      case 0:
+        return 'warning';
+      case 2:
+        return 'danger';
+    }
   }
 
 
   getCtsp() {
-    this.sanPhamCTService.getCtsp().subscribe(
-      (response: ApiResponse<any>) => {
-        this.listChiTietSP = response.result;
-        console.log('Show chi tiết sản phẩm thành công', response);
-      },
-      (error) => {
-        console.error('Có lỗi xảy ra khi lấy chi tiết sản phẩm', error);
-      }
-    );
+    this.listChiTietSP = this.selectedListSp;
+    console.log('listChiTietSP:' + this.listChiTietSP)
   }
 
-  ngAfterViewInit(): void {
-    // @ts-ignore
-    const $colors = $(this.colorsSelect.nativeElement);
-    // @ts-ignore
-    const $sizes = $(this.sizeSelect.nativeElement);
-
-    $colors.select2({
-      placeholder: 'Chọn màu sắc'
-    });
-
-    $sizes.select2({
-      placeholder: 'Chọn Size'
-    });
-
-    $colors.on('change', (event: JQuery.TriggeredEvent) => {
-      const selectedColor = $colors.val() as string;
-      if (selectedColor && !this.selectedColors.includes(selectedColor)) {
-        this.selectedColors.push(selectedColor);
-        this.updateSelectedColors();
-      }
-      // Reset select2 để có thể chọn tiếp mục khác
-      $colors.val(null).trigger('change');
-    });
-
-    $sizes.on('change', (event: JQuery.TriggeredEvent) => {
-      const selectedSize = $sizes.val() as string;
-      if (selectedSize && !this.selectedSizes.includes(selectedSize)) {
-        this.selectedSizes.push(selectedSize);
-        this.updateSelectedSizes();
-      }
-      // Reset select2 để có thể chọn tiếp mục khác
-      $sizes.val(null).trigger('change');
-    });
-  }
-
-  updateSelectedSizes(): void {
-    const $sizeList = $('#sizeList');
-    $sizeList.empty();
-    this.selectedSizes.forEach(size => {
-      $sizeList.append('<li>' + size + '</li>');
-    });
-  }
-
-  updateSelectedColors(): void {
-    const $colorList = $('#colorList');
-    $colorList.empty();
-    this.selectedColors.forEach(color => {
-      $colorList.append('<li>' + color + '</li>');
-    });
-  }
-
-  removeColor(color: string): void {
-    const index = this.selectedColors.indexOf(color);
-    if (index !== -1) {
-      this.selectedColors.splice(index, 1);
-      this.updateSelectedColors();
-    }
-  }
 
   loadSanPhamChiTietByNgayTao(): void {
-    this.sanPhamCTService.getSanPhamChiTietSapXepByNGayTao(this.page, this.size)
+    this.sanPhamCTService.getAllSanPhamChiTiet()
       .subscribe(response => {
-        this.listSanPhamChiTiet = response.result.content;
-        this.totalElements = response.result.totalElements;
-        this.totalPages = response.result.totalPages;
+        this.listSanPhamChiTiet = response.result;
       });
   }
 
@@ -207,38 +223,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     this.loadSanPhamChiTietByNgayTao();
   }
 
-
-  saveProduct() {
-    // xử lý lấy data call api
-    if (this.chiTietSanPhamFormAdd.valid) {
-      // const: bien k the thay doi
-      // lay ra value form
-      const formValues = this.chiTietSanPhamFormAdd.value;
-      const chiTietSanPhamDto: ChiTietSanPhamDto = {
-        ...formValues,
-        sanPham: {id: formValues.sanPham}, // Chuyển đổi ID thành đối tượng
-        thuongHieu: {id: formValues.thuongHieu},
-        chatLieu: {id: formValues.chatLieu},
-        danhMuc: {id: formValues.danhMuc},
-        kichThuoc: {id: formValues.kichThuoc},
-        mauSac: {id: formValues.mauSac},
-      };
-
-      this.sanPhamCTService.themSanPhamChiTiet(chiTietSanPhamDto).subscribe(
-        response => {
-          console.log('Thêm chi tiết sản phẩm thành công!', response);
-          this.loadSanPhamChiTietByNgayTao();
-          this.showConfirmationModalAdd = false;
-          alert("Thêm sản phẩm chi tiết thành công!");
-        }, error => {
-          console.error('Thêm chi tiết sản phẩm thất bại!', error);
-          alert('Thêm chi tiết sản phẩm thất bại!');
-        }
-      )
-    } else {
-      this.markTheElement(this.chiTietSanPhamFormAdd);
-    }
-  }
 
   markTheElement(formGroup: FormGroup): void {
     Object.keys(formGroup.controls).forEach(filed => {
@@ -262,80 +246,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       })
   }
 
-
-  updateProduct() {
-
-    if (this.chiTietSanPhamFormAdd.valid) {
-      // const: bien k the thay doi
-      // lay ra value form
-      const formValues = this.chiTietSanPhamFormUpdate.value;
-
-      const chiTietSanPhamDto: ChiTietSanPhamDto = {
-        id: this.sanPhamChiTietID?.id,
-        ma: formValues.ma,
-
-        sanPham: {id: formValues.sanPham}, // Chuyển đổi ID thành đối tượng
-        thuongHieu: {id: formValues.thuongHieu},
-        chatLieu: {id: formValues.chatLieu},
-        danhMuc: {id: formValues.danhMuc},
-        kichThuoc: {id: formValues.kichThuoc},
-        mauSac: {id: formValues.mauSac},
-
-        soLuong: this.sanPhamChiTietID?.soLuong,
-        giaNhap: formValues.giaNhap,
-        giaBan: formValues.giaBan,
-
-        ngayNhap: this.sanPhamChiTietID?.ngayNhap,
-        ngayTao: this.sanPhamChiTietID?.ngayTao,
-        ngaySua: new Date(),
-
-        trangThai: this.sanPhamChiTietID?.trangThai,
-        hinhAnh: this.sanPhamChiTietID?.hinhAnh,
-      };
-
-      this.sanPhamCTService.suaSanPhamChiTiet(chiTietSanPhamDto, this.sanPhamChiTietID?.id).subscribe(
-        response => {
-          console.log('Sửa chi tiết sản phẩm thành công!', response);
-          this.loadSanPhamChiTietByNgayTao();
-          this.showConfirmationModalUpdate = false;
-          alert("Sửa sản phẩm chi tiết thành công!");
-        }, error => {
-          console.error('Sửa chi tiết sản phẩm thất bại!', error);
-          alert('Sửa chi tiết sản phẩm thất bại!');
-        }
-      )
-
-    }
-  }
-
-  // ĐÓNG MỞ MODEL
-  cancelSaveAdd() {
-    // Đóng modal
-    this.showConfirmationModalAdd = false;
-  }
-
-  viewFormAddProduct() {
-    // Mở modal
-    this.showConfirmationModalAdd = true;
-  }
-
-  cancelSaveUpdate() {
-    // Đóng modal
-    this.showConfirmationModalUpdate = false;
-  }
-
-  async viewFormUpdateProduct(id: string): Promise<void> {
-    await this.getChiTietSanPhamById(id);
-    // Mở modal
-    // lấy ra index của sản phẩm chi tiết theo id
-    const index = this.listSanPhamChiTiet.findIndex(e => e.id == id);
-    // lấy ra giá trị theo index
-    const value = this.listSanPhamChiTiet[index];
-    // fill value form
-    this.fillValueToForm(value);
-    this.showConfirmationModalUpdate = true;
-  }
-
   fillValueToForm(spct: any) {
     this.chiTietSanPhamFormUpdate.patchValue({
       ma: spct.ma,
@@ -351,51 +261,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     })
   }
 
-
-  // Phương thức này sẽ được gọi khi bạn thay đổi tùy chọn trong select
-  onSelectChange(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    const selectedValue = selectElement.value;
-
-    // Thực hiện hành động tương ứng với giá trị được chọn
-    this.handleSelection(selectedValue);
-  }
-
-  // Phương thức để xử lý giá trị được chọn
-  handleSelection(value: string): void {
-    if (value === '5') {
-      // Thực hiện hành động khi chọn "5"
-      this.size = 5;
-      this.loadSanPhamChiTietByNgayTao();
-    } else if (value === '10') {
-      // Thực hiện hành động khi chọn "10"
-      this.size = 10;
-      this.loadSanPhamChiTietByNgayTao();
-    } else if (value === '15') {
-      // Thực hiện hành động khi chọn "15"
-      this.size = 15;
-      this.loadSanPhamChiTietByNgayTao();
-    }
-  }
-
-
-  // Phương thức hiển thị hộp thoại xác nhận và gọi updateTrangThai nếu người dùng xác nhận
-  confirmAndUpdate(id: string): void {
-    const confirmed = window.confirm('Bạn có chắc chắn muốn cập nhật trạng thái không?');
-    if (confirmed) {
-      this.updateTrangThai(id);
-    }
-  }
-
-  // UPDATE TRANG THAI SPCT
-  updateTrangThai(id: string): void {
-    this.sanPhamCTService.updateTrangThaiById(id).subscribe(
-      res => {
-        this.loadSanPhamChiTietByNgayTao();
-        alert('Xóa sản phẩm chi tiết thành công!')
-      }
-    );
-  }
 
 
   // San pham
@@ -439,9 +304,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     this.kichThuocService.getAll().subscribe(
       response => {
         this.listKichThuoc = response.result;
-        for (const kt of this.listKichThuoc) {
-          this.availableSizes.push(kt.ten)
-        }
 
       }
     )
@@ -452,9 +314,6 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     this.mauSacService.getAll().subscribe(
       response => {
         this.listMauSac = response.result;
-        for (const responseElement of this.listMauSac) {
-          this.availableColors.push(responseElement.ten)
-        }
       }
     )
   }
@@ -463,112 +322,29 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
     return this.chiTietSanPhamFormAdd.controls;
   }
 
-  // Các hàm xử lý khi select thay đổi
-  onSanPhamChange(): void {
-    const sanPhamId = this.sanPhamForm.value.sanPham;
-    this.sanPhamCTService.getChiTietSanPhamById(sanPhamId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi sản phẩm
-      });
-  }
-
-  onThuongHieuChange(): void {
-    const thuongHieuId = this.sanPhamForm.value.thuongHieu;
-    this.sanPhamCTService.getSPCTByThuongHieuId(thuongHieuId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi thương hiệu
-      });
-  }
-
-  onChatLieuChange(): void {
-    const chatLieuId = this.sanPhamForm.value.chatLieu;
-    this.sanPhamCTService.getSPCTByChatLieuId(chatLieuId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi chất liệu
-      });
-  }
-
-  onDanhMucChange(): void {
-    const danhMucId = this.sanPhamForm.value.danhMuc;
-    this.sanPhamCTService.getSPCTByDanhMucId(danhMucId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi danh mục
-      });
-  }
-
-  onKichThuocChange(): void {
-    const kichThuocId = this.sanPhamForm.value.kichThuoc;
-    this.sanPhamCTService.getSPCTByKichThuocId(kichThuocId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi kích thước
-      });
-  }
-
-  onMauSacChange(): void {
-    const mauSacId = this.sanPhamForm.value.mauSac;
-    this.sanPhamCTService.getSPCTByMauSacId(mauSacId)
-      .subscribe(response => {
-        this.listSanPhamChiTiet = response.result; // Cập nhật lại dữ liệu khi thay đổi màu sắc
-      });
-  }
-
-  selectedMauSacArray: MauSacDto[] = [];
-  selectedKichThuocArray: KichThuocDto[] = [];
-  sanPham: SanPhamDto | undefined;
-  chatLieu: ChatLieuDto | undefined;
-  thuongHieu: ThuongHieuDto | undefined;
-  danhMuc: DanhMucDto | undefined;
-
   // @ts-ignore
-  selectedSp(): SanPhamDto {
-    for (const sp of this.listSanPham) {
-      if (this.selectedSanPham?.id === sp.id) {
-        return sp;
-      }
-    }
-  }  // @ts-ignore
-  selectedCl(): ChatLieuDto {
-    for (const cl of this.listChatLieu) {
-      if (this.selectedChatLieu?.id === cl.id) {
-        return cl;
-      }
-    }
-  }  // @ts-ignore
-  selectedTh(): ThuongHieuDto {
-    for (const th of this.listThuongHieu) {
-      if (this.selectedThuongHieu?.id === th.id) {
-        return th;
-      }
-    }
-  }  // @ts-ignore
-  selectedDm(): DanhMucDto {
-    for (const dm of this.listDanhMuc) {
-      if (this.selectedDanhMuc?.id === dm.id) {
-        return dm;
-      }
-    }
+  selectedSp(): SanPhamDto | undefined {
+    return this.selectedSanPham.length > 0 ? this.selectedSanPham[0] : undefined;
+  }
+
+  selectedCl(): ChatLieuDto | undefined {
+    return this.selectedChatLieu.length > 0 ? this.selectedChatLieu[0] : undefined;
+  }
+
+  selectedTh(): ThuongHieuDto | undefined {
+    return this.selectedThuongHieu.length > 0 ? this.selectedThuongHieu[0] : undefined;
+  }
+
+  selectedDm(): DanhMucDto | undefined {
+    return this.selectedDanhMuc.length > 0 ? this.selectedDanhMuc[0] : undefined;
   }
 
   selectedMauSac(): MauSacDto[] {
-    for (const ms of this.listMauSac) {
-      for (const slms of this.selectedColors) {
-        if (ms.ten === slms) {
-          this.selectedMauSacArray.push(ms)
-        }
-      }
-    }
-    return this.selectedMauSacArray;
+    return this.listMauSac.filter(ms => this.selectedColors.some(selMs => selMs.id === ms.id));
   }
 
   selectedSize(): KichThuocDto[] {
-    for (const kt of this.listKichThuoc) {
-      for (const slkt of this.selectedSizes) {
-        if (kt.ten === slkt) {
-          this.selectedKichThuocArray.push(kt)
-        }
-      }
-    }
-    return this.selectedKichThuocArray;
+    return this.listKichThuoc.filter(kt => this.selectedSizes.some(selSize => selSize.id === kt.id));
   }
 
   addChiTietSanPham() {
@@ -579,38 +355,66 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       danhMuc: this.selectedDm(),
       thuongHieu: this.selectedTh(),
       kichThuocList: this.selectedSize()
-    }
-    console.log(saveCtspRequest)
-    this.sanPhamCTService.saveChiTietSanPham(saveCtspRequest).subscribe(
-      (response: ApiResponse<any>) => {
+    };
 
-        console.log('Lưu chi tiết sản phẩm thành công', response);
-        this.router.navigate(['/admin/san-pham-chi-tiet']);
-        this.getCtsp();
-      },
-      (error) => {
-        console.error('Có lỗi xảy ra khi lưu chi tiết sản phẩm', error);
+    const listSPCT: ChiTietSanPhamDto[] = [];
+
+    for (const ms of saveCtspRequest.mauSacList) {
+      for (const size of saveCtspRequest.kichThuocList) {
+        const ctsp: ChiTietSanPhamDto = {
+          ma: "",
+          sanPham: saveCtspRequest.sanPham,
+          thuongHieu: saveCtspRequest.thuongHieu,
+          chatLieu: saveCtspRequest.chatLieu,
+          danhMuc: saveCtspRequest.danhMuc,
+          kichThuoc: size,
+          mauSac: ms,
+          soLuong: 0,
+          giaNhap: 0,
+          giaBan: 0,
+          ngayNhap: new Date,
+          ngayTao: new Date,
+          ngaySua: new Date,
+          trangThai: 1,
+          hinhAnh: this.listHinhAnhSelect,
+        }
+        listSPCT.push(ctsp);
       }
-    );
+    }
+
+    for (const ctsp of listSPCT) {
+      // @ts-ignore
+      ctsp.ma = listSPCT.indexOf(ctsp);
+    }
+
+    this.selectedListSp = listSPCT;
+    this.getCtsp();
+    console.log(saveCtspRequest);
   }
 
+
   saveListCt(list: any[]): void {
-    this.sanPhamCTService.saveListCt(list).subscribe(
+    const img: IMG = {
+      anhDtoListt: this.listHinhAnhSelect,
+      chiTietSanPhamDto: list
+    }
+    this.sanPhamCTService.saveListCt(img).subscribe(
       (response: ApiResponse<any>) => {
 
+
+        // this.getCtsp();
+        this.loadSanPhamChiTietByNgayTao();
+        this.selectedDanhMuc = [];
+        this.selectedSanPham = [];
+        this.selectedThuongHieu = [];
+        this.selectedChatLieu = [];
         this.listChiTietSP = [];
         this.selectedSizes = [];
         this.selectedColors = [];
-        this.getCtsp();
-        this.loadSanPhamChiTietByNgayTao();
-
-        this.router.navigate(['/admin/san-pham-chi-tiet']).then(() => {
-          this.snackBar.open('Lưu danh sách thành công!', 'Đóng', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
-        }).catch(err => {
-          console.error('Lỗi chuyển hướng đến /admin/san-pham-chi-tiet:', err);
+        this.listHinhAnhSelect = [];
+        this.snackBar.open('Lưu danh sách thành công!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
         });
       },
       (error) => {
@@ -623,28 +427,68 @@ export class ProductDetailViewComponent implements OnInit, AfterViewInit {
       }
     );
   }
+  imgList: HinhAnhDto[] = [];
+
+  async onFileChange(event: any, ctsp: any , index:string) {
+    for (let file of event.files) {
+      this.uploadedFiles.push(file);
+
+      const path = `yt/${file.name}`;
+      const uploadTask = await this.fireStorage.upload(path, file);
+      const aurl = await uploadTask.ref.getDownloadURL();
+
+      const hinhAnhDto: HinhAnhDto = {
+        id: '',
+        ma: index.toString(),
+        url: aurl,
+        chiTietSanPham: ctsp,
+        trangThai: 1,
+      }
+
+      this.imgList.push(hinhAnhDto)
+
+      if (!ctsp.hinhAnhUrls) {
+        ctsp.hinhAnhUrls = [];
+      }
+      ctsp.hinhAnhUrls.push(aurl);
+      console.log(`File uploaded. Download URL: ${aurl}`);
+    }
+
+    console.log('saukhi luu anh vao' + this.listChiTietSP.toString())
+    this.listHinhAnhSelect = this.imgList;
+
+  }
+
+  confirm() {
+    this.confirmationService.confirm({
+      header: 'Xác nhận',
+      message: 'Bạn chắc chắn muốn thêm biến thể chứ?',
+      acceptIcon: 'pi pi-check mr-2',
+      rejectIcon: 'pi pi-times mr-2',
+      rejectButtonStyleClass: 'p-button-sm',
+      acceptButtonStyleClass: 'p-button-outlined p-button-sm',
+      accept: () => {
+        this.saveListCt(this.listChiTietSP);
+        this.messageService.add({severity: 'success', summary: 'Đã xác nhận', detail: 'Xác nhận', life: 3000});
+      },
+      reject: () => {
+        this.messageService.add({severity: 'error', summary: 'Đã huỷ', detail: 'Đã huỷ xác nhận', life: 3000});
+      }
+    });
+  }
+
+  loadHinhAnh() {
+    this.hinhAnhService.getAllHinhAnh().subscribe(
+      (response: ApiResponse<any>) => {
+        this.listHinhAnh = response.result;
+        console.log('list ha' + this.listHinhAnh)
+      })
+  }
+
 }
 
 
-// deleteSanPham(id: string): Observable<ApiResponse<void>> {
-//   const token = localStorage.getItem('token');
-//   const headers = new HttpHeaders({
-//     'Authorization': `Bearer ${token}`
-//   });
 
-//   return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`, {headers});
-// }
 
-// delete(id: any): void {
-//   this.sanPhamCTService.deleteSanPham(id).subscribe(() => {
-//     this.loadSanPhamChiTiet();
-//     this.router.navigate(['/admin/san-pham']);
-//   });
-// }
 
-// openSanPham(id: any): void {
-//   this.sanPhamCTService.openSanPham(id).subscribe(() => {
-//     this.loadSanPhamChiTiet();
-//     this.router.navigate(['/admin/san-pham']);
-//   });
-// }
+

@@ -110,4 +110,9 @@ import { MauSacDto } from '../model/mau-sac-dto.model';
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll/dang-hoat-dong`, { headers });
   }
 
+  getAllColors(): Observable<ApiResponse<any>> {
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`);
+  }
+
   }

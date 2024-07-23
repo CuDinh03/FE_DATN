@@ -10,6 +10,7 @@ import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {ErrorCode} from "../../model/ErrorCode";
 import {forkJoin} from 'rxjs';
 import {SanPhamCTService} from "../../service/SanPhamCTService";
+import {HoaDonDto} from "../../model/hoa-don-dto.model";
 
 @Component({
   selector: 'app-history-view',
@@ -40,6 +41,7 @@ export class HistoryViewComponent {
   hoaDons: any[] = [];
   startDate: string = '';
   endDate: string = '';
+  ghiChu: string = '';
   @ViewChild('searchInput') searchInputRef!: ElementRef;
 
   constructor(
@@ -157,6 +159,7 @@ export class HistoryViewComponent {
   }
 
 
+
   findOrderDetailByid(id: string): void {
     this.hoaDonChiTietService.findById(id).subscribe((response) => {
       if (response.result) {
@@ -175,14 +178,56 @@ export class HistoryViewComponent {
     })
   }
 
-  updateTrangThai(id: string, trangThai: number): void {
-    this.hoaDonService.updateTrangThai(id, trangThai).subscribe(
-      (response) => {
+
+  huyDonModal(): void {
+    const storedHoaDon = localStorage.getItem('hoaDon');
+    if (storedHoaDon) {
+      const hoaDon = JSON.parse(storedHoaDon);
+      const hoaDonDto: HoaDonDto = {
+        id: hoaDon.id,
+        ma: hoaDon.ma,
+        tongTien: hoaDon.tongTien,
+        tongTienGiam: hoaDon.tongTienGiam,
+        voucher: hoaDon.voucher,
+        ghiChu: this.ghiChu,
+        khachHangId: hoaDon.khachHangId,
+        nhanVienId: hoaDon.nhanVienId,
+        ngayTao: hoaDon.ngayTao,
+        ngaySua: new Date(),
+        trangThai: 5,
+      };
+      this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
+      this.findOrder();
+      this.closeconfirmUpdate();
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
+
+  updateTrangThai(id: string, trangThai: number, hoaDonDto: HoaDonDto): void {
+    this.apiService.updateTrangThainew(id, trangThai, hoaDonDto).subscribe(
+      (response: ApiResponse<HoaDonDto>) => {
         if (response) {
-          this.snackBar.open('Cập nhật trạng thái thành công', 'Đóng', {
+          let message = '';
+          switch (trangThai) {
+            case 2:
+              message = 'Đã xác nhận đơn hàng';
+              break;
+            case 4:
+              message = 'Hoàn thành đơn hàng';
+              break;
+            case 5:
+              message = 'Hủy đơn thành công';
+              break;
+            default:
+              message = 'Cập nhật trạng thái thành công';
+              break;
+          }
+          this.snackBar.open(message, 'Đóng', {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
+          console.log(response);
         } else {
           this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
             duration: 3000,
@@ -198,8 +243,8 @@ export class HistoryViewComponent {
         });
       }
     );
-    this.closeconfirmUpdate();
   }
+
 
   showModalUpdate(): void {
     if (this.confirmUpdate && this.confirmUpdate.nativeElement) {
@@ -333,7 +378,18 @@ export class HistoryViewComponent {
           if (response.result) {
             this.hoaDon = response.result;
             localStorage.setItem('hoaDon', JSON.stringify(response.result));
-            this.router.navigate(['/order-detail'])
+            this.router.navigate(['/customer/order-detail', id]); // Thay đổi đường dẫn
+          }
+        })
+  }
+
+  findHoaDonById1(id: string): void {
+    this.apiService.getHoaDonById(id)
+      .subscribe(
+        (response: ApiResponse<any>) => {
+          if (response.result) {
+            this.hoaDon = response.result;
+            localStorage.setItem('hoaDon', JSON.stringify(response.result));
           }
         })
   }
@@ -349,11 +405,11 @@ export class HistoryViewComponent {
       case 3:
         return 'Đang giao';
       case 4:
-        return 'Đã nhận hàng';
-      case 5:
         return 'Hoàn thành';
-      case 6:
+      case 5:
         return 'Hủy đơn';
+      case 6:
+        return 'Sửa đơn';
       default:
         return '';
     }
@@ -372,10 +428,9 @@ export class HistoryViewComponent {
       case 4:
         return '#228B22';
       case 5:
-        return '#228B22';
+        return '#FF0000';
       case 6:
         return '#FF0000';
-
       default:
         return '';
     }

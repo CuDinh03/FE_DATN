@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {AuthenticationService} from "../service/AuthenticationService";
 
 @Injectable({
@@ -8,16 +8,31 @@ import {AuthenticationService} from "../service/AuthenticationService";
 export class AuthGuard  {
   constructor(private authService: AuthenticationService, private router: Router) {
   }
+
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.authService.isLoggedIn()) {
-      if (this.authService.getRole() == 'ADMIN'){
-        return true
-      }else if (this.authService.getRole()=="CUSTOMER") {
-        return true;
-      }else {
-        this.router.navigate(['/trang-chu']);
-        return false
+      const role = this.authService.getRole();
+      const url: string = state.url;
+
+      if (url.startsWith('/admin')) {
+        if (role === 'ADMIN') {
+          return true;
+        } else {
+          this.router.navigate(['/trang-chu']);
+          return false;
+        }
       }
+      if (url.startsWith('/customer')) {
+        if (role === 'CUSTOMER') {
+          return true;
+        } else {
+          this.router.navigate(['/trang-chu']);
+          return false;
+        }
+      }
+
+      this.router.navigate(['/trang-chu']);
+      return false;
     } else {
       this.router.navigate(['/log-in']);
       return false;

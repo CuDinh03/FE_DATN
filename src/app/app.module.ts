@@ -17,7 +17,7 @@ import {AdminViewComponent} from './admin/admin-view/admin-view.component';
 import {AuthenticationLoginComponent} from './auth/authentication-login/authentication-login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaiKhoanService} from "./service/TaiKhoanService";
-import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import {HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import {ShoppingCartComponent} from './page/shopping-cart/shopping-cart.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {SidebarComponent} from './admin/sidebar/sidebar.component';
@@ -44,52 +44,140 @@ import {ThuongHieuViewComponent} from './admin/thuonghieu-view/thuonghieu-view.c
 import {HinhAnhViewComponent} from './admin/hinhanh-view/hinhanh-view.component';
 import {RatingViewComponent} from './page/rating-view/rating-view.component';
 import {MaskValuePipe} from './page/profile/mask-value-pipe';
+import { DemoComponent } from './demo/demo.component';
+import {AdminRoutingModule} from "./admin-routing.module";
+import {CustomerRoutingModule} from "./customer-routing.module";
+import {GuestRoutingModule} from "./guest-routing.module";
+import {TrangChuComponent } from './page/trang-chu/trang-chu.component';
+import {CommonModule} from "@angular/common";
+import {NgxSpinner, NgxSpinnerModule} from "ngx-spinner";
+import {ToastModule} from "primeng/toast";
+import {FileUploadModule} from "primeng/fileupload";
+import {InputNumberModule} from "primeng/inputnumber";
+import {TableModule} from "primeng/table";
+import {MultiSelectModule} from "primeng/multiselect";
+import {ToolbarModule} from "primeng/toolbar";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {DialogModule} from "primeng/dialog";
+import {TagModule} from "primeng/tag";
+import {PanelModule} from "primeng/panel";
+import {AngularFireStorageModule} from "@angular/fire/compat/storage";
+import {AngularFireModule} from "@angular/fire/compat";
+import {environment} from "../environments/environment";
+import {NgSelectModule} from "@ng-select/ng-select";
+import {Button} from 'primeng/button';
+import {AvatarModule} from "primeng/avatar";
+import {SidebarModule} from "primeng/sidebar";
+import {StyleClassModule} from "primeng/styleclass";
+import {Ripple} from "primeng/ripple";
+import {DropdownModule} from "primeng/dropdown";
+import {InputTextModule} from "primeng/inputtext";
+import {RatingModule} from "primeng/rating";
+import {PaginatorModule} from "primeng/paginator";
+import {IconFieldModule} from "primeng/iconfield";
+import {InputIconModule} from "primeng/inputicon";
+import {InputSwitchModule} from "primeng/inputswitch";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {ConfirmationService, MessageService, PrimeNGConfig} from "primeng/api";
 
 @NgModule({ declarations: [
-        HomeComponent,
-        HeaderComponent,
-        MainViewComponent,
-        FooterComponent,
-        ShoppingCartViewComponent,
-        ProductDetailComponent,
-        BannerComponent,
-        PreviewProductComponent,
-        TrendingProductComponent,
-        BestSellingProductComponent,
-        OfferSectionComponent,
-        ShopCategoryComponent,
-        AdminViewComponent,
-        AuthenticationLoginComponent,
-        ShoppingCartComponent,
-        RegisterComponent,
-        SidebarComponent,
-        ProfileComponent,
-        ProductViewComponent,
-        AccountViewComponent,
-        CategoryViewComponent,
-        ShoppingViewComponent,
-        VoucherViewComponent,
-        AdminHeaderComponent,
-        OrdersViewComponent,
-        CustomerViewComponent,
-        PaymentViewComponent,
-        SidebarProfileComponent,
-        HistoryViewComponent,
-        OrderDetailComponent,
-        ChatLieuViewComponent,
-        MauSacViewComponent,
-        KichThuocViewComponent,
-        ThuongHieuViewComponent,
-        HinhAnhViewComponent,
-        ProductDetailViewComponent,
-        RatingViewComponent,
-        MaskValuePipe
-    ],
-    bootstrap: [HomeComponent], imports: [BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MatSnackBarModule], providers: [TaiKhoanService, provideHttpClient(withInterceptorsFromDi())] })
+    HomeComponent,
+    HeaderComponent,
+    MainViewComponent,
+    FooterComponent,
+    ShoppingCartViewComponent,
+    ProductDetailComponent,
+    BannerComponent,
+    PreviewProductComponent,
+    TrendingProductComponent,
+    BestSellingProductComponent,
+    OfferSectionComponent,
+    ShopCategoryComponent,
+    AdminViewComponent,
+    AuthenticationLoginComponent,
+    ShoppingCartComponent,
+    RegisterComponent,
+    SidebarComponent,
+    ProfileComponent,
+    ProductViewComponent,
+    AccountViewComponent,
+    CategoryViewComponent,
+    ShoppingViewComponent,
+    VoucherViewComponent,
+    AdminHeaderComponent,
+    OrdersViewComponent,
+    CustomerViewComponent,
+    PaymentViewComponent,
+    SidebarProfileComponent,
+    HistoryViewComponent,
+    OrderDetailComponent,
+    ChatLieuViewComponent,
+    MauSacViewComponent,
+    KichThuocViewComponent,
+    ThuongHieuViewComponent,
+    HinhAnhViewComponent,
+    ProductDetailViewComponent,
+    RatingViewComponent,
+    MaskValuePipe,
+    DemoComponent,
+    TrangChuComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
+    AdminRoutingModule,
+    CustomerRoutingModule,
+    GuestRoutingModule,
+    CommonModule,
+    NgxSpinnerModule,
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
+    NgSelectModule,
+    BrowserModule,
+    AngularFireStorageModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    MultiSelectModule,
+    Button,
+    AvatarModule,
+    SidebarModule,
+    StyleClassModule,
+    Ripple,
+    TableModule,
+    ConfirmDialogModule,
+    FileUploadModule,
+    ToolbarModule,
+    DialogModule,
+    DropdownModule,
+    TagModule,
+    RadioButtonModule,
+    InputTextModule,
+    RatingModule,
+    PaginatorModule,
+    InputNumberModule,
+    ToastModule,
+    PanelModule,
+    IconFieldModule,
+    InputIconModule,
+    InputSwitchModule,
+
+  ],
+  providers: [TaiKhoanService,
+    AngularFireAuth,
+    ConfirmationService,
+    MessageService,
+    PrimeNGConfig,
+    provideHttpClient(withInterceptorsFromDi())],
+  bootstrap: [HomeComponent]
+})
 export class AppModule {
 }

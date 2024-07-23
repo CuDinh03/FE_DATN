@@ -52,7 +52,6 @@ export class RegisterComponent {
         taiKhoanDto: {
           tenDangNhap: this.accountForm.value.tenDangNhap,
           matKhau: this.accountForm.value.matKhau,
-          xacNhanMatKhau: this.accountForm.value.xacNhanMatKhau,
           id: '',
         },
         mail: this.accountForm.value.email

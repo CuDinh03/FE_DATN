@@ -13,49 +13,6 @@ import {HoaDonChiTietService} from "../../service/HoaDonChiTietService";
   templateUrl: './admin-view.component.html',
   styleUrls: ['./admin-view.component.css']
 })
-export class AdminViewComponent implements OnInit {
-  doanhThu: number = 0;
-  donHang: number =  0;
-  listHoaDonChiTiet: any[] = [];
-
-  constructor(
-    private http: HttpClient,
-    private auth: AuthenticationService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private hoaDonService: HoaDonService,
-    private hoaDonChiTietService: HoaDonChiTietService
-    ) {
-  }
-
-  ngOnInit(): void {
-  this.getThongKeDoanhThu();
-  this.getThongKeDonHang();
-  this.getThongKeSanPham();
-  }
-
-  getThongKeDoanhThu()  {
-    this.hoaDonService.getThongKeDoanhThu().subscribe(res => {
-      if (res.result){
-        this.doanhThu = res.result;
-      }
-    })
-  }
-
-  getThongKeDonHang()  {
-    this.hoaDonService.getThongKeDonHang().subscribe(res => {
-      if (res.result){
-        this.donHang = res.result;
-      }
-    })
-  }
-
-  getThongKeSanPham()  {
-    this.hoaDonChiTietService.getThongKeSanPham().subscribe((res:ApiResponse<any>) => {
-      if (res.result){
-        this.listHoaDonChiTiet = res.result;
-      }
-    })
-  }
+export class AdminViewComponent  {
 
 }
