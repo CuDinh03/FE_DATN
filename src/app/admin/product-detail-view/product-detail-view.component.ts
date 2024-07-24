@@ -47,7 +47,7 @@ export class ProductDetailViewComponent implements OnInit {
   selectedDanhMuc: DanhMucDto[] = [];
   selectedColors: MauSacDto[] = [];
   selectedSizes: KichThuocDto[] = [];
-  listChiTietSP: any [] = [];
+  listChiTietSP: ChiTietSanPhamDto [] = [];
   page = 0;
   size = 5;
   listSanPhamChiTiet: ChiTietSanPhamDto[] = [];
@@ -372,9 +372,6 @@ export class ProductDetailViewComponent implements OnInit {
           soLuong: 0,
           giaNhap: 0,
           giaBan: 0,
-          ngayNhap: new Date,
-          ngayTao: new Date,
-          ngaySua: new Date,
           trangThai: 1,
           hinhAnh: this.listHinhAnhSelect,
         }
@@ -393,7 +390,7 @@ export class ProductDetailViewComponent implements OnInit {
   }
 
 
-  saveListCt(list: any[]): void {
+  saveListCt(list: ChiTietSanPhamDto[]): void {
     const img: IMG = {
       anhDtoListt: this.listHinhAnhSelect,
       chiTietSanPhamDto: list

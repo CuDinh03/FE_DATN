@@ -35,7 +35,7 @@ export class TrendingProductComponent implements OnInit {
 ) {}
 
   ngOnInit(): void {
-    this.spinner.show();
+    // this.spinner.show();
     this.loadDanhSachSanPham();
   }
 
@@ -76,7 +76,7 @@ export class TrendingProductComponent implements OnInit {
                 console.error(`Error loading diem danh gia for productId ${sanPham.id}:`, error);
               }
             );
-            this.taskCompleted();
+            // this.taskCompleted();
           });
         } else {
           console.log(response);
