@@ -125,9 +125,6 @@ Apache-2.0
 @ng-select/ng-select
 MIT
 
-angular-highcharts
-MIT
-
 firebase/app
 
 firebase/compat/app
@@ -135,9 +132,6 @@ firebase/compat/app
 firebase/compat/auth
 
 firebase/compat/storage
-
-highcharts
-https://www.highcharts.com/license
 
 idb
 ISC
