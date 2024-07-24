@@ -6,6 +6,7 @@ import { AuthenticationService } from "../../service/AuthenticationService";
 import { Router } from "@angular/router";
 import { SanPhamService } from "../../service/SanPhamService";
 import { DanhGiaService } from "../../service/DanhGiaService";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-trending-product',
@@ -23,12 +24,18 @@ export class TrendingProductComponent implements OnInit {
   danhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ số lượng đánh giá theo từng productId
   diemDanhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ điểm đánh giá theo từng productId
 
+  private tasksCompleted = 0;
+
+
   constructor(private auth: AuthenticationService,
               private router: Router,
               private sanPhamCTService: SanPhamCTService,
-              private danhGiaService: DanhGiaService) {}
+              private danhGiaService: DanhGiaService,
+                private spinner: NgxSpinnerService
+) {}
 
   ngOnInit(): void {
+    this.spinner.show();
     this.loadDanhSachSanPham();
   }
 
@@ -69,6 +76,7 @@ export class TrendingProductComponent implements OnInit {
                 console.error(`Error loading diem danh gia for productId ${sanPham.id}:`, error);
               }
             );
+            this.taskCompleted();
           });
         } else {
           console.log(response);
@@ -78,6 +86,13 @@ export class TrendingProductComponent implements OnInit {
         console.error('Error loading products:', error);
       }
     );
+  }
+
+  private taskCompleted(): void {
+    this.tasksCompleted++;
+    if (this.tasksCompleted >= 1) {
+      this.spinner.hide();
+    }
   }
 
   onPageChange(page: number): void {
