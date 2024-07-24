@@ -11,10 +11,8 @@
       "prefix": "app",
       "architect": {
         "build": {
-
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-
             "outputPath": "dist/shop-app-angular",
             "index": "src/index.html",
             "main": "src/main.ts",
