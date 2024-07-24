@@ -9,7 +9,7 @@ import { KhachHangDto } from "../model/khachHangDto";
 })
 export class KhachHangService {
 
-  apiUrl = 'http://localhost:9091/api/khs';
+  apiUrl = 'https://datn-5iv4.onrender.com/api/khs';
 
   constructor(private http: HttpClient) {
   }

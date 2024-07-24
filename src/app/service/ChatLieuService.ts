@@ -10,7 +10,7 @@ import { ChatLieuDto } from '../model/chat-lieu-dto.model';
   })
   export class ChatLieuService {
 
-    apiUrl = 'http://localhost:9091/api/chat-lieu';
+    apiUrl = 'https://datn-5iv4.onrender.com/api/chat-lieu';
 
     constructor(private http: HttpClient) {}
 

@@ -10,7 +10,7 @@ import {ThanhToanOnl} from "../model/thanh-toan-onl";
 })
 export class ThanhToanService {
 
-    apiUrl: string = 'http://localhost:9091/api/thanhtoan';
+    apiUrl: string = 'https://datn-5iv4.onrender.com/api/thanhtoan';
 
     constructor(private http: HttpClient) {
     }

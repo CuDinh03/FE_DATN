@@ -12,7 +12,7 @@ import { HinhAnhDto } from '../model/hinh-anh-dto.model';
   })
   export class HinhAnhService {
 
-    apiUrl = 'http://localhost:9091/api/hinh-anh';
+    apiUrl = 'https://datn-5iv4.onrender.com/api/hinh-anh';
 
     constructor(private http: HttpClient) {}
 

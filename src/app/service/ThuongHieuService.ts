@@ -11,7 +11,7 @@ import { ThuongHieuDto } from '../model/thuong-hieu-dto.model';
   })
   export class ThuongHieuService {
 
-    apiUrl = 'http://localhost:9091/api/thuong-hieu';
+    apiUrl = 'https://datn-5iv4.onrender.com/api/thuong-hieu';
 
     constructor(private http: HttpClient) {}
 

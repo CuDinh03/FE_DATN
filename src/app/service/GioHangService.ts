@@ -11,7 +11,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
   })
   export class GioHangService {
 
-    apiUrl = 'http://localhost:9091/api/gio-hang';
+    apiUrl = 'https://datn-5iv4.onrender.com/api/gio-hang';
 
 
     constructor(private http: HttpClient) {}

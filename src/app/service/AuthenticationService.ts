@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private apiUrl = 'http://localhost:9091/api/auth/log-in';
+  private apiUrl = 'https://datn-5iv4.onrender.com/api/auth/log-in';
 
 
   constructor(private http: HttpClient, private router: Router) {
