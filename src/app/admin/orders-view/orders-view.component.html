@@ -942,16 +942,50 @@
                 <th>Kích thước</th>
                 <th>Số lượng</th>
                 <th>Đơn giá</th>
+                <th>Thao tác</th>
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let chiTiet of hoaDonChiTiet">
+              <tr *ngFor="let chiTiet of hoaDonChiTiet, let i = index">
                 <td>{{ chiTiet.chiTietSanPham.sanPham.ma }}</td>
                 <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
-                <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
-                <td>{{ chiTiet.chiTietSanPham.kichThuoc.ten }}</td>
-                <td>{{ chiTiet.soLuong }}</td>
+                <td>
+                  <ng-container *ngIf="editingRow === i; else displayMauSac">
+                    <select [(ngModel)]="chiTiet.chiTietSanPham.mauSac.ten" class="form-select" >
+                      <option *ngFor="let mauSac of mauSacOptions" [value]="mauSac">{{ mauSac }}</option>
+                    </select>
+                  </ng-container>
+                  <ng-template #displayMauSac>
+                    {{ chiTiet.chiTietSanPham.mauSac.ten }}
+                  </ng-template>
+                </td>
+                <td>
+                  <ng-container *ngIf="editingRow === i; else displayKichThuoc">
+                    <select [(ngModel)]="chiTiet.chiTietSanPham.kichThuoc.ten" class="form-select" >
+                      <option *ngFor="let kichThuoc of kichThuocOptions" [value]="kichThuoc">{{ kichThuoc }}</option>
+                    </select>
+                  </ng-container>
+                  <ng-template #displayKichThuoc>
+                    {{ chiTiet.chiTietSanPham.kichThuoc.ten }}
+                  </ng-template>
+                </td>
+                <td>
+                  <ng-container *ngIf="editingRow === i; else displaySoLuong">
+                    <input type="number" [(ngModel)]="chiTiet.soLuong" class="form-control"/>
+                  </ng-container>
+                  <ng-template #displaySoLuong>
+                    {{ chiTiet.soLuong }}
+                  </ng-template>
+                </td>
                 <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
+                <td>
+                  <button class="btn btn-warning" (click)="enableEditing(i)" *ngIf="editingRow !== i">
+                    <i class="ti ti-edit"></i>
+                  </button>
+                  <button class="btn btn-success" (click)="saveChanges()" *ngIf="editingRow === i">
+                    <i class="ti ti-file"></i>
+                  </button>
+                </td>
               </tr>
               </tbody>
             </table>

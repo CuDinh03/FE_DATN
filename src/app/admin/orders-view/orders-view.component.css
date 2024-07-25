@@ -14,3 +14,7 @@
   white-space: nowrap;
   max-width: 150px; /* Điều chỉnh kích thước tối đa theo nhu cầu */
 }
+
+.table th, .table td {
+  vertical-align: middle;
+}

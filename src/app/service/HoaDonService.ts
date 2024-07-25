@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {DanhMucDto} from "../model/danh-muc-dto.model";
 import {HoaDonDto} from "../model/hoa-don-dto.model";
+import {HoaDonSua} from "../model/HoaDonSua";
 
 
 @Injectable({
@@ -208,5 +209,14 @@ export class HoaDonService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/thongke/doanhthu/thang"`, {headers});
   }
 
+
+  updateHoaDonSua(hoaDonSua: HoaDonSua): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put<ApiResponse<any>>(`${this.apiUrl}/suaHoaDon`, hoaDonSua, {headers});
+  }
 }
 

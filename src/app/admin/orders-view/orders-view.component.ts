@@ -9,6 +9,10 @@ import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {ErrorCode} from "../../model/ErrorCode";
 import {HoaDonDto} from "../../model/hoa-don-dto.model";
 import {ThanhToanOnl} from "../../model/thanh-toan-onl";
+import {KhachHangService} from "../../service/KhachHangService";
+import {NhanVienService} from "../../service/nhanVienService";
+import {NguoiDung} from "../../model/NguoiDung";
+import {SanPhamCTService} from "../../service/SanPhamCTService";
 
 @Component({
   selector: 'app-orders-view',
@@ -40,6 +44,12 @@ export class OrdersViewComponent {
   diaChiKhachHang: string = '';
   sdtKhachHang: string = '';
   ghiChu: string = '';
+  nguoiDung: any = {}
+  editingRow: number | null = null;
+  listMauSac: any[] = [];
+  listKichThuoc: any[] = [];
+  mauSacOptions = ['Xanh kẻ trắng', 'Xanh', 'Vàng'];
+  kichThuocOptions = ['S', 'M', 'L'];
 
   constructor(
     private apiService: HoaDonService,
@@ -47,6 +57,8 @@ export class OrdersViewComponent {
     private router: Router,
     private auth: AuthenticationService,
     private snackBar: MatSnackBar,
+    private nhanVienService: NhanVienService,
+    private ctSanPhamService: SanPhamCTService
   ) {
 
   }
@@ -55,6 +67,63 @@ export class OrdersViewComponent {
     this.loadHoaDon();
 
   }
+
+  enableEditing(index: number): void {
+    this.editingRow = index;
+  }
+
+  saveChanges(): void {
+    // Thực hiện lưu thay đổi
+    this.editingRow = null;
+  }
+
+  cancelEditing(): void {
+    this.editingRow = null;
+  }
+
+  suaHoaDon(){
+    const tenDangNhap = this.auth.getTenDangNhap();
+    if (tenDangNhap){
+        this.nhanVienService.findByTenDangNhap(tenDangNhap).subscribe((reponse: ApiResponse<any>) => {
+          this.nguoiDung = reponse.result
+
+      })
+    }else{
+      console.log("lỗi")
+    }
+  }
+
+
+  loadColors(): void {
+    const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
+    if (storeChiTietSanPham) {
+      const chiTietSanPham = JSON.parse(storeChiTietSanPham);
+      this.ctSanPhamService.getAllMauSacByMa(chiTietSanPham.sanPham.ma).subscribe(
+        (response: ApiResponse<any>) => {
+          this.listMauSac = response.result;
+        },
+        (error) => {
+          console.error('Error fetching colors', error);
+        }
+      );
+    }
+  }
+
+  loadSize(): void {
+    const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
+    if (storeChiTietSanPham) {
+      const chiTietSanPham = JSON.parse(storeChiTietSanPham);
+      this.ctSanPhamService.getAllKichThuocByMa(chiTietSanPham.sanPham.ma).subscribe(
+        (response: ApiResponse<any>) => {
+          this.listKichThuoc = response.result;
+        },
+        (error) => {
+          console.error('Error fetching sizes', error);
+        }
+      );
+    }
+  }
+
 
 
   getHoaDons(): void {
@@ -159,13 +228,6 @@ export class OrdersViewComponent {
     );
   }
 
-  showModal(): void {
-    if (this.confirmUpdate && this.confirmUpdate.nativeElement) {
-      this.confirmUpdate.nativeElement.classList.add('show');
-      this.confirmUpdate.nativeElement.style.display = 'block';
-    }
-  }
-
   closeconfirmUpdate(): void {
     if (this.confirmUpdate && this.confirmUpdate.nativeElement) {
       this.confirmUpdate.nativeElement.classList.remove('show');
@@ -241,31 +303,6 @@ export class OrdersViewComponent {
     }
   }
 
-  xacNhanSuaModal(): void {
-    const storedHoaDon = localStorage.getItem('hoaDon');
-    if (storedHoaDon) {
-      const hoaDon = JSON.parse(storedHoaDon);
-      const hoaDonDto: HoaDonDto = {
-        id: hoaDon.id,
-        ma: hoaDon.ma,
-        tongTien: hoaDon.tongTien,
-        tongTienGiam: hoaDon.tongTienGiam,
-        voucher: hoaDon.voucher,
-        ghiChu: this.ghiChu,
-        khachHangId: hoaDon.khachHangId,
-        nhanVienId: hoaDon.nhanVienId,
-        ngayTao: hoaDon.ngayTao,
-        ngaySua: new Date(),
-        trangThai: 2,
-      };
-      this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
-      this.loadHoaDon();
-      this.closeconfirmUpdate();
-    } else {
-      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
-    }
-  }
-
 
   loadHoaDonById(idHoaDon: string): void {
     this.apiService.getHoaDonById(idHoaDon)
@@ -281,17 +318,6 @@ export class OrdersViewComponent {
             this.router.navigate(['/admin/hoa-don'])
           }
         })
-  }
-
-
-
-  handleError(error: HttpErrorResponse): void {
-    console.error(error);
-    if (error.error.code === ErrorCode.PASSWORD_INVALID) {
-      this.errorMessage = 'Mã danh mục không được để trống';
-    } else {
-      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
-    }
   }
 
   updateTrangThai(id: string, trangThai: number, hoaDonDto: HoaDonDto): void {
@@ -336,20 +362,6 @@ export class OrdersViewComponent {
     );
   }
 
-
-
-  logout(): void {
-    this.auth.logout();
-    this.router.navigate(['/log-in']).then(() => {
-      console.log('Redirected to /log-in');
-    }).catch(err => {
-      console.error('Error navigating to /log-in:', err);
-    });
-  }
-
-  closeSuccessAlert(): void {
-    this.showSuccessAlert = false;
-  }
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);

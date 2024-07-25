@@ -25,4 +25,14 @@ export class NhanVienService {
     return this.http.get<ApiResponse<TaiKhoanDto>>(`${this.apiUrl}/${taiKhoanDto.tenDangNhap}`,{ headers });
   }
 
+  findByTenDangNhap(tenDangNhap: string): Observable<ApiResponse<any>> {
+    const token:string| null = localStorage.getItem('token');
+
+    const  headers= new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${tenDangNhap}`,{ headers });
+  }
+
 }
