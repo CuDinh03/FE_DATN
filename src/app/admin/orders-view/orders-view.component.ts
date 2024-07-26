@@ -13,6 +13,7 @@ import {KhachHangService} from "../../service/KhachHangService";
 import {NhanVienService} from "../../service/nhanVienService";
 import {NguoiDung} from "../../model/NguoiDung";
 import {SanPhamCTService} from "../../service/SanPhamCTService";
+import {HoaDonSua} from "../../model/HoaDonSua";
 
 @Component({
   selector: 'app-orders-view',
@@ -32,6 +33,7 @@ export class OrdersViewComponent {
   errorMessage: string = '';
   successMessage = '';
   hoaDon = ''
+  hoaDon1: any = {}
   noProductsFound = false;
   noCartDetail = false;
   hoaDons: any[] = [];
@@ -48,8 +50,9 @@ export class OrdersViewComponent {
   editingRow: number | null = null;
   listMauSac: any[] = [];
   listKichThuoc: any[] = [];
-  mauSacOptions = ['Xanh kẻ trắng', 'Xanh', 'Vàng'];
-  kichThuocOptions = ['S', 'M', 'L'];
+  mauSacOptions: any[] = [];
+  kichThuocOptions: any = [];
+  chiTietList: any = []
 
   constructor(
     private apiService: HoaDonService,
@@ -58,7 +61,8 @@ export class OrdersViewComponent {
     private auth: AuthenticationService,
     private snackBar: MatSnackBar,
     private nhanVienService: NhanVienService,
-    private ctSanPhamService: SanPhamCTService
+    private ctSanPhamService: SanPhamCTService,
+    private hoaDonService: HoaDonService,
   ) {
 
   }
@@ -82,25 +86,49 @@ export class OrdersViewComponent {
   }
 
   suaHoaDon(){
-    const tenDangNhap = this.auth.getTenDangNhap();
-    if (tenDangNhap){
-        this.nhanVienService.findByTenDangNhap(tenDangNhap).subscribe((reponse: ApiResponse<any>) => {
-          this.nguoiDung = reponse.result
 
-      })
-    }else{
-      console.log("lỗi")
+  }
+
+  saveChanges1(): void {
+    const tenDangNhap = this.auth.getTenDangNhap();
+
+    if ( tenDangNhap) {
+
+      this.nhanVienService.findByTenDangNhap(tenDangNhap).subscribe((response: ApiResponse<any>) => {
+        this.nguoiDung = response.result;
+
+        const request: HoaDonSua = {
+          hoaDon: this.hoaDonSua,
+          chiTietList: this.hoaDonChiTiet,
+          nguoiDung: this.nguoiDung
+        };
+
+        console.log(request)
+        this.hoaDonService.updateHoaDonSua(request).subscribe(
+          (response: ApiResponse<any>) => {
+            if (response.result) {
+              console.log('Update successful', response.result);
+              this.editingRow = null;
+            }
+          },
+          (error) => {
+            console.error('Error updating HoaDon', error);
+          }
+        );
+      });
+    } else {
+      console.log("Lỗi: Không tìm thấy thông tin hóa đơn hoặc tên đăng nhập");
     }
   }
 
 
-  loadColors(): void {
-    const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
-    if (storeChiTietSanPham) {
-      const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.ctSanPhamService.getAllMauSacByMa(chiTietSanPham.sanPham.ma).subscribe(
+  loadColors(ma: string): void {
+    if (ma) {
+      this.ctSanPhamService.getAllMauSacByMa(ma).subscribe(
         (response: ApiResponse<any>) => {
-          this.listMauSac = response.result;
+          if (response.result){
+            this.mauSacOptions = response.result.map((item: any) => item.ten);
+          }
         },
         (error) => {
           console.error('Error fetching colors', error);
@@ -109,13 +137,13 @@ export class OrdersViewComponent {
     }
   }
 
-  loadSize(): void {
-    const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
-    if (storeChiTietSanPham) {
-      const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.ctSanPhamService.getAllKichThuocByMa(chiTietSanPham.sanPham.ma).subscribe(
+  loadSize(ma: string): void {
+    if (ma) {
+      this.ctSanPhamService.getAllKichThuocByMa(ma).subscribe(
         (response: ApiResponse<any>) => {
-          this.listKichThuoc = response.result;
+          if (response.result){
+            this.kichThuocOptions = response.result.map((item: any) => item.ten);
+          }
         },
         (error) => {
           console.error('Error fetching sizes', error);
@@ -124,7 +152,13 @@ export class OrdersViewComponent {
     }
   }
 
-
+  enableEditingAndLoadData(i: number, ma: string): void {
+    this.enableEditing(i);
+    setTimeout(() => {
+      this.loadColors(ma);
+      this.loadSize(ma);
+    }, 0);
+  }
 
   getHoaDons(): void {
     this.apiService.getHoaDonsByTranThai(this.trangThai, this.page, this.size).subscribe((response: ApiResponse<any>) => {

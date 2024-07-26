@@ -979,10 +979,10 @@
                 </td>
                 <td>{{ chiTiet.chiTietSanPham.giaBan }}</td>
                 <td>
-                  <button class="btn btn-warning" (click)="enableEditing(i)" *ngIf="editingRow !== i">
+                  <button class="btn btn-warning" *ngIf="editingRow !== i" (click)="enableEditingAndLoadData(i, chiTiet.chiTietSanPham.sanPham.ma)">
                     <i class="ti ti-edit"></i>
                   </button>
-                  <button class="btn btn-success" (click)="saveChanges()" *ngIf="editingRow === i">
+                  <button class="btn btn-success" (click)="saveChanges1()" *ngIf="editingRow === i">
                     <i class="ti ti-file"></i>
                   </button>
                 </td>
@@ -1028,7 +1028,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Xác nhận</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="saveChanges1()">Xác nhận</button>
           <button type="button" class="btn btn-danger" (click)="huyDonModal()" data-bs-dismiss="modal">Hủy đơn</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>

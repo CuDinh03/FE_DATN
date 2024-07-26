@@ -4,7 +4,7 @@ import {NguoiDung} from "./NguoiDung";
 
 
 export interface HoaDonSua {
-  hoaDonChiTiet: HoaDonChiTietDto[]
-  hoaDon: HoaDonDto
-  nguoiDung: NguoiDung
+  chiTietList: HoaDonChiTietDto[];
+  hoaDon: HoaDonDto;
+  nguoiDung: NguoiDung;
 }
