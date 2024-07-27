@@ -10,6 +10,6 @@ export interface HoaDonDto {
   khachHangId: string;
   nhanVienId: string;
   ngayTao: Date;
-  ngaySua: Date;
+  ngaySua?: Date;
   trangThai: number;
 }

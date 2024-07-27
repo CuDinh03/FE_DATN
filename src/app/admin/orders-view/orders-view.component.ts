@@ -8,18 +8,29 @@ import {AuthenticationService} from './../../service/AuthenticationService';
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {ErrorCode} from "../../model/ErrorCode";
 import {HoaDonDto} from "../../model/hoa-don-dto.model";
-import {ThanhToanOnl} from "../../model/thanh-toan-onl";
-import {KhachHangService} from "../../service/KhachHangService";
 import {NhanVienService} from "../../service/nhanVienService";
 import {NguoiDung} from "../../model/NguoiDung";
 import {SanPhamCTService} from "../../service/SanPhamCTService";
 import {HoaDonSua} from "../../model/HoaDonSua";
+
+
+interface MauSac {
+  id: string;
+  ten: string;
+}
+
+interface KichThuoc {
+  id: string;
+  ten: string;
+}
 
 @Component({
   selector: 'app-orders-view',
   templateUrl: './orders-view.component.html',
   styleUrls: ['./orders-view.component.css']
 })
+
+
 export class OrdersViewComponent {
   @ViewChild('confirmUpdate') confirmUpdate!: ElementRef;
   listHoaDon: any[] = [];
@@ -33,14 +44,12 @@ export class OrdersViewComponent {
   errorMessage: string = '';
   successMessage = '';
   hoaDon = ''
-  hoaDon1: any = {}
   noProductsFound = false;
   noCartDetail = false;
   hoaDons: any[] = [];
   trangThai: number = 0;
   page: number = 0;
   size: number = 5;
-  selectedTab: number = 0;
   hoaDonSua: any = {};
   tenKhachHang: string = '';
   diaChiKhachHang: string = '';
@@ -48,11 +57,8 @@ export class OrdersViewComponent {
   ghiChu: string = '';
   nguoiDung: any = {}
   editingRow: number | null = null;
-  listMauSac: any[] = [];
-  listKichThuoc: any[] = [];
   mauSacOptions: any[] = [];
   kichThuocOptions: any = [];
-  chiTietList: any = []
 
   constructor(
     private apiService: HoaDonService,
@@ -81,19 +87,10 @@ export class OrdersViewComponent {
     this.editingRow = null;
   }
 
-  cancelEditing(): void {
-    this.editingRow = null;
-  }
-
-  suaHoaDon(){
-
-  }
-
   saveChanges1(): void {
     const tenDangNhap = this.auth.getTenDangNhap();
 
-    if ( tenDangNhap) {
-
+    if (tenDangNhap) {
       this.nhanVienService.findByTenDangNhap(tenDangNhap).subscribe((response: ApiResponse<any>) => {
         this.nguoiDung = response.result;
 
@@ -103,12 +100,12 @@ export class OrdersViewComponent {
           nguoiDung: this.nguoiDung
         };
 
-        console.log(request)
+        console.log(request);
         this.hoaDonService.updateHoaDonSua(request).subscribe(
           (response: ApiResponse<any>) => {
             if (response.result) {
               console.log('Update successful', response.result);
-              this.editingRow = null;
+              this.xacNhanSuaModal();
             }
           },
           (error) => {
@@ -121,13 +118,26 @@ export class OrdersViewComponent {
     }
   }
 
+  updateMauSac(index: number, mauSacId: string): void {
+    const selectedMauSac = this.mauSacOptions.find((mauSac: MauSac) => mauSac.id === mauSacId);
+    if (selectedMauSac) {
+      this.hoaDonChiTiet[index].chiTietSanPham.mauSac = selectedMauSac;
+    }
+  }
+
+  updateKichThuoc(index: number, kichThuocId: string): void {
+    const selectedKichThuoc = this.kichThuocOptions.find((kichThuoc: KichThuoc) => kichThuoc.id === kichThuocId);
+    if (selectedKichThuoc) {
+      this.hoaDonChiTiet[index].chiTietSanPham.kichThuoc = selectedKichThuoc;
+    }
+  }
 
   loadColors(ma: string): void {
     if (ma) {
       this.ctSanPhamService.getAllMauSacByMa(ma).subscribe(
         (response: ApiResponse<any>) => {
           if (response.result){
-            this.mauSacOptions = response.result.map((item: any) => item.ten);
+            this.mauSacOptions = response.result;
           }
         },
         (error) => {
@@ -142,7 +152,7 @@ export class OrdersViewComponent {
       this.ctSanPhamService.getAllKichThuocByMa(ma).subscribe(
         (response: ApiResponse<any>) => {
           if (response.result){
-            this.kichThuocOptions = response.result.map((item: any) => item.ten);
+            this.kichThuocOptions = response.result;
           }
         },
         (error) => {
@@ -294,16 +304,18 @@ export class OrdersViewComponent {
         khachHangId: hoaDon.khachHangId,
         nhanVienId: hoaDon.nhanVienId,
         ngayTao: hoaDon.ngayTao,
-        ngaySua: new Date(),
         trangThai: hoaDon.trangThai + 1,
       };
       this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
       this.loadHoaDon();
       this.closeconfirmUpdate();
+      this.ghiChu = ''
     } else {
       this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
     }
   }
+
+
 
   huyDonModal(): void {
     const storedHoaDon = localStorage.getItem('hoaDon');
@@ -319,13 +331,45 @@ export class OrdersViewComponent {
         khachHangId: hoaDon.khachHangId,
         nhanVienId: hoaDon.nhanVienId,
         ngayTao: hoaDon.ngayTao,
-        ngaySua: new Date(),
         trangThai: 5,
       };
       if (hoaDonDto.ghiChu){
         this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
         this.loadHoaDon();
         this.closeconfirmUpdate();
+        this.ghiChu = ''
+      }else {
+        this.snackBar.open('Cập nhật trạng thái thất bại. Vui Lòng nhập ghi chú', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    } else {
+      this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
+    }
+  }
+
+  xacNhanSuaModal(): void {
+    const storedHoaDon = localStorage.getItem('hoaDon');
+    if (storedHoaDon) {
+      const hoaDon = JSON.parse(storedHoaDon);
+      const hoaDonDto: HoaDonDto = {
+        id: hoaDon.id,
+        ma: hoaDon.ma,
+        tongTien: hoaDon.tongTien,
+        tongTienGiam: hoaDon.tongTienGiam,
+        voucher: hoaDon.voucher,
+        ghiChu: this.ghiChu,
+        khachHangId: hoaDon.khachHangId,
+        nhanVienId: hoaDon.nhanVienId,
+        ngayTao: hoaDon.ngayTao,
+        trangThai: 2,
+      };
+      if (hoaDonDto.ghiChu){
+        this.updateTrangThai(hoaDon.id, hoaDonDto.trangThai, hoaDonDto);
+        this.loadHoaDon();
+        this.closeconfirmUpdate();
+        this.ghiChu = ''
       }else {
         this.snackBar.open('Cập nhật trạng thái thất bại. Vui Lòng nhập ghi chú', 'Đóng', {
           duration: 3000,
