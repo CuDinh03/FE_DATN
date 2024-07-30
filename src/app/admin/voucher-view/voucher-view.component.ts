@@ -39,8 +39,6 @@ export class VoucherViewComponent {
       ma: [''],
       ten: [''],
       loaiGiamGia: [''],
-      ngayBatDau: [''],
-      ngayKetThuc: [''],
       giaTriGiam: [''],
       giaTriToiThieu: [''],
       soLuong: [''],

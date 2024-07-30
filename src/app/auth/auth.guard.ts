@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
       const url: string = state.url;
 
       if (url.startsWith('/admin')) {
-        if (role === 'ADMIN') {
+        if (role === 'ROLE_ADMIN') {
           return true;
         } else {
           this.router.navigate(['/trang-chu']);
@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
         }
       }
       if (url.startsWith('/customer')) {
-        if (role === 'CUSTOMER') {
+        if (role === 'ROLE_CUSTOMER') {
           return true;
         } else {
           this.router.navigate(['/trang-chu']);

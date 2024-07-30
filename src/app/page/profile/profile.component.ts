@@ -31,17 +31,6 @@ export class ProfileComponent {
   ) {
   }
 
-  // Ẩn email
-  // obfuscateEmail(email: string): string {
-  //   const [username, domain] = email.split('@');
-  //   const hiddenUsername = username.slice(0, 3) + '*****' + username.slice(-2);
-  //   return `${hiddenUsername}@${domain}`;
-  // }
-  // Ẩn sdt
-  // obfuscatePhone(phone: string): string {
-  //   return phone.slice(0, 1) + '*******' + phone.slice(-2);
-  // }
-
   ngOnInit(): void {
     this.initFormKhachHang();
     this.getMyInfo();
@@ -97,7 +86,6 @@ export class ProfileComponent {
       email: ['', Validators.required],
       sdt: ['', Validators.required],
       gioiTinh: ['', Validators.required],
-      ngaySinh: ['', Validators.required],
       diaChi: ['', Validators.required]
     });
   }
