@@ -99,7 +99,11 @@
 
                       <div class="mb-3">
                         <span><label for="ma" class="form-label">Mã: </label> </span>
-
+                        <span>
+                            <div>
+                              <input type="color" formControlName="ma" (change)="onColorChange($event)" />
+                            </div>
+                        </span>
                         <span id="ma">{{ mauSacForm.get('ma')?.value }}</span>
 
                         <!-- <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched)">
