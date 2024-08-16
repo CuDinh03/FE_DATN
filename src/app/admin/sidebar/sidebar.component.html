@@ -12,7 +12,7 @@
     <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
       <ul id="sidebarnav">
         <li class="sidebar-item">
-          <a class="sidebar-link" href="/admin" aria-expanded="false" style="margin-bottom: 25px;">
+          <a class="sidebar-link" [routerLink]="['/admin/dash-board']" aria-expanded="false" style="margin-bottom: 25px;">
                         <span>
                             <i class="ti ti-layout-dashboard"></i>
                         </span>
@@ -29,7 +29,7 @@
           </a>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" [routerLink]="['/admin/san-pham']" routerLinkActive="active"
+          <a class="sidebar-link" [routerLink]="['/admin/san-pham-chi-tiet']" routerLinkActive="active"
              aria-expanded="false" aria-expanded="false" data-bs-toggle="collapse"
              data-bs-target="#productDropdown" role="button" aria-controls="productDropdown"
              style="margin-bottom: 25px;">
@@ -40,10 +40,6 @@
           </a>
           <div class="collapse" id="productDropdown">
             <ul class="list-unstyled ms-3">
-              <li>
-                <a class="sidebar-link" [routerLink]="['/admin/san-pham-chi-tiet']" routerLinkActive="active">
-                  Sản phẩm chi tiết</a>
-              </li>
               <li>
                 <a class="sidebar-link" [routerLink]="['/admin/san-pham']"
                    routerLinkActive="active">Sản phẩm</a>

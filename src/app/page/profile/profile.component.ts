@@ -3,6 +3,7 @@ import {TaiKhoanService} from "../../service/TaiKhoanService";
 import {KhachHangDto} from "../../model/khachHangDto";
 import {KhachHangService} from 'src/app/service/KhachHangService';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NgxSpinnerService} from "ngx-spinner";
 
 
 @Component({
@@ -23,18 +24,21 @@ export class ProfileComponent {
   isEditSDT: boolean = false;
   showUpdateEmailModal: boolean = false;
   showUpdateSDTModal: boolean = false;
+  private tasksCompleted = 0;
+
 
   constructor(
     private taiKhoanService: TaiKhoanService,
     private khachHangService: KhachHangService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private spinner: NgxSpinnerService
   ) {
   }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.initFormKhachHang();
     this.getMyInfo();
-
   }
 
   getMyInfo(): void {
@@ -42,17 +46,39 @@ export class ProfileComponent {
       response => {
         this.myInfo = response.result;
         if (this.myInfo && this.myInfo.id) {
-          // this.getKHByIdTaiKhoan(this.myInfo.id);
           this.khachHang = this.myInfo;
           // @ts-ignore
           this.khachHang.ngaySinh = this.formatDate(this.khachHang.ngaySinh);
 
           this.fillValueToForm(this.khachHang);
         }
-      }, error => {
+        this.taskCompleted();
+      },
+      error => {
         console.error('Lỗi khi lấy thông tin tài khoản:', error);
-      });
+        this.taskCompleted();
+      }
+    );
   }
+  initFormKhachHang(): void {
+    this.formKhachHang = this.formBuilder.group({
+      ten: ['', Validators.required],
+      email: ['', Validators.required],
+      sdt: ['', Validators.required],
+      gioiTinh: ['', Validators.required],
+      ngaySinh: ['', Validators.required],
+      diaChi: ['', Validators.required]
+    });
+    this.taskCompleted();
+  }
+
+  private taskCompleted(): void {
+    this.tasksCompleted++;
+    if (this.tasksCompleted >= 2) {
+      this.spinner.hide();
+    }
+  }
+
 
   // Lấy Thông tin khách hàng từ id tài khoản đang đăng nhập
 
@@ -79,16 +105,17 @@ export class ProfileComponent {
     }
   }
 
-  // 1. Khoi tao form
-  initFormKhachHang(): void {
-    this.formKhachHang = this.formBuilder.group({
-      ten: ['', Validators.required],
-      email: ['', Validators.required],
-      sdt: ['', Validators.required],
-      gioiTinh: ['', Validators.required],
-      diaChi: ['', Validators.required]
-    });
-  }
+
+//   initFormKhachHang(): void {
+//     this.formKhachHang = this.formBuilder.group({
+//       ten: ['', Validators.required],
+//       email: ['', Validators.required],
+//       sdt: ['', Validators.required],
+//       gioiTinh: ['', Validators.required],
+//       diaChi: ['', Validators.required]
+//     });
+//   }
+
 
   // 3. fill value form
   fillValueToForm(khachHang: any): void {
@@ -188,3 +215,4 @@ export class ProfileComponent {
 //       console.error('Lỗi khi lấy id tài khoản:', error);
 //     });
 // }
+

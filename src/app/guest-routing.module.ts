@@ -14,11 +14,15 @@ const guestRoutes: Routes = [
   { path: '', component: TrangChuComponent },
   { path: 'log-in', component: AuthenticationLoginComponent },
   { path: 'list-p', component: ShopCategoryComponent },
-  { path: 'detail/:id', component: ProductDetailComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'sign-up', component: RegisterComponent },
   { path: 'danh-gia', component: RatingViewComponent },
   { path: 'demo', component: DemoComponent },
+  {path: 'san-pham', component:ProductDetailComponent},
+  { path: 'demo', component: DemoComponent },
+  { path: 'san-pham', component: ProductDetailComponent },
+  { path: 'list-product', component: ShopCategoryComponent }
+
 ];
 
 @NgModule({

@@ -1,585 +1,475 @@
+<div class="container-fluid">
 
-  <div class="body-wrapper">
-    <!--  Header Start -->
-    <app-admin-header></app-admin-header>
-    <!--  Header End -->
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-12 d-flex align-items-strech">
-          <div class="card w-100">
-            <div class="card-body">
-              <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                <div class="mb-3 mb-sm-0">
-                  <h2 class="card-title fw-semibold">Danh sách sản phẩm chi tiết</h2>
-                </div>
-                <!-- <div *ngIf="errorMessage" class="alert alert-danger position-fixed top-50 start-50 translate-middle"
-                  role="alert">
-                  {{ errorMessage }}
-                </div> -->
-                <div>
-                  <select class="form-select" (change)="onSelectChange($event)">
-                    <option value="5">5 sản phẩm</option>
-                    <option value="10">10 sản phẩm</option>
-                    <option value="15">15 sản phẩm</option>
-                  </select>
-                </div>
-              </div>
+<div class="card justify-content-center">
+  <div class="row">
+    <div class="col-lg-12 d-flex align-items-strech">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+            <div class="mb-3 mb-sm-0">
+              <h2 class="card-title fw-semibold">Danh sách sản phẩm chi tiết</h2>
+            </div>
+            <!-- <div *ngIf="errorMessage" class="alert alert-danger position-fixed top-50 start-50 translate-middle"
+              role="alert">
+              {{ errorMessage }}
+            </div> -->
+            <div>
+              <select class="form-select" >
+                <option value="5">5 sản phẩm</option>
+                <option value="10">10 sản phẩm</option>
+                <option value="15">15 sản phẩm</option>
+              </select>
+            </div>
+          </div>
 
-              <!--                  <button class="btn btn-primary" (click)="viewFormAddProduct()" data-bs-toggle="modal"-->
-              <!--                    data-bs-target="#addProductModal">Thêm sản phẩm</button>-->
-
-              <!-- TIM KIEM -->
-              <!--              <form [formGroup]="sanPhamForm"> &lt;!&ndash; Bao bọc các select trong formGroup sanPhamForm &ndash;&gt;-->
-              <!--                <div>-->
-              <!--                  <label for="loaiSanPham" class="form-label">Loại Sản Phẩm:</label>-->
-              <!--                  <select formControlName="sanPham" id="sanPham" class="form-select" (change)="onSanPhamChange()">-->
-              <!--                    <option *ngFor="let sanPham of listSanPham" [value]="sanPham.id">{{ sanPham.ten }}</option>-->
-              <!--                  </select>-->
-              <!--                </div>-->
-              <!--                <div>-->
-              <!--                  <label for="thuongHieu" class="form-label">Thương hiệu:</label>-->
-              <!--                  <select formControlName="thuongHieu" id="thuongHieu" class="form-select"-->
-              <!--                    (change)="onThuongHieuChange()">-->
-              <!--                    <option *ngFor="let thuongHieu of listThuongHieu" [value]="thuongHieu.id">{{ thuongHieu.ten }}-->
-              <!--                    </option>-->
-              <!--                  </select>-->
-              <!--                </div>-->
-              <!--                <div>-->
-              <!--                  <label for="chatLieu" class="form-label">Chất liệu:</label>-->
-              <!--                  <select formControlName="chatLieu" id="chatLieu" class="form-select" (change)="onChatLieuChange()">-->
-              <!--                    <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu.id">{{ chatLieu.ten }}</option>-->
-              <!--                  </select>-->
-              <!--                </div>-->
-              <!--                <div>-->
-              <!--                  <label for="danhMuc" class="form-label">Danh mục:</label>-->
-              <!--                  <select formControlName="danhMuc" id="danhMuc" class="form-select" (change)="onDanhMucChange()">-->
-              <!--                    <option *ngFor="let danhMuc of listDanhMuc" [value]="danhMuc.id">{{ danhMuc.ten }}</option>-->
-              <!--                  </select>-->
-              <!--                </div>-->
-              <!--                <div>-->
-              <!--                  <label for="kichThuoc" class="form-label">Kích thước:</label>-->
-              <!--                  <select formControlName="kichThuoc" id="kichThuoc" class="form-select" (change)="onKichThuocChange()">-->
-              <!--                    <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc.id">{{ kichThuoc.ten }}</option>-->
-              <!--                  </select>-->
-              <!--                </div>-->
-              <!--                <div>-->
-              <!--                  <label for="mauSac" class="form-label">Màu sắc:</label>-->
-              <!--                  <select formControlName="mauSac" id="mauSac" class="form-select" (change)="onMauSacChange()">-->
-              <!--                    <option *ngFor="let mauSac of listMauSac" [value]="mauSac.id">{{ mauSac.ten }}</option>-->
-              <!--                  </select>-->
-              <!--                </div>-->
-              <!--              </form>-->
-
-              <div>
-                <table class="table text-nowrap mb-0 align-middle">
-                  <thead class="text-dark fs-4">
-                  <tr>
-                    <th class="border-bottom-0" scope="col">
-                      <h6 class="fw-semibold mb-0">#</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Mã</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Tên</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Thương hiệu</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Chất Liệu</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Danh mục</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Kích thước</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Màu sắc</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Số lượng</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Giá nhập</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Giá bán</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Ngày nhập</h6>
-                    </th>
-                    <!-- <th scope="col">
-                      <h6 class="fw-semibold mb-0">Hình ảnh</h6>
-                    </th> -->
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Trạng thái</h6>
-                    </th>
-                    <th scope="col">
-                      <h6 class="fw-semibold mb-0">Thao tác</h6>
-                    </th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr style="height: 30px;" *ngFor=" let sanPhamChiTiet of listSanPhamChiTiet; let i = index">
-                    <th>{{ i + 1 }}</th>
-                    <td title="{{ sanPhamChiTiet.ma }}">{{ sanPhamChiTiet.ma }}</td>
-                    <td title="{{ sanPhamChiTiet.sanPham.ten }}">{{ sanPhamChiTiet.sanPham.ten }}</td>
-                    <td title="{{ sanPhamChiTiet.thuongHieu.ten }}">{{ sanPhamChiTiet.thuongHieu.ten }}</td>
-                    <td title="{{ sanPhamChiTiet.chatLieu.ten }}">{{ sanPhamChiTiet.chatLieu.ten }}</td>
-                    <td title="{{ sanPhamChiTiet.danhMuc.ten }}">{{ sanPhamChiTiet.danhMuc.ten }}</td>
-                    <td title="{{ sanPhamChiTiet.kichThuoc.ten }}">{{ sanPhamChiTiet.kichThuoc.ten }}</td>
-                    <td title="{{ sanPhamChiTiet.mauSac.ten }}">{{ sanPhamChiTiet.mauSac.ten }}</td>
-                    <td title="{{ sanPhamChiTiet.soLuong }}">{{ sanPhamChiTiet.soLuong }}</td>
-                    <td title="{{ sanPhamChiTiet.giaNhap }}">{{ sanPhamChiTiet.giaNhap }}</td>
-                    <td title="{{ sanPhamChiTiet.giaBan }}">{{ sanPhamChiTiet.giaBan }}</td>
-                    <td
-                      title="{{ sanPhamChiTiet.ngayNhap | date: 'dd/MM/yyyy' }}">{{ sanPhamChiTiet.ngayNhap | date: 'dd/MM/yyyy' }}
-                    </td>
-                    <td title="{{ sanPhamChiTiet.trangThai == 1 ? 'Còn hàng' : 'Hết hàng' }}">
-                      {{ sanPhamChiTiet.trangThai == 1 ? "Còn hàng" : "Hết hàng" }}
-                    </td>
-                    <td>
-                      <!-- MỞ form update SPCT -->
-                      <button style="color: #7A98FE;font-size: 20px; border: none; background-color: transparent;"
-                              (click)="viewFormUpdateProduct(sanPhamChiTiet.id)" data-bs-toggle="modal"
-                              data-bs-target="#updateProductModal">
-                        <i class="ti ti-edit"></i>
-                      </button>
-                      <!-- XOA SPCT  -->
-                      <button style="color: #7A98FE; font-size: 20px; border: none; background-color: transparent;"
-                              (click)="confirmAndUpdate(sanPhamChiTiet.id)">
-                        <i class="ti ti-x"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-                <div>
-                  <div class="d-flex justify-content-end">
-                    <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary" [disabled]="page === 0">
-                      <
-                    </button>
-                    <span style="margin: 5px">Trang {{ page + 1 }}</span>
-                    <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"
-                            [disabled]="page === totalPages - 1"> >
-                    </button>
+          <div>
+            <table class="table text-nowrap mb-0 align-middle">
+              <thead class="text-dark fs-4">
+              <tr>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Mã</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Tên</h6>
+                </th>
+                <th scope="col" style="width: 20% ;text-align: center;vertical-align: middle;">
+                  <h6 class="fw-semibold mb-0">Hình ảnh</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Danh mục</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Số lượng</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Giá bán</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                </th>
+                <th scope="col">
+                  <h6 class="fw-semibold mb-0">Thao tác</h6>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr style="height: 30px;" *ngFor="let sanPhamChiTiet of listChiTietSP; let i = index">
+                <td title="{{ sanPhamChiTiet.ma }}">{{ sanPhamChiTiet.ma }}</td>
+                <td title="{{ sanPhamChiTiet.sanPham.ten }}">{{ sanPhamChiTiet.sanPham.ten }}
+                  <p style="color: #ccc; font-size: 12px">[{{ sanPhamChiTiet.mauSac.ten }} - {{ sanPhamChiTiet.kichThuoc.ten }}]</p>
+                </td>
+                <td *ngIf="sanPhamChiTiet.hinhAnh && sanPhamChiTiet.hinhAnh.length > 0" style="text-align: center; vertical-align: middle;">
+                  <div class="slides-container">
+                    <div *ngFor="let hinhAnh of sanPhamChiTiet.hinhAnh; let i = index"
+                         class="slides"
+                         [ngClass]="{'active': currentSlideNew[this.page] && currentSlideNew[this.page][sanPhamChiTiet.ma] === i}">
+                      <img [src]="hinhAnh.url" />
+                    </div>
+                    <a class="prev" (click)="prevSlide(sanPhamChiTiet.ma)">&#10094;</a>
+                    <a class="next" (click)="nextSlide(sanPhamChiTiet.ma)">&#10095;</a>
                   </div>
-                </div>
-                <div *ngIf="listSanPhamChiTiet.length === 0">
-                  <p>Không có sản phẩm chi tiết nào được tìm thấy.</p>
-                </div>
+                </td>
+                <td title="{{ sanPhamChiTiet.danhMuc.ten }}">{{ sanPhamChiTiet.danhMuc.ten }}</td>
+                <td title="{{ sanPhamChiTiet.soLuong }}">{{ sanPhamChiTiet.soLuong }}</td>
+                <td title="{{ sanPhamChiTiet.giaBan }}">{{ sanPhamChiTiet.giaBan }}</td>
+                <td title="{{ sanPhamChiTiet.trangThai == 1 ? 'Còn hàng' : 'Hết hàng' }}">
+                  {{ sanPhamChiTiet.trangThai == 1 ? "Còn hàng" : "Hết hàng" }}
+                </td>
+                <td>
+                   <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                     <i class="ti ti-edit"></i>
+                   </button>
+                   <button class="btn btn-danger">
+                      <i class="ti ti-x"></i>
+                   </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div>
+              <div class="d-flex justify-content-end">
+                <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary" [disabled]="page === 0">
+                  <
+                </button>
+                <span style="margin: 5px">Trang {{ page + 1 }}</span>
+                <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"
+                        [disabled]="page === totalPages - 1"> >
+                </button>
               </div>
+            </div>
+            <div *ngIf="listSanPhamChiTiet.length === 0">
+              <p>Không có sản phẩm chi tiết nào được tìm thấy.</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12 align-items-strech">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                <div class="mb-3 mb-sm-0">
-                  <h5 class="card-title fw-semibold">Sản phẩm</h5>
-                </div>
-                <!--              <div class="d-flex justify-content-end">-->
-                <!--              </div>-->
-              </div>
-              <div class="container-fluid">
-                <div class="text-nowrap mb-0 col-12 mb-3">
-                  <div class="row">
-                    <div class="col-5">
-                      <select id="sp" class="form-select" aria-label="Default select example" style="width: 100%"
-                              [(ngModel)]="selectedSanPham">
-                        <option *ngFor="let sp of listSanPham" [ngValue]="sp">{{ sp?.ten }}</option>
-                      </select>
-                    </div>
-                    <div class="col-1">
-                      <button class="btn btn-info" (click)="addChiTietSanPham()">+</button>
-                    </div>
-                  </div>
-                  <br>
-                  <h5>Thuộc tính</h5>
-                  <hr>
-                  <div class="row mt-5">
-                    <div class="col-5 mt-2">
-                      <label>Chat lieu</label>
-                      <select id="cl" class="form-select" aria-label="Default select example" style="width: 100%"
-                              [(ngModel)]="selectedChatLieu">
-                        <option *ngFor="let cl of listChatLieu" [ngValue]="cl">{{ cl?.ten }}</option>
-                      </select>
-                    </div>
-                    <div class="col-5 mt-2">
-                      <label>Thuong hieu</label>
-                      <select id="thuongHieu" class="form-select" aria-label="Default select example"
-                              style="width: 100%"
-                              [(ngModel)]="selectedThuongHieu">
-                        <option *ngFor="let th of listThuongHieu" [ngValue]="th">{{ th?.ten }}</option>
-                      </select>
-                    </div>
-                    <div class="col-5 mt-2">
-                      <label>Danh muc</label>
-                      <select id="dm" class="form-select" aria-label="Default select example" style="width: 100%"
-                              [(ngModel)]="selectedDanhMuc">
-                        <option *ngFor="let dm of listDanhMuc" [ngValue]="dm">{{ dm?.ten }}</option>
-                      </select>
-                    </div>
-                    <div class="col-5 mt-2">
-                      <label for="sizes">Kích cỡ</label>
-                      <select #sizeSelect id="sizes" class="form-select" aria-label="Default select example"
-                              style="width: 100%">
-                        <option *ngFor="let size of availableSizes" [value]="size">{{ size }}</option>
-                      </select>
-                      <div id="selectedSizes">
-                        <h3>Kích cỡ đã chọn:</h3>
-                        <ul id="sizeList">
-                          <li *ngFor="let size of selectedSizes">
-                            {{ size }}
-                            <!--                          <button class="btn btn-sm btn-danger ms-2" (click)="removeSize(size)">Xoá</button>-->
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="col-5 mt-2">
-                      <label for="colors">Màu sắc</label>
-                      <select #colorsSelect id="colors" class="form-select" aria-label="Default select example"
-                              style="width: 100%">
-                        <option *ngFor="let color of availableColors" [value]="color">{{ color }}</option>
-                      </select>
-                      <div id="selectedColors">
-                        <h3>Màu sắc đã chọn:</h3>
-                        <ul id="colorList">
-                          <li *ngFor="let color of selectedColors">
-                            {{ color }}
-                            <button class="btn btn-sm btn-danger ms-2" (click)="removeColor(color)">Xoá</button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div class="row mt-2">
-                      <ng-container
-                        *ngIf="selectedSizes && selectedSizes.length > 0 && selectedColors && selectedColors.length >0">
-                        <ng-container *ngFor="let ms of selectedColors">
-                          <p class="col-12 align-middle">Sản phẩm có màu {{ ms }}</p>
-                          <hr class="mt-5">
-                          <table class="table">
-                            <thead>
-                            <tr>
-                              <th>Mã</th>
-                              <th>Sản phẩm</th>
-                              <th>Thương hiệu</th>
-                              <th>Chất liệu</th>
-                              <th>Danh mục</th>
-                              <th>Kích thước</th>
-                              <th>Màu sắc</th>
-                              <th>Số lượng</th>
-                              <th>Giá nhập</th>
-                              <th>Giá bán</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <ng-container *ngFor="let ctsp of listChiTietSP">
-                              <tr *ngIf="ctsp.mauSac.ten === ms ">
-                                <td>{{ ctsp.ma }}</td>
-                                <td>{{ ctsp.sanPham.ten }}</td>
-                                <td>{{ ctsp.thuongHieu.ten }}</td>
-                                <td>{{ ctsp.chatLieu.ten }}</td>
-                                <td>{{ ctsp.danhMuc.ten }}</td>
-                                <td>{{ ctsp.kichThuoc.ten }}</td>
-                                <td>{{ ctsp.mauSac.ten }}</td>
-                                <td><input class="form-control" type="number" [(ngModel)]="ctsp.soLuong"></td>
-                                <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaNhap"></td>
-                                <td><input class="form-control" type="number" [(ngModel)]="ctsp.giaBan"></td>
-                              </tr>
-                            </ng-container>
-                            </tbody>
-                          </table>
-                        </ng-container>
-                        <button class="btn btn-info" (click)="saveListCt(listChiTietSP)">Luu spct</button>
-                      </ng-container>
-                    </div>
-
-                  </div>
+    </div>
+  </div>
+</div>
 
 
-                  <div>
-                    <div class="d-flex justify-content-end">
-                      <!--                  <button (click)="onPageChangeSanPhamCT(page - 1)" class="btn btn-secondary"-->
-                      <!--                          [disabled]="page === 0">-->
-                      <!--                    < </button>-->
-                      <!--                  <span style="margin: 5px">Trang {{ page + 1 }}</span>-->
-                      <!--                  <button (click)="onPageChangeSanPhamCT(page + 1)" class="btn btn-secondary"-->
-                      <!--                          [disabled]="page === totalPages - 1"> >-->
-                      <!--                  </button>-->
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--          <div *ngIf="chiTietSanPham.length === 0">-->
-              <!--            <p>Không có danh mục nào được tìm thấy.</p>-->
-              <!--          </div>-->
-            </div>
+<div class="card">
+  <h5 class="card-title fw-semibold">Sản phẩm</h5>
+  <!--              <div class="d-flex justify-content-end">-->
+  <!--              </div>-->
+  <div class="row">
+    <div class="col-6">
+      <label class="col-3" >Sản phẩm</label>
+      <p-multiSelect [options]="listSanPham"
+                     [(ngModel)]="selectedSanPham"
+                     placeholder="Chọn Sản phẩm"
+                     optionLabel="ten"
+                     class="col-3">
+        <ng-template let-value pTemplate="selectedItems">
+          <div class="inline-flex align-items-center gap-2 px-1" *ngFor="let option of value">
+            <div>{{ option.ten }},</div>
           </div>
-        </div>
-      </div>
+          <div *ngIf="!value || value.length === 0">Chọn Sản phẩm</div>
+        </ng-template>
+        <ng-template let-sp pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ sp.ten }}</div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="py-2 px-3">
+            <b>
+              {{ selectedSanPham ? selectedSanPham.length : 0 }}
+            </b>
+            Sản phẩm{{ (selectedSanPham ? selectedSanPham.length : 0) > 1 ? 's' : '' }} đã chọn.
+          </div>
+        </ng-template>
+      </p-multiSelect>
+    </div>
+<!--    <p-button class="btn btn-light-primary" label="Thêm biến thể" icon="pi pi-plus" iconPos="right" (click)="addChiTietSanPham()"/>-->
 
-      <!--    &lt;!&ndash; MODAL Add &ndash;&gt;-->
-      <!--    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true"-->
-      <!--         [ngClass]="{'is-active': showConfirmationModalAdd}">-->
-      <!--      <div class="modal-dialog" (click)="cancelSaveAdd()">-->
-      <!--        <div class="modal-content">-->
-      <!--          <div class="modal-header">-->
+  </div>
+  <br>
+  <h5>Thuộc tính</h5>
+  <hr>
+  <div class="row mt-2">
+    <div class="col-6">
+      <label class="col-3">Chất liệu</label>
+      <p-multiSelect [options]="listChatLieu"
+                     [(ngModel)]="selectedChatLieu"
+                     placeholder="Chọn Chất liệu"
+                     optionLabel="ten"
+                     class="col-3">
+        <ng-template let-value pTemplate="selectedItems">
+          <div class="inline-flex align-items-center gap-2 px-1" *ngFor="let option of value">
+            <div>{{ option.ten }},</div>
+          </div>
+          <div *ngIf="!value || value.length === 0">Chọn Chất liệu</div>
+        </ng-template>
+        <ng-template let-cl pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ cl.ten }}</div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="py-2 px-3">
+            <b>
+              {{ selectedChatLieu ? selectedChatLieu.length : 0 }}
+            </b>
+            Chất liệu{{ (selectedChatLieu ? selectedChatLieu.length : 0) > 1 ? 's' : '' }} đã chọn.
+          </div>
+        </ng-template>
+      </p-multiSelect>
+    </div>
 
-      <!--            &lt;!&ndash; FORM  ADD &ndash;&gt;-->
-      <!--            <form [formGroup]="chiTietSanPhamFormAdd" class="container mt-5">-->
+    <div class="col-6">
+      <label class="col-3">Thương hiệu</label>
+      <p-multiSelect [options]="listThuongHieu"
+                     [(ngModel)]="selectedThuongHieu"
+                     placeholder="Chọn Thương hiệu"
+                     optionLabel="ten" class="col-3">
+        <ng-template  let-value pTemplate="selectedItems">
+          <div class="inline-flex align-items-center gap-2 px-1" *ngFor="let option of value">
+            <div>{{ option.ten }},</div>
+          </div>
+          <div *ngIf="!value || value.length === 0">Chọn Thương hiệu</div>
+        </ng-template>
+        <ng-template let-th pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ th.ten }}</div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="py-2 px-3">
+            <b>
+              {{ selectedThuongHieu ? selectedThuongHieu.length : 0 }}
+            </b>
+            Thương hiệu{{ (selectedThuongHieu ? selectedThuongHieu.length : 0) > 1 ? 's' : '' }} đã chọn.
+          </div>
+        </ng-template>
+      </p-multiSelect>
+    </div>
+  </div>
+  <div class="row mt-2">
 
-      <!--              <div class="mb-3">-->
-      <!--                <label for="inputOne" class="form-label">Mã sản phẩm:</label>-->
-      <!--                <input formControlName="ma" id="ma" type="text" class="form-control">-->
+    <div class="col-6">
+      <label class="col-3">Danh mục</label>
+      <p-multiSelect [options]="listDanhMuc"
+                     [(ngModel)]="selectedDanhMuc"
+                     placeholder="Chọn Danh mục"
+                     optionLabel="ten" class="col-3">
+        <ng-template let-value pTemplate="selectedItems">
+          <div class="inline-flex align-items-center gap-2 px-1" *ngFor="let option of value">
+            <div>{{ option.ten }},</div>
+          </div>
+          <div *ngIf="!value || value.length === 0">Chọn Danh mục</div>
+        </ng-template>
+        <ng-template let-dm pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ dm.ten }}</div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="py-2 px-3">
+            <b>
+              {{ selectedDanhMuc ? selectedDanhMuc.length : 0 }}
+            </b>
+            Danh mục{{ (selectedDanhMuc ? selectedDanhMuc.length : 0) > 1 ? 's' : '' }} đã chọn.
+          </div>
+        </ng-template>
+      </p-multiSelect>
+    </div>
 
-      <!--                <div *ngIf="f['ma'].invalid && (f['ma'].dirty || f['ma'].touched) && f['ma'].errors">-->
-      <!--                  <div class="error-msg" *ngIf="f['ma'].errors['required']"></div>-->
-      <!--                  <div style="color: red">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
+    <div class="col-6">
+      <label class="col-3">Size</label>
 
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="inputOne" class="form-label">Giá nhập:</label>-->
-      <!--                <input formControlName="giaNhap" id="giaNhap" type="text" class="form-control">-->
-
-      <!--                <div-->
-      <!--                  *ngIf="f['giaNhap'].invalid && (f['giaNhap'].dirty || f['giaNhap'].touched) && f['giaNhap'].errors">-->
-      <!--                  <div style="color: red" *ngIf="f['giaNhap'].errors['required']">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="inputOne" class="form-label">Giá bán:</label>-->
-      <!--                <input formControlName="giaBan" id="giaBan" type="text" class="form-control">-->
-
-      <!--                <div *ngIf="f['giaBan'].invalid && (f['giaBan'].dirty || f['giaBan'].touched) && f['giaBan'].errors">-->
-      <!--                  <div class="error-msg" *ngIf="f['giaBan'].errors['required']"></div>-->
-      <!--                  <div style="color: red">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="inputOne" class="form-label">Số lượng:</label>-->
-      <!--                <input formControlName="soLuong" id="soLuong" type="text" class="form-control">-->
-
-      <!--                <div-->
-      <!--                  *ngIf="f['soLuong'].invalid && (f['soLuong'].dirty || f['soLuong'].touched) && f['soLuong'].errors">-->
-      <!--                  <div class="error-msg" *ngIf="f['soLuong'].errors['required']"></div>-->
-      <!--                  <div style="color: red">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="loaiSanPham" class="form-label">Loại Sản Phẩm:</label>-->
-      <!--                <select formControlName="sanPham" id="sanPham" class="form-select">-->
-      <!--                  <option *ngFor="let sanPham of listSanPham" [value]="sanPham.id">{{ sanPham.ten }}</option>-->
-      <!--                </select>-->
-      <!--                <div-->
-      <!--                  *ngIf="f['sanPham'].invalid && (f['sanPham'].dirty || f['sanPham'].touched) && f['sanPham'].errors">-->
-      <!--                  <div class="error-msg" *ngIf="f['sanPham'].errors['required']" style="color: red">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="thuongHieu" class="form-label">Thương hiệu:</label>-->
-      <!--                <select formControlName="thuongHieu" id="thuongHieu" class="form-select">-->
-      <!--                  <option *ngFor="let thuongHieu of listThuongHieu" [value]="thuongHieu.id">{{ thuongHieu.ten }}-->
-      <!--                  </option>-->
-      <!--                </select>-->
-      <!--                <div-->
-      <!--                  *ngIf="f['thuongHieu'].invalid && (f['thuongHieu'].dirty || f['thuongHieu'].touched) && f['thuongHieu'].errors">-->
-      <!--                  <div class="error-msg" *ngIf="f['thuongHieu'].errors['required']" style="color: red">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="chatLieu" class="form-label">Chất liệu:</label>-->
-      <!--                <select formControlName="chatLieu" id="chatLieu" class="form-select">-->
-      <!--                  <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu.id">{{ chatLieu.ten }}-->
-      <!--                  </option>-->
-      <!--                </select>-->
-      <!--                <div-->
-      <!--                  *ngIf="f['chatLieu'].invalid && (f['chatLieu'].dirty || f['chatLieu'].touched) && f['chatLieu'].errors">-->
-      <!--                  <div class="error-msg" *ngIf="f['chatLieu'].errors['required']" style="color: red">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="danhMuc" class="form-label">Danh mục:</label>-->
-      <!--                <select formControlName="danhMuc" id="danhMuc" class="form-select">-->
-      <!--                  <option *ngFor="let danhMuc of listDanhMuc" [value]="danhMuc.id">{{ danhMuc.ten }}</option>-->
-      <!--                </select>-->
-      <!--                <div-->
-      <!--                  *ngIf="f['danhMuc'].invalid && (f['danhMuc'].dirty || f['danhMuc'].touched) && f['danhMuc'].errors">-->
-      <!--                  <div class="error-msg" *ngIf="f['danhMuc'].errors['required']" style="color: red">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="kichThuoc" class="form-label">Kích thước:</label>-->
-      <!--                <select formControlName="kichThuoc" id="kichThuoc" class="form-select">-->
-      <!--                  <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc.id">{{ kichThuoc.ten }}-->
-      <!--                  </option>-->
-      <!--                </select>-->
-      <!--                <div-->
-      <!--                  *ngIf="f['kichThuoc'].invalid && (f['kichThuoc'].dirty || f['kichThuoc'].touched) && f['kichThuoc'].errors">-->
-      <!--                  <div class="error-msg" *ngIf="f['kichThuoc'].errors['required']" style="color: red">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="mauSac" class="form-label">Màu sắc:</label>-->
-      <!--                <select formControlName="mauSac" id="mauSac" class="form-select">-->
-      <!--                  <option *ngFor="let mauSac of listMauSac" [value]="mauSac.id">{{ mauSac.ten }}</option>-->
-      <!--                </select>-->
-      <!--                <div *ngIf="f['mauSac'].invalid && (f['mauSac'].dirty || f['mauSac'].touched) && f['mauSac'].errors">-->
-      <!--                  <div class="error-msg" *ngIf="f['mauSac'].errors['required']" style="color: red">-->
-      <!--                    Không được để trống!-->
-      <!--                  </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-
-      <!--              <div class="modal-footer">-->
-      <!--                <button class="btn btn-success" (click)="saveProduct()" data-bs-dismiss="modal">Thêm</button>-->
-      <!--                <button class="btn btn-danger" (click)="cancelSaveAdd()" data-bs-dismiss="modal">Hủy</button>-->
-      <!--              </div>-->
-      <!--            </form>-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--    </div>-->
-
-      <!--    &lt;!&ndash; MODAL Update &ndash;&gt;-->
-      <!--    <div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel"-->
-      <!--         aria-hidden="true" [ngClass]="{'is-active': showConfirmationModalUpdate}">-->
-      <!--      <div class="modal-dialog">-->
-      <!--        <div class="modal-content">-->
-      <!--          <div class="modal-header">-->
-      <!--            <h5 class="modal-title" id="updateProductModalLabel">Cập nhật sản phẩm</h5>-->
-      <!--            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-      <!--          </div>-->
-      <!--          <div class="modal-body">-->
-      <!--            &lt;!&ndash; FORM UPDATE &ndash;&gt;-->
-      <!--            <form [formGroup]="chiTietSanPhamFormUpdate" class="container mt-3">-->
-      <!--              <div class="mb-3">-->
-      <!--                <label for="ma" class="form-label">Mã sản phẩm:</label>-->
-      <!--                <input formControlName="ma" id="ma" type="text" class="form-control" [value]="sanPhamChiTietID?.ma"-->
-      <!--                       readonly>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="giaNhap" class="form-label">Giá nhập:</label>-->
-      <!--                <input formControlName="giaNhap" id="giaNhap" type="text" class="form-control"-->
-      <!--                       [value]="sanPhamChiTietID?.giaNhap">-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="giaBan" class="form-label">Giá bán:</label>-->
-      <!--                <input formControlName="giaBan" id="giaBan" type="text" class="form-control"-->
-      <!--                       [value]="sanPhamChiTietID?.giaBan">-->
-      <!--              </div>-->
-
-      <!--              &lt;!&ndash; Không sửa số lượng &ndash;&gt;-->
-      <!--              &lt;!&ndash; <div class="mb-3">-->
-      <!--                <label for="soLuong" class="form-label">Số lượng:</label>-->
-      <!--                <input formControlName="soLuong" id="soLuong" type="text" class="form-control"-->
-      <!--                  [value]="sanPhamChiTietID?.soLuong">-->
-      <!--              </div> &ndash;&gt;-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="sanPham" class="form-label">Loại Sản Phẩm:</label>-->
-      <!--                <select formControlName="sanPham" id="sanPham" class="form-select">-->
-      <!--                  <option *ngFor="let sanPham of listSanPham" [value]="sanPham.id"-->
-      <!--                          [selected]="sanPham.id === sanPhamChiTietID?.sanPham?.id">-->
-      <!--                    {{ sanPham.ten }}-->
-      <!--                  </option>-->
-      <!--                </select>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="thuongHieu" class="form-label">Thương hiệu:</label>-->
-      <!--                <select formControlName="thuongHieu" id="thuongHieu" class="form-select">-->
-      <!--                  <option *ngFor="let thuongHieu of listThuongHieu" [value]="thuongHieu.id"-->
-      <!--                          [selected]="thuongHieu.id === sanPhamChiTietID?.thuongHieu?.id">-->
-      <!--                    {{ thuongHieu.ten }}-->
-      <!--                  </option>-->
-      <!--                </select>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="chatLieu" class="form-label">Chất liệu:</label>-->
-      <!--                <select formControlName="chatLieu" id="chatLieu" class="form-select">-->
-      <!--                  <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu.id"-->
-      <!--                          [selected]="chatLieu.id === sanPhamChiTietID?.chatLieu?.id">-->
-      <!--                    {{ chatLieu.ten }}-->
-      <!--                  </option>-->
-      <!--                </select>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="danhMuc" class="form-label">Danh mục:</label>-->
-      <!--                <select formControlName="danhMuc" id="danhMuc" class="form-select">-->
-      <!--                  <option *ngFor="let danhMuc of listDanhMuc" [value]="danhMuc.id"-->
-      <!--                          [selected]="danhMuc.id === sanPhamChiTietID?.danhMuc?.id">-->
-      <!--                    {{ danhMuc.ten }}-->
-      <!--                  </option>-->
-      <!--                </select>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="kichThuoc" class="form-label">Kích thước:</label>-->
-      <!--                <select formControlName="kichThuoc" id="kichThuoc" class="form-select">-->
-      <!--                  <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc.id"-->
-      <!--                          [selected]="kichThuoc.id === sanPhamChiTietID?.kichThuoc?.id">-->
-      <!--                    {{ kichThuoc.ten }}-->
-      <!--                  </option>-->
-      <!--                </select>-->
-      <!--              </div>-->
-
-      <!--              <div class="mb-3">-->
-      <!--                <label for="mauSac" class="form-label">Màu sắc:</label>-->
-      <!--                <select formControlName="mauSac" id="mauSac" class="form-select">-->
-      <!--                  <option *ngFor="let mauSac of listMauSac" [value]="mauSac.id"-->
-      <!--                          [selected]="mauSac.id === sanPhamChiTietID?.mauSac?.id">-->
-      <!--                    {{ mauSac.ten }}-->
-      <!--                  </option>-->
-      <!--                </select>-->
-      <!--              </div>-->
-      <!--              <div class="modal-footer">-->
-      <!--                <button class="btn btn-success" (click)="updateProduct()" data-bs-dismiss="modal">Sửa</button>-->
-      <!--                <button class="btn btn-danger" (click)="cancelSaveUpdate()" data-bs-dismiss="modal">Hủy</button>-->
-      <!--              </div>-->
-      <!--            </form>-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--    </div>-->
+      <p-multiSelect
+        [options]="listKichThuoc"
+        [(ngModel)]="selectedSizes"
+        placeholder="Chọn Size"
+        optionLabel="ten" class="col-3">
+        <ng-template let-value pTemplate="selectedItems">
+          <div class="inline-flex align-items-center gap-2 px-1" *ngFor="let option of value">
+            <div>{{ option.ten }},</div>
+          </div>
+          <div *ngIf="!value || value.length === 0">Chọn Size</div>
+        </ng-template>
+        <ng-template let-kt pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ kt.ten }}</div>
+          </div>
+        </ng-template>
+        <ng-template let-kt pTemplate="footer">
+          <div class="py-2 px-3">
+            <b>
+              {{ selectedSizes ? selectedSizes.length : 0 }}
+            </b>
+            Size{{ (selectedSizes ? selectedSizes.length : 0) > 1 ? 's' : '' }} đã chọn.
+          </div>
+        </ng-template>
+      </p-multiSelect>
 
     </div>
   </div>
+  <div class="row mt-2">
+    <div class="col-6">
+
+      <label class="col-3">Màu sắc</label>
+      <p-multiSelect
+        [options]="listMauSac"
+        [(ngModel)]="selectedColors"
+        placeholder="Chọn màu sắc"
+        optionLabel="ten" class="col-3">
+        <ng-template let-value pTemplate="selectedItems">
+          <div class="inline-flex align-items-center gap-2 px-1" *ngFor="let option of value">
+            <div>{{ option.ten }},</div>
+          </div>
+          <div *ngIf="!value || value.length === 0">Chọn màu sắc</div>
+        </ng-template>
+        <ng-template let-ms pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ ms.ten }}</div>
+          </div>
+        </ng-template>
+        <ng-template let-ms pTemplate="footer">
+          <div class="py-2 px-3">
+            <b>
+              {{ selectedColors ? selectedColors.length : 0 }}
+            </b>
+            Màu sắc{{ (selectedColors ? selectedColors.length : 0) > 1 ? 's' : '' }} đã chọn.
+          </div>
+        </ng-template>
+      </p-multiSelect>
+    </div>
+  </div>
+  <button  pButton
+           pRipple
+           label="Thêm biến thể"
+           class="btn btn-light-primary" icon="pi pi-plus"  iconPos="right" (click)="addChiTietSanPham()"> </button>
+  <div class="row mt-2">
+    <ng-container
+      *ngIf="selectedSizes && selectedSizes.length > 0 && selectedColors && selectedColors.length >0">
+      <ng-container *ngFor="let ms of selectedColors">
+        <p class="col-12 " >Sản phẩm có màu {{ ms.ten }}</p>
+        <label [style.backgroundColor]="ms.ma" >|</label>
+        <hr class="mt-5">
+        <p-table [value]="selectedListSp" [tableStyle]="{ 'min-width': '50rem' }" class="col-12">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Sản phẩm</th>
+              <th>Thương hiệu</th>
+              <th>Chất liệu</th>
+              <th>Danh mục</th>
+              <th>Kích thước</th>
+              <th>Màu sắc</th>
+              <th>Số lượng</th>
+              <th>Giá nhập</th>
+              <th>Giá bán</th>
+              <th>IMG</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-ctsp let-i="rowIndex">
+            <tr *ngIf="ctsp.mauSac.ten === ms.ten ">
+              <td>{{ ctsp.sanPham.ten }}</td>
+              <td>{{ ctsp.thuongHieu.ten }}</td>
+              <td>{{ ctsp.chatLieu.ten }}</td>
+              <td>{{ ctsp.danhMuc.ten }}</td>
+              <td>{{ ctsp.kichThuoc.ten }}</td>
+              <td>{{ ctsp.mauSac.ten }}</td>
+              <td><p-inputNumber
+                inputId="integeronly"
+                [(ngModel)]="ctsp.soLuong"/></td>
+              <td><p-inputNumber
+                inputId="integeronly"
+                [(ngModel)]="ctsp.giaNhap"/></td>
+              <td><p-inputNumber
+                inputId="integeronly"
+                [(ngModel)]="ctsp.giaBan"/></td>
+              <!-- Hiển thị ảnh -->
+              <td>
+                <p-toast />
+                <p-fileUpload
+                  name="demo[]"
+                  url="https://www.primefaces.org/cdn/api/upload.php"
+                  (onUpload)="onFileChange($event, ctsp, i)"
+                  [multiple]="true"
+                  accept="image/*"
+                  maxFileSize="10000000">
+                  <ng-template pTemplate="content">
+                    <li *ngFor="let file of ctsp.hinhAnhUrls">
+                      {{ file.name }} - {{ file.size }} bytes
+                    </li>
+
+                  </ng-template>
+                </p-fileUpload>
+              </td>
+            </tr>
+            <tr>
+              <div *ngIf="ctsp.hinhAnhUrls && ctsp.hinhAnhUrls.length > 0" class="image-gallery">
+                <h5>Hình ảnh đã tải lên:</h5>
+                <div class="image-list">
+                  <img *ngFor="let url of ctsp.hinhAnhUrls" [src]="url" class="uploaded-image" />
+                </div>
+              </div>
+            </tr>
+          </ng-template>
+        </p-table>
+      </ng-container>
+    </ng-container>
+
+
+  </div>
+  <br>
+  <button  pButton
+           pRipple
+           label="Lưu các biến thể"
+           class="btn btn-success" (click)="confirm()"></button>
+</div>
+
+<div class="card flex justify-content-center">
+  <p-toast />
+</div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">CTSP472 | 19/11/2024</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container mb-3" style="text-align: center">
+          <img src="https://firebasestorage.googleapis.com/v0/b/uploadimg-84016.appspot.com/o/yt%2FIMG_2136_1x900x900x4.jpeg?alt=media&token=143f9755-d250-49fc-a58d-b2021b3f9089" style="width: 60%; height: auto;">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Tên sản phẩm</label>
+          <input type="text" class="form-control" >
+        </div>
+        <div class="mb-3 row">
+          <div class="col-6">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Danh mục</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+          </div>
+          <div class="col-6">
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Chất liệu</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <div class="col-6">
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Màu sắc</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Kích thước</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3 container">
+          <table class="table">
+            <thead>
+            <tr>
+              <th style="text-align: center; vertical-align: middle;">Số lương</th>
+              <th style="text-align: center; vertical-align: middle;">Giá nhập</th>
+              <th style="text-align: center; vertical-align: middle;">Giá bán</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td style="text-align: center; vertical-align: middle;">
+                <input type="number" style="width: 100px ">
+              </td>
+              <td style="text-align: center; vertical-align: middle;">
+                <input type="number" style="width: 100px ">
+              </td>
+              <td style="text-align: center; vertical-align: middle;">
+                <input type="number" style="width: 100px ">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Edit</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -3,7 +3,7 @@ import {ChiTietSanPhamDto} from "./chi-tiet-san-pham-dto.model";
 
 export interface HoaDonChiTietDto {
   id: string;
-  gioHang: HoaDonDto;
+  hoaDon: HoaDonDto;
   chiTietSanPham: ChiTietSanPhamDto;
   soLuong: number;
   ngayTao: Date;

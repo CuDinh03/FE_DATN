@@ -1,18 +1,218 @@
-.card {
-  overflow-x: auto;
+/* CSS cho .image-gallery */
+.image-gallery {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-top: 1rem;
+}
+
+/* CSS cho danh sách hình ảnh */
+.image-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+/* CSS cho mỗi hình ảnh trong danh sách */
+.uploaded-image {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 4px;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS cho tiêu đề hình ảnh */
+.image-gallery h5 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #333;
+}
+/* CSS cho mỗi hình ảnh tải lên */
+.uploaded-image {
+    max-width: 150px; /* Kích thước tối đa của hình ảnh */
+    max-height: 150px; /* Kích thước tối đa của hình ảnh */
+    border-radius: 8px; /* Bo tròn các góc hình ảnh */
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo mó */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng cho hình ảnh */
+    margin: 0.5rem; /* Khoảng cách giữa các hình ảnh */
+    transition: transform 0.3s ease-in-out; /* Hiệu ứng chuyển động khi hover */
+}
+
+/* CSS cho hiệu ứng hover */
+.uploaded-image:hover {
+    transform: scale(1.05); /* Phóng to hình ảnh khi hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Tăng cường đổ bóng khi hover */
+}
+
+/*css*/
+.p-panel .p-panel-header {
+  background-color: #007ad9;
+  color: #ffffff;
+}
+
+.p-panel .p-panel-content {
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.p-table {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.p-table thead th {
+  background-color: #007ad9;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.p-table tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.p-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.p-table tbody td {
+  vertical-align: middle;
+}
+
+.p-table .p-button {
+  margin-right: 0.5rem;
+}
+
+.p-dialog .p-dialog-header {
+  background-color: #007ad9;
+  color: #ffffff;
+}
+
+.p-dialog .p-dialog-content {
+  background-color: #f9f9f9;
+}
+
+.p-dialog .p-dialog-footer .p-button {
+  margin-right: 1rem;
+}
+
+.p-toolbar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #dddddd;
+  padding: 0.5rem;
+}
+
+.p-toolbar .p-button {
+  margin-right: 0.5rem;
+}
+
+/* Custom styles */
+.product-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.product-category {
+  font-size: 14px;
+  color: #777;
+}
+
+.product-price {
+  color: #007ad9;
+  font-weight: bold;
+}
+
+.product-status {
+  font-size: 14px;
+}
+
+.p-toast {
+  background-color: #007ad9;
+  color: #ffffff;
+}
+
+.table th,
+.table td {
+  vertical-align: middle; /* Căn giữa theo chiều dọc */
+}
+
+/* Input field styles */
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  font-weight: bold;
+  color: #333;
+}
+
+.p-inputtext, .p-inputnumber {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #dddddd;
+}
+
+.p-inputtext:focus, .p-inputnumber:focus {
+  border-color: #007ad9;
+  box-shadow: 0 0 5px rgba(0, 122, 217, 0.5);
+}
+
+.slides-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%; /* Đảm bảo gallery không vượt quá kích thước của vùng chứa */
+  overflow: hidden; /* Ẩn phần bên ngoài vùng chứa */
+}
+
+.slides {
+  display: none; /* Ẩn tất cả các slide trừ slide hiện tại */
+}
+
+.slides.active {
+  display: block;
+}
+
+.slides img {
+  width: 30%; /* Đặt chiều rộng của ảnh là 30% */
+  height: auto; /* Đảm bảo tỷ lệ khung hình của ảnh không bị biến dạng */
+  display: block; /* Đảm bảo ảnh chiếm toàn bộ không gian ngang */
+  margin: 0 auto; /* Căn giữa ảnh trong slide */
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 1rem;
+  margin-top: -1.375rem;
+  color: #a2a2a2;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;/* Nền màu tối với độ trong suốt */
+}
+
+.next {
+  right: 2.6rem;
 }
 
 .table {
-  table-layout: fixed;
   width: 100%;
+  border-collapse: collapse;
 }
 
-.table th, .table td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.prev {
+  left: 2.6rem;
 }
 
-.table tbody tr:hover {
-  background-color: #f0f0f0; /* Thay đổi màu nền khi hover */
+.prev:hover, .next:hover {
+  color: #0dcaf0; /* Màu chữ khi hover */
 }
+
+

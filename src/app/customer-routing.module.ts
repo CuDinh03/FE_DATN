@@ -7,6 +7,7 @@ import { OrderDetailComponent } from './page/order-detail/order-detail.component
 import { PaymentViewComponent } from './page/payment-view/payment-view.component';
 import { AuthGuard } from './auth/auth.guard';
 import {MainViewComponent} from "./page/main-view/main-view.component";
+import {ProductDetailComponent} from "./page/product-detail/product-detail.component";
 
 const customerRoutes: Routes = [
   {
@@ -18,7 +19,10 @@ const customerRoutes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: 'don-mua', component: HistoryViewComponent },
       { path: 'order-detail', component: OrderDetailComponent },
-      { path: 'thanh-toan', component: PaymentViewComponent }
+      { path: 'thanh-toan', component: PaymentViewComponent },
+      {path: 'san-pham', component:ProductDetailComponent},
+      { path: 'order-detail/:id', component: OrderDetailComponent },
+
     ],
   }
 

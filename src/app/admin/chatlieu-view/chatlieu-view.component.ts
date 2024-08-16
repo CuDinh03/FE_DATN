@@ -101,6 +101,8 @@ export class ChatLieuViewComponent implements OnInit{
             setTimeout(() => this.showSuccessAlert = false, 3000); // Tự động ẩn sau 3 giây
             this.chatLieuForm.reset();
             this.isEditMode = false;
+            console.log(data);
+            
           },
           (error: HttpErrorResponse) => {
             this.handleError(error);

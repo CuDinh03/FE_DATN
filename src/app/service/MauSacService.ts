@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
@@ -108,6 +108,11 @@ import { MauSacDto } from '../model/mau-sac-dto.model';
     });
 
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll/dang-hoat-dong`, { headers });
+  }
+
+  getAllColors(): Observable<ApiResponse<any>> {
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`);
   }
 
   }

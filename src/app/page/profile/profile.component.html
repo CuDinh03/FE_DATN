@@ -1,4 +1,27 @@
+<ngx-spinner   [fullScreen]="true">
+
+<div aria-label="Orange and tan hamster running in a metal wheel" role="img" class="wheel-and-hamster">
+    <div class="wheel"></div>
+    <div class="hamster">
+      <div class="hamster__body">
+        <div class="hamster__head">
+          <div class="hamster__ear"></div>
+          <div class="hamster__eye"></div>
+          <div class="hamster__nose"></div>
+        </div>
+        <div class="hamster__limb hamster__limb--fr"></div>
+        <div class="hamster__limb hamster__limb--fl"></div>
+        <div class="hamster__limb hamster__limb--br"></div>
+        <div class="hamster__limb hamster__limb--bl"></div>
+        <div class="hamster__tail"></div>
+      </div>
+    </div>
+    <div class="spoke"></div>
+  </div>
+</ngx-spinner>
+
 <section style="background-color: #eee;">
+
   <div class="container py-5">
     <div class="row d-flex justify-content-center">
       <!-- Sidebar -->
@@ -45,7 +68,7 @@
                     <label *ngIf="!isEditEmail">{{ myInfo.email | maskValue:3:10 }}</label>
                     <input *ngIf="isEditEmail" type="email" id="email" class="form-control"
                            formControlName="email" name="email">
-                    <a href="#" (click)="changeEditEmail()">Thay Đổi</a>
+                    <a  (click)="changeEditEmail()">Thay Đổi</a>
                     <div
                       *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched) && f['email'].errors">
                       <div class="error-msg" *ngIf="f['email']"></div>
@@ -65,7 +88,7 @@
                     <label *ngIf="!isEditSDT">{{ myInfo.sdt | maskValue:1:2 }}</label>
                     <input *ngIf="isEditSDT" type="tel" id="sdt" class="form-control"
                            formControlName="sdt" name="sdt">
-                    <a href="#" (click)="changeEditSDT()">Thay Đổi</a>
+                    <a  (click)="changeEditSDT()">Thay Đổi</a>
                     <div
                       *ngIf="f['sdt'].invalid && (f['sdt'].dirty || f['sdt'].touched) && f['sdt'].errors">
                       <div class="error-msg" *ngIf="f['sdt']"></div>

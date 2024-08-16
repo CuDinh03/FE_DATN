@@ -29,16 +29,18 @@ export class MauSacViewComponent implements OnInit{
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
-  mauSacForm: FormGroup; 
+  mauSacForm: FormGroup;
   id: string;
   successMessage = '';
   selectedMauSac: MauSacDto | null = null;
   isEditMode = false;
 
+  color: string = '';
+
 
   constructor(private apiService: MauSacService, private formBuilder: FormBuilder,
 
-    private router: Router,private auth: AuthenticationService, 
+    private router: Router,private auth: AuthenticationService,
     private route: ActivatedRoute) {
       this.mauSacForm = this.formBuilder.group({
         ten: ['', [Validators.required]],
@@ -46,7 +48,7 @@ export class MauSacViewComponent implements OnInit{
         id: [''],
         trangThai: ['',Validators.required]
       });
-  
+
       this.id = this.route.snapshot.params['id'];
      }
 
@@ -56,11 +58,11 @@ export class MauSacViewComponent implements OnInit{
         this.findById(this.id);
       }
     }
-  
+
     get f() {
       return this.mauSacForm.controls;
     }
-  
+
     onSubmit(): void {
       this.submitted = true;
       if (this.mauSacForm.invalid) {
@@ -72,7 +74,7 @@ export class MauSacViewComponent implements OnInit{
         this.createMauSac();
       }
     }
-  
+
     loadMauSac(): void {
       this.apiService.getMauSac(this.currentPage, this.pageSize)
         .subscribe(response => {
@@ -81,12 +83,20 @@ export class MauSacViewComponent implements OnInit{
           this.totalPages = response.result.totalPages;
         });
     }
-  
+
+
+  onColorChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    this.color = inputElement.value;
+    console.log('Mã màu đã chọn:', this.color);
+    // Bạn có thể sử dụng mã màu này trong các thao tác khác
+  }
+
     onPageChange(page: number): void {
       this.currentPage = page;
       this.loadMauSac();
     }
-  
+
     createMauSac(): void {
       this.submitted = true;
       if (this.mauSacForm.invalid) {
@@ -108,7 +118,7 @@ export class MauSacViewComponent implements OnInit{
           }
         );
     }
-  
+
     updateMauSac(): void {
       this.submitted = true;
       if (this.mauSacForm.invalid) {
@@ -129,9 +139,9 @@ export class MauSacViewComponent implements OnInit{
         }
       );
     }
-  
-    
-  
+
+
+
     findById(id: string): void {
       this.apiService.findById(id)
         .subscribe(
@@ -149,7 +159,7 @@ export class MauSacViewComponent implements OnInit{
           }
         );
     }
-  
+
     handleError(error: HttpErrorResponse): void {
       console.error(error);
       if (error.error.code === ErrorCode.PASSWORD_INVALID) {
@@ -158,7 +168,7 @@ export class MauSacViewComponent implements OnInit{
         this.errorMessage = 'Đã xảy ra lỗi, vui lòng thử lại sau.';
       }
     }
-  
+
     logout(): void {
       this.auth.logout();
       this.router.navigate(['/log-in']).then(() => {
@@ -167,21 +177,21 @@ export class MauSacViewComponent implements OnInit{
         console.error('Error navigating to /log-in:', err);
       });
     }
-  
+
     delete(id: any): void {
       this.apiService.deleteMauSac(id).subscribe(() => {
         this.loadMauSac();
         this.router.navigate(['/admin/mau-sac']);
       });
     }
-  
+
     openMauSac(id: any): void {
       this.apiService.openMauSac(id).subscribe(() => {
         this.loadMauSac();
         this.router.navigate(['/admin/mau-sac']);
       });
     }
-  
+
     closeSuccessAlert(): void {
       this.showSuccessAlert = false;
     }

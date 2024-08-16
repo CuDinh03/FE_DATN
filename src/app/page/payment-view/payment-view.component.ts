@@ -1,6 +1,6 @@
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ApiResponse} from './../../model/ApiResponse';
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import {KhachHangService} from './../../service/KhachHangService';
 import {GioHangService} from 'src/app/service/GioHangService';
 import {GioHangChiTietService} from './../../service/GioHangChiTietService';
@@ -13,6 +13,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {ThanhToanService} from "../../service/ThanhToanService";
 import {ThanhToanOnl} from "../../model/thanh-toan-onl";
 import {GioHangDto} from "../../model/gio-hang-dto";
+import {DiaChiService} from "../../service/DiaChiService";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-payment-view',
@@ -22,32 +24,22 @@ import {GioHangDto} from "../../model/gio-hang-dto";
 export class PaymentViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   @ViewChild('userInfor') userInfor!: ElementRef;
-  @ViewChild('paymentModal') paymentModal!: ElementRef;
   totalElements = 0;
   totalPages: number = 0;
   currentPage = 0;
   pageSize = 6;
   tenDangNhap: string = '';
-  showSearch: boolean = false;
-  isLoggedInCart: boolean = false;
-  isCartHovered = false;
   results: string[] = [];
   khachHang: any;
   vouchers: any[] = [];
   gioHang: any = {};
   gioHangChiTiet: any[] = [];
-  showConfirmationModal: boolean = false;
-  itemToDeleteId: string = '';
-  allSelected = false;
-  selectedTotal = 0;
-  showFooter: boolean = false;
   voucher: any;
   discount: number = 0;
   customerForm: FormGroup;
   selectedCustomerId: string | null = null;
-
-  // submitted = false;
-
+  loading = false;
+  thongTinDatHang: any[] = []
   showUpperFooter: boolean = true;
   selectedCustomer: any = null;
 
@@ -59,7 +51,9 @@ export class PaymentViewComponent {
               private el: ElementRef, private renderer: Renderer2,
               private voucherService: VoucherService,
               private formBuilder: FormBuilder,
-              private thanhToanService: ThanhToanService
+              private thanhToanService: ThanhToanService,
+              private diaChiService: DiaChiService,
+              private spinner: NgxSpinnerService
   ) {
     this.customerForm = this.formBuilder.group({
       ten: [''],
@@ -86,12 +80,9 @@ export class PaymentViewComponent {
     return item.chiTietSanPham.giaBan * item.soLuong;
   }
 
-  selectCustomer(customerId: string): void {
-    this.selectedCustomerId = customerId;
-  }
 
-  // Hiển thị thông tin khách hàng vào form
-  selectCustomerForUpdate(customer: any): void {
+  selectCustomer(customer: any): void {
+    this.selectedCustomerId = customer.id;
     this.selectedCustomer = customer;
     this.customerForm.patchValue({
       ten: customer.ten,
@@ -103,15 +94,29 @@ export class PaymentViewComponent {
   }
 
   updateCustomerInfo(): void {
-    if (this.customerForm.invalid) {
-      return;
+    if (this.selectedCustomer) {
+      this.customerForm.patchValue({
+        ten: this.selectedCustomer.ten,
+        diaChi: this.selectedCustomer.diaChi,
+        sdt: this.selectedCustomer.sdt,
+        email: this.selectedCustomer.email,
+        note: this.selectedCustomer.note
+      });
     }
-    const updatedCustomer = {
-      ...this.selectedCustomer,
-      ...this.customerForm.value
-    };
-    this.selectCustomerForUpdate(this.khachHang);
     this.closeInforModal();
+  }
+
+
+  // Hiển thị thông tin khách hàng vào form
+  selectCustomerForUpdate(customer: any): void {
+    this.selectedCustomer = customer;
+    this.customerForm.patchValue({
+      ten: customer.ten,
+      diaChi: customer.diaChi,
+      sdt: customer.sdt,
+      email: customer.email,
+      note: customer.note
+    });
   }
 
   findShoppingCart() {
@@ -151,6 +156,9 @@ export class PaymentViewComponent {
         (response) => {
           if (response.result) {
             this.khachHang = response.result;
+            this.diaChiService.getAllByIdKhachHang(response.result.id).subscribe((response) =>{
+              this.thongTinDatHang = response.result;
+            })
           } else {
             console.error('Không tìm thấy thông tin khách hàng.');
           }
@@ -164,19 +172,9 @@ export class PaymentViewComponent {
 
 
   loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAllBỵKhachHang(idGioHang).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          this.gioHangChiTiet = response.result;
-          console.log(this.gioHangChiTiet);
-        } else {
-          this.gioHangChiTiet = [];
-        }
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Unexpected error:', error);
-      }
-    );
+    const storedGioHangChiTiet = localStorage.getItem('selectedItems');
+    const gioHangChiTietList = storedGioHangChiTiet ? JSON.parse(storedGioHangChiTiet) : [];
+    this.gioHangChiTiet = gioHangChiTietList;
   }
 
   getCartTotal(): number {
@@ -192,12 +190,7 @@ export class PaymentViewComponent {
       this.loadVoucher();
     }
   }
-  showModalinfo(): void {
-    if (this.paymentModal && this.paymentModal.nativeElement) {
-      this.paymentModal.nativeElement.classList.add('show');
-      this.paymentModal.nativeElement.style.display = 'block';
-    }
-  }
+
   showModalInfor(): void {
     if (this.userInfor && this.userInfor.nativeElement) {
       this.userInfor.nativeElement.classList.add('show');
@@ -247,12 +240,6 @@ export class PaymentViewComponent {
     if (this.userInfor && this.userInfor.nativeElement) {
       this.userInfor.nativeElement.classList.remove('show');
       this.userInfor.nativeElement.style.display = 'none';
-    }
-  }
-  closePaymentModal(): void {
-    if (this.paymentModal && this.paymentModal.nativeElement) {
-      this.paymentModal.nativeElement.classList.remove('show');
-      this.paymentModal.nativeElement.style.display = 'none';
     }
   }
 
@@ -317,10 +304,12 @@ export class PaymentViewComponent {
   }
 
   saveInfoPayment() {
-    this.closePaymentModal();
+    this.loading = true;
     if (this.customerForm.invalid) {
+      this.loading = false;
       return;
     }
+    this.spinner.show();
 
     const storedVoucher = localStorage.getItem('voucher') || '';
     const tenDangNhap = localStorage.getItem('tenDangNhap') || '';
@@ -330,6 +319,7 @@ export class PaymentViewComponent {
         this.khachHang = response.result;
         if (!this.khachHang || !this.khachHang.id) {
           console.error('Không tìm thấy thông tin khách hàng.');
+          this.spinner.hide();
           return;
         }
         this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
@@ -337,53 +327,54 @@ export class PaymentViewComponent {
             const gioHang = gioHangResponse.result;
             if (!gioHang) {
               console.error('Không tìm thấy giỏ hàng.');
+              this.spinner.hide();
               return;
             }
-            this.gioHangChiTietService.getAllBỵKhachHang(gioHang.id).subscribe(
-              (gioHangChiTietResponse: ApiResponse<any>) => {
-                const gioCt = gioHangChiTietResponse.result || [];
 
-                const thanhToanOnl: ThanhToanOnl = {
-                  gioHang: gioHang,
-                  tongTien: this.getCartTotal() - this.discount,
-                  tongTienGiam: this.discount,
-                  voucher: storedVoucher ? JSON.parse(storedVoucher) : null,
-                  diaChiGiaoHang: this.customerForm.value.diaChi,
-                  ghiChu: this.customerForm.value.note,
-                  gioHangChiTietList: gioCt // lỗi ở đây, bên phía BE bị null chỗ này
-                };
+            // Lấy dữ liệu giỏ hàng chi tiết từ localStorage
+            const storedGioHangChiTiet = localStorage.getItem('selectedItems');
+            const gioHangChiTietList = storedGioHangChiTiet ? JSON.parse(storedGioHangChiTiet) : [];
 
-                this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
-                  (response: ApiResponse<ThanhToanOnl>) => {
-                    if (response.result) {
-                      this.snackBar.open('Đặt hàng thành công!', 'Đóng', {
-                        duration: 3000,
-                        panelClass: ['success-snackbar']
-                      });
-                      this.router.navigate(['/trang-chu']);
-                    }
-                  },
-                  (error) => {
-                    this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {
-                      duration: 3000,
-                      panelClass: ['error-snackbar']
-                    });
-                  }
-                );
+            const thanhToanOnl: ThanhToanOnl = {
+              gioHang: gioHang,
+              tongTien: this.getCartTotal() - this.discount,
+              tongTienGiam: this.discount,
+              voucher: storedVoucher ? JSON.parse(storedVoucher) : null,
+              diaChiGiaoHang: this.customerForm.value.diaChi,
+              ghiChu: this.customerForm.value.note,
+              gioHangChiTietList: gioHangChiTietList
+            };
+
+            this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
+              (response: ApiResponse<ThanhToanOnl>) => {
+                this.loading = false;
+                if (response.result) {
+                  this.snackBar.open('Đặt hàng thành công!', 'Đóng', {
+                    duration: 3000,
+                    panelClass: ['success-snackbar']
+                  });
+                  this.router.navigate(['/trang-chu']);
+                  localStorage.removeItem('selectedItems');
+                  this.spinner.hide();
+                }
               },
               (error) => {
-                console.error('Lỗi hiển giỏ hàng chi tiêt:', error);
-              }
+                this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {
+                  duration: 3000,
+                  panelClass: ['error-snackbar']
+                });
+                this.spinner.hide();              }
             );
           },
           (error) => {
             console.error('Lỗi tải giỏ hàng:', error);
-          }
+            this.spinner.hide();          }
         );
       },
       (error) => {
         console.error('Lỗi tải khách hàng:', error);
-      }
+        this.spinner.hide();      }
     );
   }
+
 }
