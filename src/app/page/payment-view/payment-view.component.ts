@@ -252,7 +252,7 @@ export class PaymentViewComponent {
             localStorage.setItem('voucher', JSON.stringify(response.result));
             this.calculateThanhTien();
             this.calculateGiamGia();
-            this.router.navigate(['/thanh-toan'])
+            this.router.navigate(['/customer/thanh-toan'])
           }
         })
   }

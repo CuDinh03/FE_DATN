@@ -15,7 +15,7 @@ export class AuthGuard  {
       const url: string = state.url;
 
       if (url.startsWith('/admin')) {
-        if (role === 'ROLE_ADMIN') {
+        if (role === 'ADMIN') {
           return true;
         } else {
           this.router.navigate(['/trang-chu']);
@@ -23,7 +23,7 @@ export class AuthGuard  {
         }
       }
       if (url.startsWith('/customer')) {
-        if (role === 'ROLE_CUSTOMER') {
+        if (role === 'CUSTOMER') {
           return true;
         } else {
           this.router.navigate(['/trang-chu']);
