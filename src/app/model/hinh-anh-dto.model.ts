@@ -4,6 +4,6 @@ export interface HinhAnhDto{
     id: string;
     ma?: string;
     url: string;
-    chiTietSanPham:ChiTietSanPhamDto;
+    chiTietSanPham?:ChiTietSanPhamDto;
     trangThai: number;
 }

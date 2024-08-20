@@ -16,5 +16,5 @@ export interface ChiTietSanPhamDto {
     ngayTao?: Date;
     ngaySua?: Date;
     trangThai?: number;
-    hinhAnh?: HinhAnhDto[];
+  HinhAnh?: HinhAnhDto[];
 }

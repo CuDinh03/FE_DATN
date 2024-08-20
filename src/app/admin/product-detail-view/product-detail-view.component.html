@@ -302,11 +302,10 @@
            label="Thêm biến thể"
            class="btn btn-light-primary" icon="pi pi-plus"  iconPos="right" (click)="addChiTietSanPham()"> </button>
   <div class="row mt-2">
-    <ng-container
-      *ngIf="selectedSizes && selectedSizes.length > 0 && selectedColors && selectedColors.length >0">
+    <ng-container *ngIf="selectedSizes && selectedSizes.length > 0 && selectedColors && selectedColors.length > 0">
       <ng-container *ngFor="let ms of selectedColors">
-        <p class="col-12 " >Sản phẩm có màu {{ ms.ten }}</p>
-        <label [style.backgroundColor]="ms.ma" >|</label>
+        <p class="col-12">Sản phẩm có màu {{ ms.ten }}</p>
+        <label [style.backgroundColor]="ms.ma">|</label>
         <hr class="mt-5">
         <p-table [value]="selectedListSp" [tableStyle]="{ 'min-width': '50rem' }" class="col-12">
           <ng-template pTemplate="header">
@@ -324,25 +323,18 @@
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-ctsp let-i="rowIndex">
-            <tr *ngIf="ctsp.mauSac.ten === ms.ten ">
+            <tr *ngIf="ctsp.mauSac.ten === ms.ten">
               <td>{{ ctsp.sanPham.ten }}</td>
               <td>{{ ctsp.thuongHieu.ten }}</td>
               <td>{{ ctsp.chatLieu.ten }}</td>
               <td>{{ ctsp.danhMuc.ten }}</td>
               <td>{{ ctsp.kichThuoc.ten }}</td>
               <td>{{ ctsp.mauSac.ten }}</td>
-              <td><p-inputNumber
-                inputId="integeronly"
-                [(ngModel)]="ctsp.soLuong"/></td>
-              <td><p-inputNumber
-                inputId="integeronly"
-                [(ngModel)]="ctsp.giaNhap"/></td>
-              <td><p-inputNumber
-                inputId="integeronly"
-                [(ngModel)]="ctsp.giaBan"/></td>
+              <td><p-inputNumber inputId="integeronly" [(ngModel)]="ctsp.soLuong"/></td>
+              <td><p-inputNumber inputId="integeronly" [(ngModel)]="ctsp.giaNhap"/></td>
+              <td><p-inputNumber inputId="integeronly" [(ngModel)]="ctsp.giaBan"/></td>
               <!-- Hiển thị ảnh -->
               <td>
-                <p-toast />
                 <p-fileUpload
                   name="demo[]"
                   url="https://www.primefaces.org/cdn/api/upload.php"
@@ -351,26 +343,30 @@
                   accept="image/*"
                   maxFileSize="10000000">
                   <ng-template pTemplate="content">
-                    <li *ngFor="let file of ctsp.hinhAnhUrls">
-                      {{ file.name }} - {{ file.size }} bytes
+                    <li *ngFor="let file of ctsp.HinhAnh">
+                      {{ file.name }} - {{ file.size }}
                     </li>
-
                   </ng-template>
                 </p-fileUpload>
               </td>
             </tr>
-            <tr>
-              <div *ngIf="ctsp.hinhAnhUrls && ctsp.hinhAnhUrls.length > 0" class="image-gallery">
-                <h5>Hình ảnh đã tải lên:</h5>
-                <div class="image-list">
-                  <img *ngFor="let url of ctsp.hinhAnhUrls" [src]="url" class="uploaded-image" />
+            <tr *ngIf="ctsp.HinhAnh && ctsp.mauSac.ten === ms.ten && ctsp.HinhAnh.length > 0">
+              <td colspan="10">
+                <div class="image-gallery">
+                  <h5>Hình ảnh đã tải lên:</h5>
+                  <div *ngFor="let url of ctsp.HinhAnh; let i = index" class="image-item">
+                    <img [src]="url.url" class="uploaded-image" />
+                    <button class="btn-delete" (click)="removeImage(ctsp, i)">×</button>
+                  </div>
                 </div>
-              </div>
+              </td>
             </tr>
           </ng-template>
         </p-table>
       </ng-container>
     </ng-container>
+  </div>
+
 
 
   </div>
@@ -383,7 +379,6 @@
 
 <div class="card flex justify-content-center">
   <p-toast />
-</div>
 </div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

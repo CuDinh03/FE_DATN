@@ -17,8 +17,14 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
 
   // 1. get all
   getAll(): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
 
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`);
+    // Thêm token vào header của yêu cầu
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/getAll`,{headers});
   }
 
 
