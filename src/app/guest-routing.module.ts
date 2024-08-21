@@ -20,7 +20,6 @@ const guestRoutes: Routes = [
   { path: 'demo', component: DemoComponent },
   {path: 'san-pham', component:ProductDetailComponent},
   { path: 'demo', component: DemoComponent },
-  { path: 'san-pham', component: ProductDetailComponent },
   { path: 'list-product', component: ShopCategoryComponent }
 
 ];
