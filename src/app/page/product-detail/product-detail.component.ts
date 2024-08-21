@@ -152,9 +152,6 @@ export class ProductDetailComponent implements OnInit {
             this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
               (response) => {
                 this.gioHang = response.result;
-                if (this.gioHang && this.gioHang.id) {
-                  // Handle successful response
-                }
               },
               (error) => {
                 console.error('Error fetching shopping cart:', error);
@@ -218,6 +215,15 @@ export class ProductDetailComponent implements OnInit {
   }
 
 
+  addToCart(): void {
+    const role = this.auth.getRole();
+    if (role != 'ROLE_CUSTOMER') {
+      this.snackBar.open('Đăng nhập trước khi mua hàng!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      this.router.navigate(['/log-in']);
+    }
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
@@ -252,6 +258,8 @@ export class ProductDetailComponent implements OnInit {
     } else {
       console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
     }
+
+
   }
 
 

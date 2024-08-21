@@ -36,12 +36,12 @@ export class SanPhamCTService {
   // Get chitietSanPham by id
   getChiTietSanPhamById(id: string): Observable<ApiResponse<any>> {
 
-
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`);
   }
 
   getChiTietSanPhamByIdKH(id: string): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`);
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}` );
   }
 
 

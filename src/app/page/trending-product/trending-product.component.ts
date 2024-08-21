@@ -23,7 +23,8 @@ export class TrendingProductComponent implements OnInit {
   danhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ số lượng đánh giá theo từng productId
   diemDanhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ điểm đánh giá theo từng productId
 
-  constructor(private router: Router,
+  constructor(
+              private router: Router,
               private sanPhamCTService: SanPhamCTService,
               private danhGiaService: DanhGiaService,
               private authService: AuthenticationService) {}
@@ -33,7 +34,7 @@ export class TrendingProductComponent implements OnInit {
   }
 
   findSanPhamById(id: string): void {
-    this.sanPhamCTService.getChiTietSanPhamById(id).subscribe(
+    this.sanPhamCTService.getChiTietSanPhamByIdKH(id).subscribe(
       (response: ApiResponse<any>) => {
         if (response.result) {
           this.findSanPhamChiTiet = response.result;
