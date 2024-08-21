@@ -79,17 +79,14 @@ export class OrderDetailComponent {
 
 
   loadHoaDonChiTiet(): void {
-    // const storeHoaDon = localStorage.getItem('hoaDon');
     this.hoaDonService.getHoaDonById(this.orderId).subscribe(
       (response: ApiResponse<any>) =>{
         this.hoaDon = response.result
+        this.currentStatus = response.result.trangThai;
         console.log(this.hoaDon)
       }
     )
     if (this.orderId) {
-      // const hoaDon = JSON.parse(storeHoaDon);
-      // this.hoaDon = hoaDon
-      // this.currentStatus = this.hoaDon.trangThai;
       this.hoaDonChiTietService.getAllBỵKhachHang(this.orderId).subscribe(
         (response: ApiResponse<any>) => {
           if (response.result && response.result.length > 0) {

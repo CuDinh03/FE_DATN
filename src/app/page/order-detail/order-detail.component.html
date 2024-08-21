@@ -23,28 +23,24 @@
             <div class="status-circle" [ngClass]="{'active': currentStatus >= 2}">
               <i class="fa fa-file"></i>
               <span style="color: black; font-size: 16px;">Đã xử lý</span>
-              <p style="color: black; font-size: 10px;">20/11/2023</p>
             </div>
 
             <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
             <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
               <i class="fa fa-truck"></i>
               <span style="color: black; font-size: 16px;">Đang giao</span>
-              <p style="color: black; font-size: 10px;">20/11/2023</p>
             </div>
 
             <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
             <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
               <i class="fa fa-check-circle"></i>
               <span style="color: black; font-size: 16px;">Đã giao hàng</span>
-              <p style="color: black; font-size: 10px;">20/11/2023</p>
             </div>
 
             <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
             <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
               <i class="fa fa-star"></i>
               <span style="color: black; font-size: 16px;">Hoàn thành</span>
-              <p style="color: black; font-size: 10px;">20/11/2023</p>
             </div>
           </div>
           <div *ngIf="hoaDon.trangThai === 5">
