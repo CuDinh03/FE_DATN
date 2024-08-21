@@ -45,9 +45,6 @@ export class RegisterComponent {
             return;
         }
 
-
-
-
       const accountData: DangNhapDto = {
         taiKhoanDto: {
           tenDangNhap: this.accountForm.value.tenDangNhap,
@@ -61,8 +58,6 @@ export class RegisterComponent {
         this.errorMessage = 'Mật khẩu và xác nhận mật khẩu không khớp';
         return;
       }
-
-        const username = this.accountForm.value.tenDangNhap;
 
       this.accountService.checkUsernameExists(accountData.taiKhoanDto.tenDangNhap).subscribe(
             (response: ApiResponse<any>) => {

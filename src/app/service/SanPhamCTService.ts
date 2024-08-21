@@ -26,22 +26,22 @@ export class SanPhamCTService {
 
   getSanPhamChiTietSapXepByNGayTao(page: number, size: number): Observable<ApiResponse<any>> {
 
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
     let params = new HttpParams();
     params = params.append('page', page.toString());
     params = params.append('size', size.toString());
 
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/sap-xep-ngay-tao`, { params,headers });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/sap-xep-ngay-tao`, { params });
   }
 
   // Get chitietSanPham by id
   getChiTietSanPhamById(id: string): Observable<ApiResponse<any>> {
 
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`,{headers});
   }
 
   getChiTietSanPhamByIdKH(id: string): Observable<ApiResponse<any>> {

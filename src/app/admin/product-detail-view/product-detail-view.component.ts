@@ -39,7 +39,7 @@ export class ProductDetailViewComponent implements OnInit {
   @ViewChild('editModal') editModal!: ElementRef;
 
   cols!: Column[];
-  uploadedFiles: any[] = [];
+  selectedSanPhamChiTiet?: ChiTietSanPhamDto;
   listHinhAnhSelect: HinhAnhDto[] = [];
   selectedListSp: ChiTietSanPhamDto[] = [];
   selectedSanPham: SanPhamDto[] = [];
@@ -192,62 +192,62 @@ export class ProductDetailViewComponent implements OnInit {
     });
   }
 
-  editProduct(product: ChiTietSanPhamDto) {
-    this.product = {...product};
-    this.productDialog = true;
-  }
+  // editProduct(product: ChiTietSanPhamDto) {
+  //   this.product = {...product};
+  //   this.productDialog = true;
+  // }
 
-  deleteProduct(product: ChiTietSanPhamDto) {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + product.sanPham.ten + '?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.listSanPhamChiTiet = this.listSanPhamChiTiet.filter((val) => val.id !== product.id);
-        this.product = {};
-        // this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-      }
-    });
-  }
+  // deleteProduct(product: ChiTietSanPhamDto) {
+  //   this.confirmationService.confirm({
+  //     message: 'Are you sure you want to delete ' + product.sanPham.ten + '?',
+  //     header: 'Confirm',
+  //     icon: 'pi pi-exclamation-triangle',
+  //     accept: () => {
+  //       this.listSanPhamChiTiet = this.listSanPhamChiTiet.filter((val) => val.id !== product.id);
+  //       this.product = {};
+  //       // this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+  //     }
+  //   });
+  // }
+  //
+  // hideDialog() {
+  //   this.productDialog = false;
+  //   this.submitted = false;
+  // }
 
-  hideDialog() {
-    this.productDialog = false;
-    this.submitted = false;
-  }
 
-
-  saveProduct() {
-    this.submitted = true;
-
-    if (this.product.sanPham.ten?.trim()) {
-      if (this.product.id) {
-        this.listSanPhamChiTiet[this.findIndexById(this.product.id)] = this.product;
-        this.sanPhamCTService.suaSanPhamChiTiet(this.product).subscribe({
-          next: () => {
-            this.loadSanPhamChiTietByNgayTao();
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Successful',
-              detail: 'Cập nhật sản phẩm thành công',
-              life: 3000
-            });
-          },
-          error: (err) => {
-            this.messageService.add({severity: 'error', summary: 'Error', detail: 'Cập nhật thất bại', life: 3000});
-            console.error('Update failed', err);
-          }
-        });
-      } else {
-        this.product.id = this.createId();
-        this.listSanPhamChiTiet.push(this.product);
-        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000});
-      }
-
-      this.listSanPhamChiTiet = [...this.listSanPhamChiTiet];
-      this.productDialog = false;
-      this.product = {};
-    }
-  }
+  // saveProduct() {
+  //   this.submitted = true;
+  //
+  //   if (this.product.sanPham.ten?.trim()) {
+  //     if (this.product.id) {
+  //       this.listSanPhamChiTiet[this.findIndexById(this.product.id)] = this.product;
+  //       this.sanPhamCTService.suaSanPhamChiTiet(this.product).subscribe({
+  //         next: () => {
+  //           this.loadSanPhamChiTietByNgayTao();
+  //           this.messageService.add({
+  //             severity: 'success',
+  //             summary: 'Successful',
+  //             detail: 'Cập nhật sản phẩm thành công',
+  //             life: 3000
+  //           });
+  //         },
+  //         error: (err) => {
+  //           this.messageService.add({severity: 'error', summary: 'Error', detail: 'Cập nhật thất bại', life: 3000});
+  //           console.error('Update failed', err);
+  //         }
+  //       });
+  //     } else {
+  //       this.product.id = this.createId();
+  //       this.listSanPhamChiTiet.push(this.product);
+  //       this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000});
+  //     }
+  //
+  //     this.listSanPhamChiTiet = [...this.listSanPhamChiTiet];
+  //     this.productDialog = false;
+  //     this.product = {};
+  //   }
+  // }
 
 
   findIndexById(id: string): number {
@@ -579,6 +579,25 @@ export class ProductDetailViewComponent implements OnInit {
         this.listHinhAnh = response.result;
         console.log('list ha' + this.listHinhAnh)
       })
+  }
+
+  openEditModal(sanPhamChiTiet: ChiTietSanPhamDto): void {
+    this.selectedSanPhamChiTiet = { ...sanPhamChiTiet }; // Sử dụng spread operator để sao chép đối tượng
+    // Đảm bảo danh sách các tùy chọn (danh mục, chất liệu,...) đã được tải
+  }
+  updateProduct(): void {
+    if (this.selectedSanPhamChiTiet) {
+      this.sanPhamCTService.suaSanPhamChiTiet(this.selectedSanPhamChiTiet).subscribe(
+        response => {
+          // Xử lý phản hồi thành công
+          console.log('Product updated successfully');
+          // Đóng modal nếu cần
+        },
+        error => {
+          console.error('Error updating product:', error);
+        }
+      );
+    }
   }
 
 }

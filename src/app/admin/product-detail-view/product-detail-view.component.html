@@ -13,13 +13,13 @@
               role="alert">
               {{ errorMessage }}
             </div> -->
-            <div>
-              <select class="form-select" >
-                <option value="5">5 sản phẩm</option>
-                <option value="10">10 sản phẩm</option>
-                <option value="15">15 sản phẩm</option>
-              </select>
-            </div>
+<!--            <div>-->
+<!--              <select class="form-select" >-->
+<!--                <option value="5">5 sản phẩm</option>-->
+<!--                <option value="10">10 sản phẩm</option>-->
+<!--                <option value="15">15 sản phẩm</option>-->
+<!--              </select>-->
+<!--            </div>-->
           </div>
 
           <div>
@@ -76,7 +76,7 @@
                   {{ sanPhamChiTiet.trangThai == 1 ? "Còn hàng" : "Hết hàng" }}
                 </td>
                 <td>
-                   <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                   <button class="btn btn-warning me-2" (click)="openEditModal(sanPhamChiTiet)" data-bs-toggle="modal" data-bs-target="#exampleModal">
                      <i class="ti ti-edit"></i>
                    </button>
                    <button class="btn btn-danger">
@@ -385,60 +385,57 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">CTSP472 | 19/11/2024</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{ selectedSanPhamChiTiet?.ma }} | {{ selectedSanPhamChiTiet?.ngayTao | date }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="container mb-3" style="text-align: center">
-          <img src="https://firebasestorage.googleapis.com/v0/b/uploadimg-84016.appspot.com/o/yt%2FIMG_2136_1x900x900x4.jpeg?alt=media&token=143f9755-d250-49fc-a58d-b2021b3f9089" style="width: 60%; height: auto;">
-        </div>
+          <div class="slides-container">
+<!--            <div *ngFor="let hinhAnh of selectedSanPhamChiTiet?.HinhAnh; let i = index"-->
+<!--                 class="slides"-->
+<!--                 [ngClass]="{'active': currentSlideNew[this.page] && currentSlideNew[this.page][selectedSanPhamChiTiet.ma] === i}">-->
+<!--              <img [src]="hinhAnh.url" />-->
+<!--            </div>-->
+<!--            <a class="prev" (click)="prevSlide(selectedSanPhamChiTiet?.ma)">&#10094;</a>-->
+<!--            <a class="next" (click)="nextSlide(selectedSanPhamChiTiet?.ma)">&#10095;</a>-->
+          </div>        </div>
         <div class="mb-3">
           <label class="form-label">Tên sản phẩm</label>
-          <input type="text" class="form-control" >
+          <input type="text" class="form-control" placeholder="{{selectedSanPhamChiTiet?.sanPham?.ten}}">
         </div>
         <div class="mb-3 row">
           <div class="col-6">
-          <select class="form-select" aria-label="Default select example">
-            <option selected>Danh mục</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
+            <select class="form-select" aria-label="Danh mục">
+              <option selected value="{{selectedSanPhamChiTiet?.danhMuc}}">{{selectedSanPhamChiTiet?.danhMuc?.ten}}</option>
+              <option *ngFor="let danhMuc of listDanhMuc" [value]="danhMuc">{{ danhMuc.ten }}</option>
+            </select>
           </div>
           <div class="col-6">
-            <select class="form-select" aria-label="Default select example">
-              <option selected>Chất liệu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <select class="form-select" aria-label="Chất liệu" >
+              <option selected value="{{selectedSanPhamChiTiet?.chatLieu}}">{{selectedSanPhamChiTiet?.chatLieu?.ten}}</option>
+              <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu">{{ chatLieu.ten }}</option>
             </select>
           </div>
         </div>
-
         <div class="mb-3 row">
           <div class="col-6">
-            <select class="form-select" aria-label="Default select example">
-              <option selected>Màu sắc</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <select class="form-select" aria-label="Màu sắc" >
+              <option selected value="{{selectedSanPhamChiTiet?.mauSac}}">{{selectedSanPhamChiTiet?.mauSac?.ten}}</option>
+              <option *ngFor="let mauSac of listMauSac" [value]="mauSac">{{ mauSac.ten }}</option>
             </select>
           </div>
           <div class="col-6">
-            <select class="form-select" aria-label="Default select example">
-              <option selected>Kích thước</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <select class="form-select" aria-label="Kích thước">
+              <option selected value="{{selectedSanPhamChiTiet?.kichThuoc}}">{{selectedSanPhamChiTiet?.kichThuoc?.ten}}</option>
+              <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc">{{ kichThuoc.ten }}</option>
             </select>
           </div>
         </div>
-
         <div class="mb-3 container">
           <table class="table">
             <thead>
             <tr>
-              <th style="text-align: center; vertical-align: middle;">Số lương</th>
+              <th style="text-align: center; vertical-align: middle;">Số lượng</th>
               <th style="text-align: center; vertical-align: middle;">Giá nhập</th>
               <th style="text-align: center; vertical-align: middle;">Giá bán</th>
             </tr>
@@ -446,22 +443,21 @@
             <tbody>
             <tr>
               <td style="text-align: center; vertical-align: middle;">
-                <input type="number" style="width: 100px ">
+                <input type="number" placeholder="{{selectedSanPhamChiTiet?.soLuong}}" style="width: 100px">
               </td>
               <td style="text-align: center; vertical-align: middle;">
-                <input type="number" style="width: 100px ">
+                <input type="number" placeholder="{{selectedSanPhamChiTiet?.giaNhap}}" style="width: 100px">
               </td>
               <td style="text-align: center; vertical-align: middle;">
-                <input type="number" style="width: 100px ">
+                <input type="number" placeholder="{{selectedSanPhamChiTiet?.giaBan}}" style="width: 100px">
               </td>
             </tr>
             </tbody>
           </table>
         </div>
-
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Edit</button>
+        <button type="button" class="btn btn-primary" (click)="updateProduct()">Save changes</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
