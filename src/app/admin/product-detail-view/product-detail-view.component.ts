@@ -439,11 +439,8 @@ export class ProductDetailViewComponent implements OnInit {
           soLuong: 0,
           giaNhap: 0,
           giaBan: 0,
-          ngayNhap: new Date,
-          ngayTao: new Date,
-          ngaySua: new Date,
           trangThai: 1,
-          hinhAnh: this.listHinhAnhSelect,
+          hinhAnhUrls: this.listHinhAnhSelect,
         }
         listSPCT.push(ctsp);
       }
@@ -461,6 +458,7 @@ export class ProductDetailViewComponent implements OnInit {
 
 
   saveListCt(list: any[]): void {
+
     const img: IMG = {
       anhDtoListt: this.listHinhAnhSelect,
       chiTietSanPhamDto: list
@@ -523,25 +521,26 @@ export class ProductDetailViewComponent implements OnInit {
 
     console.log('saukhi luu anh vao' + this.listChiTietSP.toString())
     this.listHinhAnhSelect = this.imgList;
+    ctsp = null;
 
   }
 
   confirm() {
-    this.confirmationService.confirm({
-      header: 'Xác nhận',
-      message: 'Bạn chắc chắn muốn thêm biến thể chứ?',
-      acceptIcon: 'pi pi-check mr-2',
-      rejectIcon: 'pi pi-times mr-2',
-      rejectButtonStyleClass: 'p-button-sm',
-      acceptButtonStyleClass: 'p-button-outlined p-button-sm',
-      accept: () => {
-        this.saveListCt(this.listChiTietSP);
-        this.messageService.add({severity: 'success', summary: 'Đã xác nhận', detail: 'Xác nhận', life: 3000});
-      },
-      reject: () => {
-        this.messageService.add({severity: 'error', summary: 'Đã huỷ', detail: 'Đã huỷ xác nhận', life: 3000});
-      }
-    });
+    this.saveListCt(this.listChiTietSP);
+  }
+
+  @ViewChild('voucherModal') voucherModal!: ElementRef;
+  showModal(): void {
+    if (this.voucherModal && this.voucherModal.nativeElement) {
+      this.voucherModal.nativeElement.classList.add('show');
+      this.voucherModal.nativeElement.style.display = 'block';
+    }
+  }
+  closeVoucherModal(): void {
+    if (this.voucherModal && this.voucherModal.nativeElement) {
+      this.voucherModal.nativeElement.classList.remove('show');
+      this.voucherModal.nativeElement.style.display = 'none';
+    }
   }
 
   loadHinhAnh() {

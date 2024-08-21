@@ -375,10 +375,8 @@
 
   </div>
   <br>
-  <button  pButton
-           pRipple
-           label="Lưu các biến thể"
-           class="btn btn-success" (click)="confirm()"></button>
+  <button
+           class="btn btn-success" (click)="showModal()">Save</button>
 </div>
 
 <div class="card flex justify-content-center">
@@ -468,6 +466,25 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-primary">Edit</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" #voucherModal tabindex="-1" aria-labelledby="accountModalLabel2" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="accountModalLabel2">Danh sách voucher</h5>
+
+        <button type="button" class="btn-close" (click)="closeVoucherModal()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+       Ban chac chan muon them san pham
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="confirm()">Xac nhan</button>
       </div>
     </div>
   </div>

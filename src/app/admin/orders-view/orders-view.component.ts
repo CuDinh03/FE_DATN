@@ -97,7 +97,7 @@ export class OrdersViewComponent {
         const request: HoaDonSua = {
           hoaDon: this.hoaDonSua,
           chiTietList: this.hoaDonChiTiet,
-          nguoiDung: this.nguoiDung
+          nhanVien: this.nguoiDung
         };
 
         console.log(request);
