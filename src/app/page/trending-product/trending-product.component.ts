@@ -23,10 +23,10 @@ export class TrendingProductComponent implements OnInit {
   danhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ số lượng đánh giá theo từng productId
   diemDanhGiaMap: { [key: string]: number } = {}; // Object để lưu trữ điểm đánh giá theo từng productId
 
-  constructor(private auth: AuthenticationService,
-              private router: Router,
+  constructor(private router: Router,
               private sanPhamCTService: SanPhamCTService,
-              private danhGiaService: DanhGiaService) {}
+              private danhGiaService: DanhGiaService,
+              private authService: AuthenticationService) {}
 
   ngOnInit(): void {
     this.loadDanhSachSanPham();
@@ -38,7 +38,12 @@ export class TrendingProductComponent implements OnInit {
         if (response.result) {
           this.findSanPhamChiTiet = response.result;
           localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result));
-          this.router.navigate(['/customer/san-pham']);
+          const role = this.authService.getRole();
+          if (role === 'ROLE_CUSTOMER') {
+            this.router.navigate(['/customer/san-pham']);
+          }else {
+            this.router.navigate(['/san-pham']);
+          }
         }
       });
   }

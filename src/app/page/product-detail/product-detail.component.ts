@@ -217,7 +217,7 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  addToCart(): void {
+
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
