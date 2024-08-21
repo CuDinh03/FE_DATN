@@ -51,7 +51,7 @@ export class RegisterComponent {
           matKhau: this.accountForm.value.matKhau,
           id: '',
         },
-        mail: this.accountForm.value.email
+        email: this.accountForm.value.email
       };
 
       if (accountData.taiKhoanDto.matKhau !== this.accountForm.value.xacNhanMatKhau) {
