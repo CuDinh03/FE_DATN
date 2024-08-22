@@ -80,6 +80,7 @@ import {InputIconModule} from "primeng/inputicon";
 import {InputSwitchModule} from "primeng/inputswitch";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {ConfirmationService, MessageService, PrimeNGConfig} from "primeng/api";
+import {NgApexchartsModule} from "ng-apexcharts";
 
 @NgModule({ declarations: [
     HomeComponent,
@@ -169,6 +170,7 @@ import {ConfirmationService, MessageService, PrimeNGConfig} from "primeng/api";
     IconFieldModule,
     InputIconModule,
     InputSwitchModule,
+    NgApexchartsModule
 
   ],
   providers: [TaiKhoanService,

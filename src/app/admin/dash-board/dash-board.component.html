@@ -17,7 +17,16 @@
               </select>
             </div>
           </div>
-          <div class="charts">
+          <div id="chart">
+            <apx-chart
+              [series]="chartOptions.series ?? []"
+            [chart]="chartOptions.chart || { type: 'line' }"
+            [xaxis]="chartOptions.xaxis ?? {}"
+            [dataLabels]="chartOptions.dataLabels ?? {}"
+            [grid]="chartOptions.grid ?? {}"
+            [stroke]="chartOptions.stroke ?? {}"
+            [title]="chartOptions.title ?? {}"
+            ></apx-chart>
 
           </div>
         </div>

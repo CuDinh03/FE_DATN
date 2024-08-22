@@ -6,6 +6,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
 import {DanhMucDto} from "../model/danh-muc-dto.model";
 import {HoaDonDto} from "../model/hoa-don-dto.model";
 import {HoaDonSua} from "../model/HoaDonSua";
+import {MonthlySalesData} from "../model/MonthlySalesData";
 
 
 @Injectable({
@@ -217,6 +218,14 @@ export class HoaDonService {
     });
 
     return this.http.put<ApiResponse<any>>(`${this.apiUrl}/suaHoaDon`, hoaDonSua, { headers });
+  }
+
+  getMonthlySalesData(): Observable<MonthlySalesData[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<MonthlySalesData[]>(`${this.apiUrl}/monthly-sales` , { headers });
   }
 
 
