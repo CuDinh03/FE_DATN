@@ -1,6 +1,6 @@
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ApiResponse} from './../../model/ApiResponse';
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import {KhachHangService} from './../../service/KhachHangService';
 import {GioHangService} from 'src/app/service/GioHangService';
 import {GioHangChiTietService} from './../../service/GioHangChiTietService';
@@ -13,6 +13,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {ThanhToanService} from "../../service/ThanhToanService";
 import {ThanhToanOnl} from "../../model/thanh-toan-onl";
 import {GioHangDto} from "../../model/gio-hang-dto";
+import {DiaChiService} from "../../service/DiaChiService";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-payment-view',
@@ -21,31 +23,25 @@ import {GioHangDto} from "../../model/gio-hang-dto";
 })
 export class PaymentViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
+  @ViewChild('userInfor') userInfor!: ElementRef;
   totalElements = 0;
   totalPages: number = 0;
   currentPage = 0;
   pageSize = 6;
   tenDangNhap: string = '';
-  showSearch: boolean = false;
-  isLoggedInCart: boolean = false;
-  isCartHovered = false;
   results: string[] = [];
   khachHang: any;
   vouchers: any[] = [];
-  gioHang: any ={};
+  gioHang: any = {};
   gioHangChiTiet: any[] = [];
-  showConfirmationModal: boolean = false;
-  itemToDeleteId: string = '';
-  allSelected = false;
-  selectedTotal = 0;
-  showFooter: boolean = false;
   voucher: any;
   discount: number = 0;
   customerForm: FormGroup;
-    // submitted = false;
-
+  selectedCustomerId: string | null = null;
+  loading = false;
+  thongTinDatHang: any[] = []
   showUpperFooter: boolean = true;
-
+  selectedCustomer: any = null;
 
   constructor(private auth: AuthenticationService, private router: Router,
               private gioHangChiTietService: GioHangChiTietService,
@@ -55,32 +51,73 @@ export class PaymentViewComponent {
               private el: ElementRef, private renderer: Renderer2,
               private voucherService: VoucherService,
               private formBuilder: FormBuilder,
-              private thanhToanService: ThanhToanService
+              private thanhToanService: ThanhToanService,
+              private diaChiService: DiaChiService,
+              private spinner: NgxSpinnerService
   ) {
     this.customerForm = this.formBuilder.group({
-        name:[''],
-        address:[''],
-        phone:[''],
-        ten:[''],
-        email:[''],
-        note:[''],
+      ten: [''],
+      diaChi: [''],
+      sdt: [''],
+      email: [''],
+      note: [''],
     })
 
 
   }
 
-  get f(){
+
+  get f() {
     return this.customerForm.controls;
   }
 
   ngOnInit() {
     this.findShoppingCart();
+    this.loadUserInfor();
   }
 
   calculateSubtotal(item: any): number {
     return item.chiTietSanPham.giaBan * item.soLuong;
   }
 
+
+  selectCustomer(customer: any): void {
+    this.selectedCustomerId = customer.id;
+    this.selectedCustomer = customer;
+    this.customerForm.patchValue({
+      ten: customer.ten,
+      diaChi: customer.diaChi,
+      sdt: customer.sdt,
+      email: customer.email,
+      note: customer.note
+    });
+  }
+
+  updateCustomerInfo(): void {
+    if (this.selectedCustomer) {
+      this.customerForm.patchValue({
+        ten: this.selectedCustomer.ten,
+        diaChi: this.selectedCustomer.diaChi,
+        sdt: this.selectedCustomer.sdt,
+        email: this.selectedCustomer.email,
+        note: this.selectedCustomer.note
+      });
+    }
+    this.closeInforModal();
+  }
+
+
+  // Hiển thị thông tin khách hàng vào form
+  selectCustomerForUpdate(customer: any): void {
+    this.selectedCustomer = customer;
+    this.customerForm.patchValue({
+      ten: customer.ten,
+      diaChi: customer.diaChi,
+      sdt: customer.sdt,
+      email: customer.email,
+      note: customer.note
+    });
+  }
 
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
@@ -112,21 +149,32 @@ export class PaymentViewComponent {
     }
   }
 
+  loadUserInfor() {
+    const tenDangNhap = this.auth.getTenDangNhap();
+    if (tenDangNhap) {
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+        (response) => {
+          if (response.result) {
+            this.khachHang = response.result;
+            this.diaChiService.getAllByIdKhachHang(response.result.id).subscribe((response) =>{
+              this.thongTinDatHang = response.result;
+            })
+          } else {
+            console.error('Không tìm thấy thông tin khách hàng.');
+          }
+        },
+        (error) => {
+          console.error('Error fetching customer:', error);
+        }
+      );
+    }
+  }
+
 
   loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAllBỵKhachHang(idGioHang).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          this.gioHangChiTiet = response.result;
-          console.log(this.gioHangChiTiet);
-        } else {
-          this.gioHangChiTiet = [];
-        }
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Unexpected error:', error);
-      }
-    );
+    const storedGioHangChiTiet = localStorage.getItem('selectedItems');
+    const gioHangChiTietList = storedGioHangChiTiet ? JSON.parse(storedGioHangChiTiet) : [];
+    this.gioHangChiTiet = gioHangChiTietList;
   }
 
   getCartTotal(): number {
@@ -140,6 +188,14 @@ export class PaymentViewComponent {
       this.voucherModal.nativeElement.classList.add('show');
       this.voucherModal.nativeElement.style.display = 'block';
       this.loadVoucher();
+    }
+  }
+
+  showModalInfor(): void {
+    if (this.userInfor && this.userInfor.nativeElement) {
+      this.userInfor.nativeElement.classList.add('show');
+      this.userInfor.nativeElement.style.display = 'block';
+      this.loadUserInfor()
     }
   }
 
@@ -178,6 +234,15 @@ export class PaymentViewComponent {
       this.voucherModal.nativeElement.style.display = 'none';
     }
   }
+
+
+  closeInforModal(): void {
+    if (this.userInfor && this.userInfor.nativeElement) {
+      this.userInfor.nativeElement.classList.remove('show');
+      this.userInfor.nativeElement.style.display = 'none';
+    }
+  }
+
   getVoucherById(id: string) {
     this.voucherService.getVoucherByid(id)
       .subscribe(
@@ -187,7 +252,7 @@ export class PaymentViewComponent {
             localStorage.setItem('voucher', JSON.stringify(response.result));
             this.calculateThanhTien();
             this.calculateGiamGia();
-            this.router.navigate(['/thanh-toan'])
+            this.router.navigate(['/customer/thanh-toan'])
           }
         })
   }
@@ -196,6 +261,7 @@ export class PaymentViewComponent {
     let total = this.calculateTotal();
     return total - this.discount;
   }
+
   calculateTotal(): number {
     let total = 0;
     this.gioHangChiTiet.forEach((item: any) => {
@@ -225,76 +291,90 @@ export class PaymentViewComponent {
 
     return `${day}/${month}/${year}`; // Return in the desired format (dd/MM/yyyy)
   }
-  // @ts-ignore
-  findGioHang(id: string): GioHangDto{
-    this.gioHangService.findGioHangByIdKhachHang(id).subscribe(
-        (response : ApiResponse<GioHangDto>) =>{
-          console.log('thanhcong')
-          console.log(response.result)
-          return response.result;
-        }
 
+  // @ts-ignore
+  findGioHang(id: string): GioHangDto {
+    this.gioHangService.findGioHangByIdKhachHang(id).subscribe(
+      (response: ApiResponse<GioHangDto>) => {
+        console.log('thanhcong')
+        console.log(response.result)
+        return response.result;
+      }
     )
   }
 
   saveInfoPayment() {
+    this.loading = true;
     if (this.customerForm.invalid) {
+      this.loading = false;
       return;
     }
+    this.spinner.show();
 
-    // @ts-ignore
-    this.tenDangNhap = localStorage.getItem('tenDangNhap');
-    this.khachHangService.findKhachHangByTenDangNhap(this.tenDangNhap).subscribe(
-        (response) => {
-          this.khachHang = response.result;
-          if (!this.khachHang || !this.khachHang.id) {
-            console.error('Không tìm thấy thông tin khách hàng.');
-            return;
-          }
+    const storedVoucher = localStorage.getItem('voucher') || '';
+    const tenDangNhap = localStorage.getItem('tenDangNhap') || '';
 
-          this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
-              (gioHangResponse: ApiResponse<GioHangDto>) => {
-                const gioHang = gioHangResponse.result;
-                if (!gioHang) {
-                  console.error('Không tìm thấy giỏ hàng.');
-                  return;
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+      (response) => {
+        this.khachHang = response.result;
+        if (!this.khachHang || !this.khachHang.id) {
+          console.error('Không tìm thấy thông tin khách hàng.');
+          this.spinner.hide();
+          return;
+        }
+        this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
+          (gioHangResponse: ApiResponse<GioHangDto>) => {
+            const gioHang = gioHangResponse.result;
+            if (!gioHang) {
+              console.error('Không tìm thấy giỏ hàng.');
+              this.spinner.hide();
+              return;
+            }
+
+            // Lấy dữ liệu giỏ hàng chi tiết từ localStorage
+            const storedGioHangChiTiet = localStorage.getItem('selectedItems');
+            const gioHangChiTietList = storedGioHangChiTiet ? JSON.parse(storedGioHangChiTiet) : [];
+
+            const thanhToanOnl: ThanhToanOnl = {
+              gioHang: gioHang,
+              tongTien: this.getCartTotal() - this.discount,
+              tongTienGiam: this.discount,
+              voucher: storedVoucher ? JSON.parse(storedVoucher) : null,
+              diaChiGiaoHang: this.customerForm.value.diaChi,
+              ghiChu: this.customerForm.value.note,
+              gioHangChiTietList: gioHangChiTietList
+            };
+
+            this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
+              (response: ApiResponse<ThanhToanOnl>) => {
+                this.loading = false;
+                if (response.result) {
+                  this.snackBar.open('Đặt hàng thành công!', 'Đóng', {
+                    duration: 3000,
+                    panelClass: ['success-snackbar']
+                  });
+                  this.router.navigate(['/trang-chu']);
+                  localStorage.removeItem('selectedItems');
+                  this.spinner.hide();
                 }
-
-                const thanhToanOnl: ThanhToanOnl = {
-                  gioHang: gioHang,
-                  tongTien: this.getCartTotal(),
-                  tongTienGiam: this.discount,
-                  voucher: this.voucher,
-                  ghiChu: '',
-                  gioHangChiTiet: this.gioHangChiTiet
-                };
-
-                this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
-                    (response: ApiResponse<ThanhToanOnl>) => {
-                      if (response.result) {
-                        this.snackBar.open('Thanh toán thành công!', 'Đóng', {
-                          duration: 3000,
-                          panelClass: ['success-snackbar']
-                        });
-                        this.router.navigate(['/trang-chu']);
-                      }
-                    },
-                    (error: HttpErrorResponse) => {
-                      this.snackBar.open('Thanh toán không thành công. Vui lòng thử lại!', 'Đóng', {
-                        duration: 3000,
-                        panelClass: ['error-snackbar']
-                      });
-                    }
-                );
               },
               (error) => {
-                console.error('Error fetching shopping cart:', error);
-              }
-          );
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
+                this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {
+                  duration: 3000,
+                  panelClass: ['error-snackbar']
+                });
+                this.spinner.hide();              }
+            );
+          },
+          (error) => {
+            console.error('Lỗi tải giỏ hàng:', error);
+            this.spinner.hide();          }
+        );
+      },
+      (error) => {
+        console.error('Lỗi tải khách hàng:', error);
+        this.spinner.hide();      }
     );
   }
+
 }

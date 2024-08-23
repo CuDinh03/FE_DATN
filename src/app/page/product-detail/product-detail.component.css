@@ -245,6 +245,15 @@
   .custom-radio-size label:hover {
     cursor: pointer; /* Đổi kiểu con trỏ thành bàn tay khi hover vào */
   }
+
+  .color-name {
+    color: #000;
+    font-size: 14px; /* Kích thước chữ có thể thay đổi tùy ý */
+    text-align: center;
+    white-space: nowrap; /* Giữ văn bản trên một dòng */
+    overflow: hidden; /* Ẩn phần văn bản bị tràn */
+    text-overflow: ellipsis; /* Thêm dấu ba chấm nếu văn bản quá dài */
+  }
   
   
   

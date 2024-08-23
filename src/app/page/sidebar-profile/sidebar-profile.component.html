@@ -1,0 +1,48 @@
+<nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+    <ul id="sidebarnav">
+        <li class="sidebar-item">
+            <a class="nav-link nav-icon-hover avatar-container" href="javascript:void(0)" id="drop2"
+                data-bs-toggle="dropdown" aria-expanded="false" style="margin-bottom: 20px;">
+                <img src="assets/shopping/img/blog/author.png" alt="" width="35" height="35" class="rounded-circle">
+                <div class="online-dot"></div> <!-- Thêm chấm xanh -->
+            </a>
+            <span style="font-size: 16px; color: black; margin-left: 10px;">{{ khachHang.ten }}</span>
+        </li>
+        <li class="sidebar-item">
+            <a class="sidebar-link" [routerLink]="['/customer/profile']" routerLinkActive="active" aria-expanded="false"
+                style="margin-bottom: 20px;">
+                <span>
+                    <i class="ti ti-user"></i>
+                </span>
+                <span class="hide-menu">Tài khoản của tôi</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a class="sidebar-link" [routerLink]="['/customer/don-mua']" routerLinkActive="active" aria-expanded="false"
+                style="margin-bottom: 20px;">
+                <span>
+                    <i class="ti ti-list-check"></i>
+                </span>
+                <span class="hide-menu">Đơn mua</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a class="sidebar-link" aria-expanded="false" [routerLink]="['#']" style="margin-bottom: 20px;"
+                routerLinkActive="active">
+                <span>
+                    <i class="ti ti-ticket" style="color: #FF0000;"></i>
+                </span>
+                <span class="hide-menu">Kho voucher</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a class="sidebar-link" aria-expanded="false" [routerLink]="['#']" style="margin-bottom: 20px;"
+                routerLinkActive="active">
+                <span>
+                    <i class="ti ti-coin" style="color: #FF7A00;"></i>
+                </span>
+                <span class="hide-menu">Điểm tích lũy</span>
+            </a>
+        </li>
+    </ul>
+</nav>

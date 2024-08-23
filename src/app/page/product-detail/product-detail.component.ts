@@ -8,6 +8,10 @@ import { ApiResponse } from './../../model/ApiResponse';
 import { SanPhamCTService } from './../../service/SanPhamCTService';
 import { AuthenticationService } from "../../service/AuthenticationService";
 import { ActivatedRoute, Router } from "@angular/router";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {HoaDonChiTietService} from "../../service/HoaDonChiTietService";
+import {DanhGiaService} from "../../service/DanhGiaService";
+import {DanhGiaDto} from "../../model/danh-gia-dto";
 
 @Component({
   selector: 'app-product-detail',
@@ -34,8 +38,30 @@ export class ProductDetailComponent implements OnInit {
     private gioHangService: GioHangService,
     private khachHangService: KhachHangService,
     private snackBar: MatSnackBar,
-    private http: HttpClient
-  ) {}
+    private formBuilder: FormBuilder,
+    private danhGiaServe: DanhGiaService,
+  ) {
+    this.danhGiaForm = this.formBuilder.group({
+      khachHang: [''],
+      hoaDonChiTiet: [''],
+      tieuDe: [''],
+      noiDung: [''],
+      diem: [''],
+      trangThai: [''],
+    })
+
+    const tenDangNhap = localStorage.getItem('tenDangNhap');
+    if (tenDangNhap) {
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
+        (response) => {
+          this.khachHang = response.result;
+        },
+        (error) => {
+          console.error('Error fetching customer:', error);
+        }
+      );
+    }
+  }
 
   ngOnInit(): void {
     this.loadSanPhamChiTiet();
@@ -44,6 +70,66 @@ export class ProductDetailComponent implements OnInit {
     this.loadColors();
     this.loadSize();
     this.loadSelectedOptions();
+
+  }
+
+  hoaDonChiTiet: any = {};
+  danhGiaForm: FormGroup;
+  selectedRating: number = 0;
+  stars: number[] = [1, 2, 3, 4, 5];
+
+  get f() {
+    return this.danhGiaForm.controls;
+  }
+
+
+  createRating(): void {
+    const danhGiaDto: DanhGiaDto = {
+      khachHang: this.khachHang,
+      hoaDonChiTiet: null,
+      tieuDe: this.danhGiaForm.value.tieuDe,
+      noiDung: this.danhGiaForm.value.noiDung,
+      diem: this.selectedRating,
+      trangThai: 1,
+    };
+    this.danhGiaServe.createRating(danhGiaDto).subscribe(
+      (response) => {
+        this.snackBar.open('Đã đánh giá sản phẩm!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+        this.router.navigate(['/don-mua']);
+      },
+      (error) => {
+        this.snackBar.open('Đánh giá sản phẩm thất bại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    );
+  }
+
+
+  selectRating(rating: number): void {
+    this.selectedRating = rating;
+  }
+
+
+  getRatingText(rating: number): string {
+    switch (rating) {
+      case 1:
+        return 'Tệ';
+      case 2:
+        return 'Không hài lòng';
+      case 3:
+        return 'Bình thường';
+      case 4:
+        return 'Hài lòng';
+      case 5:
+        return 'Tuyệt vời!';
+      default:
+        return '';
+    }
   }
 
   loadSelectedOptions(): void {
@@ -52,7 +138,7 @@ export class ProductDetailComponent implements OnInit {
       const chiTietSanPham = JSON.parse(storedProductDetail);
       this.selectedColor = chiTietSanPham.mauSac;
       this.selectedSize = chiTietSanPham.kichThuoc;
-      this.updateProductDetails();
+      // this.updateProductDetails();
     }
   }
 
@@ -66,9 +152,6 @@ export class ProductDetailComponent implements OnInit {
             this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
               (response) => {
                 this.gioHang = response.result;
-                if (this.gioHang && this.gioHang.id) {
-                  // Handle successful response
-                }
               },
               (error) => {
                 console.error('Error fetching shopping cart:', error);
@@ -89,7 +172,7 @@ export class ProductDetailComponent implements OnInit {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.sanPhamCTService.getAllMauSacByMa(chiTietSanPham.ma).subscribe(
+      this.sanPhamCTService.getAllMauSacByMa(chiTietSanPham.sanPham.ma).subscribe(
         (response: ApiResponse<any>) => {
           this.listMauSac = response.result;
         },
@@ -104,7 +187,7 @@ export class ProductDetailComponent implements OnInit {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.sanPhamCTService.getAllKichThuocByMa(chiTietSanPham.ma).subscribe(
+      this.sanPhamCTService.getAllKichThuocByMa(chiTietSanPham.sanPham.ma).subscribe(
         (response: ApiResponse<any>) => {
           this.listKichThuoc = response.result;
         },
@@ -119,7 +202,7 @@ export class ProductDetailComponent implements OnInit {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.sanPhamCTService.getChiTietSanPhamById(chiTietSanPham.id)
+      this.sanPhamCTService.getChiTietSanPhamByIdKH(chiTietSanPham.id)
         .subscribe((response: ApiResponse<any>) => {
           if (response.result) {
             this.findCiTietSanPham = response.result;
@@ -131,42 +214,53 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
+
   addToCart(): void {
+    const role = this.auth.getRole();
+    if (role != 'ROLE_CUSTOMER') {
+      this.snackBar.open('Đăng nhập trước khi mua hàng!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      this.router.navigate(['/log-in']);
+    }
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
-        const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-        const productPrice = chiTietSanPham.giaBan; // Lấy giá bán của sản phẩm
-        const totalPrice = productPrice * this.quantity; // Tính tổng giá trị của sản phẩm
+      const chiTietSanPham = JSON.parse(storeChiTietSanPham);
+      const productPrice = chiTietSanPham.giaBan; // Lấy giá bán của sản phẩm
+      const totalPrice = productPrice * this.quantity; // Tính tổng giá trị của sản phẩm
 
-        if (this.quantity <= 0) {
-            this.snackBar.open('Số lượng nhập vào phải lớn hơn 0. Vui lòng nhập lại!', 'Đóng', {
-                duration: 3000,
-                panelClass: ['error-snackbar']
-            });
-            return;
-        }
+      if (this.quantity <= 0) {
+        this.snackBar.open('Số lượng nhập vào phải lớn hơn 0. Vui lòng nhập lại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
 
-        if (this.quantity > chiTietSanPham.soLuong) {
-            this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
-                duration: 3000,
-                panelClass: ['error-snackbar']
-            });
-            return;
-        }
+      if (this.quantity > chiTietSanPham.soLuong) {
+        this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
 
-        if (totalPrice > 5000000) { // Kiểm tra nếu tổng giá trị vượt quá 5.000.000 VNĐ
-            this.snackBar.open('Tổng giá trị đơn hàng vượt quá 5.000.000 VNĐ. Vui lòng liên hệ với chăm sóc khách hàng!', 'Đóng', {
-                duration: 5000,
-                panelClass: ['error-snackbar']
-            });
-            return;
-        }
+      if (totalPrice > 5000000) { // Kiểm tra nếu tổng giá trị vượt quá 5.000.000 VNĐ
+        this.snackBar.open('Tổng giá trị đơn hàng vượt quá 5.000.000 VNĐ. Vui lòng liên hệ với chăm sóc khách hàng!', 'Đóng', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
 
-        this.addProductToCart(this.gioHang.id, chiTietSanPham.id, this.quantity);
+      this.addProductToCart(this.gioHang.id, chiTietSanPham.id, this.quantity);
     } else {
-        console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
+      console.error('Không tìm thấy giỏ hàng hoặc chi tiết sản phẩm trong localStorage.');
     }
-}
+
+
+  }
 
 
   addProductToCart(idGioHang: string, idSanPhamChiTiet: string, soLuong: number): void {
@@ -207,7 +301,7 @@ export class ProductDetailComponent implements OnInit {
       const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
       if (storeChiTietSanPham) {
         const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-        this.sanPhamCTService.findChiTietSanPhamByMauSacAndKichThuoc(chiTietSanPham.ma, this.selectedSize.id, this.selectedColor.id)
+        this.sanPhamCTService.findChiTietSanPhamByMauSacAndKichThuoc(chiTietSanPham.sanPham.ma, this.selectedSize.id, this.selectedColor.id)
           .subscribe((response: ApiResponse<any>) => {
             if (response.result) {
               this.findCiTietSanPham = response.result;

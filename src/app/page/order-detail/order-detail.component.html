@@ -1,0 +1,206 @@
+<section style="background-color: #ffffff;">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center">
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <app-sidebar-profile></app-sidebar-profile>
+      </div>
+      <div class="col-lg-9">
+        <div class="card p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <a [routerLink]="['/customer/don-mua']" style="color: black;">
+              Trở lại
+            </a>
+            <span class="me-3"> Mã đơn hàng: DH123123123 |
+              <span [style.color]="getTrangThaiColor(hoaDon.trangThai)" class="ms-auto">
+                  {{ getTrangThaiText(hoaDon.trangThai) }}
+                </span>
+            </span>
+          </div>
+        </div>
+        <div class="card p-4">
+          <div class="status-bar mb-5" *ngIf="hoaDon.trangThai > 0 && hoaDon.trangThai < 5">
+            <div class="status-circle" [ngClass]="{'active': currentStatus >= 2}">
+              <i class="fa fa-file"></i>
+              <span style="color: black; font-size: 16px;">Đã xử lý</span>
+            </div>
+
+            <div class="status-connector" [ngClass]="{'active': currentStatus >= 3}"></div>
+            <div class="status-circle" [ngClass]="{'active': currentStatus >= 3}">
+              <i class="fa fa-truck"></i>
+              <span style="color: black; font-size: 16px;">Đang giao</span>
+            </div>
+
+            <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
+            <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
+              <i class="fa fa-check-circle"></i>
+              <span style="color: black; font-size: 16px;">Đã giao hàng</span>
+            </div>
+
+            <div class="status-connector" [ngClass]="{'active': currentStatus >= 4}"></div>
+            <div class="status-circle" [ngClass]="{'active': currentStatus >= 4}">
+              <i class="fa fa-star"></i>
+              <span style="color: black; font-size: 16px;">Hoàn thành</span>
+            </div>
+          </div>
+          <div *ngIf="hoaDon.trangThai === 5">
+            Hóa đơn đã hủy
+          </div>
+        </div>
+        <div class="card p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <p>
+              Cảm ơn quý khách đã mua hàng
+            </p>
+            <button class="btn_muaLai">Mua lại</button>
+          </div>
+          <hr>
+          <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3>ĐỊA CHỈ NHẬN HÀNG</h3>
+              <p>SPX Express</p>
+            </div>
+          </div>
+
+          <div class="d-flex p-3">
+            <div class="infor">
+              <p style="color: black; font-size: 14px;">{{ hoaDon.khachHang.ten }}</p>
+              <p>{{ hoaDon.khachHang.sdt }}</p>
+              <p style="width: 300px;">{{ hoaDon.khachHang.diaChi }}</p>
+            </div>
+            <div class="status-order-detail">
+              <div class="progress-container">
+                <div *ngIf="hoaDon.trangThai > 0 && hoaDon.trangThai < 6">
+                  <div *ngFor="let status of trangThaiList; let i = index"
+                       [ngClass]="{'completed': i < currentStatus, 'current': i === currentStatus, 'upcoming': i > currentStatus}"
+                       class="progress-step">
+                    <p>{{ getTrangThaiText(status) }}</p>
+                  </div>
+                </div>
+                <div *ngIf="hoaDon.trangThai === 5">
+                  hóa đơn đã hủy
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between align-items-center ps-3 pe-3">
+            <div>
+              <span class="align-items-center" style="color: black;">
+                <i class="ti ti-brand-shopee "></i> MT-Shirt
+              </span>
+            </div>
+            <div>!</div>
+          </div>
+          <div *ngFor="let item of listHoaDonChiTiet">
+            <hr>
+            <div class="d-flex align-items-center">
+              <span class="ms-2">
+                <div class="media">
+                  <div class="d-flex">
+                    <img *ngIf="item.hinhAnhUrls && item.hinhAnhUrls.length > 0"
+                         [src]="item.hinhAnhUrls[1]" alt="" class="product-image">
+                  </div>
+                  <div class="media-body">
+                    <p style="color: black; font-size: 16px;"> {{ item.chiTietSanPham.sanPham.ten }}
+                      <br>
+                      <span style="color: rgb(150, 150, 150); font-size: 12px;">Phân loại sản phẩm: </span>
+                      <br>
+                      <span style="color: rgb(150, 150, 150); font-size: 12px;">{{ item.chiTietSanPham.mauSac.ten }}
+                        , </span>
+                      <span
+                        style="color: rgb(150, 150, 150); font-size: 12px; margin-right: 40px;">{{ item.chiTietSanPham.kichThuoc.ten }}</span>
+                      <span style="color: rgb(150, 150, 150); font-size: 12px;">x{{ item.soLuong }}</span>
+                    </p>
+                  </div>
+                </div>
+              </span>
+              <span class="ms-auto me-3"
+                    style="color: #5D87FF;"> {{ item.chiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}
+              </span>
+            </div>
+          </div>
+          <table class="order-summary mt-3">
+            <tbody>
+            <tr>
+              <td class="text-right">Tổng tiền hàng</td>
+              <td class="text-right">{{ hoaDon.tongTien | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Phí vận chuyển</td>
+              <td class="text-right">{{ hoaDon.tongTien | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Giảm giá phí vận chuyển</td>
+              <td class="text-right">{{ hoaDon.tongTien | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Khuyến mãi</td>
+              <td class="text-right">{{ hoaDon.tongTienGiam | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Thành tiền</td>
+              <td class="text-right">{{ hoaDon.tongTien | currency:'VND':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">Phương thức thanh toán</td>
+              <td class="text-right">Tiền mặt</td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-end mt-3" *ngIf="hoaDon.trangThai === 2">
+            <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Yêu cầu sửa đơn</button>
+          </div>
+          <div class="d-flex justify-content-end mt-3" *ngIf="hoaDon.trangThai === 1">
+            <button class="btn btn-danger">Hủy đơn</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">Yêu cầu sửa đơn hàng</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                 (change)="onRadioChange('Tôi muốn cập nhật địa chỉ/sđt nhận hàng')" [(ngModel)]="selectedOption1" value="Tôi muốn cập nhật địa chỉ/sđt nhận hàng">
+          <label class="form-check-label" for="flexRadioDefault1">
+            Thay đổi địa chỉ/ thông tin người nhận
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                 (change)="onRadioChange('Thay đổi sản phẩm (Màu sắc, kích thước, thêm mã giảm giá...)')" [(ngModel)]="selectedOption1" value="Thay đổi sản phẩm (Màu sắc, kích thước, thêm mã giảm giá...)">
+          <label class="form-check-label" for="flexRadioDefault2">
+            Thay đổi sản phẩm (Màu sắc, kích thước, số lượng...)
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3"
+                 (change)="onRadioChange('Tôi không có nhu cầu mua nữa')" [(ngModel)]="selectedOption1" value="Tôi không có nhu cầu mua nữa">
+          <label class="form-check-label" for="flexRadioDefault3">
+            Tôi không muốn mua nữa
+          </label>
+        </div>
+        <!-- Div to display the note input -->
+        <div *ngIf="showNoteInput" class="mt-3">
+          <label for="noteInput">Ghi chú:</label>
+          <input type="text" id="noteInput" class="form-control" [(ngModel)]="noteText" [placeholder]="notePlaceholder">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="submitRequest()" data-dismiss="modal">Xác nhận</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+      </div>
+    </div>
+  </div>
+</div>
+

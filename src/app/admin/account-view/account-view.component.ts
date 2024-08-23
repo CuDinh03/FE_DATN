@@ -1,7 +1,7 @@
 
 import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {TaiKhoanService} from "../../service/TaiKhoanService";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {AuthenticationService} from "../../service/AuthenticationService";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiResponse} from "../../model/ApiResponse";
@@ -111,6 +111,20 @@ export class AccountViewComponent {
       this.accountModal.nativeElement.style.display = 'none';
     }
   }
+
+  delete(id: any): void {
+    this.apiService.deleteAccount(id).subscribe(() => {
+      this.loadAccounts();
+      this.router.navigate(['/admin/tai-khoan']);
+    });
+  }
+  openAccount(id: any): void {
+    this.apiService.openAccount(id).subscribe(() => {
+      this.loadAccounts();
+      this.router.navigate(['/admin/tai-khoan']);
+    });
+  }
+
 
 
 }

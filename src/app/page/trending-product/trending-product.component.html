@@ -6,27 +6,33 @@
     </div>
     <div class="row">
       <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let sanPham of chiTietSanPham">
-        <div class="card text-center card-product">
-          <div class="card-product__img">
+        <div class="card text-center card-product" (click)="findSanPhamById(sanPham.id)">
+          <div class="card-product__img" >
             <img class="card-img" *ngIf="sanPham.hinhAnh && sanPham.hinhAnh.length > 0" [src]="sanPham.hinhAnh[1].url" alt="Ảnh sản phẩm">
             <ul class="card-product__imgOverlay">
-              <li><button><i class="ti ti-search"></i></button></li>
-              <li><button (click)="findSanPhamById(sanPham.id)"><i class="ti ti-shopping-cart"></i></button></li>
-              <li><button><i class="ti ti-heart"></i></button></li>
+              <li>
+                <button><i class="ti ti-search"></i></button>
+              </li>
+              <li>
+                <button (click)="findSanPhamById(sanPham.id)"><i class="ti ti-shopping-cart"></i></button>
+              </li>
+              <li>
+                <button><i class="ti ti-heart"></i></button>
+              </li>
             </ul>
           </div>
           <div class="card-body text-center">
             <p>{{ sanPham.danhMuc.ten }}</p>
-            <h4 class="card-product__title"><a class="btn" (click)="findSanPhamById(sanPham.id)" >{{ sanPham.sanPham.ten }} màu {{sanPham.mauSac.ten}}</a></h4>
+            <h4 class="card-product__title"><a class="btn">{{ sanPham.sanPham.ten }} màu {{ sanPham.mauSac.ten }}</a></h4>
             <p class="card-product__price">{{ sanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</p>
-            <p>Còn {{sanPham.soLuong}} sản phẩm</p>
+            <p>Còn {{ sanPham.soLuong }} sản phẩm</p>
             <div class="rating">
-              <i class="ti ti-star filled"></i>
-              <i class="ti ti-star filled"></i>
-              <i class="ti ti-star filled"></i>
-              <i class="ti ti-star filled"></i>
-              <i class="ti ti-star"></i>
-              <span>(202 đánh giá)</span>
+              <i class="ti ti-star" [class.filled]="getDiemDanhGia(sanPham.id) >= 1"></i>
+              <i class="ti ti-star" [class.filled]="getDiemDanhGia(sanPham.id) >= 2"></i>
+              <i class="ti ti-star" [class.filled]="getDiemDanhGia(sanPham.id) >= 3"></i>
+              <i class="ti ti-star" [class.filled]="getDiemDanhGia(sanPham.id) >= 4"></i>
+              <i class="ti ti-star" [class.filled]="getDiemDanhGia(sanPham.id) >= 5"></i>
+              <span>({{ getSoLuongDanhGia(sanPham.id) }} đánh giá)</span>
             </div>
           </div>
         </div>
@@ -34,44 +40,3 @@
     </div>
   </div>
 </section>
-
-<!-- <section class="section-margin calc-60px">
-  <div class="container">
-    <div class="section-intro pb-60px">
-      <p>Popular Item in the market</p>
-      <h2>Hàng <span class="section-intro__style">Mới về</span></h2>
-    </div>
-    <div class="row">
-      <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let sanPham of chiTietSanPham">
-        <div class="card text-center card-product">
-          <div class="card-product__img">
-            <img class="card-img" *ngIf="sanPham.hinhAnh && sanPham.hinhAnh.length > 0" [src]="sanPham.hinhAnh[0].url" alt="Ảnh sản phẩm">
-            <ul class="card-product__imgOverlay">
-              <li><button><i class="ti ti-search"></i></button></li>
-              <li><button><i class="ti ti-shopping-cart"></i></button></li>
-              <li><button><i class="ti ti-heart"></i></button></li>
-            </ul>
-          </div>
-          <div class="card-body">
-            <p>{{ sanPham.danhMuc.ten }}</p>
-            <h4 class="card-product__title"><a href="#">{{ sanPham.ma }}</a></h4>
-            <p class="card-product__price">{{ sanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</p>
-            <p>Đã bán 2302 sản phẩm</p>
-            <div class="rating">
-              <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-                <i class="ti-star" [class.filled]="sanPham.rating > i"></i>
-              </ng-container>
-              <span>({{ sanPham.reviewCount }} đánh giá)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
-
-
-
-
-
-

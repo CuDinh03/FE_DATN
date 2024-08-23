@@ -1,11 +1,12 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import {TaiKhoanService} from '../../service/TaiKhoanService';
 import {TaiKhoanDto} from '../../model/tai-khoan-dto.model';
 import {ApiResponse} from '../../model/ApiResponse';
 import {ErrorCode} from '../../model/ErrorCode';
+import {DangNhapDto} from "../../model/dangNhapDto";
 
 @Component({
     selector: 'app-register',
@@ -24,6 +25,7 @@ export class RegisterComponent {
         private router: Router
     ) {
         this.accountForm = this.formBuilder.group({
+          email: ['', [Validators.required, Validators.email]],
             tenDangNhap: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(10)]],
             matKhau: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
             xacNhanMatKhau: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]]
@@ -43,22 +45,28 @@ export class RegisterComponent {
             return;
         }
 
-        const accountData: TaiKhoanDto = this.accountForm.value;
-        if (accountData.matKhau !== accountData.xacNhanMatKhau) {
-            this.errorMessage = 'Mật khẩu và xác nhận mật khẩu không khớp';
-            return;
-        }
+      const accountData: DangNhapDto = {
+        taiKhoanDto: {
+          tenDangNhap: this.accountForm.value.tenDangNhap,
+          matKhau: this.accountForm.value.matKhau,
+          id: '',
+        },
+        email: this.accountForm.value.email
+      };
 
-        const username = this.accountForm.value.tenDangNhap;
+      if (accountData.taiKhoanDto.matKhau !== this.accountForm.value.xacNhanMatKhau) {
+        this.errorMessage = 'Mật khẩu và xác nhận mật khẩu không khớp';
+        return;
+      }
 
-        this.accountService.checkUsernameExists(username).subscribe(
+      this.accountService.checkUsernameExists(accountData.taiKhoanDto.tenDangNhap).subscribe(
             (response: ApiResponse<any>) => {
                 if (response.result) {
                     this.errorMessage = 'Tên đăng nhập đã tồn tại.';
                 } else {
                     this.accountService.createAccount(accountData)
                         .subscribe(
-                            (response: ApiResponse<TaiKhoanDto>) => {
+                            (response: ApiResponse<DangNhapDto>) => {
                                 this.successMessage = 'Đăng ký thành công! Chuyển hướng đến trang đăng nhập...';
                                 setTimeout(() => {
                                     this.router.navigate(['/log-in']);

@@ -1,11 +1,4 @@
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-     data-sidebar-position="fixed" data-header-position="fixed">
-  <app-sidebar></app-sidebar>
-  <!--  Main wrapper -->
-  <div class="body-wrapper">
-    <!--  Header Start -->
-    <app-admin-header></app-admin-header>
-    <!--  Header End -->
+
     <div class="container-fluid">
       <!--  Row 1 -->
       <div class="row">
@@ -22,14 +15,14 @@
                 </div> -->
                 <div>
 
-                  <select class="form-select">
-<!--                    <option value="ALL">All</option>-->
-<!--                    <option value="CUSTOMER">Customer</option>-->
-<!--                    <option value="STAFF">Staff</option>-->
-<!--                    <option value="ADMIN">Admin</option>-->
-                    <!--                    <option value="3">May 2023</option>-->
-                    <!--                    <option value="4">June 2023</option>-->
-                  </select>
+<!--                  <select class="form-select">-->
+<!--&lt;!&ndash;                    <option value="ALL">All</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <option value="CUSTOMER">Customer</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <option value="STAFF">Staff</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <option value="ADMIN">Admin</option>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    <option value="3">May 2023</option>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    <option value="4">June 2023</option>&ndash;&gt;-->
+<!--                  </select>-->
                 </div>
               </div>
               <div *ngIf="vouchers.length > 0">
@@ -59,22 +52,19 @@
                     <td>{{voucher.ma }}</td>
                     <td>{{voucher.ten}}</td>
                     <td>
-                      <div *ngIf="voucher.trangThai === true">
-                        <div class="form-check form-switch">
+                      <div *ngIf="voucher.trangThai === 1">
+                        <div class="form-check form-switch" (click)="delete(voucher.id)" >
                           <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
 
                         </div>
                       </div>
-                      <div *ngIf="voucher.trangThai === false">
-                        <div class="form-check form-switch">
+                      <div *ngIf="voucher.trangThai === 0">
+                        <div class="form-check form-switch" (click)="openVoucher(voucher.id)" >
                           <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                         </div>
                       </div>
                     </td>
                     <td>
-                      <a href="/delete" style="color: #F87777; font-size: 20px;" class="me-2">
-                        <i class="ti ti-x"></i>
-                      </a>
                       <a (click)="openModal(voucher)" style="color: #7A98FE;font-size: 20px;">
                         <i class="ti ti-edit"></i>
                       </a>
@@ -92,52 +82,151 @@
                   </button>
                 </div>
                 <div *ngIf="vouchers.length === 0">
-                  <p>Không có tài khoản nào được tìm thấy.</p>
+                  <p>Không có voucher nào được tìm thấy.</p>
                 </div>
               </div>
 
             </div>
           </div>
         </div>
-<!--        <div class="col-lg-5">-->
-<!--          <div class="row">-->
-<!--            <div class="col-lg-12">-->
-<!--              <div class="card">-->
-<!--                <div class="card-body">-->
-<!--                  <div class="row alig n-items-start">-->
-<!--                    <form [formGroup]="voucherForm" (ngSubmit)="createVoucher()">-->
-<!--                      <div class="mb-3">-->
-<!--                        <label for="ma" class="form-label">Mã</label>-->
-<!--                        <input type="text" class="form-control" formControlName="ma" aria-describedby="textHelp" id="ma">-->
-<!--                      </div>-->
-<!--                      <div class="mb-4">-->
-<!--                        <label for="ten" class="form-label">Tên</label>-->
-<!--                        <input type="text" class="form-control" formControlName="ten" id="ten"  >-->
-<!--                      </div>-->
-<!--                      <div class="mb-4">-->
-<!--                        <label for="trangThai" class="form-label">Trạng thái</label>-->
-<!--                        <input type="text" class="form-control" formControlName="trangThai"  id="trangThai">-->
-<!--                      </div>-->
-<!--                      <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Thêm</button>-->
-<!--                    </form>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div id="earning"></div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+        <div class="col-lg-5">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row alig n-items-start">
+                    <form [formGroup]="voucherForm" (ngSubmit)="onSubmit()">
+                      <input type="hidden" formControlName="id" id="id">
+
+                      <div class="mb-3">
+                        <span><label for="ma" class="form-label">Mã: </label> </span>
+
+                        <span id="ma">{{ voucherForm.get('ma')?.value }}</span>
+
+                      </div>
+                      <div class="mb-4">
+                        <label for="ten" class="form-label">Tên: </label>
+                        <input type="text" class="form-control" formControlName="ten" id="ten">
+                        <div *ngIf="f['ten'].invalid &&  (f['ten'].dirty || f['ten'].touched)">
+                          <div *ngIf="f['ten'].errors">
+                            <div id="validationServer03Feedback">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <label for="ten" class="form-label">Loại giảm : </label>
+                        <input type="text" class="form-control" formControlName="loaiGiamGia" id="loaiGiamGia">
+                        <div *ngIf="f['ten'].invalid &&  (f['ten'].dirty || f['ten'].touched)">
+                          <div *ngIf="f['ten'].errors">
+                            <div id="validationServer03Feedbackl">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <label for="ten" class="form-label">Ngày bắt đầu: </label>
+                        <input type="date" class="form-control" formControlName="ngayBatDau" id="ngayBatDau">
+                        <div *ngIf="f['ten'].invalid &&  (f['ten'].dirty || f['ten'].touched)">
+                          <div *ngIf="f['ten'].errors">
+                            <div id="validationServer03Feedbackb">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <label for="ten" class="form-label">Ngày kết thúc: </label>
+                        <input type="date" class="form-control" formControlName="ngayKetThuc" id="ngayKetThuc">
+                        <div *ngIf="f['ten'].invalid &&  (f['ten'].dirty || f['ten'].touched)">
+                          <div *ngIf="f['ten'].errors">
+                            <div id="validationServer03Feedbacke">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <label for="ten" class="form-label">Giá trị giảm: </label>
+                        <input type="number" class="form-control" formControlName="giaTriGiam" id="giaTriGiam">
+                        <div *ngIf="f['ten'].invalid &&  (f['ten'].dirty || f['ten'].touched)">
+                          <div *ngIf="f['ten'].errors">
+                            <div id="validationServer03Feedbackg">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <label for="ten" class="form-label">Giá trị giảm tối thiểu: </label>
+                        <input type="number" class="form-control" formControlName="giaTriToiThieu" id="giaTriToiThieu">
+                        <div *ngIf="f['ten'].invalid &&  (f['ten'].dirty || f['ten'].touched)">
+                          <div *ngIf="f['ten'].errors">
+                            <div id="validationServer03Feedbackt">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <label for="ten" class="form-label">Số lượng: </label>
+                        <input type="number" class="form-control" formControlName="soLuong" id="soLuong">
+                        <div *ngIf="f['ten'].invalid &&  (f['ten'].dirty || f['ten'].touched)">
+                          <div *ngIf="f['ten'].errors">
+                            <div id="validationServer03Feedbacks">
+                              <small style="color: red;">Không được để trống</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-4">
+                        <label class="form-label">Trạng thái: </label>
+                        <br>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" formControlName="trangThai" id="inlineRadio"
+                                 value="1">
+                          <label class="form-check-label" for="inlineRadio1">Còn</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" formControlName="trangThai" id="inlineRadio1"
+                                 value="0">
+                          <label class="form-check-label" for="inlineRadio1">Hết</label>
+                        </div>
+                      </div>
+                      <div>
+                        <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" [disabled]="!voucherForm.valid">
+                          {{ isEditMode ? 'Cập nhật' : 'Thêm' }}
+                        </button>
+                      </div>
+                      <div *ngIf="showSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{successMessage}}
+                        <button type="button" class="btn-close" aria-label="Close" (click)="closeSuccessAlert()"></button>
+                      </div>
+
+                      <!-- Thông báo lỗi -->
+                      <div *ngIf="errorMessage" class="alert alert-danger">
+                        {{ errorMessage }}
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+                <div id="earning"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
-  </div>
-</div>
 
 <div class="modal fade" #voucherModal tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="accountModalLabel">Chi tiết Tài khoản</h5>
+        <h5 class="modal-title" id="accountModalLabel">Chi tiết Voucher</h5>
         <button type="button" class="btn-close" (click)="closeVoucherModal()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -185,7 +274,7 @@
             <td>
               <!--                                            <a [routerLink]="'/admin/' + account.id" type="button"-->
               <!--                                               class="btn btn-info">Chi tiết</a>-->
-              <button type="button" class="btn btn-warning  ">Cập nhật</button>
+              <button type="button" class="btn btn-warning" (click)="findById(selectedVoucher?.id)">Cập nhật</button>
 
             </td>
           </tr>

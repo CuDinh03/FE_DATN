@@ -1,11 +1,4 @@
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-  data-sidebar-position="fixed" data-header-position="fixed">
-  <app-sidebar></app-sidebar>
-  <!--  Main wrapper -->
-  <div class="body-wrapper">
-    <!--  Header Start -->
-<app-admin-header></app-admin-header>
-    <!--  Header End -->
+
     <div class="container-fluid">
       <!--  Row 1 -->
       <div class="row">
@@ -49,7 +42,10 @@
                         <h6 class="fw-semibold mb-0">Chức vụ</h6>
                       </th>
                       <th scope="col">
-                        <h6 class="fw-semibold mb-0">Action</h6>
+                        <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                      </th>
+                      <th scope="col">
+                        <h6 class="fw-semibold mb-0">Chi Tiết</h6>
                       </th>
                     </tr>
                   </thead>
@@ -66,16 +62,32 @@
                         </div>
                       </td>
                       <td>{{account.ngayTao | date: 'dd/MM/yyyy'}}</td>
-                      <td>{{account.idChucVu.ten}}</td>
+                      <td>{{account.chucVu.ten}}</td>
+<!--                      <td>-->
+<!--                        &lt;!&ndash;                                            <a [routerLink]="'/admin/' + account.id" type="button"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                               class="btn btn-info">Chi tiết</a>&ndash;&gt;-->
+<!--                        <button type="button" class="btn btn-info" ">Chi-->
+<!--                          tiết-->
+<!--                        </button>-->
+<!--                        <button type="button" class="btn btn-danger" (click)="openModal(account)">Vô hiệu hoá-->
+<!--                        </button>-->
+<!--                      </td>-->
                       <td>
-                        <!--                                            <a [routerLink]="'/admin/' + account.id" type="button"-->
-                        <!--                                               class="btn btn-info">Chi tiết</a>-->
-                        <button type="button" class="btn btn-info" (click)="openModal(account)">Chi
-                          tiết
-                        </button>
-                        <button type="button" class="btn btn-danger" (click)="openModal(account)">Vô hiệu hoá
-                        </button>
-
+                        <div *ngIf="account.trangThai === 1">
+                          <div class="form-check form-switch" (click)="delete(account.id)">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                          </div>
+                        </div>
+                        <div *ngIf="account.trangThai === 0">
+                          <div class="form-check form-switch" (click)="openAccount(account.id)">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <a (click)="openModal(account)" style="color: #7A98FE;font-size: 20px;">
+                          <i class="ti ti-info"></i>
+                        </a>
                       </td>
                     </tr>
                   </tbody>
@@ -147,7 +159,7 @@
                   <h6 class="fw-semibold mb-1 ">{{selectedAccount?.tenDangNhap }}</h6>
                 </td>
                 <td>{{selectedAccount?.ngayTao | date: 'dd/MM/yyyy'}}</td>
-                <td>{{selectedAccount?.idChucVu.ten}}</td>
+                <td>{{selectedAccount?.chucVu.ten}}</td>
                 <td>
                   <!--                                            <a [routerLink]="'/admin/' + account.id" type="button"-->
                   <!--                                               class="btn btn-info">Chi tiết</a>-->
@@ -167,5 +179,5 @@
     </div>
   </div>
 
-</div>
-</div>
+
+
