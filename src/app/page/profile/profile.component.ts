@@ -67,7 +67,8 @@ export class ProfileComponent {
       sdt: ['', Validators.required],
       gioiTinh: ['', Validators.required],
       ngaySinh: ['', Validators.required],
-      diaChi: ['', Validators.required]
+      diaChi: ['', Validators.required],
+      taiKhoan: ['', Validators.required],
     });
     this.taskCompleted();
   }
@@ -128,6 +129,7 @@ export class ProfileComponent {
       gioiTinh: khachHang.gioiTinh,
       ngaySinh: khachHang.ngaySinh,
       diaChi: khachHang.diaChi,
+      taiKhoan: khachHang.taiKhoan
     });
   }
 
@@ -147,7 +149,7 @@ export class ProfileComponent {
         sdt: formValue.sdt,
         email: formValue.email,
         diaChi: formValue.diaChi,
-        taiKhoan: this.taiKhoanInfo,
+        taiKhoan: formValue.taiKhoan,
         ngayTao: this.taiKhoanInfo?.ngayTao,
         ma: this.taiKhoanInfo?.ma
       }
