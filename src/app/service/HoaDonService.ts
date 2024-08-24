@@ -220,12 +220,12 @@ export class HoaDonService {
     return this.http.put<ApiResponse<any>>(`${this.apiUrl}/suaHoaDon`, hoaDonSua, { headers });
   }
 
-  getMonthlySalesData(): Observable<MonthlySalesData[]> {
+  getMonthlySalesData(): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.get<MonthlySalesData[]>(`${this.apiUrl}/monthly-sales` , { headers });
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/monthly-sales` , { headers });
   }
 
 

@@ -1,17 +1,19 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {CurrencyPipe, NgForOf} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
 import {HoaDonService} from "../../service/HoaDonService";
 import {HoaDonChiTietService} from "../../service/HoaDonChiTietService";
-import {ApiResponse} from "../../model/ApiResponse";
-import {ChartComponent, NgApexchartsModule ,  ApexAxisChartSeries,
+import {ChartComponent, NgApexchartsModule, ApexAxisChartSeries,
   ApexChart,
   ApexXAxis,
   ApexDataLabels,
   ApexTitleSubtitle,
   ApexStroke,
-  ApexGrid} from "ng-apexcharts";
+  ApexGrid,
+  ApexYAxis} from "ng-apexcharts";
 import {MonthlySalesData} from "../../model/MonthlySalesData";
+import {NgxSpinnerComponent, NgxSpinnerService} from "ngx-spinner";
+import {forkJoin} from "rxjs";
 
 export type ChartOptions = {
   series?: ApexAxisChartSeries;
@@ -21,6 +23,7 @@ export type ChartOptions = {
   grid?: ApexGrid;
   stroke?: ApexStroke;
   title?: ApexTitleSubtitle;
+  yaxis?: ApexYAxis;  // Thêm yaxis vào định nghĩa
 };
 
 
@@ -32,9 +35,10 @@ export type ChartOptions = {
     NgForOf,
     ReactiveFormsModule,
     NgApexchartsModule,
+    NgxSpinnerComponent,
   ],
   templateUrl: './dash-board.component.html',
-  styleUrl: './dash-board.component.css'
+  styleUrls: ['./dash-board.component.css']  // Chú ý sửa styleUrl thành styleUrls
 })
 export class DashBoardComponent implements OnInit {
   doanhThu: number = 0;
@@ -42,76 +46,30 @@ export class DashBoardComponent implements OnInit {
   listHoaDonChiTiet: any[] = [];
   monthlySalesData: MonthlySalesData[] = [];
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions> = {
-    series: [],
-    chart: {
-      height: 350,
-      type: 'line',
-      zoom: {
-        enabled: false
-      }
-    } as ApexChart,
-    xaxis: {
-      categories: []
-    },
-    dataLabels: {
-      enabled: false
-    },
-    grid: {
-      row: {
-        colors: ['#f3f3f3', 'transparent'],
-        opacity: 0.5
-      }
-    },
-    stroke: {
-      curve: 'smooth'
-    },
-    title: {
-      text: '',
-      align: 'left'
-    }
-  };
+  public chartOptions: Partial<ChartOptions> = {};
 
   constructor(
     private hoaDonService: HoaDonService,
-    private hoaDonChiTietService: HoaDonChiTietService
+    private hoaDonChiTietService: HoaDonChiTietService,
+    private spinner: NgxSpinnerService,
+    private cdr: ChangeDetectorRef // Thêm ChangeDetectorRef
   ) {
   }
 
   ngOnInit(): void {
-    this.hoaDonService.getMonthlySalesData().subscribe(data => {
-      console.log('API Data:', data);  // Kiểm tra dữ liệu API
-      this.monthlySalesData = Array.isArray(data) ? data : [];
+    this.spinner.show();
+    forkJoin({
+      monthlySales: this.hoaDonService.getMonthlySalesData(),
+      thongKeDoanhThu: this.hoaDonService.getThongKeDoanhThu(),
+      thongKeDonHang: this.hoaDonService.getThongKeDonHang(),
+      thongKeSanPham: this.hoaDonChiTietService.getThongKeSanPham()
+    }).subscribe(({monthlySales, thongKeDoanhThu, thongKeDonHang, thongKeSanPham}) => {
+      this.monthlySalesData = this.prepareChartData(monthlySales.result);
+      this.doanhThu = thongKeDoanhThu.result || 0;
+      this.donHang = thongKeDonHang.result || 0;
+      this.listHoaDonChiTiet = thongKeSanPham.result || [];
       this.updateChartOptions();
     });
-    this.getThongKeDoanhThu();
-    this.getThongKeDonHang();
-    this.getThongKeSanPham();
-  }
-
-
-  getThongKeDoanhThu() {
-    this.hoaDonService.getThongKeDoanhThu().subscribe(res => {
-      if (res.result) {
-        this.doanhThu = res.result;
-      }
-    })
-  }
-
-  getThongKeDonHang() {
-    this.hoaDonService.getThongKeDonHang().subscribe(res => {
-      if (res.result) {
-        this.donHang = res.result;
-      }
-    })
-  }
-
-  getThongKeSanPham() {
-    this.hoaDonChiTietService.getThongKeSanPham().subscribe((res: ApiResponse<any>) => {
-      if (res.result) {
-        this.listHoaDonChiTiet = res.result;
-      }
-    })
   }
 
   updateChartOptions(): void {
@@ -155,21 +113,38 @@ export class DashBoardComponent implements OnInit {
         }
       },
       xaxis: {
-        categories: this.monthlySalesData.map(item => this.getMonthName(item.month))
+        categories: this.getMonthNames()
       },
-      // @ts-ignore
       yaxis: {
         title: {
           text: 'Giá Trị'
         }
       }
     };
+
+    // Sau khi cập nhật chartOptions, cập nhật lại series để biểu đồ render
+    // this.chart.updateSeries(this.chartOptions.series!);
+    this.cdr.detectChanges(); // Thêm dòng này để phát hiện thay đổi
+    this.spinner.hide();  //
+
   }
 
-
-  getMonthName(month: number): string {
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return monthNames[month - 1] || 'Unknown';
+  getMonthNames(): string[] {
+    return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   }
 
+  prepareChartData(monthlySalesData: any[]): any[] {
+    const fullYearData = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      orderCount: 0,
+      totalSales: 0
+    }));
+
+    monthlySalesData.forEach(data => {
+      const index = data.month - 1;
+      fullYearData[index] = data;
+    });
+
+    return fullYearData;
+  }
 }
