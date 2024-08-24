@@ -86,7 +86,7 @@ export class ProductDetailViewComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private hinhAnhService: HinhAnhService,
     private utilityService: UtilityService,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {
     this.loadMacSac();
       this.productForm = this.fb.group({
@@ -565,16 +565,6 @@ export class ProductDetailViewComponent implements OnInit {
   updateProduct(): void {
     if (this.productForm.valid) {
       const updatedProduct1 = this.productForm.value;
-
-      // this.selectedSanPhamChiTiet.soLuong = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.sanPham = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.thuongHieu = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.chatLieu = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.danhMuc = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.kichThuoc = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.mauSac = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.giaNhap = updatedProduct1.soLuong;
-
       const updatedProduct = {
         id : this.selectedSanPhamChiTiet.id,
         ma: this.selectedSanPhamChiTiet.ma,
@@ -603,6 +593,22 @@ export class ProductDetailViewComponent implements OnInit {
         }
       });
     }
+  }
+
+  delete(id: string): void {
+    this.sanPhamCTService.remove(id).subscribe(
+      response => {
+        if (response) {
+          // 'Xóa thành công!';
+        } else {
+          // 'Xóa thất bại!');
+        }
+      },
+      error => {
+        // ('Xảy ra lỗi khi xóa!');
+        // Xử lý lỗi nếu cần
+      }
+    );
   }
 
 }
