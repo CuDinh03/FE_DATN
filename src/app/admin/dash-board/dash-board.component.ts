@@ -1,19 +1,13 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {CurrencyPipe, NgForOf} from "@angular/common";
-import {ReactiveFormsModule} from "@angular/forms";
-import {HoaDonService} from "../../service/HoaDonService";
-import {HoaDonChiTietService} from "../../service/HoaDonChiTietService";
-import {ChartComponent, NgApexchartsModule, ApexAxisChartSeries,
-  ApexChart,
-  ApexXAxis,
-  ApexDataLabels,
-  ApexTitleSubtitle,
-  ApexStroke,
-  ApexGrid,
-  ApexYAxis} from "ng-apexcharts";
-import {MonthlySalesData} from "../../model/MonthlySalesData";
-import {NgxSpinnerComponent, NgxSpinnerService} from "ngx-spinner";
-import {forkJoin} from "rxjs";
+import { ChangeDetectorRef, Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { CurrencyPipe, NgForOf } from "@angular/common";
+import { ReactiveFormsModule } from "@angular/forms";
+import { HoaDonService } from "../../service/HoaDonService";
+import { HoaDonChiTietService } from "../../service/HoaDonChiTietService";
+import { ChartComponent, NgApexchartsModule, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexTitleSubtitle, ApexStroke, ApexGrid, ApexYAxis } from "ng-apexcharts";
+import { MonthlySalesData } from "../../model/MonthlySalesData";
+import { NgxSpinnerComponent, NgxSpinnerService } from "ngx-spinner";
+import { forkJoin } from "rxjs";
+import ApexCharts from 'apexcharts';
 
 export type ChartOptions = {
   series?: ApexAxisChartSeries;
@@ -26,7 +20,6 @@ export type ChartOptions = {
   yaxis?: ApexYAxis;  // Thêm yaxis vào định nghĩa
 };
 
-
 @Component({
   selector: 'app-dash-board',
   standalone: true,
@@ -38,9 +31,9 @@ export type ChartOptions = {
     NgxSpinnerComponent,
   ],
   templateUrl: './dash-board.component.html',
-  styleUrls: ['./dash-board.component.css']  // Chú ý sửa styleUrl thành styleUrls
+  styleUrls: ['./dash-board.component.css']  // Sửa styleUrl thành styleUrls
 })
-export class DashBoardComponent implements OnInit {
+export class DashBoardComponent implements OnInit, AfterViewInit {
   doanhThu: number = 0;
   donHang: number = 0;
   listHoaDonChiTiet: any[] = [];
@@ -53,23 +46,55 @@ export class DashBoardComponent implements OnInit {
     private hoaDonChiTietService: HoaDonChiTietService,
     private spinner: NgxSpinnerService,
     private cdr: ChangeDetectorRef // Thêm ChangeDetectorRef
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
     this.spinner.show();
-    forkJoin({
-      monthlySales: this.hoaDonService.getMonthlySalesData(),
-      thongKeDoanhThu: this.hoaDonService.getThongKeDoanhThu(),
-      thongKeDonHang: this.hoaDonService.getThongKeDonHang(),
-      thongKeSanPham: this.hoaDonChiTietService.getThongKeSanPham()
-    }).subscribe(({monthlySales, thongKeDoanhThu, thongKeDonHang, thongKeSanPham}) => {
-      this.monthlySalesData = this.prepareChartData(monthlySales.result);
-      this.doanhThu = thongKeDoanhThu.result || 0;
-      this.donHang = thongKeDonHang.result || 0;
-      this.listHoaDonChiTiet = thongKeSanPham.result || [];
-      this.updateChartOptions();
+    // Tạo một đối tượng chứa các Observable cần thực hiện song song
+    const observables = {
+      monthlySales$: this.hoaDonService.getMonthlySalesData(),
+      thongKeDoanhThu$: this.hoaDonService.getThongKeDoanhThu(),
+      thongKeDonHang$: this.hoaDonService.getThongKeDonHang(),
+      thongKeSanPham$: this.hoaDonChiTietService.getThongKeSanPham()
+    };
+
+    // Sử dụng forkJoin để thực hiện tất cả các Observable cùng một lúc
+    forkJoin(observables).subscribe({
+      next: ({
+               monthlySales$,
+               thongKeDoanhThu$,
+               thongKeDonHang$,
+               thongKeSanPham$
+             }) => {
+        // Xử lý dữ liệu trả về từ các Observable
+        this.monthlySalesData = this.prepareChartData(monthlySales$.result);
+        this.doanhThu = thongKeDoanhThu$.result || 0;
+        this.donHang = thongKeDonHang$.result || 0;
+        this.listHoaDonChiTiet = thongKeSanPham$.result || [];
+
+        // Cập nhật cấu hình biểu đồ
+        this.updateChartOptions();
+
+        // Ẩn spinner sau khi dữ liệu đã được tải về
+        this.spinner.hide();
+      },
+      error: (err) => {
+        // Xử lý lỗi (nếu có)
+        console.error('Có lỗi xảy ra khi lấy dữ liệu', err);
+
+        // Ẩn spinner nếu có lỗi
+        this.spinner.hide();
+      }
     });
+  }
+
+  ngAfterViewInit() {
+    // Đảm bảo biểu đồ được khởi tạo sau khi cấu hình đã được thiết lập
+    if (this.chartOptions && this.chartOptions.series) {
+      new ApexCharts(document.querySelector("#chart"), this.chartOptions as ApexCharts.ApexOptions).render();
+    } else {
+      console.error('Biểu đồ không thể được khởi tạo vì chartOptions chưa được cấu hình.');
+    }
   }
 
   updateChartOptions(): void {
@@ -122,11 +147,12 @@ export class DashBoardComponent implements OnInit {
       }
     };
 
-    // Sau khi cập nhật chartOptions, cập nhật lại series để biểu đồ render
-    // this.chart.updateSeries(this.chartOptions.series!);
-    this.cdr.detectChanges(); // Thêm dòng này để phát hiện thay đổi
-    this.spinner.hide();  //
-
+    // Đảm bảo biểu đồ được cập nhật sau khi cấu hình đã được thiết lập
+    if (this.chart) {
+      this.chart.updateSeries(this.chartOptions.series!); // Cập nhật lại series
+    }
+    this.cdr.detectChanges(); // Phát hiện thay đổi
+    this.spinner.hide(); // Đóng spinner
   }
 
   getMonthNames(): string[] {

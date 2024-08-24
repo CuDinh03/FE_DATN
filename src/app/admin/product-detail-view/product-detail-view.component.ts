@@ -36,6 +36,7 @@ interface Column {
 
 })
 export class ProductDetailViewComponent implements OnInit {
+
   @ViewChild('editModal') editModal!: ElementRef;
 
   cols!: Column[];
@@ -104,6 +105,7 @@ export class ProductDetailViewComponent implements OnInit {
     this.loadHinhAnh();
     this.loadSanPhamChiTietByNgayTao1();
   }
+
 
   showModalEdit(): void {
     if (this.editModal && this.editModal.nativeElement) {

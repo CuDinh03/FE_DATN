@@ -24,6 +24,40 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Hết hàng - Red border and background */
+.stock-out {
+  border: 1px solid #f85151;
+  background-color: #f85151;
+  color: white;
+  border-radius: 30px; /* Bo góc nhỏ */
+  padding: 2px 6px; /* Padding để text không bị chạm viền */
+  display: inline-block; /* Đảm bảo border chỉ bao quanh chữ */
+  text-align: center; /* Căn giữa văn bản */
+}
+
+/* Sắp hết hàng - Yellow border and background */
+.stock-low {
+  border: 1px solid #ff9100;
+  background-color: #ff9100;
+  color: white;
+  border-radius: 30px; /* Bo góc nhỏ */
+  padding: 2px 6px; /* Padding để text không bị chạm viền */
+  display: inline-block; /* Đảm bảo border chỉ bao quanh chữ */
+  text-align: center; /* Căn giữa văn bản */
+}
+
+/* Còn hàng - Green border and background */
+.stock-in {
+  border: 1px solid green;
+  background-color: green;
+  color: white;
+  border-radius: 30px; /* Bo góc nhỏ */
+  padding: 2px 6px; /* Padding để text không bị chạm viền */
+  display: inline-block; /* Đảm bảo border chỉ bao quanh chữ */
+  text-align: center; /* Căn giữa văn bản */
+}
+
+
 /* CSS cho tiêu đề hình ảnh */
 .image-gallery h5 {
     margin-bottom: 1rem;
@@ -260,6 +294,30 @@
 .btn-delete:hover {
   background: rgba(255, 0, 0, 0.8);
 }
+.notification-container {
+  width: 300px; /* Đặt chiều rộng tự động để phù hợp với nội dung */
+  max-width: 300px; /* Đặt chiều rộng tối đa của thanh thông báo */
+  overflow: hidden; /* Ẩn phần văn bản bị tràn */
+  text-overflow: ellipsis; /* Hiển thị dấu ba chấm khi nội dung bị tràn */
+  white-space: nowrap; /* Đảm bảo văn bản không bị xuống dòng */
+}
+
+.notification-text {
+  display: inline-block; /* Cần thiết để có thể áp dụng các thuộc tính overflow */
+  vertical-align: middle; /* Căn chỉnh văn bản dọc giữa */
+  width: 300px; /* Đặt chiều rộng tự động để phù hợp với nội dung */
+  max-width: 300px; /* Đặt chiều rộng tối đa của thanh thông báo */
+}
 
 
-
+.lineHead{
+width: 1200px;
+height: 20px;
+display: inline-block;
+border: 1px solid #ccc;
+textAlign: center;
+lineHeight: 20px;
+overflow: hidden;
+whiteSpace: nowrap;
+textOverflow: ellipsis;
+}

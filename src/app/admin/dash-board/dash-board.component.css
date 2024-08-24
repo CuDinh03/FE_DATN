@@ -14,7 +14,17 @@
 .spoke {
   position: absolute;
 }
+#chart {
+  width: 100%;  /* Đảm bảo biểu đồ chiếm toàn bộ chiều rộng của container */
+  height: 350px; /* Đảm bảo chiều cao của biểu đồ */
+  margin: 0 auto; /* Căn giữa container */
+}
 
+@media (max-width: 768px) {
+  #chart {
+    height: 300px; /* Thay đổi chiều cao cho màn hình nhỏ hơn */
+  }
+}
 .wheel,
 .spoke {
   border-radius: 50%;
