@@ -30,7 +30,7 @@ export class UtilityService {
 
    removeHinhAnhProperty(list: ChiTietSanPhamDto[]): ChiTietSanPhamDto[] {
     return list.map(item => {
-      const { HinhAnh, ...rest } = item; // Tách thuộc tính HinhAnh ra khỏi đối tượng
+      const { hinhAnh, ...rest } = item; // Tách thuộc tính HinhAnh ra khỏi đối tượng
       return rest; // Trả về đối tượng mới không có thuộc tính HinhAnh
     });
   }
