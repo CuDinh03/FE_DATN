@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormGroup,} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators,} from '@angular/forms';
 import {ChiTietSanPhamDto} from 'src/app/model/chi-tiet-san-pham-dto.model';
 import {ChatLieuService} from 'src/app/service/ChatLieuService';
 import {DanhMucService} from 'src/app/service/DanhMucService';
@@ -39,7 +39,7 @@ export class ProductDetailViewComponent implements OnInit {
   @ViewChild('editModal') editModal!: ElementRef;
 
   cols!: Column[];
-  selectedSanPhamChiTiet: any = {};
+  selectedSanPhamChiTiet: ChiTietSanPhamDto = {};
   listHinhAnhSelect: HinhAnhDto[] = [];
   selectedListSp: ChiTietSanPhamDto[] = [];
   selectedSanPham: SanPhamDto[] = [];
@@ -61,17 +61,15 @@ export class ProductDetailViewComponent implements OnInit {
   listDanhMuc: DanhMucDto[] = [];
   listThuongHieu: ThuongHieuDto[] = [];
   listHinhAnh: HinhAnhDto[] = [];
-  sanPhamChiTietID: any;
   chiTietSanPhamFormAdd!: FormGroup;
-  chiTietSanPhamFormUpdate!: FormGroup;
   productDialog: boolean = false;
   product!: ChiTietSanPhamDto;
   selectedProducts!: ChiTietSanPhamDto[] | null;
   submitted: boolean = false;
-  currentSlide = 0;
   statuses!: any[];
   sanPhamChiTiet: any = {};
   currentSlideNew: { [page: number]: { [key: string]: number } } = {};
+  productForm: FormGroup;
 
   constructor(
     private sanPhamCTService: SanPhamCTService,
@@ -87,9 +85,20 @@ export class ProductDetailViewComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private hinhAnhService: HinhAnhService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private fb: FormBuilder,
   ) {
     this.loadMacSac();
+      this.productForm = this.fb.group({
+        sanPham: ['', Validators.required],
+        danhMuc: ['', Validators.required],
+        chatLieu: ['', Validators.required],
+        mauSac: ['', Validators.required],
+        kichThuoc: ['', Validators.required],
+        soLuong: [0, Validators.required],
+        giaNhap: [0, Validators.required],
+        giaBan: [0, Validators.required]
+      });
   }
 
   ngOnInit(): void {
@@ -102,6 +111,29 @@ export class ProductDetailViewComponent implements OnInit {
     // this.getCtsp();
     this.loadHinhAnh();
     this.loadSanPhamChiTietByNgayTao();
+
+    if (this.selectedSanPhamChiTiet) {
+      this.productForm.patchValue({
+        // @ts-ignore
+
+        sanPham: this.selectedSanPhamChiTiet.sanPham,
+        // @ts-ignore
+
+        danhMuc: this.selectedSanPhamChiTiet.danhMuc, // Giả sử bạn lưu trữ ID
+        // @ts-ignore
+
+        chatLieu: this.selectedSanPhamChiTiet.chatLieu,
+        // @ts-ignore
+
+        mauSac: this.selectedSanPhamChiTiet.mauSac,
+        // @ts-ignore
+
+        kichThuoc: this.selectedSanPhamChiTiet.kichThuoc,
+        soLuong: this.selectedSanPhamChiTiet.soLuong,
+        giaNhap: this.selectedSanPhamChiTiet.giaNhap,
+        giaBan: this.selectedSanPhamChiTiet.giaBan
+      });
+    }
   }
 
   showModalEdit(): void {
@@ -180,30 +212,6 @@ export class ProductDetailViewComponent implements OnInit {
     });
   }
 
-  // editProduct(product: ChiTietSanPhamDto) {
-  //   this.product = {...product};
-  //   this.productDialog = true;
-  // }
-
-  // deleteProduct(product: ChiTietSanPhamDto) {
-  //   this.confirmationService.confirm({
-  //     message: 'Are you sure you want to delete ' + product.sanPham.ten + '?',
-  //     header: 'Confirm',
-  //     icon: 'pi pi-exclamation-triangle',
-  //     accept: () => {
-  //       this.listSanPhamChiTiet = this.listSanPhamChiTiet.filter((val) => val.id !== product.id);
-  //       this.product = {};
-  //       // this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-  //     }
-  //   });
-  // }
-  //
-  // hideDialog() {
-  //   this.productDialog = false;
-  //   this.submitted = false;
-  // }
-
-
   saveProduct() {
     this.submitted = true;
 
@@ -271,13 +279,6 @@ export class ProductDetailViewComponent implements OnInit {
     }
   }
 
-
-  // getCtsp() {
-  //   this.listChiTiet = ;
-  //   console.log('listChiTietSP:' + this.listChiTietSP)
-  // }
-
-
   onPageChangeSanPhamCT(page: number): void {
     this.page = page;
     this.loadSanPhamChiTietByNgayTao();
@@ -294,9 +295,6 @@ export class ProductDetailViewComponent implements OnInit {
       }
     });
   }
-
-
-
 
 
   // San pham
@@ -427,8 +425,6 @@ export class ProductDetailViewComponent implements OnInit {
 
 
   saveListCt(list: any[]): void {
-    // const sanitizedList = this.utilityService.sanitizeObject(list);
-    // const sanitizedHinhAnh = this.utilityService.sanitizeObject(this.listHinhAnhSelect);
     const listSp = this.utilityService.removeHinhAnhProperty(list);
 
     const img: IMG = {
@@ -549,19 +545,56 @@ export class ProductDetailViewComponent implements OnInit {
   openEditModal(sanPhamChiTiet: ChiTietSanPhamDto): void {
     this.selectedSanPhamChiTiet = { ...sanPhamChiTiet }; // Sử dụng spread operator để sao chép đối tượng
     console.log(this.selectedSanPhamChiTiet)
+    this.productForm.patchValue({
+      // @ts-ignore
+      sanPham: this.selectedSanPhamChiTiet.sanPham,
+      danhMuc: this.selectedSanPhamChiTiet.danhMuc, // Giả sử bạn lưu trữ ID
+      chatLieu: this.selectedSanPhamChiTiet.chatLieu,
+      mauSac: this.selectedSanPhamChiTiet.mauSac,
+      kichThuoc: this.selectedSanPhamChiTiet.kichThuoc,
+      soLuong: this.selectedSanPhamChiTiet.soLuong,
+      giaNhap: this.selectedSanPhamChiTiet.giaNhap,
+      giaBan: this.selectedSanPhamChiTiet.giaBan
+    });
     // Đảm bảo danh sách các tùy chọn (danh mục, chất liệu,...) đã được tải
     this.showModalEdit()
+    console.log(this.productForm)
   }
 
 
   updateProduct(): void {
-    if (this.selectedSanPhamChiTiet) {
-      this.sanPhamCTService.suaSanPhamChiTiet(this.selectedSanPhamChiTiet).subscribe({
+    if (this.productForm.valid) {
+      const updatedProduct1 = this.productForm.value;
+
+      // this.selectedSanPhamChiTiet.soLuong = updatedProduct1.soLuong;
+      // this.selectedSanPhamChiTiet.sanPham = updatedProduct1.soLuong;
+      // this.selectedSanPhamChiTiet.thuongHieu = updatedProduct1.soLuong;
+      // this.selectedSanPhamChiTiet.chatLieu = updatedProduct1.soLuong;
+      // this.selectedSanPhamChiTiet.danhMuc = updatedProduct1.soLuong;
+      // this.selectedSanPhamChiTiet.kichThuoc = updatedProduct1.soLuong;
+      // this.selectedSanPhamChiTiet.mauSac = updatedProduct1.soLuong;
+      // this.selectedSanPhamChiTiet.giaNhap = updatedProduct1.soLuong;
+
+      const updatedProduct = {
+        id : this.selectedSanPhamChiTiet.id,
+        ma: this.selectedSanPhamChiTiet.ma,
+        sanPham : updatedProduct1.sanPham,
+        chatLieu: updatedProduct1.chatLieu,
+        danhMuc: updatedProduct1.danhMuc,
+        kichThuoc: updatedProduct1.kichThuoc,
+        mauSac: updatedProduct1.mauSac,
+        soLuong: updatedProduct1.soLuong,
+        giaNhap: updatedProduct1.giaNhap,
+        giaBan: updatedProduct1.giaBan,
+        hinhAnh : this.selectedSanPhamChiTiet.hinhAnh
+      }
+
+      console.log(updatedProduct)
+      this.sanPhamCTService.suaSanPhamChiTiet(updatedProduct).subscribe({
         next: (response) => {
           console.log('Cập nhật thành công:', response);
           // Cập nhật giao diện sau khi thành công, ví dụ như đóng modal, load lại danh sách, v.v.
-
-          this.loadSanPhamChiTietByNgayTao()
+          this.loadSanPhamChiTietByNgayTao();
           this.closeModalEdit();
         },
         error: (err) => {

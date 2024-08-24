@@ -398,7 +398,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form [formGroup]="productForm" (ngSubmit)="updateProduct()">
           <div class="container mb-3" style="text-align: center">
             <div class="slides-container">
               <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -420,41 +420,28 @@
                 </button>
               </div>
               <div class="mb-3">
-                <label class="form-label">Tên sản phẩm</label>
-                <input type="text" class="form-control" placeholder="{{selectedSanPhamChiTiet?.sanPham?.ten}}">
+                <label class="form-label">Tên sản phẩm: {{selectedSanPhamChiTiet?.sanPham?.ten}}</label>
               </div>
               <div class="mb-3 row">
                 <div class="col-6">
-                  <select class="form-select" aria-label="Danh mục">
-                    <option selected
-                            value="{{selectedSanPhamChiTiet?.danhMuc}}">{{ selectedSanPhamChiTiet?.danhMuc?.ten }}
-                    </option>
+                  <select formControlName="danhMuc" class="form-select" aria-label="Danh mục">
                     <option *ngFor="let danhMuc of listDanhMuc" [value]="danhMuc">{{ danhMuc.ten }}</option>
                   </select>
                 </div>
                 <div class="col-6">
-                  <select class="form-select" aria-label="Chất liệu">
-                    <option selected
-                            value="{{selectedSanPhamChiTiet?.chatLieu}}">{{ selectedSanPhamChiTiet?.chatLieu?.ten }}
-                    </option>
+                  <select formControlName="chatLieu" class="form-select" aria-label="Chất liệu">
                     <option *ngFor="let chatLieu of listChatLieu" [value]="chatLieu">{{ chatLieu.ten }}</option>
                   </select>
                 </div>
               </div>
               <div class="mb-3 row">
                 <div class="col-6">
-                  <select class="form-select" aria-label="Màu sắc">
-                    <option selected
-                            value="{{selectedSanPhamChiTiet?.mauSac}}">{{ selectedSanPhamChiTiet?.mauSac?.ten }}
-                    </option>
+                  <select formControlName="mauSac" class="form-select" aria-label="Màu sắc">
                     <option *ngFor="let mauSac of listMauSac" [value]="mauSac">{{ mauSac.ten }}</option>
                   </select>
                 </div>
                 <div class="col-6">
-                  <select class="form-select" aria-label="Kích thước">
-                    <option selected
-                            value="{{selectedSanPhamChiTiet?.kichThuoc}}">{{ selectedSanPhamChiTiet?.kichThuoc?.ten }}
-                    </option>
+                  <select formControlName="kichThuoc" class="form-select" aria-label="Kích thước">
                     <option *ngFor="let kichThuoc of listKichThuoc" [value]="kichThuoc">{{ kichThuoc.ten }}</option>
                   </select>
                 </div>
@@ -471,23 +458,22 @@
                   <tbody>
                   <tr>
                     <td style="text-align: center; vertical-align: middle;">
-                      <input type="number" placeholder="{{selectedSanPhamChiTiet?.soLuong}}" style="width: 100px">
+                      <input formControlName="soLuong" type="number" style="width: 100px">
                     </td>
                     <td style="text-align: center; vertical-align: middle;">
-                      <input type="number" placeholder="{{selectedSanPhamChiTiet?.giaNhap}}" style="width: 100px">
+                      <input formControlName="giaNhap" type="number" style="width: 100px">
                     </td>
                     <td style="text-align: center; vertical-align: middle;">
-                      <input type="number" placeholder="{{selectedSanPhamChiTiet?.giaBan}}" style="width: 100px">
+                      <input formControlName="giaBan" type="number" style="width: 100px">
                     </td>
                   </tr>
                   </tbody>
                 </table>
               </div>
-
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" (click)="updateProduct()">Save changes</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" >Lưu</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
             </div>
           </div>
         </form>
