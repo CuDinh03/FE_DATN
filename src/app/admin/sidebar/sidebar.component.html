@@ -12,130 +12,70 @@
     <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
       <ul id="sidebarnav">
         <li class="sidebar-item">
-          <a class="sidebar-link" [routerLink]="['/admin/dash-board']" aria-expanded="false" style="margin-bottom: 25px;">
-                        <span>
-                            <i class="ti ti-layout-dashboard"></i>
-                        </span>
+          <a class="sidebar-link" [routerLink]="['/admin/dash-board']"
+             aria-expanded="false" style="margin-bottom: 25px;">
+            <span><i class="ti ti-layout-dashboard"></i></span>
             <span class="hide-menu">Thống kê</span>
           </a>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" [routerLink]="['/admin/shopping']" routerLinkActive="active"
+          <a class="sidebar-link" [routerLink]="['/admin/shopping']"
              aria-expanded="false" style="margin-bottom: 25px;">
-                        <span>
-                            <i class="ti ti-shopping-cart"></i>
-                        </span>
+            <span><i class="ti ti-shopping-cart"></i></span>
             <span class="hide-menu">Bán hàng</span>
           </a>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" [routerLink]="['/admin/san-pham-chi-tiet']" routerLinkActive="active"
-             aria-expanded="false" aria-expanded="false" data-bs-toggle="collapse"
-             data-bs-target="#productDropdown" role="button" aria-controls="productDropdown"
-             style="margin-bottom: 25px;">
-                        <span>
-                            <i class="ti ti-shirt"></i>
-                        </span>
+          <a class="sidebar-link" [routerLink]="['/admin/san-pham-chi-tiet']"
+             aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#productDropdown"
+             role="button" aria-controls="productDropdown" style="margin-bottom: 25px;">
+            <span><i class="ti ti-shirt"></i></span>
             <span class="hide-menu">Sản phẩm</span>
           </a>
           <div class="collapse" id="productDropdown">
             <ul class="list-unstyled ms-3">
-              <li>
-                <a class="sidebar-link" [routerLink]="['/admin/san-pham']"
-                   routerLinkActive="active">Sản phẩm</a>
-              </li>
-              <li>
-                <a class="sidebar-link" [routerLink]="['/admin/danh-muc']"
-                   routerLinkActive="active">Danh Mục</a>
-              </li>
-              <li>
-                <a class="sidebar-link" [routerLink]="['/admin/mau-sac']"
-                   routerLinkActive="active">Màu Sắc</a>
-              </li>
-              <li>
-                <a class="sidebar-link" [routerLink]="['/admin/chat-lieu']"
-                   routerLinkActive="active">Chất liệu</a>
-              </li>
-              <li>
-                <a class="sidebar-link" [routerLink]="['/admin/hinh-anh']"
-                   routerLinkActive="active">Hình ảnh</a>
-              </li>
-              <li>
-                <a class="sidebar-link" [routerLink]="['/admin/kich-thuoc']"
-                   routerLinkActive="active">Kích thước</a>
-              </li>
-              <li>
-                <a class="sidebar-link" [routerLink]="['/admin/thuong-hieu']"
-                   routerLinkActive="active">Thương hiệu</a>
-              </li>
+              <li><a class="sidebar-link" [routerLink]="['/admin/san-pham']">Sản phẩm</a></li>
+              <li><a class="sidebar-link" [routerLink]="['/admin/danh-muc']">Danh Mục</a></li>
+              <li><a class="sidebar-link" [routerLink]="['/admin/mau-sac']">Màu Sắc</a></li>
+              <li><a class="sidebar-link" [routerLink]="['/admin/chat-lieu']">Chất liệu</a></li>
+              <li><a class="sidebar-link" [routerLink]="['/admin/hinh-anh']">Hình ảnh</a></li>
+              <li><a class="sidebar-link" [routerLink]="['/admin/kich-thuoc']">Kích thước</a></li>
+              <li><a class="sidebar-link" [routerLink]="['/admin/thuong-hieu']">Thương hiệu</a></li>
             </ul>
           </div>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" [routerLink]="['/admin/tai-khoan']" routerLinkActive="active"
+          <a class="sidebar-link" [routerLink]="['/admin/tai-khoan']"
              aria-expanded="false" style="margin-bottom: 25px;">
-                        <span>
-                            <i class="ti ti-users"></i>
-                        </span>
+            <span><i class="ti ti-users"></i></span>
             <span class="hide-menu">Tài khoản</span>
           </a>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" aria-expanded="false" style="margin-bottom: 25px;">
-                        <span>
-                            <i class="ti ti-user-check"></i>
-                        </span>
-            <span class="hide-menu">Nhân viên</span>
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a class="sidebar-link" [routerLink]="['/admin/hoa-don']" routerLinkActive="active"
+          <a class="sidebar-link" [routerLink]="['/admin/hoa-don']"
              aria-expanded="false" style="margin-bottom: 25px;">
-                        <span>
-                            <i class="ti ti-file-text"></i>
-                        </span>
+            <span><i class="ti ti-file-text"></i></span>
             <span class="hide-menu">Hóa đơn</span>
           </a>
         </li>
-
-
         <li class="sidebar-item">
-          <a class="sidebar-link" [routerLink]="['/admin/voucher']" routerLinkActive="active"
+          <a class="sidebar-link" [routerLink]="['/admin/voucher']"
              aria-expanded="false" style="margin-bottom: 25px;">
-
-                        <span>
-                            <i class="ti ti-ticket"></i>
-                        </span>
+            <span><i class="ti ti-ticket"></i></span>
             <span class="hide-menu">Voucher</span>
           </a>
         </li>
-
         <li class="sidebar-item">
-          <a class="sidebar-link" [routerLink]="['/admin/khach-hang']" routerLinkActive="active" aria-expanded="false"
-             style="margin-bottom: 25px;">
-                        <span>
-                            <i class="ti ti-user-check"></i>
-                        </span>
+          <a class="sidebar-link" [routerLink]="['/admin/khach-hang']"
+             aria-expanded="false" style="margin-bottom: 25px;">
+            <span><i class="ti ti-user-check"></i></span>
             <span class="hide-menu">Khách Hàng</span>
           </a>
         </li>
-
-        <li class="sidebar-item">
-
-          <a class="sidebar-link" href="./ui-forms.html" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-message-report"></i>
-                        </span>
-            <span class="hide-menu">Báo cáo</span>
-          </a>
-
-        </li>
-
       </ul>
     </nav>
-
     <!-- End Sidebar navigation -->
   </div>
   <!-- End Sidebar scroll-->
 </aside>
-<!--  Sidebar End -->
+<!-- Sidebar End -->

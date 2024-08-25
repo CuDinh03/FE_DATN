@@ -3,7 +3,7 @@
     text-decoration: none; /* Không có gạch chân ban đầu */
     transition: color 0.3s, text-decoration 0.3s; /* Hiệu ứng chuyển đổi mượt mà */
   }
-  
+
   .auth-link:hover {
     color: blue; /* Màu xanh khi di chuột */
     text-decoration: underline; /* Gạch chân khi di chuột */
@@ -17,7 +17,7 @@
     padding: 1px 4px; /* Kích thước padding */
     font-size: 8px; /* Kích thước chữ của badge */
   }
-  
+
   .new-badge::after {
     content: '';
     position: absolute;
@@ -29,6 +29,40 @@
     border-color: rgba(0, 255, 4) transparent transparent transparent;
   }
 
+.search-container {
+  display: flex;
+  align-items: center;
+}
+
+.search-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.suggestions-box {
+  display: none; /* Ẩn cửa sổ gợi ý theo mặc định */
+  border: 1px solid #ccc;
+  background: #fff;
+  z-index: 1000;
+  width: 100%;
+  max-height: 200px; /* Tùy chỉnh chiều cao tối đa của cửa sổ gợi ý */
+  overflow-y: auto; /* Cuộn khi danh sách dài hơn */
+}
+
+.suggestions-box.ng-trigger {
+  display: block; /* Hiển thị cửa sổ gợi ý khi có gợi ý */
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background: #f0f0f0;
+}
+
   .sale-badge {
     position: absolute;
     bottom: 55px; /* Điều chỉnh khoảng cách từ chữ "HÀNG MỚI VỀ" */
@@ -38,7 +72,7 @@
     padding: 1px 4px; /* Kích thước padding */
     font-size: 8px; /* Kích thước chữ của badge */
   }
-  
+
   .sale-badge::after {
     content: '';
     position: absolute;
@@ -54,7 +88,7 @@
     position: relative;
     display: inline-block;
   }
-  
+
   .online-dot {
     position: absolute;
     bottom: 5px;
@@ -68,7 +102,15 @@
   .position-relative {
     position: relative;
   }
-  
+/* search.component.css */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
   .mini-cart {
     display: none;
     position: absolute;
@@ -81,14 +123,14 @@
     z-index: 1000;
     padding: 10px;
   }
-  
+
   .mini-cart-item:hover p,
   .mini-cart-item:hover span {
     color: #0056b3; /* Màu văn bản khi hover */
   }
   .position-relative:hover .mini-cart {
     display: block;
-  } 
+  }
 
   .mini-cart-item-img {
     width: 70px;
@@ -96,7 +138,7 @@
     object-fit: cover;
     margin-right: 10px;
   }
-  
+
   .product-image {
     max-width: 60px; /* Thay đổi giá trị này theo kích thước mong muốn */
     height: auto;
@@ -112,4 +154,115 @@
   border-radius: 40%;
   padding: 2px 8px;
   font-size: 8px;
+}
+/* search.component.css */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.search-container .form-control {
+  width: 300px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.search-container .form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+.mini-product {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: -200px; /* Dịch mini-product sang trái */
+  width: 500px; /* Độ rộng của mini-product */
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border-radius: 4px;
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.triangle {
+  position: absolute;
+  top: -10px;
+  left: 55%;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #fff;
+  z-index: 1001;
+}
+
+.mini-product h5 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.product-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-link:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-link:hover .product-info .product-name {
+  color: #007bff;
+}
+
+.product-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  margin-right: 10px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.product-detail {
+  font-size: 14px;
+  color: #666;
+}
+
+.product-price {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.product-item:hover{
+  color: #a8a8a8;
 }

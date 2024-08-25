@@ -164,7 +164,7 @@ export class HistoryViewComponent {
     this.hoaDonChiTietService.findById(id).subscribe((response) => {
       if (response.result) {
         localStorage.setItem('hoaDonChiTiet', JSON.stringify(response.result))
-        this.router.navigate(['/danh-gia']);
+        this.router.navigate(['/customer/danh-gia']);
       }
     })
   }

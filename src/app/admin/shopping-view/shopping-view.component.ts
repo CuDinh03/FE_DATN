@@ -19,6 +19,7 @@ import { GioHangService } from 'src/app/service/GioHangService';
 import { ThanhToanService } from 'src/app/service/ThanhToanService';
 import {NhanVienService} from "../../service/nhanVienService";
 import {TaiKhoanDto} from "../../model/tai-khoan-dto.model";
+import {debounceTime, distinctUntilChanged, Subject, switchMap} from "rxjs";
 
 @Component({
   selector: 'app-shopping-view',
@@ -71,6 +72,8 @@ export class ShoppingViewComponent {
   quantity: number = 1;
   discount: number = 0;
   noOrder: boolean = false;
+  searchTerm: string = '';
+  searchSubject: Subject<string> = new Subject();
 
 
 
@@ -113,6 +116,15 @@ export class ShoppingViewComponent {
   }
 
   ngOnInit(): void {
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => this.chiTietSanPhamService.search(term, this.page, this.size))
+    ).subscribe(response => {
+      this.listSanPhamChiTiet = response.result.content;
+      this.totalElements = response.result.totalElements;
+      this.totalPages = response.result.totalPages;
+    });
     this.loadHoaDonGioHang();
     this.loadChiTietSP();
     this.loadMaHoaDonFromLocalStorage();
@@ -120,6 +132,11 @@ export class ShoppingViewComponent {
     this.getCustomer();
     this.getNhanVien();
   }
+
+  onSearch(): void {
+    this.searchSubject.next(this.searchTerm);
+  }
+
   getNhanVien(): void {
     const username = localStorage.getItem('tenDangNhap');
 
@@ -581,6 +598,7 @@ export class ShoppingViewComponent {
 
   deleteConfirmed() {
     this.deleteGioHangChiTiet(this.itemToDeleteId);
+    this.clearForm;
     this.showConfirmationModal = false;
   }
 
