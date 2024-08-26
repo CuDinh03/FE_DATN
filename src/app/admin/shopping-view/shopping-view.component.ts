@@ -30,6 +30,7 @@ export class ShoppingViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   @ViewChild('addToCartModal') addToCartModal!: ElementRef;
   @ViewChild('confirmPayment') confirmPayment!: ElementRef;
+  @ViewChild('addCustomer') addCustomer!: ElementRef;
   vouchers: any[] = [];
   listHoaDon: any = {};
   gioHang: any = {};
@@ -721,6 +722,20 @@ export class ShoppingViewComponent {
     if (this.voucherModal && this.voucherModal.nativeElement) {
       this.voucherModal.nativeElement.classList.remove('show');
       this.voucherModal.nativeElement.style.display = 'none';
+    }
+  }
+
+
+  closeModalAddCustomer(): void {
+    if (this.addCustomer && this.addCustomer.nativeElement) {
+      this.addCustomer.nativeElement.classList.remove('show');
+      this.addCustomer.nativeElement.style.display = 'none';
+    }
+  }
+  showModalAddCustomer(): void {
+    if (this.addCustomer && this.addCustomer.nativeElement) {
+      this.addCustomer.nativeElement.classList.add('show');
+      this.addCustomer.nativeElement.style.display = 'block';
     }
   }
 

@@ -115,7 +115,7 @@
                                  (ngModelChange)="onSdtInputChange()"/>
                         </div>
                         <div class="col-4">
-                          <button type="button" class="btn btn-info" (click)="getCustomer()">Chọn</button>
+                          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addCustomer1" >Chọn</button>
                         </div>
                       </div>
                       <i *ngIf="customer != null">
@@ -194,7 +194,8 @@
         <h2 class="card-title fw-semibold">Danh sách sản phẩm chi tiết</h2>
       </div>
       <span>
-              <input type="text" style="width: 200px;" class="form-control" placeholder="Tìm kiếm" [(ngModel)]="searchTerm" (input)="onSearch()"/>
+              <input type="text" style="width: 200px;" class="form-control" placeholder="Tìm kiếm"
+                     [(ngModel)]="searchTerm" (input)="onSearch()"/>
             </span>
     </div>
     <table class="table text-nowrap mb-0 col-12 mb-3">
@@ -278,9 +279,6 @@
 </div>
 
 
-
-
-
 <div class="modal fade" #voucherModal tabindex="-1" aria-labelledby="accountModalLabel2" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
@@ -337,6 +335,53 @@
           <button (click)="onPageChange(currentPage + 1)" class="btn btn-secondary"
                   [disabled]="currentPage === totalPages - 1">Next
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addCustomer1" tabindex="-1" aria-labelledby="addCustomer" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCustomer">Danh sách khách hàng</h5>
+        <button type="button" class="btn-close" (click)="closeModalAddCustomer()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="container">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Họ và tên: </label>
+              <input type="email" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email: </label>
+              <input type="email" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Giới tính:</label>
+              <div class="d-flex align-items-center">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Nam
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Nữ
+                  </label>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success" data-bs-dismiss="modal">Xóa</button>
+          <button class="btn btn-danger" data-bs-dismiss="modal">Hủy</button>
         </div>
       </div>
     </div>
