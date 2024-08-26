@@ -10,7 +10,7 @@
                   <h5 class="card-title fw-semibold">Danh sách khách hàng</h5>
                 </div>
               </div>
-              <div *ngIf="khachHang.length > 0">
+              <div *ngIf="listKhachHang.length > 0">
                 <table class="table text-nowrap mb-0 align-middle">
                   <thead class="text-dark fs-4">
                     <tr>
@@ -50,7 +50,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let khachHang of khachHang; let i = index" style="height: 30px;">
+                    <tr *ngFor="let khachHang of listKhachHang; let i = index" style="height: 30px;">
                       <th scope="row">{{currentPage * pageSize + i + 1 }}</th>
                       <td>{{khachHang.ma }}</td>
                       <td>{{khachHang.ten}}</td>
@@ -93,7 +93,7 @@
                         [disabled]="currentPage === totalPages - 1">>
                       </button>
                 </div>
-                <div *ngIf="khachHang.length === 0">
+                <div *ngIf="listKhachHang.length === 0">
                   <p>Không có tài khoản nào được tìm thấy.</p>
                 </div>
               </div>

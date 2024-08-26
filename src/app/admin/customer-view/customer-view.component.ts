@@ -16,7 +16,7 @@ import { TaiKhoanService } from 'src/app/service/TaiKhoanService';
   styleUrls: ['./customer-view.component.css']
 })
 export class CustomerViewComponent implements OnInit{
-  khachHang: any[] = [];
+  listKhachHang: any[] = [];
   totalElements = 0;
   totalPages = 0;
   currentPage = 0;
@@ -25,21 +25,21 @@ export class CustomerViewComponent implements OnInit{
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
-  khachHangForm: FormGroup; 
+  khachHangForm: FormGroup;
   id: string;
   successMessage = '';
   selectedDanhMuc: KhachHangDto | null = null;
   isEditMode = false;
   taiKhoanList: TaiKhoanDto[] = [];
 
-  
-  
+
+
 
   constructor(
-    private apiService: KhachHangService, 
+    private apiService: KhachHangService,
     private formBuilder: FormBuilder,
-    private router: Router, 
-    private auth: AuthenticationService, 
+    private router: Router,
+    private auth: AuthenticationService,
     private route: ActivatedRoute,
     private taiKhoanService: TaiKhoanService
   ) {
@@ -66,7 +66,7 @@ export class CustomerViewComponent implements OnInit{
       this.findById(this.id);
     }
     this.loadTaiKhoan();
-    this.loadVoucher();
+    this.loadKhang();
   }
 
   get f() {
@@ -88,9 +88,9 @@ export class CustomerViewComponent implements OnInit{
   loadKhachHang(): void {
     this.apiService.getKhs(this.currentPage, this.pageSize)
       .subscribe(response => {
-        
-        this.khachHang = response.result.content;
-    
+
+        this.listKhachHang = response.result.content;
+
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
       });
@@ -99,7 +99,7 @@ export class CustomerViewComponent implements OnInit{
   onPageChange(page: number): void {
     this.currentPage = page;
     this.loadKhachHang();
-    this.loadVoucher();
+    this.loadKhang();
   }
 
   createKhachHang(): void {
@@ -145,7 +145,7 @@ export class CustomerViewComponent implements OnInit{
     );
   }
 
-  
+
 
   findById(id: string): void {
     this.apiService.findById(id)
@@ -221,13 +221,13 @@ export class CustomerViewComponent implements OnInit{
     );
   }
 
-  loadVoucher():void{
+  loadKhang():void{
     this.apiService.getKhs(this.currentPage, this.pageSize)
       .subscribe(response => {
-        this.khachHang = response.result.content;
+        this.listKhachHang = response.result.content;
         this.totalElements = response.result.totalElements;
         this.totalPages = response.result.totalPages;
-        console.log("view khs");
+        console.log("view khs" + this.listKhachHang);
       });
   }
 
