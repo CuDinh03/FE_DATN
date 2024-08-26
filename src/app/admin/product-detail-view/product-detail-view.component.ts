@@ -75,6 +75,8 @@ export class ProductDetailViewComponent implements OnInit {
   productForm: FormGroup;
   searchTerm: string = '';
   searchSubject: Subject<string> = new Subject();
+  customerForm!: FormGroup;
+  submitted2 = false;
 
   constructor(
     private sanPhamCTService: SanPhamCTService,
@@ -149,6 +151,8 @@ export class ProductDetailViewComponent implements OnInit {
       });
     }
   }
+
+
 
   onSearch(): void {
     this.searchSubject.next(this.searchTerm);
@@ -546,7 +550,10 @@ export class ProductDetailViewComponent implements OnInit {
     const confirmed = window.confirm('Bạn chắc chắn muốn thêm biến thể chứ?');
     if (confirmed) {
       this.saveListCt(this.selectedListSp);
-      alert('Đã xác nhận');
+      this.snackBar.open('Thêm biến thể thành công!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
     } else {
       alert('Đã huỷ xác nhận');
     }
@@ -559,6 +566,28 @@ export class ProductDetailViewComponent implements OnInit {
         this.listHinhAnh = response.result;
         console.log('list ha' + this.listHinhAnh)
       })
+  }
+
+  delete(id: string): void {
+    this.sanPhamCTService.remove(id).subscribe(
+      response => {
+        if (response) {
+          this.snackBar.open('Xóa sản phẩm thành công!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        } else {
+          this.snackBar.open('Xóa thất bại!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      },
+      error => {
+        // ('Xảy ra lỗi khi xóa!');
+        // Xử lý lỗi nếu cần
+      }
+    );
   }
 
   openEditModal(sanPhamChiTiet: ChiTietSanPhamDto): void {
@@ -585,15 +614,6 @@ export class ProductDetailViewComponent implements OnInit {
     if (this.productForm.valid) {
       const updatedProduct1 = this.productForm.value;
 
-      // this.selectedSanPhamChiTiet.soLuong = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.sanPham = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.thuongHieu = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.chatLieu = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.danhMuc = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.kichThuoc = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.mauSac = updatedProduct1.soLuong;
-      // this.selectedSanPhamChiTiet.giaNhap = updatedProduct1.soLuong;
-
       const updatedProduct = {
         id : this.selectedSanPhamChiTiet.id,
         ma: this.selectedSanPhamChiTiet.ma,
@@ -611,14 +631,18 @@ export class ProductDetailViewComponent implements OnInit {
       console.log(updatedProduct)
       this.sanPhamCTService.suaSanPhamChiTiet(updatedProduct).subscribe({
         next: (response) => {
-          console.log('Cập nhật thành công:', response);
-          // Cập nhật giao diện sau khi thành công, ví dụ như đóng modal, load lại danh sách, v.v.
+          this.snackBar.open('Sửa sản phẩm thành công!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
           this.loadSanPhamChiTietByNgayTao();
           this.closeModalEdit();
         },
         error: (err) => {
-          console.error('Lỗi khi cập nhật:', err);
-          // Xử lý lỗi, ví dụ như hiển thị thông báo lỗi
+          this.snackBar.open('Có lỗi sảy ra!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
         }
       });
     }

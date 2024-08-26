@@ -115,7 +115,7 @@
                                  (ngModelChange)="onSdtInputChange()"/>
                         </div>
                         <div class="col-4">
-                          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addCustomer1" >Chọn</button>
+                          <button type="button" class="btn btn-info" data-bs-toggle="modal" href="#exampleModalToggle">Chọn</button>
                         </div>
                       </div>
                       <i *ngIf="customer != null">
@@ -341,14 +341,76 @@
   </div>
 </div>
 
-<div class="modal fade" id="addCustomer1" tabindex="-1" aria-labelledby="addCustomer" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
+     [ngClass]="{'is-active': showConfirmationModal}">
+  <div class="modal-dialog" (click)="cancelDelete()">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addCustomer">Danh sách khách hàng</h5>
+        <h5 class="modal-title" id="exampleModalLabel1">Xác nhận xóa sản phẩm</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+        <h4>Bạn có chắc chắn muốn xóa sản phẩm này</h4>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="deleteConfirmed()" data-bs-dismiss="modal">Xóa</button>
+        <button class="btn btn-danger" (click)="cancelDelete()" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="modal fade" #addToCartModal tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="accountModalLabel">Nhập số lượng</h5>
+
+        <button type="button" class="btn-close" (click)="closeAddToCartModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="product_count mt-2">
+          <input type="text" name="qty" maxlength="12" title="Quantity:" [(ngModel)]="quantity" class="input-text qty">
+          <button class="increase items-count" type="button" (click)="increaseQuantity()"><i
+            class="lnr lnr-chevron-up"></i></button>
+          <button class="reduced items-count" type="button" (click)="decreaseQuantity()"><i
+            class="lnr lnr-chevron-down"></i></button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="addToCart()">Thêm vào giỏ hàng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" #confirmPayment tabindex="-1" aria-labelledby="paymentModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="paymentModal">Xác nhận thanh toán</h3>
+        <button type="button" class="btn-close" (click)="closeConfirmPayment()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Xác nhận thanh toán với ghi chú</label>
+        <input type="text" class="form-control" id="ghiChu" name="ghiChu"
+               [(ngModel)]="ghiChu" (ngModelChange)="ghiChuText($event)">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="onSubmitPayment()">Thanh toán</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Thêm khách hàng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
       <div class="modal-body">
         <div class="container">
           <form [formGroup]="customerForm">
@@ -408,75 +470,26 @@
             </div>
           </form>
         </div>
-
-        <div class="modal-footer">
-          <button class="btn btn-success" (click)="onSubmit()" data-bs-dismiss="modal">Thêm</button>
-          <button class="btn btn-danger" data-bs-dismiss="modal">Hủy</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Thêm</button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Hủy</button>
       </div>
     </div>
   </div>
 </div>
-
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
-     [ngClass]="{'is-active': showConfirmationModal}">
-  <div class="modal-dialog" (click)="cancelDelete()">
+<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel1">Xác nhận xóa sản phẩm</h5>
+        <h5 class="modal-title" id="exampleModalToggleLabel2">Xác nhận</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <h4>Bạn có chắc chắn muốn xóa sản phẩm này</h4>
+        Xác nhận thêm khách hàng
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" (click)="deleteConfirmed()" data-bs-dismiss="modal">Xóa</button>
-        <button class="btn btn-danger" (click)="cancelDelete()" data-bs-dismiss="modal">Hủy</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" #addToCartModal tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="accountModalLabel">Nhập số lượng</h5>
-
-        <button type="button" class="btn-close" (click)="closeAddToCartModal()" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="product_count mt-2">
-          <input type="text" name="qty" maxlength="12" title="Quantity:" [(ngModel)]="quantity" class="input-text qty">
-          <button class="increase items-count" type="button" (click)="increaseQuantity()"><i
-            class="lnr lnr-chevron-up"></i></button>
-          <button class="reduced items-count" type="button" (click)="decreaseQuantity()"><i
-            class="lnr lnr-chevron-down"></i></button>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="addToCart()">Thêm vào giỏ hàng</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal fade" #confirmPayment tabindex="-1" aria-labelledby="paymentModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="paymentModal">Xác nhận thanh toán</h3>
-        <button type="button" class="btn-close" (click)="closeConfirmPayment()" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <label class="form-label">Xác nhận thanh toán với ghi chú</label>
-        <input type="text" class="form-control" id="ghiChu" name="ghiChu"
-               [(ngModel)]="ghiChu" (ngModelChange)="ghiChuText($event)">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="onSubmitPayment()">Thanh toán</button>
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal" (click)="onSubmit()">Xac nhan</button>
       </div>
     </div>
   </div>
