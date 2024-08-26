@@ -33,7 +33,7 @@ export type ChartOptions = {
   templateUrl: './dash-board.component.html',
   styleUrls: ['./dash-board.component.css']  // Sửa styleUrl thành styleUrls
 })
-export class DashBoardComponent implements OnInit {
+export class DashBoardComponent implements OnInit, AfterViewInit {
   doanhThu: number = 0;
   donHang: number = 0;
   listHoaDonChiTiet: any[] = [];
@@ -49,7 +49,7 @@ export class DashBoardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.spinner.show();
+    this.spinner.show();
     // Tạo một đối tượng chứa các Observable cần thực hiện song song
     const observables = {
       monthlySales$: this.hoaDonService.getMonthlySalesData(),
@@ -88,14 +88,14 @@ export class DashBoardComponent implements OnInit {
     });
   }
 
-  // ngAfterViewInit() {
-  //   // Đảm bảo biểu đồ được khởi tạo sau khi cấu hình đã được thiết lập
-  //   if (this.chartOptions && this.chartOptions.series) {
-  //     new ApexCharts(document.querySelector("#chart"), this.chartOptions as ApexCharts.ApexOptions).render();
-  //   } else {
-  //     console.error('Biểu đồ không thể được khởi tạo vì chartOptions chưa được cấu hình.');
-  //   }
-  // }
+  ngAfterViewInit() {
+    // Đảm bảo biểu đồ được khởi tạo sau khi cấu hình đã được thiết lập
+    if (this.chartOptions && this.chartOptions.series) {
+      new ApexCharts(document.querySelector("#chart"), this.chartOptions as ApexCharts.ApexOptions).render();
+    } else {
+      console.error('Biểu đồ không thể được khởi tạo vì chartOptions chưa được cấu hình.');
+    }
+  }
 
   updateChartOptions(): void {
     if (!this.monthlySalesData || !Array.isArray(this.monthlySalesData)) {
