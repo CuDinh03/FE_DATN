@@ -164,8 +164,6 @@ export class ShoppingViewComponent {
       tenDangNhap: username,
       matKhau: '',
       chucVu: null,
-      ngayTao: new Date(),
-      ngaySua: new Date(),
       trangThai: 1
     };
 
@@ -196,7 +194,7 @@ export class ShoppingViewComponent {
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
 
     if (this.customer.ten === 'Khách lẻ' || this.customer.ten === ''|| this.customer.ten == null){
-      this.customer = null;
+      this.customer.ten = 'Khách lẻ';
     }
 
     if (this.tienKhachDua>=this.thanhTien){
@@ -205,7 +203,13 @@ export class ShoppingViewComponent {
         const gioHangChiTiet = JSON.parse(storedGioHangChiTiet);
         const tongTien = this.calculateThanhTien();
         hoaDon.tongTien = tongTien;
-        hoaDon.khachHang = this.customer;
+        if (this.customer.ten === 'Khách lẻ'){
+          hoaDon.khachHang = null;
+
+        }else{
+          hoaDon.khachHang = this.customer;
+
+        }
         hoaDon.ghiChu = this.ghiChu;
         hoaDon.nhanVien = this.nhanVien;
         hoaDon.voucher = storedVoucher ? JSON.parse(storedVoucher) : null;
@@ -578,6 +582,7 @@ export class ShoppingViewComponent {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
+
         }
         this.loadChiTietSP();
         this.loadGioHangChiTiet(response.result.gioHang.id);
@@ -912,17 +917,26 @@ export class ShoppingViewComponent {
 
     // Nếu form không hợp lệ thì ngừng việc submit
     if (this.customerForm.invalid) {
-      return;
+      this.snackBar.open('Thêm khách hàng thất bại!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    return;
     }
 
     const khachHang : KhachHangDto = this.customerForm.value
     this.khachHangService.createKhachHang(khachHang).subscribe(
       (response) => {
-        console.log('Khách hàng đã được tạo:', response);
-      },
+        this.snackBar.open('Thêm mới khách hàng thành công!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+    },
       (error) => {
-        console.error('Lỗi khi tạo khách hàng:', error);
-      }
+        this.snackBar.open('Thêm khách hàng thất bại!', 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });        }
     );
   }
 
