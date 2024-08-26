@@ -8,7 +8,7 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from './../../service/AuthenticationService';
 import {Component, ElementRef, Renderer2, HostListener, ViewChild} from '@angular/core';
 import {VoucherService} from "../../service/VoucherService";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ThanhToanService} from "../../service/ThanhToanService";
 import {ThanhToanOnl} from "../../model/thanh-toan-onl";
 import {GioHangDto} from "../../model/gio-hang-dto";
@@ -56,11 +56,10 @@ export class PaymentViewComponent {
               private spinner: NgxSpinnerService
   ) {
     this.customerForm = this.formBuilder.group({
-      ten: [''],
-      diaChi: [''],
-      sdt: [''],
-      email: [''],
-      note: [''],
+      ten: ['', [Validators.required, Validators.pattern('^[^0-9]*$')]],  // Chỉ cho phép nhập các ký tự không phải số
+      diaChi: ['', Validators.required],
+      sdt: ['', [Validators.required, Validators.pattern('^[0-9]*$')]], // Số điện thoại chỉ cho phép số
+      note: ['']
     })
 
 
@@ -320,6 +319,7 @@ export class PaymentViewComponent {
   }
 
   saveInfoPayment() {
+
     this.loading = true;
     if (this.customerForm.invalid) {
       this.loading = false;
