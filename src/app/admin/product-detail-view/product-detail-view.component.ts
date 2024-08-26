@@ -39,6 +39,7 @@ interface Column {
 export class ProductDetailViewComponent implements OnInit {
 
   @ViewChild('editModal') editModal!: ElementRef;
+  @ViewChild('submitEdit') submitEdit!: ElementRef;
 
   cols!: Column[];
   selectedSanPhamChiTiet: ChiTietSanPhamDto = {};
