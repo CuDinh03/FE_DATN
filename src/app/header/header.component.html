@@ -31,10 +31,9 @@
                 <input type="text" class="form-control" placeholder="Tìm kiếm" [(ngModel)]="searchTerm"
                   (input)="onSearch()" />
                 <div class="mini-product" *ngIf="isCartHovered1">
-                  <div class="triangle"></div> <!-- Hình tam giác -->
                   <h5>Sản phẩm mới thêm</h5>
                   <div class="product-item" *ngFor="let item of listChiTietSP.slice(0, 6)">
-                    <a (click)="findSanPhamById(item.id)" class="product-link">
+                    <a (click)="findSanPhamById(item.id)" class="product-link" type="button">
                       <img [src]="item.hinhAnh[0]?.url" alt="{{item.sanPham.ten}}" class="product-image" />
                       <div class="product-info">
                         <p class="product-name">{{ item.sanPham.ten }}</p>
@@ -128,13 +127,9 @@
                         <i class="ti ti-user fs-6"></i>
                         <p class="mb-0 fs-3">My Profile</p>
                       </a>
-                      <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                        <i class="ti ti-mail fs-6"></i>
-                        <p class="mb-0 fs-3">My Account</p>
-                      </a>
-                      <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                      <a [routerLink]="['/customer/don-mua']" class="d-flex align-items-center gap-2 dropdown-item">
                         <i class="ti ti-list-check fs-6"></i>
-                        <p class="mb-0 fs-3">My Task</p>
+                        <p class="mb-0 fs-3">Đơn mua</p>
                       </a>
                       <a [routerLink]="['/trang-chu']" (click)="logout()"
                         class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>

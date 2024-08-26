@@ -152,7 +152,7 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
                 </a>
               </div>
             </div>
-            <form [formGroup]="customerForm" (ngSubmit)="saveInfoPayment()" class="pb-3">
+            <form [formGroup]="customerForm" class="pb-3">
               <div class="mb-2">
                 <label class="form-label">Họ và tên</label>
                 <input type="text" class="form-control" formControlName="ten" id="ten">
@@ -187,7 +187,7 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
                 </div>
                 <div class="d-flex justify-content-start align-items-start">
                   <button type="button" class="btnVoucher me-3" (click)="showModal()">Chọn Voucher</button>
-                  <button class="Btn" type="submit">
+                  <button class="Btn" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Đặt hàng
                     <svg class="svgIcon" viewBox="0 0 576 512"><path d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"></path></svg>
                   </button>
@@ -300,6 +300,9 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
   </div>
 </div>
 
+
+
+
 <app-footer></app-footer>
 
 <div class="modal fade" #userInfor tabindex="-1" aria-labelledby="userInForModal" aria-hidden="true">
@@ -348,6 +351,27 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
       <div class="modal-footer">
         <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal" (click)="updateCustomerInfo()">Sử dụng</button>
         <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" (click)="closeInforModal()">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-body">
+          Bạn có chắc chắn muốn thanh toán không?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Hủy</button>
+        <button type="button" class="btn btn-primary" (click)="saveInfoPayment()" data-bs-dismiss="modal">Đặt hàng</button>
       </div>
     </div>
   </div>

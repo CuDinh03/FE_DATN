@@ -8,7 +8,6 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from './../../service/AuthenticationService';
 import {Component, ElementRef, Renderer2, HostListener, ViewChild} from '@angular/core';
 import {VoucherService} from "../../service/VoucherService";
-import {formatDate} from "@angular/common";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ThanhToanService} from "../../service/ThanhToanService";
 import {ThanhToanOnl} from "../../model/thanh-toan-onl";
@@ -24,6 +23,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 export class PaymentViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   @ViewChild('userInfor') userInfor!: ElementRef;
+  @ViewChild('submitPay') submitPay!: ElementRef;
   totalElements = 0;
   totalPages: number = 0;
   currentPage = 0;
@@ -65,6 +65,7 @@ export class PaymentViewComponent {
 
 
   }
+
 
 
   get f() {
@@ -188,6 +189,21 @@ export class PaymentViewComponent {
       this.voucherModal.nativeElement.classList.add('show');
       this.voucherModal.nativeElement.style.display = 'block';
       this.loadVoucher();
+    }
+  }
+
+  showModalSubmitPay(): void {
+    if (this.submitPay && this.submitPay.nativeElement) {
+      this.submitPay.nativeElement.classList.add('show');
+      this.submitPay.nativeElement.style.display = 'block';
+      this.loadVoucher();
+    }
+  }
+
+  closeModalSubmitPay(): void {
+    if (this.submitPay && this.submitPay.nativeElement) {
+      this.submitPay.nativeElement.classList.remove('show');
+      this.submitPay.nativeElement.style.display = 'none';
     }
   }
 
