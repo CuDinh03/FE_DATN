@@ -143,7 +143,7 @@
                     <div class="mb-4">
                       <label class="form-label">Tiền khách đưa</label>
                       <input type="text" class="form-control" id="tienKhachDua" name="tienKhachDua"
-                             [(ngModel)]="tienKhachDua" (ngModelChange)="onTienKhachDua($event)" required/>
+                             [(ngModel)]="tienKhachDua" (ngModelChange)="onTienKhachDua($event)"  />
                     </div>
                     <div class="mb-4">
                       <label class="form-label me-3">Tiền giảm:</label>
@@ -346,41 +346,71 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addCustomer">Danh sách khách hàng</h5>
-        <button type="button" class="btn-close" (click)="closeModalAddCustomer()" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body">
         <div class="container">
-          <form>
+          <form [formGroup]="customerForm">
             <div class="mb-3">
-              <label class="form-label">Họ và tên: </label>
-              <input type="email" class="form-control">
+              <label for="ten" class="form-label">Họ và tên</label>
+              <input type="text" formControlName="ten" class="form-control" id="ten">
+              <div *ngIf="customerForm.get('ten')?.errors?.['required'] && (customerForm.get('ten')?.dirty || customerForm.get('ten')?.touched)" class="text-danger">
+                Họ và tên là bắt buộc.
+              </div>
+              <div *ngIf="customerForm.get('ten')?.errors?.['pattern'] && (customerForm.get('ten')?.dirty || customerForm.get('ten')?.touched)" class="text-danger">
+                Họ và tên không được chứa số.
+              </div>
             </div>
+
             <div class="mb-3">
-              <label class="form-label">Email: </label>
-              <input type="email" class="form-control">
+              <label for="diaChi" class="form-label">Địa chỉ</label>
+              <input type="text" formControlName="diaChi" class="form-control" id="diaChi">
+              <div *ngIf="customerForm.get('diaChi')?.errors?.['required'] && (customerForm.get('diaChi')?.dirty || customerForm.get('diaChi')?.touched)" class="text-danger">
+                Địa chỉ là bắt buộc.
+              </div>
             </div>
+
+            <div class="mb-3">
+              <label for="sdt" class="form-label">Số điện thoại</label>
+              <input type="text" formControlName="sdt" class="form-control" id="sdt1">
+              <div *ngIf="customerForm.get('sdt')?.errors?.['required'] && (customerForm.get('sdt')?.dirty || customerForm.get('sdt')?.touched)" class="text-danger">
+                Số điện thoại là bắt buộc.
+              </div>
+              <div *ngIf="customerForm.get('sdt')?.errors?.['pattern'] && (customerForm.get('sdt')?.dirty || customerForm.get('sdt')?.touched)" class="text-danger">
+                Số điện thoại chỉ được chứa số.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" formControlName="email" class="form-control" id="email" aria-describedby="emailHelp">
+              <div *ngIf="customerForm.get('email')?.errors?.['required'] && (customerForm.get('email')?.dirty || customerForm.get('email')?.touched)" class="text-danger">
+                Email là bắt buộc.
+              </div>
+              <div *ngIf="customerForm.get('email')?.errors?.['email'] && (customerForm.get('email')?.dirty || customerForm.get('email')?.touched)" class="text-danger">
+                Email không đúng định dạng.
+              </div>
+            </div>
+
             <div class="mb-3">
               <label class="form-label">Giới tính:</label>
               <div class="d-flex align-items-center">
                 <div class="form-check me-3">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                  <label class="form-check-label" for="flexRadioDefault1">
-                    Nam
-                  </label>
+                  <input class="form-check-input" type="radio" formControlName="gioiTinh" value="true" id="gioiTinhNam">
+                  <label class="form-check-label" for="gioiTinhNam">Nam</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                  <label class="form-check-label" for="flexRadioDefault2">
-                    Nữ
-                  </label>
+                  <input class="form-check-input" type="radio" formControlName="gioiTinh" value="false" id="gioiTinhNu">
+                  <label class="form-check-label" for="gioiTinhNu">Nữ</label>
                 </div>
               </div>
             </div>
           </form>
         </div>
+
         <div class="modal-footer">
-          <button class="btn btn-success" data-bs-dismiss="modal">Xóa</button>
+          <button class="btn btn-success" (click)="onSubmit()" data-bs-dismiss="modal">Thêm</button>
           <button class="btn btn-danger" data-bs-dismiss="modal">Hủy</button>
         </div>
       </div>

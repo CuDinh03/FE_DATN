@@ -20,6 +20,8 @@ import { ThanhToanService } from 'src/app/service/ThanhToanService';
 import {NhanVienService} from "../../service/nhanVienService";
 import {TaiKhoanDto} from "../../model/tai-khoan-dto.model";
 import {debounceTime, distinctUntilChanged, Subject, switchMap} from "rxjs";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {KhachHangDto} from "../../model/khachHangDto";
 
 @Component({
   selector: 'app-shopping-view',
@@ -36,8 +38,9 @@ export class ShoppingViewComponent {
   gioHang: any = {};
   chiTietSanPham: any = {};
   listHoaDonGioHang: any[] = [];
-  hoaDon: any = {};
   danhMuc: any[] = [];
+  hoaDon: any = {};
+  hoaDonGioHang: any = {};
   startFrom = 1;
   submitted = false;
   errorMessage: string = '';
@@ -76,7 +79,8 @@ export class ShoppingViewComponent {
   searchTerm: string = '';
   searchSubject: Subject<string> = new Subject();
 
-
+  customerForm!: FormGroup;
+  submitted2 = false;
 
   constructor(private auth: AuthenticationService,
               private router: Router,
@@ -91,7 +95,8 @@ export class ShoppingViewComponent {
               private thanhToanService: ThanhToanService,
               private activatedRoute: ActivatedRoute,
               private snackBar: MatSnackBar,
-              private nvService: NhanVienService
+              private nvService: NhanVienService,
+              private formBuilder: FormBuilder
   ) {
     // @ts-ignore
     this.thanhToanDto = {
@@ -114,6 +119,13 @@ export class ShoppingViewComponent {
       gioHangChiTietDtoList: []
     };
 
+    this.customerForm = this.formBuilder.group({
+      ten: ['', [Validators.required, Validators.pattern('^[^0-9]*$')]],  // Không cho phép số
+      diaChi: ['', Validators.required],
+      sdt: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],  // Chỉ cho phép số
+      email: ['', [Validators.required, Validators.email]],
+      gioiTinh: ['Nam', Validators.required]  // Mặc định là Nam
+    });
   }
 
   ngOnInit(): void {
@@ -133,6 +145,7 @@ export class ShoppingViewComponent {
     this.getCustomer();
     this.getNhanVien();
   }
+  get f() { return this.customerForm.controls; }
 
   onSearch(): void {
     this.searchSubject.next(this.searchTerm);
@@ -182,7 +195,7 @@ export class ShoppingViewComponent {
     const storedHoaDon = localStorage.getItem('dbhoadon');
     const storedGioHangChiTiet = localStorage.getItem('gioHangChiTiet');
 
-    if (this.customer.ten === 'Khách lẻ' || this.customer.ten === ''){
+    if (this.customer.ten === 'Khách lẻ' || this.customer.ten === ''|| this.customer.ten == null){
       this.customer = null;
     }
 
@@ -639,7 +652,7 @@ export class ShoppingViewComponent {
       });
       return;
     }
-    this.hoaDonGioHangService.createHoaDon(this.hoaDon).subscribe(data => {
+    this.hoaDonGioHangService.createHoaDon(this.hoaDonGioHang).subscribe(data => {
       this.snackBar.open('Tạo hóa đơn thành công!', 'Đóng', {
         duration: 3000,
         panelClass: ['error-snackbar']
@@ -837,6 +850,7 @@ export class ShoppingViewComponent {
   }
 
   onTienKhachDua(event: any): void {
+
     const numericValue = parseFloat(event); // Chuyển đổi giá trị từ chuỗi sang số
     if (!isNaN(numericValue)) {
       this.tienKhachDua = numericValue; // Gán giá trị vào tienKhachDua
@@ -890,6 +904,26 @@ export class ShoppingViewComponent {
     const year = date.getFullYear(); // Get full year
 
     return `${day}/${month}/${year}`; // Return in the desired format (dd/MM/yyyy)
+  }
+
+
+  onSubmit() {
+    this.submitted2 = true;
+
+    // Nếu form không hợp lệ thì ngừng việc submit
+    if (this.customerForm.invalid) {
+      return;
+    }
+
+    const khachHang : KhachHangDto = this.customerForm.value
+    this.khachHangService.createKhachHang(khachHang).subscribe(
+      (response) => {
+        console.log('Khách hàng đã được tạo:', response);
+      },
+      (error) => {
+        console.error('Lỗi khi tạo khách hàng:', error);
+      }
+    );
   }
 
 }
