@@ -37,6 +37,7 @@ interface Column {
 
 })
 export class ProductDetailViewComponent implements OnInit {
+
   @ViewChild('editModal') editModal!: ElementRef;
 
   cols!: Column[];
@@ -151,6 +152,7 @@ export class ProductDetailViewComponent implements OnInit {
   onSearch(): void {
     this.searchSubject.next(this.searchTerm);
   }
+
 
   showModalEdit(): void {
     if (this.editModal && this.editModal.nativeElement) {

@@ -1,3 +1,24 @@
+<ngx-spinner   [fullScreen]="true">
+  <div aria-label="Orange and tan hamster running in a metal wheel" role="img" class="wheel-and-hamster">
+    <div class="wheel"></div>
+    <div class="hamster">
+      <div class="hamster__body">
+        <div class="hamster__head">
+          <div class="hamster__ear"></div>
+          <div class="hamster__eye"></div>
+          <div class="hamster__nose"></div>
+        </div>
+        <div class="hamster__limb hamster__limb--fr"></div>
+        <div class="hamster__limb hamster__limb--fl"></div>
+        <div class="hamster__limb hamster__limb--br"></div>
+        <div class="hamster__limb hamster__limb--bl"></div>
+        <div class="hamster__tail"></div>
+      </div>
+    </div>
+    <div class="spoke"></div>
+  </div>
+</ngx-spinner>
+
 <div class="container-fluid">
   <!--  Row 1 -->
   <div class="row">
@@ -17,8 +38,16 @@
               </select>
             </div>
           </div>
-          <div class="charts">
-
+          <div id="chart">
+            <apx-chart
+              [series]="chartOptions.series ?? []"
+              [chart]="chartOptions.chart || { type: 'line' }"
+              [xaxis]="chartOptions.xaxis ?? {}"
+              [dataLabels]="chartOptions.dataLabels ?? {}"
+              [grid]="chartOptions.grid ?? {}"
+              [stroke]="chartOptions.stroke ?? {}"
+              [title]="chartOptions.title ?? {}"
+            ></apx-chart>
           </div>
         </div>
       </div>
