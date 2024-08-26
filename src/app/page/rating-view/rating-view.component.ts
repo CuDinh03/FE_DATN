@@ -65,36 +65,63 @@ export class RatingViewComponent {
       this.hoaDonChiTietService.findById(hoaDonChiTiet.id).subscribe((response: ApiResponse<any>) => {
         if (response.result) {
           this.hoaDonChiTiet = response.result;
+          console.log(this.hoaDonChiTiet)
         }
       })
     }
   }
 
+
   createRating(): void {
+    if (!this.danhGiaForm.valid || !this.selectedRating) {
+      this.snackBar.open('Vui lòng điền đầy đủ thông tin và chọn mức đánh giá!', 'Đóng', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+
+    // Tạo bản sao của hoaDonChiTiet và loại bỏ thuộc tính hinhAnhUrls
+    const hoaDonChiTiet = { ...this.hoaDonChiTiet };
+    if (hoaDonChiTiet.hinhAnhUrls) {
+      delete hoaDonChiTiet.hinhAnhUrls;
+    }
+
     const danhGiaDto: DanhGiaDto = {
       khachHang: this.khachHang,
-      hoaDonChiTiet: this.hoaDonChiTiet,
+      hoaDonChiTiet: hoaDonChiTiet, // Gửi hoaDonChiTiet không chứa hinhAnhUrls
       tieuDe: this.danhGiaForm.value.tieuDe,
       noiDung: this.danhGiaForm.value.noiDung,
       diem: this.selectedRating,
       trangThai: 1,
     };
+
     this.danhGiaServe.createRating(danhGiaDto).subscribe(
       (response) => {
-        this.snackBar.open('Đã đánh giá sản phẩm!', 'Đóng', {
-          duration: 3000,
-          panelClass: ['success-snackbar']
-        });
-        this.router.navigate(['/don-mua']);
+        if (response.code === 1000) {
+          this.snackBar.open('Đánh giá sản phẩm thành công!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+          this.router.navigate(['/don-mua']);
+        } else {
+          this.snackBar.open('Có lỗi xảy ra khi đánh giá sản phẩm!', 'Đóng', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+        }
       },
       (error) => {
-        this.snackBar.open('Đánh giá sản phẩm thất bại!', 'Đóng', {
+        console.error('Lỗi khi đánh giá sản phẩm:', error);
+        this.snackBar.open('Đánh giá sản phẩm thất bại! Vui lòng thử lại.', 'Đóng', {
           duration: 3000,
           panelClass: ['error-snackbar']
         });
       }
     );
   }
+
+
 
 
   selectRating(rating: number): void {

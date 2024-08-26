@@ -66,13 +66,13 @@ div .product_count .items-count {
 
 /* Định vị các nút tăng giảm */
 div .product_count .increase {
-    top: 2.4rem;
+    top: 3.4rem;
     /* Điều chỉnh vị trí theo chiều dọc */
     border: none !important;
 }
 
 .product_count .reduced {
-    top: 3.6rem;
+    top: 4.6rem;
     /* Điều chỉnh vị trí theo chiều dọc */
 }
 

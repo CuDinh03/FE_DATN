@@ -19,7 +19,8 @@
             <div class="col-6 product-info p-4">
               <div class="product-header">
                 <h1 class="custom-heading">{{ findCiTietSanPham.sanPham.ten | uppercase }} MÀU {{
-                    findCiTietSanPham.mauSac.ten | uppercase }}</h1>
+                    findCiTietSanPham.mauSac.ten | uppercase
+                  }}</h1>
                 <div class="rating">
                   <i class="ti ti-star filled"></i>
                   <i class="ti ti-star filled"></i>
@@ -30,12 +31,14 @@
                 </div>
               </div>
               <p class="mb-4"><strong class="price-label">Giá bán: </strong> <span class="price">{{
-                  findCiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0' }}</span></p>
-              <p class="color-label">Màu khác* <i>Số lượng trong kho: {{findCiTietSanPham.soLuong}}</i></p>
+                  findCiTietSanPham.giaBan | currency:'VND':'symbol':'1.0-0'
+                }}</span></p>
+              <p class="color-label">Màu khác* <i>Số lượng trong kho: {{ findCiTietSanPham.soLuong }}</i></p>
               <div class="row ms-2">
                 <div class="col-2" *ngFor="let color of listMauSac">
                   <div class="custom-radio">
-                    <input type="radio" id="{{ color.id }}" name="mauSac" [value]="color.id" [checked]="selectedColor.id === color.id"
+                    <input type="radio" id="{{ color.id }}" name="mauSac" [value]="color.id"
+                           [checked]="selectedColor.id === color.id"
                            (change)="onColorChange(color)"
                     />
                     <label for="{{ color.id }}" [style.backgroundColor]="color.ma">
@@ -52,11 +55,12 @@
                     <div class="d-flex mt-3">
                       <div class="" *ngFor="let size of listKichThuoc">
                         <span class="custom-radio-size">
-                          <input type="radio" id="{{ size.id }}" name="kichThuoc" [value]="size.id" [checked]="selectedSize.id === size.id"
+                          <input type="radio" id="{{ size.id }}" name="kichThuoc" [value]="size.id"
+                                 [checked]="selectedSize.id === size.id"
                                  (change)="onSizeChange(size)"
                           />
                           <label for="{{ size.id }}">
-                            <span class="size-swatch">{{size.ten}}</span>
+                            <span class="size-swatch">{{ size.ten }}</span>
                           </label>
                         </span>
                       </div>
@@ -93,138 +97,78 @@
       </div>
     </div>
   </div>
-
-
-
-
-  <!--================End Single Product Area =================-->
-
-  <!--================Product Description Area =================-->
-    <div class="container">
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-             aria-selected="false">Specification</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
-             aria-selected="false">Reviews</a>
-        </li>
-      </ul>
-      <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-          <div class="table-responsive">
-            <table class="table">
-              <tbody>
-              <tr>
-                <td>
-                  <h5>Width</h5>
-                </td>
-                <td>
-                  <h5>128mm</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Height</h5>
-                </td>
-                <td>
-                  <h5>508mm</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Depth</h5>
-                </td>
-                <td>
-                  <h5>85mm</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Weight</h5>
-                </td>
-                <td>
-                  <h5>52gm</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Quality checking</h5>
-                </td>
-                <td>
-                  <h5>yes</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Freshness Duration</h5>
-                </td>
-                <td>
-                  <h5>03days</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>When packeting</h5>
-                </td>
-                <td>
-                  <h5>Without touch of hand</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Each Box contains</h5>
-                </td>
-                <td>
-                  <h5>60pcs</h5>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
-          <div class="row d-flex justify-content-center">
-            <!-- Sidebar -->
-            <div class="col-lg-9">
-              <div class="card p-2">
-                <h1 style="color: black" class="p-3">Đánh giá sản phẩm</h1>
-                <div class="d-flex align-items-center" style="border-bottom: 1px solid #ccc; border-top: 1px solid #ccc">
-                </div>
-                <form [formGroup]="danhGiaForm" (ngSubmit)="createRating()">
-                  <div class="mt-2 d-flex align-content-center p-2">
-                    <p style="color:#000; font-size: 14px; margin-right: 40px">Chất lượng sản phẩm</p>
-                    <ng-container *ngFor="let star of stars; let i = index">
-                      <i class="fas fa-star" style="font-size: 22px"
-                         [ngClass]="i < selectedRating ? 'text-warning' : 'text-muted'"
-                         (click)="selectRating(i + 1)">
-                      </i>
-                    </ng-container>
-                    <span class="ms-2" style="color: #FFAE1F">{{ getRatingText(selectedRating) }}</span>
-                  </div>
-
-                  <div style="background-color: #eceaea; padding: 20px; margin: 15px; border-radius: 5px">
-                    <div style="background-color: white; padding: 20px; border-radius: 5px">
-                      <div class="mb-3">
-                        <label style="color: black" class="form-label">Tiêu đề</label>
-                        <input type="text" formControlName="tieuDe" class="form-control">
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label" style="color: black">Đánh giá chất lượng sản phẩm</label>
-                        <textarea formControlName="noiDung" class="form-control" rows="5"></textarea>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="d-flex justify-content-end align-content-center p-3">
-                    <button type="submit" class="btn btn-info">Đánh giá</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="container">
+    <div class="card p-5">
+      <div class="table-responsive">
+        <table class="table">
+          <tbody>
+          <tr>
+            <td>
+              <h5>Width</h5>
+            </td>
+            <td>
+              <h5>128mm</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Height</h5>
+            </td>
+            <td>
+              <h5>508mm</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Depth</h5>
+            </td>
+            <td>
+              <h5>85mm</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Weight</h5>
+            </td>
+            <td>
+              <h5>52gm</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Quality checking</h5>
+            </td>
+            <td>
+              <h5>yes</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Freshness Duration</h5>
+            </td>
+            <td>
+              <h5>03days</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>When packeting</h5>
+            </td>
+            <td>
+              <h5>Without touch of hand</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Each Box contains</h5>
+            </td>
+            <td>
+              <h5>60pcs</h5>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+  </div>
 </section>

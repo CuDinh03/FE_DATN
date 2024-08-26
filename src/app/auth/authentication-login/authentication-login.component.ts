@@ -34,7 +34,7 @@ export class AuthenticationLoginComponent implements OnInit {
         .subscribe(
           response => {
             localStorage.setItem('token', response.result.token); // Simulating token storage for admin
-            this.router.navigate(['admin']).then(() => {
+            this.router.navigate(['/admin/dash-board']).then(() => {
               this.snackBar.open('Đăng nhập thành công!', 'Đóng', {
                 duration: 3000,
                 panelClass: ['success-snackbar']

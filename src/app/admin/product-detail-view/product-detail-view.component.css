@@ -1,50 +1,84 @@
 /* CSS cho .image-gallery */
 .image-gallery {
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-top: 1rem;
 }
 
 /* CSS cho danh sách hình ảnh */
 .image-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
 }
 
 /* CSS cho mỗi hình ảnh trong danh sách */
 .uploaded-image {
-    max-width: 100px;
-    max-height: 100px;
-    border-radius: 4px;
-    object-fit: cover;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 4px;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+/* Hết hàng - Red border and background */
+.stock-out {
+  border: 1px solid #f85151;
+  background-color: #f85151;
+  color: white;
+  border-radius: 30px; /* Bo góc nhỏ */
+  padding: 2px 6px; /* Padding để text không bị chạm viền */
+  display: inline-block; /* Đảm bảo border chỉ bao quanh chữ */
+  text-align: center; /* Căn giữa văn bản */
+}
+
+/* Sắp hết hàng - Yellow border and background */
+.stock-low {
+  border: 1px solid #ff9100;
+  background-color: #ff9100;
+  color: white;
+  border-radius: 30px; /* Bo góc nhỏ */
+  padding: 2px 6px; /* Padding để text không bị chạm viền */
+  display: inline-block; /* Đảm bảo border chỉ bao quanh chữ */
+  text-align: center; /* Căn giữa văn bản */
+}
+
+/* Còn hàng - Green border and background */
+.stock-in {
+  border: 1px solid green;
+  background-color: green;
+  color: white;
+  border-radius: 30px; /* Bo góc nhỏ */
+  padding: 2px 6px; /* Padding để text không bị chạm viền */
+  display: inline-block; /* Đảm bảo border chỉ bao quanh chữ */
+  text-align: center; /* Căn giữa văn bản */
+}
+
 
 /* CSS cho tiêu đề hình ảnh */
 .image-gallery h5 {
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-    color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #333;
 }
 /* CSS cho mỗi hình ảnh tải lên */
 .uploaded-image {
-    max-width: 150px; /* Kích thước tối đa của hình ảnh */
-    max-height: 150px; /* Kích thước tối đa của hình ảnh */
-    border-radius: 8px; /* Bo tròn các góc hình ảnh */
-    object-fit: cover; /* Đảm bảo hình ảnh không bị méo mó */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng cho hình ảnh */
-    margin: 0.5rem; /* Khoảng cách giữa các hình ảnh */
-    transition: transform 0.3s ease-in-out; /* Hiệu ứng chuyển động khi hover */
+  max-width: 150px; /* Kích thước tối đa của hình ảnh */
+  max-height: 150px; /* Kích thước tối đa của hình ảnh */
+  border-radius: 8px; /* Bo tròn các góc hình ảnh */
+  object-fit: cover; /* Đảm bảo hình ảnh không bị méo mó */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng cho hình ảnh */
+  margin: 0.5rem; /* Khoảng cách giữa các hình ảnh */
+  transition: transform 0.3s ease-in-out; /* Hiệu ứng chuyển động khi hover */
 }
 
 /* CSS cho hiệu ứng hover */
 .uploaded-image:hover {
-    transform: scale(1.05); /* Phóng to hình ảnh khi hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Tăng cường đổ bóng khi hover */
+  transform: scale(1.05); /* Phóng to hình ảnh khi hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Tăng cường đổ bóng khi hover */
 }
 
 /*css*/
@@ -260,6 +294,30 @@
 .btn-delete:hover {
   background: rgba(255, 0, 0, 0.8);
 }
+.notification-container {
+  width: 300px; /* Đặt chiều rộng tự động để phù hợp với nội dung */
+  max-width: 300px; /* Đặt chiều rộng tối đa của thanh thông báo */
+  overflow: hidden; /* Ẩn phần văn bản bị tràn */
+  text-overflow: ellipsis; /* Hiển thị dấu ba chấm khi nội dung bị tràn */
+  white-space: nowrap; /* Đảm bảo văn bản không bị xuống dòng */
+}
+
+.notification-text {
+  display: inline-block; /* Cần thiết để có thể áp dụng các thuộc tính overflow */
+  vertical-align: middle; /* Căn chỉnh văn bản dọc giữa */
+  width: 300px; /* Đặt chiều rộng tự động để phù hợp với nội dung */
+  max-width: 300px; /* Đặt chiều rộng tối đa của thanh thông báo */
+}
 
 
-
+.lineHead{
+  width: 98%;
+  height: 20px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  textAlign: center;
+  lineHeight: 20px;
+  overflow: hidden;
+  whiteSpace: nowrap;
+  textOverflow: ellipsis;
+}

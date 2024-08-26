@@ -8,8 +8,7 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from './../../service/AuthenticationService';
 import {Component, ElementRef, Renderer2, HostListener, ViewChild} from '@angular/core';
 import {VoucherService} from "../../service/VoucherService";
-import {formatDate} from "@angular/common";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ThanhToanService} from "../../service/ThanhToanService";
 import {ThanhToanOnl} from "../../model/thanh-toan-onl";
 import {GioHangDto} from "../../model/gio-hang-dto";
@@ -24,6 +23,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 export class PaymentViewComponent {
   @ViewChild('voucherModal') voucherModal!: ElementRef;
   @ViewChild('userInfor') userInfor!: ElementRef;
+  @ViewChild('submitPay') submitPay!: ElementRef;
   totalElements = 0;
   totalPages: number = 0;
   currentPage = 0;
@@ -56,15 +56,15 @@ export class PaymentViewComponent {
               private spinner: NgxSpinnerService
   ) {
     this.customerForm = this.formBuilder.group({
-      ten: [''],
-      diaChi: [''],
-      sdt: [''],
-      email: [''],
-      note: [''],
+      ten: ['', [Validators.required, Validators.pattern('^[^0-9]*$')]],  // Chỉ cho phép nhập các ký tự không phải số
+      diaChi: ['', Validators.required],
+      sdt: ['', [Validators.required, Validators.pattern('^[0-9]*$')]], // Số điện thoại chỉ cho phép số
+      note: ['']
     })
 
 
   }
+
 
 
   get f() {
@@ -191,6 +191,21 @@ export class PaymentViewComponent {
     }
   }
 
+  showModalSubmitPay(): void {
+    if (this.submitPay && this.submitPay.nativeElement) {
+      this.submitPay.nativeElement.classList.add('show');
+      this.submitPay.nativeElement.style.display = 'block';
+      this.loadVoucher();
+    }
+  }
+
+  closeModalSubmitPay(): void {
+    if (this.submitPay && this.submitPay.nativeElement) {
+      this.submitPay.nativeElement.classList.remove('show');
+      this.submitPay.nativeElement.style.display = 'none';
+    }
+  }
+
   showModalInfor(): void {
     if (this.userInfor && this.userInfor.nativeElement) {
       this.userInfor.nativeElement.classList.add('show');
@@ -304,6 +319,7 @@ export class PaymentViewComponent {
   }
 
   saveInfoPayment() {
+
     this.loading = true;
     if (this.customerForm.invalid) {
       this.loading = false;

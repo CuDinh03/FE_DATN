@@ -8,6 +8,7 @@ import { PaymentViewComponent } from './page/payment-view/payment-view.component
 import { AuthGuard } from './auth/auth.guard';
 import {MainViewComponent} from "./page/main-view/main-view.component";
 import {ProductDetailComponent} from "./page/product-detail/product-detail.component";
+import {RatingViewComponent} from "./page/rating-view/rating-view.component";
 
 const customerRoutes: Routes = [
   {
@@ -22,6 +23,7 @@ const customerRoutes: Routes = [
       { path: 'thanh-toan', component: PaymentViewComponent },
       {path: 'san-pham', component:ProductDetailComponent},
       { path: 'order-detail/:id', component: OrderDetailComponent },
+      { path: 'danh-gia', component: RatingViewComponent },
 
     ],
   }

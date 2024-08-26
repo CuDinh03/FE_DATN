@@ -24,6 +24,15 @@ export class SanPhamCTService {
 
   constructor(private http: HttpClient) {}
 
+  search(keyword: string, page: number, size: number): Observable<any> {
+    let params = new HttpParams()
+      .set('keyword', keyword)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<any>(`${this.apiUrl}/search`, { params });
+  }
+
   getSanPhamChiTietSapXepByNGayTao(page: number, size: number): Observable<ApiResponse<any>> {
 
     let params = new HttpParams();
@@ -31,6 +40,14 @@ export class SanPhamCTService {
     params = params.append('size', size.toString());
 
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/sap-xep-ngay-tao`, { params });
+  }
+
+  remove(id:string): Observable<ApiResponse<any>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/delete/${id}`, { headers });
   }
 
   // Get chitietSanPham by id

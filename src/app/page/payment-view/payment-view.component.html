@@ -152,31 +152,49 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
                 </a>
               </div>
             </div>
-            <form [formGroup]="customerForm" (ngSubmit)="saveInfoPayment()" class="pb-3">
+            <form [formGroup]="customerForm" class="pb-3">
               <div class="mb-2">
-                <label class="form-label">Họ và tên</label>
-                <input type="text" class="form-control" formControlName="ten" id="ten">
-              </div>
-              <div class="mb-2">
-                <label class="form-label">Địa chỉ</label>
-                <input type="text" class="form-control" formControlName="diaChi" id="diaChi">
-              </div>
-              <div class="mb-2">
-                <label class="form-label">Số điện thoai</label>
-                <input type="text" class="form-control" formControlName="sdt" id="sdt">
-              </div>
-              <div class="pt-2">
-                <div class="mb-3">
-                  <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" formControlName="note"
-                            id="note"></textarea>
+                <label for="ten" class="form-label">Họ và tên</label>
+                <input type="text" formControlName="ten" class="form-control" id="ten">
+                <div *ngIf="customerForm.get('ten')?.errors?.['required'] && (customerForm.get('ten')?.dirty || customerForm.get('ten')?.touched)" class="text-danger">
+                  Họ và tên là bắt buộc.
                 </div>
-                <div class="d-flex flex-row pb-3">
-                  <div class="d-flex align-items-center pe-2">
-                    <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value="TienMat"
-                           aria-label="..."
-                           checked/>
-                  </div>
+                <div *ngIf="customerForm.get('ten')?.errors?.['pattern'] && (customerForm.get('ten')?.dirty || customerForm.get('ten')?.touched)" class="text-danger">
+                  Họ và tên không được chứa số.
+                </div>
+              </div>
+
+
+              <div class="mb-2">
+                <label for="diaChi" class="form-label">Địa chỉ</label>
+                <input type="text" formControlName="diaChi" class="form-control" id="diaChi">
+                <div *ngIf="customerForm.get('diaChi')?.errors?.['required'] && (customerForm.get('diaChi')?.dirty || customerForm.get('diaChi')?.touched)" class="text-danger">
+                  Địa chỉ là bắt buộc.
+                </div>
+              </div>
+
+
+              <div class="mb-2">
+                <label for="sdt" class="form-label">Số điện thoại</label>
+                <input type="text" formControlName="sdt" class="form-control" id="sdt">
+                <div *ngIf="customerForm.get('sdt')?.errors?.['required'] && (customerForm.get('sdt')?.dirty || customerForm.get('sdt')?.touched)" class="text-danger">
+                  Số điện thoại là bắt buộc.
+                </div>
+                <div *ngIf="customerForm.get('sdt')?.errors?.['pattern'] && (customerForm.get('sdt')?.dirty || customerForm.get('sdt')?.touched)" class="text-danger">
+                  Số điện thoại chỉ được chứa số.
+                </div>
+              </div>
+
+
+              <div class="mb-2">
+                <label for="note" class="form-label">Ghi chú</label>
+                <textarea formControlName="note" class="form-control" id="note"></textarea>
+                <div *ngIf="customerForm.get('note')?.errors?.['maxlength'] && (customerForm.get('note')?.dirty || customerForm.get('note')?.touched)" class="text-danger">
+                  Ghi chú không được vượt quá 200 ký tự.
+                </div>
+              </div>
+
+
                   <div class="rounded border d-flex w-100 p-3 align-items-center">
                     <p class="mb-0">
                       <i class="ti ti-shopping-cart fa-lg text-primary pe-2"></i>Thanh toán
@@ -184,17 +202,13 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
                     </p>
 
                   </div>
+                <div class="d-flex justify-content-start align-items-start">
+                  <button type="button" class="btnVoucher me-3" (click)="showModal()">Chọn Voucher</button>
+                  <button class="Btn" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Đặt hàng
+                    <svg class="svgIcon" viewBox="0 0 576 512"><path d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"></path></svg>
+                  </button>
                 </div>
-                <div class="d-flex flex-row">
-
-                  <button type="button" class="btnVoucher" (click)="showModal()">Chọn Voucher</button>
-                </div>
-                <br>
-                <button class="Btn" type="submit">
-                  Đặt hàng
-                  <svg class="svgIcon" viewBox="0 0 576 512"><path d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"></path></svg>
-                </button>
-              </div>
             </form>
           </div>
         </div>
@@ -203,7 +217,7 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
         <div class="card">
           <div class="card-body">
             <div class="py-4 d-flex justify-content-end">
-              <h6><a href="#!">Hủy thanh toán</a></h6>
+              <h6><a [routerLink]="['/trang-chu']">Hủy thanh toán</a></h6>
             </div>
             <div class="rounded d-flex flex-column p-2 bg-body-tertiary">
               <div class="p-2 me-3">
@@ -302,6 +316,9 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
   </div>
 </div>
 
+
+
+
 <app-footer></app-footer>
 
 <div class="modal fade" #userInfor tabindex="-1" aria-labelledby="userInForModal" aria-hidden="true">
@@ -350,6 +367,27 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"
       <div class="modal-footer">
         <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal" (click)="updateCustomerInfo()">Sử dụng</button>
         <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" (click)="closeInforModal()">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-body">
+          Bạn có chắc chắn muốn thanh toán không?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Hủy</button>
+        <button type="button" class="btn btn-primary" (click)="saveInfoPayment()" data-bs-dismiss="modal">Đặt hàng</button>
       </div>
     </div>
   </div>

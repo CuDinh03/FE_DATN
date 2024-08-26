@@ -216,4 +216,15 @@
   }
 }
 
+.btnVoucher, .Btn {
+  width: 150px; /* Adjust width as needed */
+  height: 40px; /* Adjust height as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
 
