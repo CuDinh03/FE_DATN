@@ -15,20 +15,14 @@ export class AuthGuard  {
       const url: string = state.url;
 
       if (url.startsWith('/admin')) {
-        if (role === 'ROLE_ADMIN') {
-          return true;
-        } else {
-          this.router.navigate(['/trang-chu']);
-          return false;
-        }
+        if (role != null && role.includes('ROLE_ADMIN')) return true;
+        this.router.navigate(['/trang-chu']);
+        return false;
       }
       if (url.startsWith('/customer')) {
-        if (role === 'ROLE_CUSTOMER') {
-          return true;
-        } else {
-          this.router.navigate(['/trang-chu']);
-          return false;
-        }
+        if (role != null && role.includes('ROLE_CUSTOMER')) return true;
+        this.router.navigate(['/trang-chu']);
+        return false;
       }
 
       this.router.navigate(['/trang-chu']);

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
 import { HinhAnhDto } from '../model/hinh-anh-dto.model';
+import { environment } from '../../environments/environment';
 
 
 
@@ -12,7 +13,7 @@ import { HinhAnhDto } from '../model/hinh-anh-dto.model';
   })
   export class HinhAnhService {
 
-    apiUrl = 'http://localhost:9091/api/hinh-anh';
+    apiUrl = `${environment.apiUrl}/hinh-anh`;
 
     constructor(private http: HttpClient) {}
 

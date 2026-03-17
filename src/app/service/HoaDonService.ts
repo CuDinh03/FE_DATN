@@ -2,7 +2,7 @@ import {ApiResponse} from '../model/ApiResponse';
 import {Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {error} from "@angular/compiler-cli/src/transformers/util";
+import { environment } from '../../environments/environment';
 import {DanhMucDto} from "../model/danh-muc-dto.model";
 import {HoaDonDto} from "../model/hoa-don-dto.model";
 import {HoaDonSua} from "../model/HoaDonSua";
@@ -15,7 +15,7 @@ import {MonthlySalesData} from "../model/MonthlySalesData";
 export class HoaDonService {
 
 
-  apiUrl = 'http://localhost:9091/api/hoa-don';
+  apiUrl = `${environment.apiUrl}/hoa-don`;
 
 
   constructor(private http: HttpClient) {
@@ -207,9 +207,17 @@ export class HoaDonService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/thongke/doanhthu/thang"`, {headers});
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/thongke/doanhthu/thang`, {headers});
   }
 
+  /** Phần trăm tăng trưởng doanh thu so với năm trước */
+  getTangTruongDoanhThu(): Observable<ApiResponse<{ tangTruongPhanTram: number }>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<{ tangTruongPhanTram: number }>>(`${this.apiUrl}/tangtruong/doanhthu`, { headers });
+  }
 
   updateHoaDonSua(hoaDonSua: HoaDonSua): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
@@ -228,6 +236,14 @@ export class HoaDonService {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/monthly-sales` , { headers });
   }
 
+  /** Số đơn hàng đã bán (trạng thái hoàn thành). */
+  getSoDonHangDaBan(): Observable<ApiResponse<number>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<ApiResponse<number>>(`${this.apiUrl}/so-don-hang`, { headers });
+  }
 
 }
 

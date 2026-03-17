@@ -2,12 +2,13 @@ import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {Router} from "@angular/router";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private apiUrl = 'http://localhost:9091/api/auth/log-in';
+  private apiUrl = `${environment.apiUrl}/auth/log-in`;
 
 
   constructor(private http: HttpClient, private router: Router) {
@@ -16,11 +17,10 @@ export class AuthenticationService {
   login(tenDangNhap: string, matKhau: string): Observable<any> {
     return this.http.post<any>(this.apiUrl, {tenDangNhap, matKhau}).pipe(
       tap(response => {
-        if (response.result && response.result.token) {
-          const decodedToken = this.decodeToken(response.result.token);
-          if (decodedToken && decodedToken.iss) {
-            localStorage.setItem('tenDangNhap', decodedToken.iss);
-          }
+        if (response?.result?.token) {
+          localStorage.setItem('token', response.result.token);
+          const decoded = this.decodeToken(response.result.token);
+          if (decoded?.iss) localStorage.setItem('tenDangNhap', decoded.iss);
         }
       })
     );
@@ -35,15 +35,24 @@ export class AuthenticationService {
     return !!localStorage.getItem('token');
   }
 
+  /** Trả về scope trong JWT (vd: "ROLE_ADMIN" hoặc "ROLE_ADMIN ROLE_STAFF"). */
   getRole(): string | null {
     const token = localStorage.getItem('token');
-
-    console.log(token)
-    if (!token) {
+    if (!token) return null;
+    try {
+      const payload = token.split('.')[1];
+      if (!payload) return null;
+      const decoded = JSON.parse(atob(payload));
+      return decoded?.scope ?? null;
+    } catch {
       return null;
     }
-    const decodedToken = JSON.parse(atob(token.split('.')[1]));
-    return decodedToken.scope;
+  }
+
+  /** Kiểm tra có phải admin (scope chứa ROLE_ADMIN). */
+  isAdmin(): boolean {
+    const scope = this.getRole();
+    return scope != null && scope.includes('ROLE_ADMIN');
   }
 
   private decodeToken(token: string): any {

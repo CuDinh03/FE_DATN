@@ -3,13 +3,14 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ApiResponse} from "../model/ApiResponse";
 import {Voucher} from "../model/voucher";
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class VoucherService{
 
-    apiUrl : string ='http://localhost:9091/api/voucher';
+    apiUrl = `${environment.apiUrl}/voucher`;
 
     constructor(private http:HttpClient) {
     }

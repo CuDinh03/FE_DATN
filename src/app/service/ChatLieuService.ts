@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
 import { ChatLieuDto } from '../model/chat-lieu-dto.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
   })
   export class ChatLieuService {
 
-    apiUrl = 'http://localhost:9091/api/chat-lieu';
+    apiUrl = `${environment.apiUrl}/chat-lieu`;
 
     constructor(private http: HttpClient) {}
 

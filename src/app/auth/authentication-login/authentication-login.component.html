@@ -20,10 +20,10 @@
                     Tên đăng nhập là bắt buộc.
                   </div>
                   <div *ngIf="loginForm.get('tenDangNhap')?.errors?.['minlength'] && (loginForm.get('tenDangNhap')?.dirty || loginForm.get('tenDangNhap')?.touched)" class="text-danger">
-                    Tên đăng nhập phải có ít nhất 6 ký tự.
+                    Tên đăng nhập không được để trống.
                   </div>
                   <div *ngIf="loginForm.get('tenDangNhap')?.errors?.['maxlength'] && (loginForm.get('tenDangNhap')?.dirty || loginForm.get('tenDangNhap')?.touched)" class="text-danger">
-                    Tên đăng nhập không được vượt quá 10 ký tự.
+                    Tên đăng nhập không được vượt quá 50 ký tự.
                   </div>
                 </div>
 
@@ -34,10 +34,10 @@
                     Mật khẩu là bắt buộc.
                   </div>
                   <div *ngIf="loginForm.get('matKhau')?.errors?.['minlength'] && (loginForm.get('matKhau')?.dirty || loginForm.get('matKhau')?.touched)" class="text-danger">
-                    Mật khẩu phải có ít nhất 8 ký tự.
+                    Mật khẩu không được để trống.
                   </div>
                   <div *ngIf="loginForm.get('matKhau')?.errors?.['maxlength'] && (loginForm.get('matKhau')?.dirty || loginForm.get('matKhau')?.touched)" class="text-danger">
-                    Mật khẩu không được vượt quá 16 ký tự.
+                    Mật khẩu không được vượt quá 100 ký tự.
                   </div>
                 </div>
 

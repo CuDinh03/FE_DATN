@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
 import { DanhMucDto } from '../model/danh-muc-dto.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
   })
   export class DanhMucService {
 
-    apiUrl = 'http://localhost:9091/api/danh-muc';
+    apiUrl = `${environment.apiUrl}/danh-muc`;
 
     constructor(private http: HttpClient) {}
 

@@ -3,15 +3,14 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {ApiResponse} from "../model/ApiResponse";
 import {Observable} from "rxjs";
 import {TaiKhoanDto} from "../model/tai-khoan-dto.model";
-
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NhanVienService {
 
-  apiUrl : string = 'http://localhost:9091/api/nguoi-dung';
+  apiUrl = `${environment.apiUrl}/nguoi-dung`;
 
   constructor(private http: HttpClient) { }
 

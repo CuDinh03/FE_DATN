@@ -315,9 +315,9 @@
   height: 20px;
   display: inline-block;
   border: 1px solid #ccc;
-  textAlign: center;
-  lineHeight: 20px;
+  text-align: center;
+  line-height: 20px;
   overflow: hidden;
-  whiteSpace: nowrap;
-  textOverflow: ellipsis;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

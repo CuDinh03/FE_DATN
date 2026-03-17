@@ -17,7 +17,8 @@ import {AdminViewComponent} from './admin/admin-view/admin-view.component';
 import {AuthenticationLoginComponent} from './auth/authentication-login/authentication-login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaiKhoanService} from "./service/TaiKhoanService";
-import {HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import { HttpClientModule, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { mockHttpInterceptor } from './core/mock-http.interceptor';
 import {ShoppingCartComponent} from './page/shopping-cart/shopping-cart.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {SidebarComponent} from './admin/sidebar/sidebar.component';
@@ -178,7 +179,7 @@ import {NgApexchartsModule} from "ng-apexcharts";
     ConfirmationService,
     MessageService,
     PrimeNGConfig,
-    provideHttpClient(withInterceptorsFromDi())],
+    provideHttpClient(withInterceptorsFromDi(), withInterceptors([mockHttpInterceptor]))],
   bootstrap: [HomeComponent]
 })
 export class AppModule {

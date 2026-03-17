@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
 import { MauSacDto } from '../model/mau-sac-dto.model';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -11,7 +12,7 @@ import { MauSacDto } from '../model/mau-sac-dto.model';
   })
   export class MauSacService {
 
-    apiUrl = 'http://localhost:9091/api/mau-sac';
+    apiUrl = `${environment.apiUrl}/mau-sac`;
 
     constructor(private http: HttpClient) {}
 

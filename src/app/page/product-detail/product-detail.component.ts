@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { KhachHangService } from './../../service/KhachHangService';
 import { GioHangService } from './../../service/GioHangService';
@@ -8,10 +7,11 @@ import { ApiResponse } from './../../model/ApiResponse';
 import { SanPhamCTService } from './../../service/SanPhamCTService';
 import { AuthenticationService } from "../../service/AuthenticationService";
 import { ActivatedRoute, Router } from "@angular/router";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {HoaDonChiTietService} from "../../service/HoaDonChiTietService";
-import {DanhGiaService} from "../../service/DanhGiaService";
-import {DanhGiaDto} from "../../model/danh-gia-dto";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { DanhGiaService } from "../../service/DanhGiaService";
+import { DanhGiaDto } from "../../model/danh-gia-dto";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getApiErrorMessage } from '../../util/error-message.util';
 
 @Component({
   selector: 'app-product-detail',
@@ -29,6 +29,7 @@ export class ProductDetailComponent implements OnInit {
   listKichThuoc: any[] = [];
   selectedColor: any;
   selectedSize: any;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private auth: AuthenticationService,
@@ -48,29 +49,25 @@ export class ProductDetailComponent implements OnInit {
       noiDung: [''],
       diem: [''],
       trangThai: [''],
-    })
-
-    const tenDangNhap = localStorage.getItem('tenDangNhap');
-    if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
-          this.khachHang = response.result;
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
-      );
-    }
+    });
   }
 
   ngOnInit(): void {
+    const tenDangNhap = localStorage.getItem('tenDangNhap');
+    if (tenDangNhap) {
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (response) => { this.khachHang = response.result; },
+        error: (err) => console.error('Error fetching customer:', err)
+      });
+    }
     this.loadSanPhamChiTiet();
     this.reloadPage();
     this.findShoppingCart();
     this.loadColors();
     this.loadSize();
     this.loadSelectedOptions();
-
   }
 
   hoaDonChiTiet: any = {};
@@ -92,21 +89,20 @@ export class ProductDetailComponent implements OnInit {
       diem: this.selectedRating,
       trangThai: 1,
     };
-    this.danhGiaServe.createRating(danhGiaDto).subscribe(
-      (response) => {
-        this.snackBar.open('Đã đánh giá sản phẩm!', 'Đóng', {
-          duration: 3000,
-          panelClass: ['success-snackbar']
-        });
+    this.danhGiaServe.createRating(danhGiaDto).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: () => {
+        this.snackBar.open('Đã đánh giá sản phẩm!', 'Đóng', { duration: 3000, panelClass: ['success-snackbar'] });
         this.router.navigate(['/don-mua']);
       },
-      (error) => {
-        this.snackBar.open('Đánh giá sản phẩm thất bại!', 'Đóng', {
+      error: (err) => {
+        this.snackBar.open(getApiErrorMessage(err, 'Đánh giá sản phẩm thất bại!'), 'Đóng', {
           duration: 3000,
           panelClass: ['error-snackbar']
         });
       }
-    );
+    });
   }
 
 
@@ -144,42 +140,35 @@ export class ProductDetailComponent implements OnInit {
 
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
-    if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
-          const khachHang = response.result;
-          if (khachHang && khachHang.id) {
-            this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
-              (response) => {
-                this.gioHang = response.result;
-              },
-              (error) => {
-                console.error('Error fetching shopping cart:', error);
-              }
-            );
-          } else {
-            console.error('Không tìm thấy thông tin khách hàng.');
-          }
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
+    if (!tenDangNhap) return;
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
+        const khachHang = response.result;
+        if (khachHang?.id) {
+          this.gioHangService.findGioHangByIdKhachHang(khachHang.id).pipe(
+            takeUntilDestroyed(this.destroyRef)
+          ).subscribe({
+            next: (res) => { this.gioHang = res.result; },
+            error: (err) => console.error('Error fetching shopping cart:', err)
+          });
         }
-      );
-    }
+      },
+      error: (err) => console.error('Error fetching customer:', err)
+    });
   }
 
   loadColors(): void {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.sanPhamCTService.getAllMauSacByMa(chiTietSanPham.sanPham.ma).subscribe(
-        (response: ApiResponse<any>) => {
-          this.listMauSac = response.result;
-        },
-        (error) => {
-          console.error('Error fetching colors', error);
-        }
-      );
+      this.sanPhamCTService.getAllMauSacByMa(chiTietSanPham.sanPham.ma).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (response: ApiResponse<any>) => { this.listMauSac = response.result ?? []; },
+        error: (err) => console.error('Error fetching colors', err)
+      });
     }
   }
 
@@ -187,14 +176,12 @@ export class ProductDetailComponent implements OnInit {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.sanPhamCTService.getAllKichThuocByMa(chiTietSanPham.sanPham.ma).subscribe(
-        (response: ApiResponse<any>) => {
-          this.listKichThuoc = response.result;
-        },
-        (error) => {
-          console.error('Error fetching sizes', error);
-        }
-      );
+      this.sanPhamCTService.getAllKichThuocByMa(chiTietSanPham.sanPham.ma).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (response: ApiResponse<any>) => { this.listKichThuoc = response.result ?? []; },
+        error: (err) => console.error('Error fetching sizes', err)
+      });
     }
   }
 
@@ -202,15 +189,16 @@ export class ProductDetailComponent implements OnInit {
     const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
     if (storeChiTietSanPham) {
       const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-      this.sanPhamCTService.getChiTietSanPhamByIdKH(chiTietSanPham.id)
-        .subscribe((response: ApiResponse<any>) => {
-          if (response.result) {
-            this.findCiTietSanPham = response.result;
-            if (this.findCiTietSanPham.hinhAnh && this.findCiTietSanPham.hinhAnh.length > 0) {
-              this.currentLargeImage = this.findCiTietSanPham.hinhAnh[0].url;
-            }
+      this.sanPhamCTService.getChiTietSanPhamByIdKH(chiTietSanPham.id).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe((response: ApiResponse<any>) => {
+        if (response.result) {
+          this.findCiTietSanPham = response.result;
+          if (this.findCiTietSanPham.hinhAnh?.length > 0) {
+            this.currentLargeImage = this.findCiTietSanPham.hinhAnh[0].url;
           }
-        });
+        }
+      });
     }
   }
 
@@ -264,18 +252,23 @@ export class ProductDetailComponent implements OnInit {
 
 
   addProductToCart(idGioHang: string, idSanPhamChiTiet: string, soLuong: number): void {
-    this.gioHangChiTietService.addProductToCartKH(idGioHang, idSanPhamChiTiet, soLuong).subscribe(
-      response => {
+    this.gioHangChiTietService.addProductToCartKH(idGioHang, idSanPhamChiTiet, soLuong).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: () => {
         this.snackBar.open('Thêm sản phẩm vào giỏ hàng thành công', 'Đóng', {
           duration: 3000,
           panelClass: ['success-snackbar']
         });
         this.reloadPage();
       },
-      error => {
-        console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
+      error: (err) => {
+        this.snackBar.open(getApiErrorMessage(err, 'Lỗi khi thêm sản phẩm vào giỏ hàng.'), 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
       }
-    );
+    });
   }
 
   increaseQuantity() {
@@ -297,24 +290,24 @@ export class ProductDetailComponent implements OnInit {
   }
 
   updateProductDetails(): void {
-    if (this.selectedColor && this.selectedSize) {
-      const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
-      if (storeChiTietSanPham) {
-        const chiTietSanPham = JSON.parse(storeChiTietSanPham);
-        this.sanPhamCTService.findChiTietSanPhamByMauSacAndKichThuoc(chiTietSanPham.sanPham.ma, this.selectedSize.id, this.selectedColor.id)
-          .subscribe((response: ApiResponse<any>) => {
-            if (response.result) {
-              this.findCiTietSanPham = response.result;
-              localStorage.setItem('sanPhamChiTiet', JSON.stringify(this.findCiTietSanPham));
-              if (this.findCiTietSanPham.hinhAnh && this.findCiTietSanPham.hinhAnh.length > 0) {
-                this.currentLargeImage = this.findCiTietSanPham.hinhAnh[0].url;
-              }
-            }
-          }, error => {
-            console.error('Error fetching product details:', error);
-          });
-      }
-    }
+    if (!this.selectedColor || !this.selectedSize) return;
+    const storeChiTietSanPham = localStorage.getItem('sanPhamChiTiet');
+    if (!storeChiTietSanPham) return;
+    const chiTietSanPham = JSON.parse(storeChiTietSanPham);
+    this.sanPhamCTService.findChiTietSanPhamByMauSacAndKichThuoc(chiTietSanPham.sanPham.ma, this.selectedSize.id, this.selectedColor.id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
+        if (response.result) {
+          this.findCiTietSanPham = response.result;
+          localStorage.setItem('sanPhamChiTiet', JSON.stringify(this.findCiTietSanPham));
+          if (this.findCiTietSanPham.hinhAnh?.length > 0) {
+            this.currentLargeImage = this.findCiTietSanPham.hinhAnh[0].url;
+          }
+        }
+      },
+      error: (err) => console.error('Error fetching product details:', err)
+    });
   }
 
   onColorChange(color: any): void {

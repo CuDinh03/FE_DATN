@@ -1,17 +1,15 @@
-
 import { ApiResponse } from '../model/ApiResponse';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {error} from "@angular/compiler-cli/src/transformers/util";
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
   })
   export class GioHangService {
 
-    apiUrl = 'http://localhost:9091/api/gio-hang';
+    apiUrl = `${environment.apiUrl}/gio-hang`;
 
 
     constructor(private http: HttpClient) {}

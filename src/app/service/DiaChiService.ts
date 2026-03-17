@@ -3,14 +3,14 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
-import { DanhMucDto } from '../model/danh-muc-dto.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DiaChiService {
 
-  apiUrl = 'http://localhost:9091/api/thong-tin-dat-hang';
+  apiUrl = `${environment.apiUrl}/thong-tin-dat-hang`;
 
   constructor(private http: HttpClient) {}
 

@@ -3,13 +3,14 @@ import { Observable } from "rxjs";
 import { ApiResponse } from "../model/ApiResponse";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { KhachHangDto } from "../model/khachHangDto";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KhachHangService {
 
-  apiUrl = 'http://localhost:9091/api/khs';
+  apiUrl = `${environment.apiUrl}/khs`;
 
   constructor(private http: HttpClient) {
   }

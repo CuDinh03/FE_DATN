@@ -1,12 +1,14 @@
-import {ErrorCode} from 'src/app/model/ErrorCode';
+import { ErrorCode } from 'src/app/model/ErrorCode';
 import { HttpErrorResponse } from '@angular/common/http';
-import {ApiResponse} from 'src/app/model/ApiResponse';
-import {AuthenticationService} from './../../service/AuthenticationService';
-import {ActivatedRoute, Router} from '@angular/router';
-import {HoaDonChiTietService} from './../../service/HoaDonChiTietService';
-import {Component, ElementRef, ViewChild} from '@angular/core';
-import {HoaDonService} from "../../service/HoaDonService";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { ApiResponse } from 'src/app/model/ApiResponse';
+import { AuthenticationService } from './../../service/AuthenticationService';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HoaDonChiTietService } from './../../service/HoaDonChiTietService';
+import { Component, DestroyRef, ElementRef, inject, ViewChild } from '@angular/core';
+import { HoaDonService } from '../../service/HoaDonService';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getApiErrorMessage } from '../../util/error-message.util';
 
 @Component({
   selector: 'app-order-detail',
@@ -27,6 +29,7 @@ export class OrderDetailComponent {
   selectedOption2: string = 'Thay đổi đơn hàng (màu sắc, kích thước, thêm mã giảm giá...)';
   selectedOption3: string = 'Tôi không có nhu cầu mua nữa';
   orderId: string | null = '';
+  private destroyRef = inject(DestroyRef);
 
   onRadioChange(noteText: string) {
     this.notePlaceholder = noteText;
@@ -43,72 +46,72 @@ export class OrderDetailComponent {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(params => {
       this.orderId = params.get('id');
-      // Thực hiện các hành động khác với orderId nếu cần
-      console.log(this.orderId);
+      this.loadHoaDonChiTiet();
     });
-    this.loadHoaDonChiTiet();
   }
-
 
   submitRequest(): void {
     const requestPayload = {
       ghiChu: this.selectedOption1 + ' - ' + this.noteText
     };
-
-    const invoiceId = this.hoaDon.id; // Thay thế bằng UUID của hóa đơn
-
-    this.hoaDonService.yeuCauSuaHoaDon(invoiceId, requestPayload)
-      .subscribe(
-        response => {
-          this.snackBar.open('Yêu cầu sửa thành công', 'Đóng', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
-        },
-        error => {
-          this.snackBar.open('Yêu cầu sửa thất bại', 'Đóng', {
-            duration: 3000,
-            panelClass: ['error-snackbar']
-          });
-        }
-      );
+    const invoiceId = this.hoaDon?.id;
+    if (!invoiceId) return;
+    this.hoaDonService.yeuCauSuaHoaDon(invoiceId, requestPayload).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: () => {
+        this.snackBar.open('Yêu cầu sửa thành công', 'Đóng', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (err) => {
+        this.snackBar.open(getApiErrorMessage(err, 'Yêu cầu sửa thất bại'), 'Đóng', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
 
-
-
   loadHoaDonChiTiet(): void {
-    this.hoaDonService.getHoaDonById(this.orderId).subscribe(
-      (response: ApiResponse<any>) =>{
-        this.hoaDon = response.result
-        this.currentStatus = response.result.trangThai;
-        console.log(this.hoaDon)
+    if (!this.orderId) return;
+    this.hoaDonService.getHoaDonById(this.orderId).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
+        this.hoaDon = response.result ?? {};
+        this.currentStatus = this.hoaDon.trangThai;
+      },
+      error: (err) => {
+        this.snackBar.open(getApiErrorMessage(err, 'Không tải được đơn hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
       }
-    )
-    if (this.orderId) {
-      this.hoaDonChiTietService.getAllBỵKhachHang(this.orderId).subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.result && response.result.length > 0) {
-            this.listHoaDonChiTiet = response.result;
-            this.noCartDetail = false;
-          } else {
-            this.noCartDetail = true;
-            this.listHoaDonChiTiet = [];
-          }
-        },
-        (error: HttpErrorResponse) => {
-          if (error.error.code === ErrorCode.NO_ORDER_DETAIL_FOUND) {
-            this.noCartDetail = true;
-            this.listHoaDonChiTiet = [];
-          } else {
-            console.error('Unexpected error:', error);
-          }
+    });
+    this.hoaDonChiTietService.getAllByKhachHang(this.orderId).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
+        if (response.result?.length) {
+          this.listHoaDonChiTiet = response.result;
+          this.noCartDetail = false;
+        } else {
+          this.noCartDetail = true;
+          this.listHoaDonChiTiet = [];
         }
-      );
-    } else {
-      console.log('khong tim thay hoa don');
-    }
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.error?.code === ErrorCode.NO_ORDER_DETAIL_FOUND) {
+          this.noCartDetail = true;
+          this.listHoaDonChiTiet = [];
+        } else {
+          this.snackBar.open(getApiErrorMessage(error, 'Lỗi tải chi tiết đơn hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
+        }
+      }
+    });
   }
 
   getTrangThaiText(trangThai: number): string {

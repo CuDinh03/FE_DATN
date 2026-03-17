@@ -1,0 +1,27 @@
+# 1. Project Overview
+- Project: ShopAppAngular - Frontend for E-commerce Clothing Store.
+- Framework: Angular 18.x (package.json).
+- Style: SCSS / Bootstrap (hoặc CSS framework bạn đang dùng).
+- Pattern: Service-based architecture, Reactive Programming with RxJS.
+
+# 2. Coding Standards
+- Components: Use Standalone Components if possible, or organize by Modules.
+- Naming: Use kebab-case for folders and file names (e.g., `product-list.component.ts`).
+- Services: Always use `providedIn: 'root'`.
+- Data Handling: Use Observables and the `async` pipe in templates to avoid memory leaks.
+- Typing: Strict TypeScript usage. Define `interface` or `model` for all API responses.
+
+# 3. API & Communication
+- Backend URL: Base URL points to the Spring Boot API DATN (default: http://localhost:9091/api). Keep in environment.ts.
+- Interceptors: Use Interceptors for adding JWT tokens to headers and handling global errors.
+- Environments: Keep API configurations in `src/environments/environment.ts`.
+
+# 4. Specific Business Logic: Clothing Shop
+- Product Customization: Handle dynamic selection for Size and Color.
+- Cart: Manage cart state using LocalStorage or a dedicated State Service.
+- UI/UX: Ensure responsive design for mobile and desktop.
+
+# 5. Cursor Behavior
+- When generating components, use Angular CLI commands via prompt suggestions: `ng generate component ...`.
+- Follow the existing folder structure: `app/components`, `app/services`, `app/models`, `app/guards`.
+- Refer to `@app/models` when creating new forms or data displays.

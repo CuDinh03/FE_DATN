@@ -40,3 +40,23 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Local env & secrets (do not commit)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+*.env
+env.local.js
+env.local.ts
+*secret*
+*credentials*
+*.pem
+*.key
+# Optional: uncomment if you use a separate secret env file
+# src/environments/environment.secret.ts
+
+# Docs (local, do not commit)
+/docs

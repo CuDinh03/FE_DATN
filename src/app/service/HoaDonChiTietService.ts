@@ -2,17 +2,15 @@ import { ApiResponse } from '../model/ApiResponse';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {error} from "@angular/compiler-cli/src/transformers/util";
-import {HoaDonSua} from "../model/HoaDonSua";
+import { environment } from '../../environments/environment';
 import {HoaDonChiTietDto} from "../model/hoa-don-chi-tiet.model";
-
 
 @Injectable({
     providedIn: 'root'
   })
   export class HoaDonChiTietService {
 
-    apiUrl = 'http://localhost:9091/api/hoa-don-chi-tiet';
+    apiUrl = `${environment.apiUrl}/hoa-don-chi-tiet`;
 
 
     constructor(private http: HttpClient) {}
@@ -27,7 +25,7 @@ import {HoaDonChiTietDto} from "../model/hoa-don-chi-tiet.model";
         return this.http.get<ApiResponse<any>>(`${this.apiUrl}/all/${id}`, {headers});
       }
 
-  getAllBỵKhachHang(id: string): Observable<ApiResponse<any>> {
+  getAllByKhachHang(id: string): Observable<ApiResponse<any>> {
     const token = localStorage.getItem('token');
     // Thêm token vào header của yêu cầu
     const headers = new HttpHeaders({

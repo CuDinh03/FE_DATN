@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
 import { KichThuocDto } from '../model/kich-thuoc-dto.model';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -11,7 +12,7 @@ import { KichThuocDto } from '../model/kich-thuoc-dto.model';
   })
   export class KichThuocService {
 
-    apiUrl = 'http://localhost:9091/api/kich-thuoc';
+    apiUrl = `${environment.apiUrl}/kich-thuoc`;
 
     constructor(private http: HttpClient) {}
 

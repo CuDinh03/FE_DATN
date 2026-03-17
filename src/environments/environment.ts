@@ -1,5 +1,9 @@
 export const environment = {
   production: false,
+  /** Base URL for Spring Boot API (DATN backend). */
+  apiUrl: 'http://localhost:9091/api',
+  /** Bật để dùng dữ liệu giả lập (không cần backend) cho test luồng giỏ hàng / thanh toán / đơn hàng. */
+  useMockData: false,
   firebaseConfig : {
     apiKey: "AIzaSyCtc5TaHiDgPVPyOpXdO0XtfE7dY6lJsEE",
     authDomain: "uploadimg-84016.firebaseapp.com",

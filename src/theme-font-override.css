@@ -1,0 +1,10 @@
+/* Override PrimeNG Lara "Inter var" font to avoid broken woff2 request (Inter-roman.var.woff2).
+   Use Roboto (already loaded from index.html) so no extra font download. */
+:root,
+body,
+.p-component {
+  font-family: "Roboto", "Helvetica Neue", sans-serif !important;
+}
+:root {
+  --font-family: "Roboto", "Helvetica Neue", sans-serif !important;
+}

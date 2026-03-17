@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../model/product.model';
-
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,7 @@ export class CartService {
 
   items: Product[] = [];
 
-  apiUrl = 'http://localhost:9091/gio-hang-chi-tiet';
+  apiUrl = `${environment.apiUrl}/gio-hang-chi-tiet`;
 
   constructor() { }
 

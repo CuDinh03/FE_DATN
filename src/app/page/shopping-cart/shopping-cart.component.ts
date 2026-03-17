@@ -6,7 +6,9 @@ import { GioHangService } from 'src/app/service/GioHangService';
 import { GioHangChiTietService } from './../../service/GioHangChiTietService';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './../../service/AuthenticationService';
-import { Component, ElementRef, Renderer2, HostListener } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, Renderer2 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getApiErrorMessage } from '../../util/error-message.util';
 
 
 @Component({
@@ -24,9 +26,8 @@ export class ShoppingCartComponent {
   itemToDeleteId: string = '';
   allSelected = false;
   selectedTotal = 0;
-  selectedItems: any[] = []
-
-
+  selectedItems: any[] = [];
+  private destroyRef = inject(DestroyRef);
 
   constructor(private auth: AuthenticationService, private router: Router,
               private gioHangChiTietService: GioHangChiTietService,
@@ -83,39 +84,30 @@ export class ShoppingCartComponent {
       }
       return;
     }
-    this.gioHangChiTietService.updateGioHangKH(idGioHangChiTiet, soLuong).subscribe(
-      (response: ApiResponse<any>) => {
-        console.log(response.message);
+    this.gioHangChiTietService.updateGioHangKH(idGioHangChiTiet, soLuong).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
         if (soLuong === 0) {
-          this.snackBar.open('Xóa thành công!', 'Đóng', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
-
+          this.snackBar.open('Xóa thành công!', 'Đóng', { duration: 3000, panelClass: ['success-snackbar'] });
         } else {
-          this.snackBar.open('Sửa số lượng thành công!', 'Đóng', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
+          this.snackBar.open('Sửa số lượng thành công!', 'Đóng', { duration: 3000, panelClass: ['success-snackbar'] });
         }
-        this.loadGioHangChiTiet(response.result.gioHang.id);
+        const gioHangId = response.result?.gioHang?.id;
+        if (gioHangId) {
+          this.loadGioHangChiTiet(gioHangId);
+        }
         this.cancelDelete();
       },
-      (error: HttpErrorResponse) => {
-        if (error.status === 400 ) {
-          this.snackBar.open('Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!', 'Đóng', {
-            duration: 3000,
-            panelClass: ['error-snackbar']
-          });
-          const item = this.gioHangChiTiet.find(item => item.id === idGioHangChiTiet);
-          if (item) {
-            item.soLuong = originalSoLuong;
-          }
-        } else {
-          console.error('Error updating gio hang:', error);
+      error: (error: HttpErrorResponse) => {
+        const msg = getApiErrorMessage(error, 'Số lượng nhập vào vượt quá số lượng còn trong kho. Vui lòng nhập lại!');
+        this.snackBar.open(msg, 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
+        const item = this.gioHangChiTiet.find(i => i.id === idGioHangChiTiet);
+        if (item) {
+          item.soLuong = originalSoLuong;
         }
       }
-    );
+    });
   }
 
 
@@ -150,32 +142,28 @@ export class ShoppingCartComponent {
 
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
-    if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
-          const khachHang = response.result;
-          if (khachHang && khachHang.id) {
-            this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
-              (response) => {
-                const gioHang = response.result;
-                console.log(gioHang);
-                if (gioHang && gioHang.id){
-                  this.loadGioHangChiTiet(gioHang.id);
-                }
-              },
-              (error) => {
-                console.error('Error fetching shopping cart:', error);
+    if (!tenDangNhap) return;
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
+        const khachHang = response.result;
+        if (khachHang?.id) {
+          this.gioHangService.findGioHangByIdKhachHang(khachHang.id).pipe(
+            takeUntilDestroyed(this.destroyRef)
+          ).subscribe({
+            next: (res) => {
+              const gioHang = res.result;
+              if (gioHang?.id) {
+                this.loadGioHangChiTiet(gioHang.id);
               }
-            );
-          } else {
-            console.error('Không tìm thấy thông tin khách hàng.');
-          }
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
+            },
+            error: (err) => console.error('Error fetching shopping cart:', err)
+          });
         }
-      );
-    }
+      },
+      error: (err) => console.error('Error fetching customer:', err)
+    });
   }
 
   increaseQuantity(item: any) {
@@ -189,19 +177,21 @@ export class ShoppingCartComponent {
   }
 
   loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAllBỵKhachHang(idGioHang).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          this.gioHangChiTiet = response.result;
-          console.log(this.gioHangChiTiet);
-        } else {
-          this.gioHangChiTiet = [];
+    this.gioHangChiTietService.getAllByKhachHang(idGioHang).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
+        this.gioHangChiTiet = response.result?.length ? response.result : [];
+        const saved = localStorage.getItem('selectedItems');
+        if (saved) {
+          const selectedIds = (JSON.parse(saved) as any[]).map((x: any) => x?.id).filter(Boolean);
+          this.gioHangChiTiet.forEach((item: any) => {
+            item.selected = selectedIds.includes(item.id);
+          });
         }
       },
-      (error: HttpErrorResponse) => {
-        console.error('Unexpected error:', error);
-      }
-    );
+      error: (err) => console.error('Unexpected error:', err)
+    });
   }
 
 

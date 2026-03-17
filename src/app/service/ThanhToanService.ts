@@ -4,13 +4,14 @@ import {Observable} from "rxjs";
 import {ApiResponse} from "../model/ApiResponse";
 import {ThanhToanDto} from "../model/thanh-toan-dto.model";
 import {ThanhToanOnl} from "../model/thanh-toan-onl";
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ThanhToanService {
 
-    apiUrl: string = 'http://localhost:9091/api/thanhtoan';
+    apiUrl = `${environment.apiUrl}/thanhtoan`;
 
     constructor(private http: HttpClient) {
     }

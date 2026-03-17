@@ -1,14 +1,14 @@
-import {SanPhamCTService} from '../service/SanPhamCTService';
-import {ErrorCode} from './../model/ErrorCode';
+import { SanPhamCTService } from '../service/SanPhamCTService';
 import { HttpErrorResponse } from '@angular/common/http';
-import {ApiResponse} from '../model/ApiResponse';
-import {KhachHangService} from '../service/KhachHangService';
-import {AuthenticationService} from '../service/AuthenticationService';
-import {GioHangService} from 'src/app/service/GioHangService';
-import {GioHangChiTietService} from './../service/GioHangChiTietService';
-import {Component} from '@angular/core';
-import {Router} from "@angular/router";
-import {catchError, debounceTime, distinctUntilChanged, of, Subject, switchMap} from "rxjs";
+import { ApiResponse } from '../model/ApiResponse';
+import { KhachHangService } from '../service/KhachHangService';
+import { AuthenticationService } from '../service/AuthenticationService';
+import { GioHangService } from 'src/app/service/GioHangService';
+import { GioHangChiTietService } from './../service/GioHangChiTietService';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, debounceTime, distinctUntilChanged, of, Subject, switchMap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-header',
@@ -30,34 +30,36 @@ export class HeaderComponent {
   size = 5;
   totalElements = 0;
   totalPages: number = 0;
-  findSanPhamChiTiet: any = {}
-  constructor(private auth: AuthenticationService, private router: Router,
-              private gioHangChiTietService: GioHangChiTietService,
-              private gioHangService: GioHangService,
-              private khachHangService: KhachHangService,
-              private sanPhamCTService: SanPhamCTService
-  ) {
+  findSanPhamChiTiet: any = {};
+  private destroyRef = inject(DestroyRef);
 
-  }
+  constructor(
+    private auth: AuthenticationService,
+    private router: Router,
+    private gioHangChiTietService: GioHangChiTietService,
+    private gioHangService: GioHangService,
+    private khachHangService: KhachHangService,
+    private sanPhamCTService: SanPhamCTService
+  ) {}
 
   ngOnInit() {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       switchMap(term => this.sanPhamCTService.search(term, this.page, this.size)),
-      catchError(error => {
-        console.error('Error during search:', error);
-        return of({ result: { content: [], totalElements: 0, totalPages: 0 } }); // Return empty data on error
-      })
+      catchError(err => {
+        console.error('Error during search:', err);
+        return of({ result: { content: [], totalElements: 0, totalPages: 0 } });
+      }),
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(response => {
-      this.listChiTietSP = response.result.content;
-      this.totalElements = response.result.totalElements;
-      this.totalPages = response.result.totalPages;
+      this.listChiTietSP = response.result?.content ?? [];
+      this.totalElements = response.result?.totalElements ?? 0;
+      this.totalPages = response.result?.totalPages ?? 0;
     });
 
-    // Kiểm tra trạng thái đăng nhập của người dùng
     this.checkLoginStatus();
-    this.findShoppingCart()
+    this.findShoppingCart();
     this.loadSanPhamChiTietByNgayTao();
   }
 
@@ -67,58 +69,49 @@ export class HeaderComponent {
   }
 
   loadSanPhamChiTietByNgayTao(): void {
-    this.sanPhamCTService.getSanPhamChiTietSapXepByNGayTao(this.page, this.size)
-      .subscribe(response => {
-        this.listChiTietSP = response.result.content;
-        this.totalElements = response.result.totalElements;
-        this.totalPages = response.result.totalPages;
-      });
+    this.sanPhamCTService.getSanPhamChiTietSapXepByNGayTao(this.page, this.size).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(response => {
+      this.listChiTietSP = response.result?.content ?? [];
+      this.totalElements = response.result?.totalElements ?? 0;
+      this.totalPages = response.result?.totalPages ?? 0;
+    });
   }
 
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
-    if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
-          const khachHang = response.result;
-          this.khachHang = response.result;
-          if (khachHang && khachHang.id) {
-            this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
-              (response) => {
-                const gioHang = response.result;
-                if (gioHang && gioHang.id) {
-                  this.loadGioHangChiTiet(gioHang.id);
-                }
-              },
-              (error) => {
-                console.error('Error fetching shopping cart:', error);
-              }
-            );
-          } else {
-            console.error('Không tìm thấy thông tin khách hàng.');
-          }
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
+    if (!tenDangNhap) return;
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
+        const khachHang = response.result;
+        this.khachHang = response.result;
+        if (khachHang?.id) {
+          this.gioHangService.findGioHangByIdKhachHang(khachHang.id).pipe(
+            takeUntilDestroyed(this.destroyRef)
+          ).subscribe({
+            next: (res) => {
+              const gioHang = res.result;
+              if (gioHang?.id) this.loadGioHangChiTiet(gioHang.id);
+            },
+            error: (err) => console.error('Error fetching shopping cart:', err)
+          });
         }
-      );
-    }
+      },
+      error: (err) => console.error('Error fetching customer:', err)
+    });
   }
 
   loadGioHangChiTiet(idGioHang: string): void {
-    this.gioHangChiTietService.getAllBỵKhachHang(idGioHang).subscribe(
-      (response: ApiResponse<any>) => {
-        if (response.result && response.result.length > 0) {
-          this.gioHangChiTiet = response.result;
-          console.log(this.gioHangChiTiet);
-        } else {
-          this.gioHangChiTiet = [];
-        }
+    this.gioHangChiTietService.getAllByKhachHang(idGioHang).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
+        this.gioHangChiTiet = response.result?.length ? response.result : [];
       },
-      (error: HttpErrorResponse) => {
-        console.error('Unexpected error:', error);
-      }
-    );
+      error: (err) => console.error('Unexpected error:', err)
+    });
   }
 
   toggleSearch() {
@@ -135,11 +128,7 @@ export class HeaderComponent {
   }
 
   getAccount(): boolean {
-    if (this.auth.getRole() == 'ADMIN') {
-      return true;
-    }
-    return false;
-
+    return this.auth.isAdmin();
   }
 
   onMouseOver1() {
@@ -151,19 +140,18 @@ export class HeaderComponent {
   }
 
   findSanPhamById(id: string): void {
-    this.sanPhamCTService.getChiTietSanPhamByIdKH(id).subscribe(
-      (response: ApiResponse<any>) => {
+    this.sanPhamCTService.getChiTietSanPhamByIdKH(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
         if (response.result) {
           this.findSanPhamChiTiet = response.result;
           localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result));
           const role = this.auth.getRole();
-          if (role === 'ROLE_CUSTOMER') {
-            this.router.navigate(['/customer/san-pham']);
-          }else {
-            this.router.navigate(['/san-pham']);
-          }
+          this.router.navigate(role === 'ROLE_CUSTOMER' ? ['/customer/san-pham'] : ['/san-pham']);
         }
-      });
+      }
+    });
   }
 
 

@@ -1,18 +1,18 @@
 import {Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
 import {TaiKhoanDto} from "../model/tai-khoan-dto.model";
 import {KhachHangDto} from "../model/khachHangDto";
 import {DangNhapDto} from "../model/dangNhapDto";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaiKhoanService {
 
-  apiUrl = 'http://localhost:9091/api/users';
+  apiUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {
 

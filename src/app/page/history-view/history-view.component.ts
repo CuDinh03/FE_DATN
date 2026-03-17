@@ -1,16 +1,18 @@
-import {KhachHangService} from './../../service/KhachHangService';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ApiResponse} from './../../model/ApiResponse';
-import {HoaDonChiTietService} from './../../service/HoaDonChiTietService';
-import {HoaDonService} from './../../service/HoaDonService';
-import {Router} from '@angular/router';
+import { KhachHangService } from './../../service/KhachHangService';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ApiResponse } from './../../model/ApiResponse';
+import { HoaDonChiTietService } from './../../service/HoaDonChiTietService';
+import { HoaDonService } from './../../service/HoaDonService';
+import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import {AuthenticationService} from './../../service/AuthenticationService';
-import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
-import {ErrorCode} from "../../model/ErrorCode";
-import {forkJoin} from 'rxjs';
-import {SanPhamCTService} from "../../service/SanPhamCTService";
-import {HoaDonDto} from "../../model/hoa-don-dto.model";
+import { AuthenticationService } from './../../service/AuthenticationService';
+import { Component, DestroyRef, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { ErrorCode } from '../../model/ErrorCode';
+import { forkJoin } from 'rxjs';
+import { SanPhamCTService } from '../../service/SanPhamCTService';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getApiErrorMessage } from '../../util/error-message.util';
+import { HoaDonDto } from '../../model/hoa-don-dto.model';
 
 @Component({
   selector: 'app-history-view',
@@ -43,6 +45,7 @@ export class HistoryViewComponent {
   endDate: string = '';
   ghiChu: string = '';
   @ViewChild('searchInput') searchInputRef!: ElementRef;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private apiService: HoaDonService,
@@ -62,84 +65,82 @@ export class HistoryViewComponent {
   }
 
   onDateChange(): void {
-    if (this.startDate && this.endDate) {
-      this.hoaDonService.getHoaDonBetweenDates(this.startDate, this.endDate).subscribe(
-        response => {
-          this.hoaDons = response.result;
-          console.log(this.hoaDons)
-
-          const hoaDonObservables = this.hoaDons.map(hoaDon => {
-            return this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id);
-          });
-          // Use forkJoin to execute all observables concurrently
-          forkJoin(hoaDonObservables).subscribe(
-            (results: any[]) => {
-              // Flatten the results into hoaDonChiTiet array
-              results.forEach(result => {
-                this.hoaDonChiTiet.push(...result.result);
-                console.log(this.hoaDonChiTiet)
-              });
-            },
-            (error) => {
-              console.error('Error fetching order details:', error);
-            }
-          );
-        },
-        error => {
-          console.error('Error fetching data', error);
-        }
-      );
-    }
+    if (!this.startDate || !this.endDate) return;
+    this.hoaDonChiTiet = [];
+    this.hoaDonService.getHoaDonBetweenDates(this.startDate, this.endDate).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
+        this.hoaDons = response.result ?? [];
+        const hoaDonObservables = this.hoaDons.map(hoaDon =>
+          this.hoaDonChiTietService.getAllByKhachHang(hoaDon.id)
+        );
+        if (hoaDonObservables.length === 0) return;
+        forkJoin(hoaDonObservables).pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
+          next: (results: any[]) => {
+            this.hoaDonChiTiet = results.flatMap(r => r.result ?? []);
+          },
+          error: (err) => {
+            this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải chi tiết đơn hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
+          }
+        });
+      },
+      error: (err) => {
+        this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải đơn theo ngày.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
+      }
+    });
   }
 
   getHoaDons(): void {
     const tenDangNhap = this.auth.getTenDangNhap();
-    if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
-          const khachHang = response.result;
-          this.khachHang = response.result;
-          if (khachHang && khachHang.id) {
-            this.apiService.getHoaDonsByTrangThaiAndKhachHang(this.trangThai, khachHang.id).subscribe(
-              (response: any) => {
-                if (response.result) {
-                  this.hoaDons = response.result;
-                  this.noProductsFound = false;
-
-                  const hoaDonObservables = this.hoaDons.map(hoaDon => {
-                    return this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id);
-                  });
-
-                  // Use forkJoin to execute all observables concurrently
-                  forkJoin(hoaDonObservables).subscribe(
-                    (results: any[]) => {
-                      // Flatten the results into hoaDonChiTiet array
-                      results.forEach(result => {
-                        this.hoaDonChiTiet.push(...result.result);
-                      });
-                    },
-                    (error) => {
-                      console.error('Error fetching order details:', error);
-                    }
-                  );
-                  this.hoaDonChiTiet = [];
-                } else {
-                  this.noProductsFound = true;
-                  this.hoaDons = [];
-                  this.hoaDonChiTiet = []; // Ensure hoaDonChiTiet is also cleared if no products found
-                }
-              }, (error: HttpErrorResponse) => {
-                if (error.error.code === ErrorCode.NO_ORDER_FOUND) {
-                  this.noProductsFound = true;
-                  this.hoaDons = [];
-                  this.hoaDonChiTiet = [];
-                } else {
-                  console.error('Unexpected error:', error);
+    if (!tenDangNhap) return;
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
+        const khachHang = response.result;
+        this.khachHang = response.result;
+        if (!khachHang?.id) return;
+        this.apiService.getHoaDonsByTrangThaiAndKhachHang(this.trangThai, khachHang.id).pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
+          next: (res: any) => {
+            this.hoaDonChiTiet = [];
+            if (res.result?.length) {
+              this.hoaDons = res.result;
+              this.noProductsFound = false;
+              const hoaDonObservables = this.hoaDons.map(hoaDon =>
+                this.hoaDonChiTietService.getAllByKhachHang(hoaDon.id)
+              );
+              forkJoin(hoaDonObservables).pipe(
+                takeUntilDestroyed(this.destroyRef)
+              ).subscribe({
+                next: (results: any[]) => {
+                  this.hoaDonChiTiet = results.flatMap(r => r.result ?? []);
+                },
+                error: (err) => {
+                  this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải chi tiết đơn hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
                 }
               });
+            } else {
+              this.noProductsFound = true;
+              this.hoaDons = [];
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.error?.code === ErrorCode.NO_ORDER_FOUND) {
+              this.noProductsFound = true;
+              this.hoaDons = [];
+              this.hoaDonChiTiet = [];
+            } else {
+              this.snackBar.open(getApiErrorMessage(error, 'Lỗi tải đơn hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
+            }
           }
-        })
-    }
+        });
+      }
+    });
   }
 
   onTabChange(trangThai: number): void {
@@ -148,34 +149,43 @@ export class HistoryViewComponent {
   }
 
   findSanPhamById(id: string): void {
-    this.sanPhamCTService.getChiTietSanPhamById(id).subscribe(
-      (response: ApiResponse<any>) => {
+    this.sanPhamCTService.getChiTietSanPhamById(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
         if (response.result) {
-          this.findSanPhamChiTiet = response.result
-          localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result))
+          this.findSanPhamChiTiet = response.result;
+          localStorage.setItem('sanPhamChiTiet', JSON.stringify(response.result));
           this.router.navigate(['/san-pham']);
         }
-      })
+      }
+    });
   }
 
-
-
   findOrderDetailByid(id: string): void {
-    this.hoaDonChiTietService.findById(id).subscribe((response) => {
-      if (response.result) {
-        localStorage.setItem('hoaDonChiTiet', JSON.stringify(response.result))
-        this.router.navigate(['/customer/danh-gia']);
+    this.hoaDonChiTietService.findById(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
+        if (response.result) {
+          localStorage.setItem('hoaDonChiTiet', JSON.stringify(response.result));
+          this.router.navigate(['/customer/danh-gia']);
+        }
       }
-    })
+    });
   }
 
   suaTrangThaiModal(id: string): void {
-    this.hoaDonChiTietService.findById(id).subscribe(response => {
-      if (response.result) {
-        this.hoaDonSingle = response.result.hoaDon
-        this.showModalUpdate();
+    this.hoaDonChiTietService.findById(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
+        if (response.result) {
+          this.hoaDonSingle = response.result.hoaDon;
+          this.showModalUpdate();
+        }
       }
-    })
+    });
   }
 
 
@@ -205,29 +215,20 @@ export class HistoryViewComponent {
   }
 
   updateTrangThai(id: string, trangThai: number, hoaDonDto: HoaDonDto): void {
-    this.apiService.updateTrangThainew(id, trangThai, hoaDonDto).subscribe(
-      (response: ApiResponse<HoaDonDto>) => {
-        if (response) {
-          let message = '';
-          switch (trangThai) {
-            case 2:
-              message = 'Đã xác nhận đơn hàng';
-              break;
-            case 4:
-              message = 'Hoàn thành đơn hàng';
-              break;
-            case 5:
-              message = 'Hủy đơn thành công';
-              break;
-            default:
-              message = 'Cập nhật trạng thái thành công';
-              break;
-          }
-          this.snackBar.open(message, 'Đóng', {
+    this.apiService.updateTrangThainew(id, trangThai, hoaDonDto).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<HoaDonDto>) => {
+        if (response?.result) {
+          const messages: Record<number, string> = {
+            2: 'Đã xác nhận đơn hàng',
+            4: 'Hoàn thành đơn hàng',
+            5: 'Hủy đơn thành công'
+          };
+          this.snackBar.open(messages[trangThai] ?? 'Cập nhật trạng thái thành công', 'Đóng', {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
-          console.log(response);
         } else {
           this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
             duration: 3000,
@@ -235,14 +236,13 @@ export class HistoryViewComponent {
           });
         }
       },
-      (error) => {
-        console.error('Error updating status:', error);
-        this.snackBar.open('Cập nhật trạng thái thất bại', 'Đóng', {
+      error: (err) => {
+        this.snackBar.open(getApiErrorMessage(err, 'Cập nhật trạng thái thất bại'), 'Đóng', {
           duration: 3000,
           panelClass: ['error-snackbar']
         });
       }
-    );
+    });
   }
 
 
@@ -262,136 +262,138 @@ export class HistoryViewComponent {
 
   findOrder() {
     const tenDangNhap = this.auth.getTenDangNhap();
-    if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
-          const khachHang = response.result;
-          this.khachHang = response.result;
-          if (khachHang && khachHang.id) {
-            this.hoaDonService.findHoaDonByIdKhachHang(khachHang.id).subscribe(
-              (response) => {
-                this.listHoaDon = response.result;
-                console.log(this.listHoaDon);
-
-                // Tạo một mảng các observable để lấy chi tiết hóa đơn
-                const hoaDonChiTietObservables = this.listHoaDon.map(hoaDon =>
-                  this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id)
-                );
-
-                // Sử dụng forkJoin để thực hiện tất cả các yêu cầu đồng thời
-                forkJoin(hoaDonChiTietObservables).subscribe(
-                  (hoaDonChiTietResponses) => {
-                    this.hoaDonChiTiet = hoaDonChiTietResponses.flatMap(response => response.result);
-                    console.log(this.hoaDonChiTiet);
-                  },
-                  (error) => {
-                    console.error('Error fetching order details:', error);
-                  }
-                );
-                this.onSearch('')
-              },
-              (error) => {
-                console.error('Error fetching shopping cart:', error);
-              }
+    if (!tenDangNhap) return;
+    this.hoaDonChiTiet = [];
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
+        const khachHang = response.result;
+        this.khachHang = response.result;
+        if (!khachHang?.id) return;
+        this.hoaDonService.findHoaDonByIdKhachHang(khachHang.id).pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
+          next: (res) => {
+            this.listHoaDon = res.result ?? [];
+            const hoaDonChiTietObservables = this.listHoaDon.map(hoaDon =>
+              this.hoaDonChiTietService.getAllByKhachHang(hoaDon.id)
             );
-          } else {
-            console.error('Không tìm thấy thông tin khách hàng.');
+            if (hoaDonChiTietObservables.length === 0) {
+              this.hoaDonChiTiet = [];
+              this.onSearch('');
+              return;
+            }
+            forkJoin(hoaDonChiTietObservables).pipe(
+              takeUntilDestroyed(this.destroyRef)
+            ).subscribe({
+              next: (hoaDonChiTietResponses) => {
+                this.hoaDonChiTiet = hoaDonChiTietResponses.flatMap(r => r.result ?? []);
+              },
+              error: (err) => {
+                this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải chi tiết đơn hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
+              }
+            });
+            this.onSearch('');
+          },
+          error: (err) => {
+            this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải đơn hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
           }
-        },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
-      );
-    }
+        });
+      },
+      error: (err) => {
+        this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải thông tin khách hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
+      }
+    });
   }
 
   onSearch(ma: string) {
     if (ma) {
       const tenDangNhap = this.auth.getTenDangNhap();
-      if (tenDangNhap) {
-        this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-          (response) => {
-            const khachHang = response.result;
-            if (khachHang && khachHang.id) {
-              const hoaDonObservable = this.hoaDonService.getHoaDonByMaKH(ma, khachHang.id);
-              hoaDonObservable.subscribe(
-                (response) => {
-                  if (response.result) {
-                    // Reset hoaDonChiTiet array before adding new items
-                    this.hoaDonChiTiet = [];
-                    this.noProductsFound = false;
-
-                    const hoaDonObservables = [response.result].map(hoaDon => {
-                      return this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id);
-                    });
-
-                    // Use forkJoin to execute all observables concurrently
-                    forkJoin(hoaDonObservables).subscribe(
-                      (results: any[]) => {
-                        // Flatten the results into hoaDonChiTiet array
-                        results.forEach(result => {
-                          this.hoaDonChiTiet.push(...result.result);
-                        });
-                      },
-                      (error) => {
-                        console.error('Error fetching order details:', error);
-                      }
-                    );
-                  } else {
-                    this.hoaDonChiTiet = [];
-                    this.noProductsFound = true;
+      if (!tenDangNhap) return;
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (response) => {
+          const khachHang = response.result;
+          if (!khachHang?.id) return;
+          this.hoaDonService.getHoaDonByMaKH(ma, khachHang.id).pipe(
+            takeUntilDestroyed(this.destroyRef)
+          ).subscribe({
+            next: (res) => {
+              this.hoaDonChiTiet = [];
+              if (res.result) {
+                this.noProductsFound = false;
+                forkJoin([this.hoaDonChiTietService.getAllByKhachHang(res.result.id)]).pipe(
+                  takeUntilDestroyed(this.destroyRef)
+                ).subscribe({
+                  next: (results: any[]) => {
+                    this.hoaDonChiTiet = (results[0]?.result ?? []);
+                  },
+                  error: (err) => {
+                    this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải chi tiết đơn.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
                   }
-                },
-                (error: HttpErrorResponse) => {
-                  console.error('Error fetching invoice:', error);
-                  this.hoaDonChiTiet = [];
-                  this.noProductsFound = true;
-                }
-              );
+                });
+              } else {
+                this.noProductsFound = true;
+              }
+            },
+            error: () => {
+              this.hoaDonChiTiet = [];
+              this.noProductsFound = true;
             }
           });
-      }
+        }
+      });
     } else {
-      // Tạo một mảng các observable để lấy chi tiết hóa đơn
+      this.hoaDonChiTiet = [];
       const hoaDonChiTietObservables = this.listHoaDon.map(hoaDon =>
-        this.hoaDonChiTietService.getAllBỵKhachHang(hoaDon.id)
+        this.hoaDonChiTietService.getAllByKhachHang(hoaDon.id)
       );
-
-      // Sử dụng forkJoin để thực hiện tất cả các yêu cầu đồng thời
-      forkJoin(hoaDonChiTietObservables).subscribe(
-        (hoaDonChiTietResponses) => {
-          this.hoaDonChiTiet = hoaDonChiTietResponses.flatMap(response => response.result);
+      if (hoaDonChiTietObservables.length === 0) {
+        this.noProductsFound = true;
+        return;
+      }
+      forkJoin(hoaDonChiTietObservables).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (hoaDonChiTietResponses) => {
+          this.hoaDonChiTiet = hoaDonChiTietResponses.flatMap(r => r.result ?? []);
           this.noProductsFound = this.hoaDonChiTiet.length === 0;
         },
-        (error) => {
-          console.error('Error fetching order details:', error);
+        error: (err) => {
+          this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải chi tiết đơn hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
         }
-      );
+      });
     }
   }
 
 
   findHoaDonById(id: string): void {
-    this.apiService.getHoaDonById(id)
-      .subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.result) {
-            this.hoaDon = response.result;
-            localStorage.setItem('hoaDon', JSON.stringify(response.result));
-            this.router.navigate(['/customer/order-detail', id]); // Thay đổi đường dẫn
-          }
-        })
+    this.apiService.getHoaDonById(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
+        if (response.result) {
+          this.hoaDon = response.result;
+          localStorage.setItem('hoaDon', JSON.stringify(response.result));
+          this.router.navigate(['/customer/order-detail', id]);
+        }
+      }
+    });
   }
 
   findHoaDonById1(id: string): void {
-    this.apiService.getHoaDonById(id)
-      .subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.result) {
-            this.hoaDon = response.result;
-            localStorage.setItem('hoaDon', JSON.stringify(response.result));
-          }
-        })
+    this.apiService.getHoaDonById(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
+        if (response.result) {
+          this.hoaDon = response.result;
+          localStorage.setItem('hoaDon', JSON.stringify(response.result));
+        }
+      }
+    });
   }
 
   getTrangThaiText(trangThai: number): string {

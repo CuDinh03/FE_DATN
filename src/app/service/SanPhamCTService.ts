@@ -11,16 +11,14 @@ import {ThuongHieuDto} from "../model/thuong-hieu-dto.model";
 import {MauSacDto} from "../model/mau-sac-dto.model";
 import {FilterSanPhamRequest} from "../model/FilterSanPhamRequest";
 import {IMG} from "../model/IMG";
-
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class SanPhamCTService {
 
-  apiUrl = 'http://localhost:9091/api/chi-tiet-san-pham';
+  apiUrl = `${environment.apiUrl}/chi-tiet-san-pham`;
 
   constructor(private http: HttpClient) {}
 

@@ -9,6 +9,9 @@
         "test": "ng test"
     },
     "private": true,
+    "overrides": {
+        "undici": "^6.24.0"
+    },
     "dependencies": {
         "@angular/animations": "^18.0.5",
         "@angular/cdk": "^18.0.5",
@@ -25,9 +28,9 @@
         "@popperjs/core": "^2.11.8",
         "apexcharts": "^3.52.0",
         "bootstrap": "^5.3.3",
-        "core-js": "3.6.0",
+        "core-js": "^3.35.1",
         "firebase": "^10.12.4",
-        "ng-apexcharts": "^1.11.0",
+        "ng-apexcharts": "~1.11.0",
         "ngx-bootstrap": "^18.0.2",
         "ngx-spinner": "^17.0.0",
         "primeicons": "^7.0.0",

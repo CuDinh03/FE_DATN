@@ -3,15 +3,14 @@ import { ApiResponse } from '../model/ApiResponse';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {error} from "@angular/compiler-cli/src/transformers/util";
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
   })
   export class GioHangChiTietService {
 
-    apiUrl = 'http://localhost:9091/api/gio-hang-chi-tiet';
+    apiUrl = `${environment.apiUrl}/gio-hang-chi-tiet`;
 
 
     constructor(private http: HttpClient) {}
@@ -45,7 +44,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
         return this.http.post<ApiResponse<GioHangChiTietDto>>(`${this.apiUrl}/create`,gioHangChiTiet, { headers });
       }
 
-      getAllBỵKhachHang(id: string): Observable<ApiResponse<any>> {
+      getAllByKhachHang(id: string): Observable<ApiResponse<any>> {
         const token = localStorage.getItem('token');
         // Thêm token vào header của yêu cầu
         const headers = new HttpHeaders({

@@ -2,15 +2,14 @@ import { ApiResponse } from '../model/ApiResponse';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {error} from "@angular/compiler-cli/src/transformers/util";
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
   })
   export class HoaDonGioHangService {
 
-    apiUrl = 'http://localhost:9091/api/hoa-don-gio-hang';
+    apiUrl = `${environment.apiUrl}/hoa-don-gio-hang`;
 
 
     constructor(private http: HttpClient) {}

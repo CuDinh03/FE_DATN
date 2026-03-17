@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {error} from "@angular/compiler-cli/src/transformers/util";
 import {ApiResponse} from "../model/ApiResponse";
 import { SanPhamDto } from '../model/san-pham-dto.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
   })
   export class SanPhamService {
 
-    apiUrl = 'http://localhost:9091/api/san-pham';
+    apiUrl = `${environment.apiUrl}/san-pham`;
 
     constructor(private http: HttpClient) {}
 

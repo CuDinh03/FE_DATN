@@ -5,13 +5,14 @@ import {ApiResponse} from "../model/ApiResponse";
 import {ThanhToanDto} from "../model/thanh-toan-dto.model";
 import {ThanhToanOnl} from "../model/thanh-toan-onl";
 import {DanhGiaDto} from "../model/danh-gia-dto";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DanhGiaService {
 
-  apiUrl: string = 'http://localhost:9091/api/danh-gia';
+  apiUrl = `${environment.apiUrl}/danh-gia`;
 
   constructor(private http: HttpClient) {
   }

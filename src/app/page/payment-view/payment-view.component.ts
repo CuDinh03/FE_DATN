@@ -6,7 +6,8 @@ import {GioHangService} from 'src/app/service/GioHangService';
 import {GioHangChiTietService} from './../../service/GioHangChiTietService';
 import {Router} from '@angular/router';
 import {AuthenticationService} from './../../service/AuthenticationService';
-import {Component, ElementRef, Renderer2, HostListener, ViewChild} from '@angular/core';
+import {Component, DestroyRef, ElementRef, inject, Renderer2, ViewChild} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {VoucherService} from "../../service/VoucherService";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ThanhToanService} from "../../service/ThanhToanService";
@@ -14,6 +15,7 @@ import {ThanhToanOnl} from "../../model/thanh-toan-onl";
 import {GioHangDto} from "../../model/gio-hang-dto";
 import {DiaChiService} from "../../service/DiaChiService";
 import {NgxSpinnerService} from "ngx-spinner";
+import { getApiErrorMessage } from '../../util/error-message.util';
 
 @Component({
   selector: 'app-payment-view',
@@ -42,6 +44,7 @@ export class PaymentViewComponent {
   thongTinDatHang: any[] = []
   showUpperFooter: boolean = true;
   selectedCustomer: any = null;
+  private destroyRef = inject(DestroyRef);
 
   constructor(private auth: AuthenticationService, private router: Router,
               private gioHangChiTietService: GioHangChiTietService,
@@ -122,59 +125,73 @@ export class PaymentViewComponent {
   findShoppingCart() {
     const tenDangNhap = this.auth.getTenDangNhap();
     if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (response) => {
           const khachHang = response.result;
           if (khachHang && khachHang.id) {
-            this.gioHangService.findGioHangByIdKhachHang(khachHang.id).subscribe(
-              (response) => {
-                const gioHang = response.result;
-                console.log(gioHang);
+            this.gioHangService.findGioHangByIdKhachHang(khachHang.id).pipe(
+              takeUntilDestroyed(this.destroyRef)
+            ).subscribe({
+              next: (res) => {
+                const gioHang = res.result;
                 if (gioHang && gioHang.id) {
                   this.loadGioHangChiTiet(gioHang.id);
                 }
               },
-              (error) => {
-                console.error('Error fetching shopping cart:', error);
-              }
-            );
-          } else {
-            console.error('Không tìm thấy thông tin khách hàng.');
+              error: (err) => console.error('Error fetching shopping cart:', err)
+            });
           }
         },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
-      );
+        error: (err) => console.error('Error fetching customer:', err)
+      });
     }
   }
 
   loadUserInfor() {
     const tenDangNhap = this.auth.getTenDangNhap();
     if (tenDangNhap) {
-      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-        (response) => {
+      this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (response) => {
           if (response.result) {
             this.khachHang = response.result;
-            this.diaChiService.getAllByIdKhachHang(response.result.id).subscribe((response) =>{
-              this.thongTinDatHang = response.result;
-            })
-          } else {
-            console.error('Không tìm thấy thông tin khách hàng.');
+            this.diaChiService.getAllByIdKhachHang(response.result.id).pipe(
+              takeUntilDestroyed(this.destroyRef)
+            ).subscribe((res) => {
+              this.thongTinDatHang = res.result ?? [];
+            });
           }
         },
-        (error) => {
-          console.error('Error fetching customer:', error);
-        }
-      );
+        error: (err) => console.error('Error fetching customer:', err)
+      });
     }
   }
 
 
   loadGioHangChiTiet(idGioHang: string): void {
-    const storedGioHangChiTiet = localStorage.getItem('selectedItems');
-    const gioHangChiTietList = storedGioHangChiTiet ? JSON.parse(storedGioHangChiTiet) : [];
-    this.gioHangChiTiet = gioHangChiTietList;
+    const selectedIdsJson = localStorage.getItem('selectedItems');
+    const selectedIds: string[] = selectedIdsJson
+      ? (JSON.parse(selectedIdsJson) as any[]).map((x: any) => x?.id).filter(Boolean)
+      : [];
+    this.gioHangChiTietService.getAllByKhachHang(idGioHang).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
+        const allItems = response.result ?? [];
+        if (selectedIds.length > 0) {
+          this.gioHangChiTiet = allItems.filter((item: any) => item?.id && selectedIds.includes(item.id));
+        } else {
+          this.gioHangChiTiet = allItems;
+        }
+      },
+      error: () => {
+        const stored = localStorage.getItem('selectedItems');
+        this.gioHangChiTiet = stored ? JSON.parse(stored) : [];
+      }
+    });
   }
 
   getCartTotal(): number {
@@ -217,20 +234,18 @@ export class PaymentViewComponent {
   loadVoucher(): void {
     if (this.pageSize > 0) {
 
-      this.voucherService.getVouchers(this.currentPage, this.pageSize)
-        .subscribe(
-          (response: ApiResponse<any>) => {
-            if (response.result && response.result.content) {
-              this.vouchers = response.result.content;
-              this.totalElements = response.result.totalElements;
-              this.totalPages = response.result.totalPages;
-            }
-          },
-          (error) => {
-            console.error('Error loading vouchers:', error);
-            // Xử lý lỗi nếu cần
+      this.voucherService.getVouchers(this.currentPage, this.pageSize).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (response: ApiResponse<any>) => {
+          if (response.result?.content) {
+            this.vouchers = response.result.content;
+            this.totalElements = response.result.totalElements ?? 0;
+            this.totalPages = response.result.totalPages ?? 0;
           }
-        );
+        },
+        error: (err) => console.error('Error loading vouchers:', err)
+      });
     } else {
       console.log("Invalid size value");
     }
@@ -259,17 +274,19 @@ export class PaymentViewComponent {
   }
 
   getVoucherById(id: string) {
-    this.voucherService.getVoucherByid(id)
-      .subscribe(
-        (response: ApiResponse<any>) => {
-          if (response.result) {
-            this.voucher = response.result;
-            localStorage.setItem('voucher', JSON.stringify(response.result));
-            this.calculateThanhTien();
-            this.calculateGiamGia();
-            this.router.navigate(['/customer/thanh-toan'])
-          }
-        })
+    this.voucherService.getVoucherByid(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response: ApiResponse<any>) => {
+        if (response.result) {
+          this.voucher = response.result;
+          localStorage.setItem('voucher', JSON.stringify(response.result));
+          this.calculateThanhTien();
+          this.calculateGiamGia();
+          this.router.navigate(['/customer/thanh-toan']);
+        }
+      }
+    });
   }
 
   calculateThanhTien(): number {
@@ -330,16 +347,19 @@ export class PaymentViewComponent {
     const storedVoucher = localStorage.getItem('voucher') || '';
     const tenDangNhap = localStorage.getItem('tenDangNhap') || '';
 
-    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).subscribe(
-      (response) => {
+    this.khachHangService.findKhachHangByTenDangNhap(tenDangNhap).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (response) => {
         this.khachHang = response.result;
         if (!this.khachHang || !this.khachHang.id) {
-          console.error('Không tìm thấy thông tin khách hàng.');
           this.spinner.hide();
           return;
         }
-        this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).subscribe(
-          (gioHangResponse: ApiResponse<GioHangDto>) => {
+        this.gioHangService.findGioHangByIdKhachHang(this.khachHang.id).pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
+          next: (gioHangResponse: ApiResponse<GioHangDto>) => {
             const gioHang = gioHangResponse.result;
             if (!gioHang) {
               console.error('Không tìm thấy giỏ hàng.');
@@ -361,9 +381,12 @@ export class PaymentViewComponent {
               gioHangChiTietList: gioHangChiTietList
             };
 
-            this.thanhToanService.thanhToanOnle(thanhToanOnl).subscribe(
-              (response: ApiResponse<ThanhToanOnl>) => {
+            this.thanhToanService.thanhToanOnle(thanhToanOnl).pipe(
+              takeUntilDestroyed(this.destroyRef)
+            ).subscribe({
+              next: (response: ApiResponse<ThanhToanOnl>) => {
                 this.loading = false;
+                this.spinner.hide();
                 if (response.result) {
                   this.snackBar.open('Đặt hàng thành công!', 'Đóng', {
                     duration: 3000,
@@ -371,26 +394,28 @@ export class PaymentViewComponent {
                   });
                   this.router.navigate(['/trang-chu']);
                   localStorage.removeItem('selectedItems');
-                  this.spinner.hide();
                 }
               },
-              (error) => {
-                this.snackBar.open('Đặt hàng không thành công. Vui lòng thử lại!', 'Đóng', {
-                  duration: 3000,
+              error: (err) => {
+                this.loading = false;
+                this.spinner.hide();
+                this.snackBar.open(getApiErrorMessage(err, 'Đặt hàng không thành công. Vui lòng thử lại!'), 'Đóng', {
+                  duration: 4000,
                   panelClass: ['error-snackbar']
                 });
-                this.spinner.hide();              }
-            );
+              }
+            });
           },
-          (error) => {
-            console.error('Lỗi tải giỏ hàng:', error);
-            this.spinner.hide();          }
-        );
+          error: (err) => {
+            this.spinner.hide();
+            this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải giỏ hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
+          }
+        });
       },
-      (error) => {
-        console.error('Lỗi tải khách hàng:', error);
-        this.spinner.hide();      }
-    );
+      error: (err) => {
+        this.spinner.hide();
+        this.snackBar.open(getApiErrorMessage(err, 'Lỗi tải khách hàng.'), 'Đóng', { duration: 3000, panelClass: ['error-snackbar'] });
+      }
+    });
   }
-
 }
